@@ -1,7 +1,7 @@
 # Fort Apocalypse
-The original Atari 400/800 6502 assembly code for the classic game Fort Apocalypse.
+The original Atari 400/800 6502 assembly code, **migrated to the 64tass assembler**, for the classic game Fort Apocalypse.
 
-This is mainly being released for historical reasons. This requires a copy of SynAssembler to assemble.
+This is mainly being released for historical reasons. This requires a copy of [64tass](https://sourceforge.net/projects/tass64/) to assemble.
 
 ![Fort Apocalypse](images/FortApocalypse.gif)
 
