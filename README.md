@@ -1,8 +1,8 @@
-# Fort Apocalypse
+# Fort Apocalypse - C256 Foenix Port
 
-The original Atari 400/800 6502 assembly code, **migrated to the 64tass assembler**, for the classic game Fort Apocalypse.
+This is a port targeting the [Foenix Retro Systems C256](https://c256foenix.com/) platform.
 
-This is mainly being released for historical reasons. This requires a copy of [64tass](https://sourceforge.net/projects/tass64/) to assemble.
+This requires [64tass](https://sourceforge.net/projects/tass64/) to assemble from source.
 
 ![Fort Apocalypse](images/FortApocalypse.gif)
 
