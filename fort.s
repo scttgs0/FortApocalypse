@@ -1,278 +1,298 @@
+;******************
+;*      Fort      *
+;*   Apocalypse   *
+;*      ROM       *
+;*                *
+;* By Steve Hales *
+;*                *
+;*   Copyright    *
+;*  September 1   *
+;* 1982  Synapse  *
+;*    Software    *
+;*                *
+;******************
 
-00010 ******************
-00020 *      Fort      *
-00030 *   Apocalypse   *
-00040 *      ROM       *
-00050 *                *
-00060 * By Steve Hales *
-00070 *                *
-00080 *   Copyright    *
-00090 *  September 1   *
-00100 * 1982  Synapse  *
-00110 *    Software    *
-00120 *                *
-00130 ******************
-00140          .LI OFF
-00150 *
-00160 * FEBUARY 8, 1983
-00170 *
-00180 * SYSTEM EQUATES
-00190 *
-00200 FRAME    .EQ $14
-00210 ATTRACT  .EQ $4D
-00220 VDSLST   .EQ $200
-00230 VVBLKI   .EQ $222
-00240 VVBLKD   .EQ $224
-00250 SDMCTL   .EQ $22F
-00260 SDLST    .EQ $230
-00270 PRIOR    .EQ $26F
-00280 PCOLR0   .EQ $2C0
-00290 PCOLR1   .EQ $2C1
-00300 PCOLR2   .EQ $2C2
-00310 PCOLR3   .EQ $2C3
-00320 COLOR0   .EQ $2C4
-00330 COLOR1   .EQ $2C5
-00340 COLOR2   .EQ $2C6
-00350 COLOR3   .EQ $2C7
-00360 COLOR4   .EQ $2C8
-00370 DMACTL   .EQ $D400
-00380 M0PF     .EQ $D000
-00390 M1PF     .EQ $D001
-00400 M2PF     .EQ $D002
-00410 M3PF     .EQ $D003
-00420 P0PF     .EQ $D004
-00430 P1PF     .EQ $D005
-00440 P2PF     .EQ $D006
-00450 P3PF     .EQ $D007
-00460 M0PL     .EQ $D008
-00470 M1PL     .EQ $D009
-00480 M2PL     .EQ $D00A
-00490 M3PL     .EQ $D00B
-00500 P0PL     .EQ $D00C
-00510 P1PL     .EQ $D00D
-00520 P2PL     .EQ $D00E
-00530 P3PL     .EQ $D00F
-00540 COLPM0   .EQ $D012
-00550 COLPM1   .EQ $D013
-00560 COLPM2   .EQ $D014
-00570 COLPM3   .EQ $D015
-00580 COLPF0   .EQ $D016
-00590 COLPF1   .EQ $D017
-00600 COLPF2   .EQ $D018
-00610 COLPF3   .EQ $D019
-00620 COLBK    .EQ $D01A
-00630 HITCLR   .EQ $D01E
-00640 CHBASE   .EQ $D409
-00650 RANDOM   .EQ $D20A
-00660 CHBAS    .EQ $2F4
-00670 CH       .EQ $2FC
-00680 CH2      .EQ $2F2
-00690 KBCODE   .EQ $D209
-00700 GRACTL   .EQ $D01D
-00710 SIZEP0   .EQ $D008
-00720 SIZEP1   .EQ $D009
-00730 SIZEP2   .EQ $D00A
-00740 SIZEP3   .EQ $D00B
-00750 PMBASE   .EQ $D407
-00760 HPOSP0   .EQ $D000
-00770 HPOSP1   .EQ $D001
-00780 HPOSP2   .EQ $D002
-00790 HPOSP3   .EQ $D003
-00800 HPOSM0   .EQ $D004
-00810 HPOSM1   .EQ $D005
-00820 HPOSM2   .EQ $D006
-00830 HPOSM3   .EQ $D007
-00840 SIZEM    .EQ $D00C
-00850 CONSOL   .EQ $D01F
-00860 NMIEN    .EQ $D40E
-00870 DLIST    .EQ $D402
-00880 HSCROL   .EQ $D404
-00890 VSCROL   .EQ $D405
-00900 WSYNC    .EQ $D40A
-00910 VCOUNT   .EQ $D40B
-00920 STICK    .EQ $278
-00930 TRIG0    .EQ $D010
-00940 AUDF1    .EQ $D200
-00950 AUDC1    .EQ $D201
-00960 AUDF2    .EQ $D202
-00970 AUDC2    .EQ $D203
-00980 AUDF3    .EQ $D204
-00990 AUDC3    .EQ $D205
-01000 AUDF4    .EQ $D206
-01010 AUDC4    .EQ $D207
-01020 AUDCTL   .EQ $D208
-01030 SKCTL    .EQ $D20F
-01040 SKSTAT   .EQ $D20F
-01050 CDTMV1   .EQ $218
-01060 CDTMV2   .EQ $21A
-01070 CDTMA1   .EQ $226
-01080 CDTMA2   .EQ $228
-01090 VVBLKI.RET .EQ $E45F
-01100 VVBLKD.RET .EQ $E462
-01110 *
-01120 * CONSTANTS
-01130 *
-01140 MIS      .EQ $300
-01150 PL0      .EQ $400
-01160 PL1      .EQ $500
-01170 PL2      .EQ $600
-01180 PL3      .EQ $700
-01190 RIGHT    .EQ $8
-01200 LEFT     .EQ $4
-01210 DOWN     .EQ $2
-01220 UP       .EQ $1
-01230 CHECK.SUM .EQ $264C
-01240 *
-01250 * CHANGE THESE CONSTANTS
-01260 * WHEN PROGRAM NEED TO GO MOBILE
-01270 *
-01280 *                START    LEN
-01290 PLAYER       .EQ $0       $800  R
-01300 PLAY.SCRN    .EQ $300     $300  R
-01310 CHR.SET1     .EQ $800     $400  R
-01320 CHR.SET2     .EQ $C00     $400  R
-01330 POD.1        .EQ $C00+920 $4E   R
-01340 POD.2        .EQ $3925    $9B   R
-01350 MAP          .EQ $1100+3  $2800 R
-01360 SLAVES       .EQ $3904    $20   R
-01370 SCANNER      .EQ $39C0    $640  R
-01380 RAM1.STUFF   .EQ $C00+144 $48
-01390 RAM2.STUFF   .EQ $100
-01400 PL           .EQ $8000
-01410 PACKED.MAP   .EQ PL       $D34
-01420 PACKED.SCAN  .EQ PL+$D34  $4ED
-01430 PROGRAM      .EQ PL+$1221 $2D2C
-01440 S.LINE1        .EQ CHR.SET1+736
-01450 S.LINE2        .EQ CHR.SET1+832
-01460 S.LINE3        .EQ CHR.SET1+928
-01470 LASERS.1       .EQ CHR.SET2+8
-01480 LASERS.2       .EQ CHR.SET2+40
-01490 LASER.3        .EQ CHR.SET2+72
-01500 BLOCK.1        .EQ CHR.SET2+80
-01510 BLOCK.2        .EQ CHR.SET2+88
-01520 BLOCK.3        .EQ CHR.SET2+96
-01530 BLOCK.4        .EQ CHR.SET2+104
-01540 BLOCK.5        .EQ CHR.SET2+112
-01550 BLOCK.6        .EQ CHR.SET2+120
-01560 BLOCK.7        .EQ CHR.SET2+128
-01570 BLOCK.8        .EQ CHR.SET2+136
-01580 WINDOW.1       .EQ CHR.SET2+712
-01590 WINDOW.2       .EQ CHR.SET2+720
-01600 EXP            .EQ $20
-01610 EXP2           .EQ $3F
-01620 EXPLOSION      .EQ CHR.SET2+256
-01630 EXPLOSION2     .EQ CHR.SET2+504
-01640 MISS.LEFT      .EQ $71
-01650 MISS.RIGHT     .EQ $72
-01660 MISS.CHR.LEFT  .EQ CHR.SET2+904
-01670 MISS.CHR.RIGHT .EQ CHR.SET2+912
-01680 EXP.WALL       .EQ $47+128
-01690 *
-01700 MAX.LEFT       .EQ 48
-01710 MAX.RIGHT      .EQ 192
-01720 MAX.UP         .EQ 100
-01730 MAX.DOWN       .EQ 212
-01740 MAX.FUEL       .EQ $2000
-01750 MIN.LEFT       .EQ 110
-01760 MIN.RIGHT      .EQ 130
-01770 MIN.UP         .EQ 146
-01780 MIN.DOWN       .EQ 166
-01790 MAX.TANKS      .EQ 6
-01800 POD.SPEED      .EQ 15
-01810 *
-01820 * ZERO PAGE USAGE
-01830 *
-01840          .OR $15
-01850 ADR1     .BS 2
-01860 ADR2     .BS 2
-01870 TEMP1    .BS 1
-01880 TEMP2    .BS 1
-01890 TEMP3    .BS 1
-01900 TEMP4    .BS 1
-01910 TEMP5    .BS 1
-01920 TEMP6    .BS 1
-01930 TEMP.MODE .BS 1
-01940 *
-01950 ADR1.I   .BS 2
-01960 ADR2.I   .BS 2
-01970 TEMP1.I  .BS 1
-01980 TEMP2.I  .BS 1
-01990 TEMP3.I  .BS 1
-02000 TEMP4.I  .BS 1
-02010 S.ADR    .BS 2
-02020 S.TEMP   .BS 1
-02030 S.FLG    .BS 1
-02040 TANK.START.X
-02050          .BS MAX.TANKS
-02060 TANK.START.Y
-02070          .BS MAX.TANKS
-02080 TIM1.VAL .BS 1   LASER 1
-02090 TIM2.VAL .BS 1   LASER 2
-02100 TIM3.VAL .BS 1   CHOP EXPLODE
-02110 TIM4.VAL .BS 1   RE FUEL
-02120 TIM5.VAL .BS 1   TANK EXPLODE
-02130 TIM6.VAL .BS 1   DEMO TIMER
-02140 TIM7.VAL .BS 1   ROBO EXPLODE
-02150 TIM8.VAL .BS 1   ROBO MISSILE
-02160 TIM9.VAL .BS 1   SLAVE MESS
-02170 SSIZEM   .BS 1
-02180          .OR $43
-02190 S1.1.VAL .BS 1
-02200 S1.2.VAL .BS 1
-02210 S2.VAL   .BS 1
-02220 S3.VAL   .BS 1
-02230 S4.VAL   .BS 1
-02240 S5.VAL   .BS 1
-02250 S6.VAL   .BS 1   MISSILE SND
-02260 GAME.POINTS .BS 1
-02270 DEMO.STATUS .BS 1
-02280 DEMO.COUNT  .BS 1
-02290 *
-02300 MAX.PODS     .EQ 39
-02310 *
-02320          .OR POD.1
-02330 POD.STATUS   .BS MAX.PODS
-02340 POD.DX       .BS MAX.PODS
-02350          .OR POD.2
-02360 POD.X        .BS MAX.PODS
-02370 POD.Y        .BS MAX.PODS
-02380 POD.TEMP1    .BS MAX.PODS
-02390 POD.TEMP2    .BS MAX.PODS
-02400 *
-02410          .OR SLAVES
-02420 SLAVE.STATUS .BS 8
-02430 SLAVE.X      .BS 8
-02440 SLAVE.Y      .BS 8
-02450 SLAVE.DX     .BS 8
-02460 *
-02470          .OR $50
-02480          .IN "H1:FORT7.S"
-02490 *
-02500          .OR PROGRAM
-02510          .TF "H1:FORT.OBJ"
-02520 *
-02530 *
-02540 *
-02550 * REST OF PROGRAM IS
-02560 * INSIDE INCLUDE FILES
-02570 *
-02580 *
-02590          .IN "H1:FORT8.S"
-02600          .IN "H1:FORT6.S"
-02610          .IN "H1:FORT2.S"
-02620          .IN "H1:FNT2.S"
-02630          .IN "H1:FORT3.S"
-02640          .IN "H1:FORT1.S"
-02650          .IN "H1:FORT4.S"
-02660          .IN "H1:FNT1.S"
-02670          .IN "H1:FORT5.S"
-02680 *
-02690 END.CART
-02700          .BS $BFFA-*
-02710          .DA CART.START
-02720          .HS 00
-02730          .DA #%10000100
-02740          .DA CART.START
-02750 *
-02760 * EOF
-02770 *
+;*
+;* FEBUARY 8, 1983
+;*
+
+;---------------------------------------
+; SYSTEM EQUATES
+;---------------------------------------
+
+FRAME           = $14
+ATTRACT         = $4D
+VDSLST          = $200
+VVBLKI          = $222
+VVBLKD          = $224
+SDMCTL          = $22F
+SDLST           = $230
+PRIOR           = $26F
+PCOLR0          = $2C0
+PCOLR1          = $2C1
+PCOLR2          = $2C2
+PCOLR3          = $2C3
+COLOR0          = $2C4
+COLOR1          = $2C5
+COLOR2          = $2C6
+COLOR3          = $2C7
+COLOR4          = $2C8
+DMACTL          = $D400
+M0PF            = $D000
+M1PF            = $D001
+M2PF            = $D002
+M3PF            = $D003
+P0PF            = $D004
+P1PF            = $D005
+P2PF            = $D006
+P3PF            = $D007
+M0PL            = $D008
+M1PL            = $D009
+M2PL            = $D00A
+M3PL            = $D00B
+P0PL            = $D00C
+P1PL            = $D00D
+P2PL            = $D00E
+P3PL            = $D00F
+COLPM0          = $D012
+COLPM1          = $D013
+COLPM2          = $D014
+COLPM3          = $D015
+COLPF0          = $D016
+COLPF1          = $D017
+COLPF2          = $D018
+COLPF3          = $D019
+COLBK           = $D01A
+HITCLR          = $D01E
+CHBASE          = $D409
+RANDOM          = $D20A
+CHBAS           = $2F4
+CH              = $2FC
+CH2             = $2F2
+KBCODE          = $D209
+GRACTL          = $D01D
+SIZEP0          = $D008
+SIZEP1          = $D009
+SIZEP2          = $D00A
+SIZEP3          = $D00B
+PMBASE          = $D407
+HPOSP0          = $D000
+HPOSP1          = $D001
+HPOSP2          = $D002
+HPOSP3          = $D003
+HPOSM0          = $D004
+HPOSM1          = $D005
+HPOSM2          = $D006
+HPOSM3          = $D007
+SIZEM           = $D00C
+CONSOL          = $D01F
+NMIEN           = $D40E
+DLIST           = $D402
+HSCROL          = $D404
+VSCROL          = $D405
+WSYNC           = $D40A
+VCOUNT          = $D40B
+STICK           = $278
+TRIG0           = $D010
+AUDF1           = $D200
+AUDC1           = $D201
+AUDF2           = $D202
+AUDC2           = $D203
+AUDF3           = $D204
+AUDC3           = $D205
+AUDF4           = $D206
+AUDC4           = $D207
+AUDCTL          = $D208
+SKCTL           = $D20F
+SKSTAT          = $D20F
+CDTMV1          = $218
+CDTMV2          = $21A
+CDTMA1          = $226
+CDTMA2          = $228
+VVBLKI_RET      = $E45F
+VVBLKD_RET      = $E462
+
+;---------------------------------------
+; CONSTANTS
+;---------------------------------------
+MIS             = $300
+PL0             = $400
+PL1             = $500
+PL2             = $600
+PL3             = $700
+RIGHT           = $8
+LEFT            = $4
+DOWN            = $2
+UP              = $1
+CHECK_SUM       = $264C
+
+;---------------------------------------
+; CHANGE THESE CONSTANTS
+; WHEN PROGRAM NEED TO GO MOBILE
+;---------------------------------------
+
+;                START                  ; LEN
+PLAYER          = $0                    ; $800  R
+PLAY_SCRN       = $300                  ; $300  R
+CHR_SET1        = $800                  ; $400  R
+CHR_SET2        = $C00                  ; $400  R
+POD_1           = $C00+920              ; $4E   R
+POD_2           = $3925                 ; $9B   R
+MAP             = $1100+3               ; $2800 R
+SLAVES          = $3904                 ; $20   R
+SCANNER         = $39C0                 ; $640  R
+RAM1_STUFF      = $C00+144              ; $48
+RAM2_STUFF      = $100
+PL              = $8000
+PACKED_MAP      = PL                    ; $D34
+PACKED_SCAN     = PL+$D34               ; $4ED
+PROGRAM         = PL+$1221              ; $2D2C
+S_LINE1         = CHR_SET1+736
+S_LINE2         = CHR_SET1+832
+S_LINE3         = CHR_SET1+928
+LASERS_1        = CHR_SET2+8
+LASERS_2        = CHR_SET2+40
+LASER_3         = CHR_SET2+72
+BLOCK_1         = CHR_SET2+80
+BLOCK_2         = CHR_SET2+88
+BLOCK_3         = CHR_SET2+96
+BLOCK_4         = CHR_SET2+104
+BLOCK_5         = CHR_SET2+112
+BLOCK_6         = CHR_SET2+120
+BLOCK_7         = CHR_SET2+128
+BLOCK_8         = CHR_SET2+136
+WINDOW_1        = CHR_SET2+712
+WINDOW_2        = CHR_SET2+720
+EXP             = $20
+EXP2            = $3F
+EXPLOSION       = CHR_SET2+256
+EXPLOSION2      = CHR_SET2+504
+MISS_LEFT       = $71
+MISS_RIGHT      = $72
+MISS_CHR_LEFT   = CHR_SET2+904
+MISS_CHR_RIGHT  = CHR_SET2+912
+EXP_WALL        = $47+128
+
+MAX_LEFT        = 48
+MAX_RIGHT       = 192
+MAX_UP          = 100
+MAX_DOWN        = 212
+MAX_FUEL        = $2000
+MIN_LEFT        = 110
+MIN_RIGHT       = 130
+MIN_UP          = 146
+MIN_DOWN        = 166
+MAX_TANKS       = 6
+POD_SPEED       = 15
+
+;---------------------------------------
+; ZERO PAGE USAGE
+;---------------------------------------
+
+                * = $15
+ADR1            .word ?
+ADR2            .word ?
+TEMP1           .byte ?
+TEMP2           .byte ?
+TEMP3           .byte ?
+TEMP4           .byte ?
+TEMP5           .byte ?
+TEMP6           .byte ?
+TEMP_MODE       .byte ?
+
+ADR1_I          .word ?
+ADR2_I          .word ?
+TEMP1_I         .byte ?
+TEMP2_I         .byte ?
+TEMP3_I         .byte ?
+TEMP4_I         .byte ?
+S_ADR           .word ?
+S_TEMP          .byte ?
+S_FLG           .byte ?
+TANK_START_X    .fill MAX_TANKS
+TANK_START_Y    .fill MAX_TANKS
+TIM1_VAL        .byte ?                 ; LASER 1
+TIM2_VAL        .byte ?                 ; LASER 2
+TIM3_VAL        .byte ?                 ; CHOP EXPLODE
+TIM4_VAL        .byte ?                 ; RE FUEL
+TIM5_VAL        .byte ?                 ; TANK EXPLODE
+TIM6_VAL        .byte ?                 ; DEMO TIMER
+TIM7_VAL        .byte ?                 ; ROBO EXPLODE
+TIM8_VAL        .byte ?                 ; ROBO MISSILE
+TIM9_VAL        .byte ?                 ; SLAVE MESS
+SSIZEM          .byte ?
+
+
+                * = $43
+S1_1_VAL        .byte ?
+S1_2_VAL        .byte ?
+S2_VAL          .byte ?
+S3_VAL          .byte ?
+S4_VAL          .byte ?
+S5_VAL          .byte ?
+S6_VAL          .byte ?                 ; MISSILE SND
+GAME_POINTS     .byte ?
+DEMO_STATUS     .byte ?
+DEMO_COUNT      .byte ?
+
+MAX_PODS        = 39
+
+
+                * = POD_1
+POD_STATUS      .fill MAX_PODS
+POD_DX          .fill MAX_PODS
+
+
+                * = POD_2
+POD_X           .fill MAX_PODS
+POD_Y           .fill MAX_PODS
+POD_TEMP1       .fill MAX_PODS
+POD_TEMP2       .fill MAX_PODS
+
+
+                * = SLAVES
+SLAVE_STATUS    .fill 8
+SLAVE_X         .fill 8
+SLAVE_Y         .fill 8
+SLAVE_DX        .fill 8
+
+                * = $50
+
+                .include "fort7.s"
+
+;---------------------------------------
+; REST OF PROGRAM IS
+; INSIDE INCLUDE FILES
+;---------------------------------------
+
+                * = $8000
+
+                .include "level.s"
+
+                * = PROGRAM
+
+                .include "fort8.s"
+                .include "fort6.s"
+                .include "fort2.s"
+
+                .include "fnt2.s"
+
+                .include "fort3.s"
+                .include "fort1.s"
+                .include "fort4.s"
+
+                .include "fnt1.s"
+
+                .include "fort5.s"
+
+END_CART        ;.fill $BFFA-*
+                .byte $00
+
+                .addr CART_START
+                .byte $00
+                .byte %10000100
+                .addr CART_START
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; EOF
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

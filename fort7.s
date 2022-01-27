@@ -1,139 +1,137 @@
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; FILE: FORT7.S
+;---------------------------------------
+; VARIABLES
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-00010 *
-00020 * FILE: FORT7.S
-00030 *
-00040 * VARIABLES
-00050 OFF          .EQ 1
-00060 ON           .EQ 2
-00070 FLY          .EQ 3
-00080 CRASH        .EQ 4
-00090 EXPLODE      .EQ 5
-00100 LAND         .EQ 6
-00110 BEGIN        .EQ 7
-00120 FULL         .EQ 8
-00130 EMPTY        .EQ 9
-00140 REFUEL       .EQ 10
-00150 PICKUP       .EQ 11
-00160 *
-00170 *
-00180 SCAN.ADR1    .BS 2
-00190 SCAN.ADR2    .BS 2
-00200 SX           .BS 1
-00210 SX.F         .BS 1
-00220 SY           .BS 1
-00230 SY.F         .BS 1
-00240 CONSOL.FLAG  .BS 1
-00250 TRIG.FLAG    .BS 1
-00260 LEVEL        .BS 1
-00270 LAND.X       .BS 1
-00280 LAND.Y       .BS 1
-00290 LAND.FX      .BS 1
-00300 LAND.FY      .BS 1
-00310 LAND.CHOP.X  .BS 1
-00320 LAND.CHOP.Y  .BS 1
-00330 LAND.CHOP.ANGLE
-00340              .BS 1
-00350 *
-00360 CHOPPER.STATUS
-00370              .BS 1
-00380 *
-00390 CHOPPER.X    .BS 1
-00400 CHOPPER.Y    .BS 1
-00410 OCHOPPER.Y   .BS 1
-00420 CHOPPER.ANGLE
-00430              .BS 1
-00440 CHOPPER.COL  .BS 1
-00450 CHOP.X       .BS 1
-00460 CHOP.Y       .BS 1
-00470 CHOP.OX      .BS 1
-00480 CHOP.OY      .BS 1
-00490 ROBOT.STATUS .BS 1
-00500 R.STATUS     .BS 1
-00510 ROBOT.X      .BS 1
-00520 ROBOT.Y      .BS 1
-00530 OROBOT.Y     .BS 1
-00540 ROBOT.ANGLE  .BS 1
-00550 ROBOT.SPD    .BS 1
-00560 ROBOT.COL    .BS 1
-00570 R.FX         .BS 1
-00580 R.FY         .BS 1
-00590 R.X          .BS 1
-00600 R.Y          .BS 1
-00610 ROCKET.STATUS
-00620              .BS 3
-00630 ROCKET.X     .BS 3
-00640 ROCKET.Y     .BS 3
-00650 ROCKET.TEMP  .BS 3
-00660 ROCKET.TEMPX .BS 3
-00670 ROCKET.TEMPY .BS 3
-00680 ROCKET.TIM   .BS 3
-00690 OROCKET.Y    .BS 3
-00700 ELEVATOR.NUM .BS 1
-00710 ELEVATOR.DX  .BS 1
-00720 ELEVATOR.TIM .BS 1
-00730 ELEVATOR.SPD .BS 1
-00740 SCORE1       .BS 1
-00750 SCORE2       .BS 1
-00760 SCORE3       .BS 1
-00770 HI1          .BS 1
-00780 HI2          .BS 1
-00790 HI3          .BS 1
-00800 BONUS1       .BS 1
-00810 BONUS2       .BS 1
-00820 FUEL.STATUS  .BS 1
-00830 FUEL.TEMP    .BS 1
-00840 FUEL1        .BS 1
-00850 FUEL2        .BS 1
-00860 *
-00870 MODE         .BS 1
-00880 BAK.COLOR    .BS 1
-00890 BAK2.COLOR   .BS 1
-00900 TITLE.MODE      .EQ 1
-00910 GO.MODE         .EQ 2
-00920 START.MODE      .EQ 3
-00930 NEW.LEVEL.MODE  .EQ 4
-00940 NEW.PLAYER.MODE .EQ 5
-00950 GAME.OVER.MODE  .EQ 6
-00960 STOP.MODE       .EQ 7
-00970 PAUSE.MODE      .EQ 8
-00980 OPTION.MODE     .EQ 9
-00990 HYPERSPACE.MODE .EQ 10
-01000 *
-01010 CM.STATUS    .BS MAX.TANKS
-01020 CM.X         .BS MAX.TANKS
-01030 CM.Y         .BS MAX.TANKS
-01040 CM.TIME      .BS MAX.TANKS
-01050 CM.TEMP      .BS MAX.TANKS
-01060 *
-01070 TANK.STATUS  .BS MAX.TANKS
-01080 TANK.X       .BS MAX.TANKS
-01090 TANK.Y       .BS MAX.TANKS
-01100 TANK.DX      .BS MAX.TANKS
-01110 TANK.TEMP
-01120 * MAX.TANKS*3     6*3=18
-01130              .BS 18
-01140 *
-01150 POD.NUM      .BS 1
-01160 POD.COM      .BS 1
-01170 SLAVE.NUM    .BS 1
-01180 SLAVES.LEFT  .BS 1
-01190 SLAVES.SAVED .BS 1
-01200 *
-01210 FORT.STATUS  .BS 1
-01220 LASER.STATUS .BS 1
-01230 LASER.SPD    .BS 1
-01240 TANK.SPD     .BS 1
-01250 TANK.SPEED   .BS 1
-01260 MISSILE.SPD  .BS 1
-01270 MISSILE.SPEED .BS 1
-01280 GRAV.SKILL   .BS 1
-01290 GRAV.SKL     .BS 1
-01300 PILOT.SKILL  .BS 1
-01310 PILOT.SKL    .BS 1
-01320 CHOPS        .BS 1
-01330 CHOP.LEFT    .BS 1
-01340 OPT.NUM      .BS 1
-01350 START.PODS   .BS 1
-01360 *
-01370 * EOF
-01380 *
+OFF             = 1
+ON              = 2
+FLY             = 3
+CRASH           = 4
+EXPLODE         = 5
+LAND            = 6
+BEGIN           = 7
+FULL            = 8
+EMPTY           = 9
+REFUEL          = 10
+PICKUP          = 11
+
+SCAN_ADR1       .word ?
+SCAN_ADR2       .word ?
+SX              .byte ?
+SX_F            .byte ?
+SY              .byte ?
+SY_F            .byte ?
+CONSOL_FLAG     .byte ?
+TRIG_FLAG       .byte ?
+LEVEL           .byte ?
+LAND_X          .byte ?
+LAND_Y          .byte ?
+LAND_FX         .byte ?
+LAND_FY         .byte ?
+LAND_CHOP_X     .byte ?
+LAND_CHOP_Y     .byte ?
+LAND_CHOP_ANGLE .byte ?
+
+CHOPPER_STATUS  .byte ?
+
+CHOPPER_X       .byte ?
+CHOPPER_Y       .byte ?
+OCHOPPER_Y      .byte ?
+CHOPPER_ANGLE   .byte ?
+CHOPPER_COL     .byte ?
+CHOP_X          .byte ?
+CHOP_Y          .byte ?
+CHOP_OX         .byte ?
+CHOP_OY         .byte ?
+ROBOT_STATUS    .byte ?
+R_STATUS        .byte ?
+ROBOT_X         .byte ?
+ROBOT_Y         .byte ?
+OROBOT_Y        .byte ?
+ROBOT_ANGLE     .byte ?
+ROBOT_SPD       .byte ?
+ROBOT_COL       .byte ?
+R_FX            .byte ?
+R_FY            .byte ?
+R_X             .byte ?
+R_Y             .byte ?
+ROCKET_STATUS   .fill 3
+ROCKET_X        .fill 3
+ROCKET_Y        .fill 3
+ROCKET_TEMP     .fill 3
+ROCKET_TEMPX    .fill 3
+ROCKET_TEMPY    .fill 3
+ROCKET_TIM      .fill 3
+OROCKET_Y       .fill 3
+ELEVATOR_NUM    .byte ?
+ELEVATOR_DX     .byte ?
+ELEVATOR_TIM    .byte ?
+ELEVATOR_SPD    .byte ?
+SCORE1          .byte ?
+SCORE2          .byte ?
+SCORE3          .byte ?
+HI1             .byte ?
+HI2             .byte ?
+HI3             .byte ?
+BONUS1          .byte ?
+BONUS2          .byte ?
+FUEL_STATUS     .byte ?
+FUEL_TEMP       .byte ?
+FUEL1           .byte ?
+FUEL2           .byte ?
+
+MODE            .byte ?
+BAK_COLOR       .byte ?
+BAK2_COLOR      .byte ?
+
+TITLE_MODE      = 1
+GO_MODE         = 2
+START_MODE      = 3
+NEW_LEVEL_MODE  = 4
+NEW_PLAYER_MODE = 5
+GAME_OVER_MODE  = 6
+STOP_MODE       = 7
+PAUSE_MODE      = 8
+OPTION_MODE     = 9
+HYPERSPACE_MODE = 10
+
+CM_STATUS       .fill MAX_TANKS
+CM_X            .fill MAX_TANKS
+CM_Y            .fill MAX_TANKS
+CM_TIME         .fill MAX_TANKS
+CM_TEMP         .fill MAX_TANKS
+
+TANK_STATUS     .fill MAX_TANKS
+TANK_X          .fill MAX_TANKS
+TANK_Y          .fill MAX_TANKS
+TANK_DX         .fill MAX_TANKS
+TANK_TEMP       .fill 18                ; MAX_TANKS*3     6*3=18
+
+POD_NUM         .byte ?
+POD_COM         .byte ?
+SLAVE_NUM       .byte ?
+SLAVES_LEFT     .byte ?
+SLAVES_SAVED    .byte ?
+
+FORT_STATUS     .byte ?
+LASER_STATUS    .byte ?
+LASER_SPD       .byte ?
+TANK_SPD        .byte ?
+TANK_SPEED      .byte ?
+MISSILE_SPD     .byte ?
+MISSILE_SPEED   .byte ?
+GRAV_SKILL      .byte ?
+GRAV_SKL        .byte ?
+PILOT_SKILL     .byte ?
+PILOT_SKL       .byte ?
+CHOPS           .byte ?
+CHOP_LEFT       .byte ?
+OPT_NUM         .byte ?
+START_PODS      .byte ?
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; EOF
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

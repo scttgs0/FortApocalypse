@@ -5,12 +5,13 @@
 ; DISPLAY LIST RAM BASED STUFF
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 DSP_LST1        = RAM1_STUFF
 Z1              .byte $70,$70,$80,$70
                 .byte $44,$00,$01       ; .DA #$44,PANEL
                 .byte $04,$04,$04,$04
                 .byte $44,$6B,$92       ; .DA #$44,NAVA.PANEL
-                .byte $C4,$00,$03       ; .DA #$44+$80,PLAY.SCRN
+                .byte $C4,$00,$03       ; .DA #$44+$80,PLAY_SCRN
                 .byte $50,$20,$80
 DSP_MAP         = *-Z1+RAM1_STUFF
 MAP_LINES       = 17
@@ -31,7 +32,7 @@ MAP_LINES       = 17
                 .byte $74,$00,$00
                 .byte $74,$00,$00
                 .byte $D4,$00,$00
-                .byte $41,$90,$0C       ; .DA #$41,DSP.LST1
+                .byte $41,$90,$0C       ; .DA #$41,DSP_LST1
 Z1_LEN          = *-Z1-1
 
 NAVA_PANEL      .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00       ; whitespace
@@ -39,7 +40,7 @@ NAVA_PANEL      .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00       ; whites
                 .byte $B4,$D4,$B2,$D2,$AF,$CF,$AE,$CE                   ; 'TRON'
                 .byte $00,$00,$00,$00,$00,$00
 
-NAVA_PANEL      = RAM2_STUFF
+PANEL           = RAM2_STUFF
 Z2              .byte $00,$00,$00,$00,$00,$00,$00                       ; whitespace
                 .byte $B3,$D3,$A3,$C3,$AF,$CF,$B2,$D2,$A5,$C5           ; 'SCORE'
                 .byte $00,$00

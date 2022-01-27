@@ -11,32 +11,32 @@ DSP_LST2        .byte $70,$70,$80,$70
                 .byte $04,$04,$04,$04
                 .byte $70,$70
                 .byte $80,$50,$20
-                .byte $44,$00,$03       ; .DA #$44,PLAY.SCRN
+                .byte $44,$00,$03       ; .DA #$44,PLAY_SCRN
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04
                 .byte $80,$70,$80
-                .byte $41,$54,$93       ; .DA #$41,DSP.LST2
+                .byte $41,$54,$93       ; .DA #$41,DSP_LST2
 
 DSP_LST3        .byte $70,$70,$70,$70,$70,$70
-                .byte $44,$00,$03       ; .DA #$44,PLAY.SCRN
+                .byte $44,$00,$03       ; .DA #$44,PLAY_SCRN
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04
-                .byte $44,$00,$03       ; .DA #$44,PLAY.SCRN
-                .byte $41,$7B,$93       ; .DA #$41,DSP.LST3
+                .byte $44,$00,$03       ; .DA #$44,PLAY_SCRN
+                .byte $41,$7B,$93       ; .DA #$41,DSP_LST3
 
 ;---------------------------------------
 ;---------------------------------------
 
 CART_START      sei
-;                LDX #$FF
-;                TXS
-;                PHA
-;                PHA
+;               LDX #$FF
+;               TXS
+;               PHA
+;               PHA
                 lda #$B3
                 pha
                 ldx #$00
@@ -59,7 +59,7 @@ _next2          sta (ADR1),Y
 
                 inc ADR1+1
                 ldx ADR1+1
-;                CPX #$50
+;               CPX #$50
                 cpx #$C0
                 bne _next2
 
@@ -384,7 +384,7 @@ BOOT_STUFF      .byte $84,$C4,$76,$9E,$E6,$7C,$08,$88,$79,$06               ; #.
 ;02180          .DA START-1
 
 INIT_OS         ldx #$25
-_next1          lda PUPDIV,X
+_next1          lda $E480,X             ; PUPDIV
                 sta VDSLST,X
                 dex
                 bpl _next1
@@ -393,16 +393,16 @@ _next1          lda PUPDIV,X
                 sta NMIEN
 
                 ldx #$3B
-                stx PACTL
-                stx PBCTL
+                stx $D302               ; PACTL
+                stx $D303               ; PBCTL
 
                 lda #$00
-                sta PORTA
-                sta PORTB
+                sta $D300               ; PORTA
+                sta $D301               ; PORTB
 
                 inx
-                stx PACTL
-                stx PBCTL
+                stx $D302               ; PACTL
+                stx $D303               ; PBCTL
 
                 rts
 
