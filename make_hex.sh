@@ -7,4 +7,4 @@
         -o fortapoc.hex \
         --list=fortapocalypse.lst \
         --labels=fortapocalypse.lbl \
-        fort.s
+        fort.asm
