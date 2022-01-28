@@ -45,7 +45,7 @@ VERTBLKD        sei
                 jsr DRAW_MAP
                 jsr UPDATE_CHOPPER
                 jsr UPDATE_ROBOT_CHOPPER
-                jsr READ_TRIG
+                jsr ReadTrigger
                 jsr DO_EXP
 
                 lda MODE
@@ -60,7 +60,7 @@ VERTBLKD        sei
                 jsr DO_ELEVATOR
                 jsr DO_CHOPPER
                 jsr ROBOT_BRAINS
-                jsr READ_STICK
+                jsr ReadJoystick
 
 _1
 

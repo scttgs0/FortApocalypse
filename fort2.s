@@ -10,71 +10,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-READ_USER
-                lda CONSOL
-                cmp CONSOL_FLAG
-                beq _4
-                sta CONSOL_FLAG
-                ldx #0
-                stx TIM6_VAL
-                cmp #6                  ; START
-                bne _1
-                lda #START_MODE
-                sta MODE
-;               LDA #1                  ; OFF
-                sta DEMO_STATUS
-                jmp _9
-_1              ldx MODE
-                cpx #OPTION_MODE
-                bne _2
-                jsr CHECK_OPTIONS
-                jmp _9
-_2              cmp #3                  ; OPTION
-                beq _3
-                cmp #5                  ; SELECT
-                bne _4
-_3              lda #OPTION_MODE
-                sta MODE
-;               LDA #1      OFF
-                sta DEMO_STATUS
-                jsr SCREEN_OFF
-                lda #0
-                sta OPT_NUM
-                jsr CHECK_OPTIONS
-                jmp _9
-_4              lda SKSTAT
-                and #%00000100
-                bne _9
-                lda KBCODE
-                cmp #$21                ; SPACE
-                bne _9
-                lda MODE
-                pha
-                lda #PAUSE_MODE
-                sta MODE
-                jsr CLEAR_SOUNDS
-_37             lda SKSTAT
-                and #%00000100
-                beq _37
-_5              lda SKSTAT
-                and #%00000100
-                bne _38
-                lda KBCODE
-                cmp #$21                ; SPACE
-                beq _6
-_38             lda CONSOL
-                cmp #7
-                bne _6
-                lda TRIG0
-                bne _5
-_6              lda SKSTAT
-                and #%00000100
-                beq _6
-                pla
-                sta MODE
-
-_9              rts
-
 CHECK_OPTIONS
                 lda CONSOL
                 cmp #3                  ; OPTION
@@ -1125,7 +1060,7 @@ WAIT_FRAME
                 lda FRAME
 _1              cmp FRAME
                 beq _1
-                jsr READ_USER
+                jsr ReadKeyboard
                 lda MODE
                 cmp TEMP_MODE
                 bne _2

@@ -300,7 +300,7 @@ _2
 
 _6              jsr CHECK_HYPER_CHAMBER
                 jsr CHECK_MODES
-                jsr READ_USER
+                jsr ReadKeyboard
 
                 lda DEMO_STATUS
                 bpl _3
