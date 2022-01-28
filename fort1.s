@@ -126,19 +126,19 @@ _2              lda TEMP3
                 stx TEMP1
                 dex                     ; X=4
                 stx TEMP2
-                ldx #<T_1
-                ldy #>T_1
+                ldx #<txtTitle1
+                ldy #>txtTitle1
                 jsr PRINT
                 inc TEMP1               ; =6
                 lda #6
                 sta TEMP2
-                ldx #<T_2
-                ldy #>T_2
+                ldx #<txtTitle2
+                ldy #>txtTitle2
                 jsr PRINT
                 lda #10
                 sta TEMP2
-                ldx #<T_3
-                ldy #>T_3
+                ldx #<txtTitle3
+                ldy #>txtTitle3
                 jsr PRINT
                 ldx #7
 _3              lda T_5,X
@@ -149,8 +149,8 @@ _3              lda T_5,X
                 sta TEMP1
                 lda #12
                 sta TEMP2
-                ldx #<T_4
-                ldy #>T_4
+                ldx #<txtTitle4
+                ldy #>txtTitle4
                 jsr PRINT
 
 T1
@@ -221,24 +221,6 @@ INC_CHR
 _1              sta TEMP3
                 rts
 
-;---------------------------------------
-;---------------------------------------
-
-T_1             .byte $A6,$AF,$B2,$B4,$00,$00                       ; 'FORT  ' inverse atari-ascii
-                .byte $A1,$B0,$AF,$A3,$A1,$AC,$B9,$B0,$B3,$A5       ; 'APOCALYPSE'
-                .byte $FF
-
-T_2             .byte $A2,$B9,$00,$00                               ; 'BY  ' inverse atari-ascii
-                .byte $B3,$B4,$A5,$B6,$A5,$00,$00                   ; 'STEVE  '
-                .byte $A8,$A1,$AC,$A5,$B3                           ; 'HALES'
-                .byte $FF
-
-T_3             .byte $A3,$AF,$B0,$B9,$B2,$A9,$A7,$A8,$B4           ; 'COPYRIGHT' inverse atari-ascii
-                .byte $FF
-
-T_4             .byte $B3,$B9,$AE,$A1,$B0,$B3,$A5,$00,$00           ; 'SYNAPSE  ' inverse atari-ascii
-                .byte $B3,$AF,$A6,$B4,$B7,$A1,$B2,$A5               ; 'SOFTWARE'
-                .byte $FF
 
 ;=======================================
 ;
@@ -624,15 +606,15 @@ _10             lda #4
                 sta TEMP1
                 lda #8
                 sta TEMP2
-                ldx #<NEW_PILOT
-                ldy #>NEW_PILOT
+                ldx #<txtPilot1
+                ldy #>txtPilot1
                 jsr PRINT
                 lda #5
                 sta TEMP1
                 lda #10
                 sta TEMP2
-                ldx #<PILOTS_LEFT
-                ldy #>PILOTS_LEFT
+                ldx #<txtPilot2
+                ldy #>txtPilot2
                 jsr PRINT
                 lda #<PLAY_SCRN+428
                 sta S_ADR
@@ -672,22 +654,14 @@ _10             lda #4
                 sta MODE
                 rts
 
-NEW_PILOT       .byte $A7,$A5,$B4,$00,$00                   ; 'GET  ' atari-ascii
-                .byte $B2,$A5,$A1,$A4,$B9,$00,$00           ; 'READY  '
-                .byte $B0,$A9,$AC,$AF,$B4                   ; 'PILOT'
-                .byte $FF
-PILOTS_LEFT     .byte $B0,$A9,$AC,$AF,$B4,$B3,$00,$00       ; 'PILOTS  '
-                .byte $AC,$A5,$A6,$B4                       ; 'LEFT'
-                .byte $FF
-
 M_NEW_LEVEL
                 jsr SCREEN_OFF
                 lda #12
                 sta TEMP1
                 lda #6
                 sta TEMP2
-                ldx #<ENTER
-                ldy #>ENTER
+                ldx #<txtEnter
+                ldy #>txtEnter
                 jsr PRINT
                 lda #2
                 sta TEMP1
@@ -696,12 +670,12 @@ M_NEW_LEVEL
                 ldy LEVEL
                 dey                     ; Y=0
                 beq _0
-_5              ldx #<LVL_1
-                ldy #>LVL_1
+_5              ldx #<txtEnterL1
+                ldy #>txtEnterL1
                 jsr PRINT
                 jmp _1
-_0              ldx #<LVL_2
-                ldy #>LVL_2
+_0              ldx #<txtEnterL2
+                ldy #>txtEnterL2
                 jsr PRINT
 _1              ldx LEVEL
                 lda LEVEL_COLOR,X
@@ -997,17 +971,6 @@ TANK_START_X_L2
 TANK_START_Y_L2
                 .byte $0C,$0C,$0C,$0C,$26,$26
 
-ENTER           .byte $A5,$AE,$B4,$A5,$B2,$A9,$AE,$A7       ; 'ENTERING' atari-ascii
-                .byte $FF
-LVL_1           .byte $B6,$A1,$B5,$AC,$B4,$B3,$00,$00       ; 'VAULTS  '
-                .byte $AF,$A6,$00,$00                       ; 'OF  '
-                .byte $A4,$B2,$A1,$A3,$AF,$AE,$A9,$B3       ; 'DRACONIS'
-                .byte $FF
-LVL_2           .byte $A3,$B2,$B9,$B3,$B4,$A1,$AC,$AC       ; 'CRYSTALLINE  '
-                .byte $A9,$AE,$A5,$00,$00
-                .byte $A3,$A1,$B6,$A5,$B3                   ; 'CAVES'
-                .byte $FF
-
 INC_GAME_POINTS
                 clc
                 adc GAME_POINTS
@@ -1080,8 +1043,8 @@ _52             lda #2
                 lda #0
                 sta TEMP2
                 sta S_FLG
-                ldx #<HS
-                ldy #>HS
+                ldx #<txtHighScore
+                ldy #>txtHighScore
                 jsr PRINT
                 lda #<PLAY_SCRN+24
                 sta S_ADR
@@ -1099,33 +1062,33 @@ _52             lda #2
                 sta TEMP1
                 lda #5
                 sta TEMP2
-                ldx #<G_1               ; YOUR
-                ldy #>G_1               ; MISSION
+                ldx #<txtGmOvrMission               ; YOUR
+                ldy #>txtGmOvrMission               ; MISSION
                 jsr PRINT
                 lda #21
                 sta TEMP1
-                ldx #<G_A               ; ABORTED
-                ldy #>G_A
+                ldx #<txtGmOvrAbort               ; ABORTED
+                ldy #>txtGmOvrAbort
                 lda LEVEL
                 cmp #3
                 bne _5
-                ldx #<G_C               ; COMPLETED
-                ldy #>G_C
+                ldx #<txtGmOvrComplete               ; COMPLETED
+                ldy #>txtGmOvrComplete
 _5              jsr PRINT
 
                 ldx #7
                 stx TEMP1
                 inx                     ; X=8
                 stx TEMP2
-                ldx #<G_2               ; YOUR
-                ldy #>G_2               ; RANK
+                ldx #<txtGmOvrRank               ; YOUR
+                ldy #>txtGmOvrRank               ; RANK
                 jsr PRINT
                 lda #21
                 sta TEMP1
                 lda #10
                 sta TEMP2
-                ldx #<G_3               ; CLASS
-                ldy #>G_3
+                ldx #<txtGmOvrClass               ; CLASS
+                ldy #>txtGmOvrClass
                 jsr PRINT
                 lda GAME_POINTS
                 and #3
@@ -1149,8 +1112,8 @@ _6              iny
                 and #3
                 asl
                 tay
-                ldx RATING,Y
-                lda RATING+1,Y
+                ldx txtGmOvrRating,Y
+                lda txtGmOvrRating+1,Y
                 tay
                 jsr PRINT
                 lda #-1
@@ -1160,31 +1123,6 @@ _6              iny
                 sta MODE
                 sta DEMO_STATUS
                 rts
-
-G_1             .byte $2D,$29,$33,$33,$29,$2F,$2E           ; 'MISSION' atari-ascii
-                .byte $FF
-G_A             .byte $21,$22,$2F,$32,$34,$25,$24           ; 'ABORTED'
-                .byte $FF
-G_C             .byte $23,$2F,$2D,$30,$2C,$25,$34,$25,$24   ; 'COMPLETED'
-                .byte $FF
-G_2             .byte $39,$2F,$35,$32,$00,$00               ; 'YOUR  '
-                .byte $32,$21,$2E,$2B,$00,$00,$29,$33       ; 'RANK  IS'
-                .byte $FF
-
-G_3             .byte $A3,$AC,$A1,$B3,$B3                   ; 'CLASS'
-                .byte $FF
-RATING          .addr R_1,R_2,R_3,R_4
-R_1             .byte $B3,$B0,$A1,$B2,$B2,$AF,$B7           ; 'SPARROW'
-                .byte $FF
-R_2             .byte $A3,$AF,$AE,$A4,$AF,$B2               ; 'CONDOR'
-                .byte $FF
-R_3             .byte $A8,$A1,$B7,$AB                       ; 'HAWK'
-                .byte $FF
-R_4             .byte $A5,$A1,$A7,$AC,$A5                   ; 'EAGLE'
-                .byte $FF
-HS              .byte $A8,$A9,$A7,$A8,$00,$00               ; 'HIGH  '
-                .byte $B3,$A3,$AF,$B2,$A5                   ; 'SCORE'
-                .byte $FF
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF

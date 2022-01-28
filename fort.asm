@@ -70,6 +70,7 @@
                 .include "fort8.s"
 
                 .include "input.asm"
+                .include "text.asm"
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF

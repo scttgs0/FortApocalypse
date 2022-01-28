@@ -51,20 +51,20 @@ _8              lda #13
                 sta TEMP1
                 lda #1
                 sta TEMP2
-                ldx #<OPTT1
-                ldy #>OPTT1
+                ldx #<txtOptTitle1
+                ldy #>txtOptTitle1
                 jsr PRINT
                 lda #0
                 sta TEMP1
                 lda #3
                 sta TEMP2
-                ldx #<OPTT2
-                ldy #>OPTT2
+                ldx #<txtOptTitle2
+                ldy #>txtOptTitle2
                 jsr PRINT
                 lda #28
                 sta TEMP1
-                ldx #<OPTT3
-                ldy #>OPTT3
+                ldx #<txtOptTitle3
+                ldy #>txtOptTitle3
                 jsr PRINT
 
 PRINT_OPTS
@@ -73,20 +73,20 @@ PRINT_OPTS
                 lda #7                  ; OPTION
                 sta TEMP2
 
-                ldx #<OPT1
-                ldy #>OPT1
+                ldx #<txtOptGravity
+                ldy #>txtOptGravity
                 jsr PRINT
 
                 inc TEMP2
                 inc TEMP2
-                ldx #<OPT2
-                ldy #>OPT2
+                ldx #<txtOptPilot
+                ldy #>txtOptPilot
                 jsr PRINT
 
                 inc TEMP2
                 inc TEMP2
-                ldx #<OPT3
-                ldy #>OPT3
+                ldx #<txtOptRobo
+                ldy #>txtOptRobo
                 jsr PRINT
 
                 lda OPT_NUM
@@ -97,9 +97,9 @@ PRINT_OPTS
                 lda OPT_NUM
                 asl
                 tax
-                lda OPT_TAB,X
+                lda OptTable,X
                 sta ADR2
-                lda OPT_TAB+1,X
+                lda OptTable+1,X
                 sta ADR2+1
                 jsr CCL
                 ldy #0
@@ -130,8 +130,8 @@ _2
                 lda GRAV_SKILL
                 asl
                 tay
-                ldx OPT_1,Y
-                lda OPT_1+1,Y
+                ldx OptGravityTable,Y
+                lda OptGravityTable+1,Y
                 tay
                 jsr PRINT
 
@@ -140,8 +140,8 @@ _2
                 lda PILOT_SKILL
                 asl
                 tay
-                ldx OPT_2,Y
-                lda OPT_2+1,Y
+                ldx OptPilotTable,Y
+                lda OptPilotTable+1,Y
                 tay
                 jsr PRINT
 
@@ -150,53 +150,10 @@ _2
                 lda CHOPS
                 asl
                 tay
-                ldx OPT_3,Y
-                lda OPT_3+1,Y
+                ldx OptRoboTable,Y
+                lda OptRoboTable+1,Y
                 tay
                 jmp PRINT
-
-
-OPTT1           .byte $2F,$30,$34,$29,$2F,$2E,$33           ; 'OPTIONS' atari-ascii
-                .byte $FF
-OPTT2           .byte $2F,$30,$34,$29,$2F,$2E               ; 'OPTION'
-                .byte $FF
-OPTT3           .byte $33,$25,$2C,$25,$23,$34               ; 'SELECT'
-                .byte $FF
-OPT1            .byte $27,$32,$21,$36,$29,$34,$39,$00       ; 'GRAVITY '
-                .byte $33,$2B,$29,$2C,$2C                   ; 'SKILL'
-                .byte $FF
-OPT2            .byte $30,$29,$2C,$2F,$34,$00               ; 'PILOT '
-                .byte $33,$2B,$29,$2C,$2C                   ; 'SKILL'
-                .byte $FF
-OPT3            .byte $32,$2F,$22,$2F,$00                   ; 'ROBO '
-                .byte $30,$29,$2C,$2F,$34,$33               ; 'PILOTS'
-                .byte $FF
-OPT1_1          .byte $37,$25,$21,$2B,$00,$00,$00,$00       ; 'WEAK    '
-                .byte $FF
-OPT1_2          .byte $2E,$2F,$32,$2D,$21,$2C               ; 'NORMAL'
-                .byte $FF
-OPT1_3          .byte $33,$34,$32,$2F,$2E,$27               ; 'STRONG'
-                .byte $FF
-OPT2_1          .byte $2E,$2F,$36,$29,$23,$25               ; 'NOVICE'
-                .byte $FF
-OPT2_2          .byte $30,$32,$2F,$00,$00,$00,$00,$00,$00   ; 'PRO      '
-                .byte $FF
-OPT2_3          .byte $25,$38,$30,$25,$32,$34               ; 'EXPERT'
-                .byte $FF
-OPT3_1          .byte $33,$25,$36,$25,$2E,$00,$00,$00       ; 'SEVEN   '
-                .byte $FF
-OPT3_2          .byte $2E,$29,$2E,$25,$00,$00,$00,$00       ; 'NINE    '
-                .byte $FF
-OPT3_3          .byte $25,$2C,$25,$36,$25,$2E               ; 'ELEVEN'
-                .byte $FF
-OPT_1
-                .addr OPT1_1,OPT1_2,OPT1_3
-OPT_2
-                .addr OPT2_1,OPT2_2,OPT2_3
-OPT_3
-                .addr OPT3_1,OPT3_2,OPT3_3
-OPT_TAB
-                .addr OPT1,OPT2,OPT3
 
 MOVE_PODS
                 lda #POD_SPEED

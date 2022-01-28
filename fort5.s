@@ -114,8 +114,8 @@ PRINT_SLAVES_LEFT
                 sta TEMP1
                 lda #0
                 sta TEMP2
-                ldx #<SLAVE_PICKUP_MESS
-                ldy #>SLAVE_PICKUP_MESS
+                ldx #<txtMenRemain
+                ldy #>txtMenRemain
                 jsr PRINT
                 lda SLAVES_LEFT
                 ora #$10+128
@@ -233,11 +233,6 @@ SLAVE_CHR_B_R
                 .byte $3B,$3C
                 .byte $44
 LAND_LEN        = *-LAND_CHR-1
-SLAVE_PICKUP_MESS
-                .byte $AD,$A5,$AE,$00,$00           ; 'MEN  ' atari-ascii
-                .byte $B4,$AF,$00,$00               ; 'TO  '
-                .byte $B2,$A5,$B3,$A3,$B5,$A5       ; 'RESCUE'
-                .byte $FF
 
 CHECK_FUEL_BASE
                 lda FUEL_STATUS
@@ -289,8 +284,8 @@ _9
                 lda #$A4
                 sta AUDC2
                 sta AUDF2
-                ldx #<WARNING
-                ldy #>WARNING
+                ldx #<txtLowOnFuel
+                ldy #>txtLowOnFuel
                 jsr PRINT
                 jmp _20
 _10             lda #$A4
@@ -299,11 +294,6 @@ _11             sta AUDC2
                 sta AUDF2
                 jsr CLEAR_INFO
 _20             rts
-
-WARNING         .byte $AC,$AF,$B7,$00,$00       ; 'LOW  ' atari-ascii
-                .byte $AF,$AE,$00,$00           ; 'ON  '
-                .byte $A6,$B5,$A5,$AC           ; 'FUEL'
-                .byte $FF
 
 RE_FUEL
                 dec TIM4_VAL
