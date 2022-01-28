@@ -33,10 +33,6 @@ DSP_LST3        .byte $70,$70,$70,$70,$70,$70
 ;---------------------------------------
 
 CART_START      sei
-;               LDX #$FF
-;               TXS
-;               PHA
-;               PHA
                 lda #$B3
                 pha
                 ldx #$00
@@ -59,7 +55,6 @@ _next2          sta (ADR1),Y
 
                 inc ADR1+1
                 ldx ADR1+1
-;               CPX #$50
                 cpx #$C0
                 bne _next2
 
@@ -366,23 +361,6 @@ BOOT_STUFF      .byte $84,$C4,$76,$9E,$E6,$7C,$08,$88,$79,$06               ; #.
 ;=======================================
 ; 
 ;=======================================
-;02030 INIT.OS
-;02040          LDA $E463
-;02050          STA $224
-;02060          LDA $E464
-;02070          STA $225
-;02080          LDA $E460
-;02090          STA $222
-;02100          LDA $E461
-;02110          STA $223
-;02120          RTS
-;02130 *
-;02140          .AS /f3DSdsIaApPLa;/
-;02150          .AS /Steve Hales/
-;02160 *
-;02170          .DA INIT.OS-1
-;02180          .DA START-1
-
 INIT_OS         ldx #$25
 _next1          lda $E480,X             ; PUPDIV
                 sta VDSLST,X

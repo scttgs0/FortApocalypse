@@ -23,7 +23,6 @@ _1              stx OPT_NUM
 _2              cmp #5                  ; SELECT
                 bne _8
                 lda OPT_NUM
-;               CMP #0
                 bne _4
                 ldx GRAV_SKILL
                 inx
@@ -67,8 +66,6 @@ _8              lda #13
                 ldx #<OPTT3
                 ldy #>OPTT3
                 jsr PRINT
-;               JSR PRINT_OPTS
-;               RTS
 
 PRINT_OPTS
                 lda #0
@@ -110,7 +107,6 @@ PRINT_OPTS
                 sty TEMP6
 _1              ldy TEMP5
                 lda (ADR2),Y
-;               CMP #0
                 beq _3
                 cmp #$FF
                 beq _2
@@ -158,7 +154,6 @@ _2
                 lda OPT_3+1,Y
                 tay
                 jmp PRINT
-;               RTS
 
 
 OPTT1           .byte $2F,$30,$34,$29,$2F,$2E,$33           ; 'OPTIONS' atari-ascii
@@ -371,7 +366,6 @@ _1              lda POD_COM
                 and #$3F
                 sta POD_COM
                 and #$F0
-;               CMP #0
                 bne _2
                 inc POD_X,X
 _2              lda POD_X,X
@@ -640,7 +634,6 @@ CHECK_HYPER_CHAMBER
                 sta CHOPPER_COL
                 lda #GO_MODE
                 sta MODE
-;               JSR SAVE_POS
 _1              rts
 
 H_XF
@@ -935,15 +928,12 @@ _0              ldx #$E0
 _1              sta CHR_SET1+$200,X
                 inx
                 bne _1
-;               LDX #0
-;               LDA #0
 _2              sta CHR_SET1+$300,X
                 sta PLAY_SCRN+$000,X
                 sta PLAY_SCRN+$100,X
                 sta PLAY_SCRN+$200,X
                 inx
                 bne _2
-;               LDA #0
                 sta S1_1_VAL
                 sta S2_VAL
                 sta S3_VAL
@@ -1021,7 +1011,6 @@ PRINT
                 sty TEMP6
 _1              ldy TEMP5
                 lda (ADR2),Y
-;               CMP #0
                 beq _3
                 cmp #$FF
                 beq _2
@@ -1051,8 +1040,6 @@ GIVE_BONUS
                 sta CHOP_LEFT
                 cld
                 ldx #2
-;               JSR WAIT_FRAME
-;               RTS
 
 WAIT_FRAME
                 lda MODE

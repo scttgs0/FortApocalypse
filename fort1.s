@@ -17,7 +17,6 @@ _3              lda Z2,X
                 sta PRIOR
                 lda #%00000011
                 sta GRACTL
-;               LDA #3
                 sta SKCTL
                 lda #>PLAYER
                 sta PMBASE
@@ -43,21 +42,6 @@ _3              lda Z2,X
                 sta MODE
 
 SET_FONTS
-;               LDA #CHR_SET1
-;               STA ADR1
-;               LDA /CHR_SET1
-;               STA ADR1+1
-
-;1              LDY #0
-;               TYA
-;2              STA (ADR1),Y
-;               INY
-;               BNE _2
-;               INC ADR1+1
-;               LDA ADR1+1
-;               CMP /CHR_SET1+$800
-;               BNE _1
-
                 ldx #0
 _3              lda FNT1,X
                 sta CHR_SET1+15,X
@@ -84,7 +68,7 @@ _4              lda Z1,X
                 lda #$40
                 sta NMIEN
                 cli
-; TITLE
+
 TITLE
                 ldx #$FF
                 txs
@@ -324,7 +308,6 @@ _4              JMP MAIN
 
 CHECK_LEVEL
                 lda LEVEL
-;               CMP #0
                 beq DO_LEVEL_1
                 cmp #1
                 bne _1
@@ -555,7 +538,6 @@ M_START
                 ldx CHOPS
                 lda CHOP_TAB,X
                 ldy DEMO_STATUS
-;               CPY #0                  ; ON
                 bne _0
                 lda #2
 _0              sta MAIN                ; PROT
@@ -619,7 +601,6 @@ M_NEW_PLAYER
                 sbc #1
                 sta CHOP_LEFT
                 cld
-;               LDA CHOP_LEFT
                 cmp #$99
                 bne _1
                 lda #GAME_OVER_MODE
@@ -771,11 +752,9 @@ _92             sta TANK_START_Y,X
                 dex
                 bpl _2
 
-;               LDA #OFF
                 sta R_STATUS
 
                 ldx #MAX_PODS-1
-;               LDA #OFF
 _6              sta POD_STATUS,X
                 dex
                 bpl _6
@@ -818,7 +797,6 @@ _1              lda (ADR1),Y
                 bne _3
 _2              lda RANDOM
                 and #3
-;               CMP #0
                 beq _2
                 clc
                 adc #$62-1
@@ -827,7 +805,6 @@ _3              cmp #$74                ; 't'
                 bne _5
 _4              lda RANDOM
                 and #3
-;               CMP #0
                 beq _4
                 clc
                 adc #$65-1
@@ -1181,7 +1158,6 @@ _6              iny
                 ror SCREEN_OFF          ; PROT
                 lda #TITLE_MODE
                 sta MODE
-;               LDA #1
                 sta DEMO_STATUS
                 rts
 

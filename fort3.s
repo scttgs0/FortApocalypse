@@ -29,7 +29,6 @@ VERTBLKD        sei
                 asl
                 ora P0PF
                 ora P1PF
-;               AND #%00000010
                 sta CHOPPER_COL
                 lda M0PL
                 ora M1PL
@@ -63,24 +62,6 @@ VERTBLKD        sei
                 jsr ReadJoystick
 
 _1
-
-;               = $7000
-;               LDA CHOP_X
-;               STA P
-;               LDA CHOP_Y
-;               STA P+1
-;               LDA CHOPPER_X
-;               STA P+2
-;               LDA CHOPPER_Y
-;               STA P+3
-;               LDA SX
-;               STA P+4
-;               LDA SY
-;               STA P+5
-;               LDA SX_F
-;               STA P+6
-;               LDA SY_F
-;               STA P+7
                 plp
                 cli
                 jmp VVBLKD_RET
@@ -142,7 +123,6 @@ _6              lda #FLY
                 jmp POS_ROBOT
 _2              rts
 
-;                   0001020304050607
 ROB_X
                 .byte $84,$C3,$49,$C3,$49,$84,$84,$84
                 .byte $D7,$D7,$D7,$D6,$D6,$D6,$33,$33
@@ -167,7 +147,6 @@ R_F
                 cmp #ON
                 bne _10
                 lda ROCKET_STATUS+2
-;               CMP #0
                 bne _10
 _2              lda ROBOT_ANGLE
                 and #%00011110
@@ -422,13 +401,8 @@ _3              lda CHOPPER_COL
                 cmp #8
                 bne _6                  ; HYPER
 
-;               LDA RANDOM
-;               CMP #26
-;               BLT _20
                 lda LEVEL
-;               CMP #0
                 bne _20
-;               LDA #0
                 sta CHOPPER_COL
                 lda #HYPERSPACE_MODE
                 sta MODE
@@ -745,7 +719,6 @@ UPDATE_ROBOT_CHOPPER
                 lda #0
                 sta ROBOT_X
                 sta ROBOT_Y
-;               RTS
 
 _0              ldy OROBOT_Y
                 ldx #17
@@ -822,7 +795,6 @@ UPDATE_ROCKETS
 CHECK_ROCKET_COL
                 ldx #2
 NXT_RCK         lda ROCKET_STATUS,X
-;               CMP #0
                 bne _23
 _9              jmp _6
 _23             cmp #7
@@ -905,7 +877,6 @@ _6
 
 MOVE_ROCKETS
                 lda ROCKET_STATUS,X
-;               CMP #0                  ; OFF
                 beq _2
                 cmp #7                  ; EXP
                 beq _3
@@ -967,7 +938,6 @@ _5              ldy OROCKET_Y,X
                 ora PLAYER+MIS+5,Y
                 sta PLAYER+MIS+5,Y
 _10             ldy ROCKET_STATUS,X
-;               CPY #0                  ; OFF
                 beq _4
                 cpy #7                  ; EXP
                 beq _4

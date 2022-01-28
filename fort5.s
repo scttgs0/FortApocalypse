@@ -86,7 +86,6 @@ GET_SLAVE_ADR   lda SLAVE_X,X
 S_COL           jsr GET_SLAVE_ADR
                 ldy #0
                 lda (ADR1),Y
-;               CMP #0
                 beq _1
                 cmp #EXP
                 beq _1
@@ -96,7 +95,6 @@ S_COL           jsr GET_SLAVE_ADR
                 beq _1
                 dec ADR1+1
                 lda (ADR1),Y
-;               CMP #0
                 beq _1
                 cmp #EXP
                 beq _1
@@ -256,7 +254,6 @@ _3              lda CHOPPER_STATUS
                 bge _9
                 ldx CHOP_X
                 lda LEVEL
-;               CMP #0
                 bne _1
                 cpx #$15+2
                 blt _9

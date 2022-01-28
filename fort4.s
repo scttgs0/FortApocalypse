@@ -27,7 +27,6 @@ POS_ROBOT
                 sta TEMP1_I
                 lda R_Y
                 sta TEMP2_I
-;               JMP POS_IT_I
 
 POS_IT_I
                 ldx TEMP1_I
@@ -114,7 +113,6 @@ _2              cpx #MIN_LEFT
 _3              inc SX_F
                 lda SX_F
                 and #3
-;               EOR #0
                 bne _4
                 dec SX
 _4
@@ -135,7 +133,6 @@ _80             ldx CHOPPER_Y
                 sta CHOPPER_Y
                 lda SY_F
                 and #7
-;               EOR #0
                 bne _21
                 lda SY
                 cmp #24
@@ -143,7 +140,6 @@ _80             ldx CHOPPER_Y
 _21             inc SY_F
                 lda SY_F
                 and #7
-;               EOR #0
                 bne _3
                 inc SY
 _3              lda SY
@@ -256,7 +252,6 @@ _3              sta LASERS_1,X
                 dex
                 bpl _3
                 ldx #8-1
-;               LDA #0
 _6              sta LASER_3,X
                 dex
                 bpl _6
@@ -484,8 +479,6 @@ _4              lda #<FUEL_DIG
                 lda FUEL2
                 jsr DDIG
                 lda FUEL1
-;               JSR DDIG
-;               RTS
 
 ;
 ; DRAW DIGIT
@@ -522,8 +515,6 @@ _4              tya
                 jsr DRAW
                 lda S_TEMP
                 and #$F
-;               JSR DRAW
-;               RTS
 
 DRAW            cmp #$A
                 bne _1
@@ -554,7 +545,6 @@ _2              iny
 
 INC_SCORE
                 lda DEMO_STATUS
-;               CMP #0                  ; ON
                 beq _1
                 sed
                 txa
