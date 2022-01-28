@@ -22,22 +22,25 @@ _3              lda Z2,X
                 sta PMBASE
                 lda #>CHR_SET1
                 sta CHBAS
+
                 ldx #0
                 stx AUDCTL
                 stx COLOR4
                 stx TIM6_VAL
-
                 stx PILOT_SKILL
                 stx GRAV_SKILL
                 inx                     ; X=1
                 stx ELEVATOR_DX
                 inx                     ; X=2
                 stx CHOPS
+
                 lda #<LINE1
                 sta VDSLST
                 lda #>LINE1
                 sta VDSLST+1
+
                 jsr M_START
+
                 lda #TITLE_MODE
                 sta MODE
 
@@ -69,196 +72,26 @@ _4              lda Z1,X
                 sta NMIEN
                 cli
 
-TITLE
-                ldx #$FF
-                txs
-                lda #$43
-                sta COLOR0
-                lda #$0F
-                sta COLOR1
-                lda #$83
-                sta COLOR2
-                jsr SCREEN_OFF
-                lda #<DSP_LST3
-                sta SDLST
-                lda #>DSP_LST3
-                sta SDLST+1
-                lda #$3B
-                sta TEMP3
-                ldy #0
-                sty TEMP1_I
-_1              lda TEMP3
-                sta PLAY_SCRN,Y
-                jsr INC_CHR
-                iny
-                cpy #40
-                bne _1
-                lda #<PLAY_SCRN+39
-                sta ADR1
-                lda #>PLAY_SCRN+39
-                sta ADR1+1
-                lda #$3B
-                sta TEMP3
-                ldx #17
-                ldy #0
-_2              lda TEMP3
-                sta (ADR1),Y
-                iny
-                jsr INC_CHR
-                sta (ADR1),Y
-                dey
-                lda ADR1
-                clc
-                adc #40
-                sta ADR1
-                lda ADR1+1
-                adc #0
-                sta ADR1+1
-                dex
-                bpl _2
-
-                lda #<T2
-                sta VVBLKD
-                lda #>T2
-                sta VVBLKD+1
-
-                ldx #5
-                stx TEMP1
-                dex                     ; X=4
-                stx TEMP2
-                ldx #<txtTitle1
-                ldy #>txtTitle1
-                jsr PRINT
-                inc TEMP1               ; =6
-                lda #6
-                sta TEMP2
-                ldx #<txtTitle2
-                ldy #>txtTitle2
-                jsr PRINT
-                lda #10
-                sta TEMP2
-                ldx #<txtTitle3
-                ldy #>txtTitle3
-                jsr PRINT
-                ldx #7
-_3              lda T_5,X
-                sta PLAY_SCRN+426,X
-                dex
-                bpl _3
-                lda #4
-                sta TEMP1
-                lda #12
-                sta TEMP2
-                ldx #<txtTitle4
-                ldy #>txtTitle4
-                jsr PRINT
-
-T1
-                lda VCOUNT
-                asl
-                sta WSYNC
-                sta COLPF3
-                jmp T1
-
-T2
-                lda FRAME
-                and #3
-                bne _1
-                lda COLOR2
-                pha
-                lda COLOR1
-                sta COLOR2
-                lda COLOR0
-                sta COLOR1
-                pla
-                sta COLOR0
-
-_1              lda FRAME
-                and #7
-                bne _2
-                inc TEMP1_I
-
-_2              lda #$AF
-                sta AUDC1
-                sta AUDC2
-                lda #$FF
-                sec
-                sbc TEMP1_I
-                sta AUDF1
-                tax
-                dex
-                stx AUDF2
-
-                lda TEMP1_I
-                cmp #$F3
-                beq _4
-                ldx #START_MODE
-                lda TRIG0
-                beq _3
-                lda CONSOL
-                cmp #6
-                beq _3
-                ldx #OPTION_MODE
-                cmp #7
-                bne _3
-
-                jmp VVBLKD_RET
-_3              stx MODE
-                ldx #0
-                stx OPT_NUM
-                inx                     ; X=1
-_5              stx DEMO_STATUS
-                jmp T3
-_4              ldx #-1                 ; START DEMO
-                bne _5                  ; FORCED
-
-INC_CHR
-                inc TEMP3
-                lda TEMP3
-                cmp #$3E
-                bne _1
-                lda #$3B
-_1              sta TEMP3
-                rts
-
-
-;=======================================
-;
-;=======================================
-T3              sei
-                lda #$A                 ; LASER BLOCK
-                sta COLOR1
-                lda #$94                ; LASERS,HOUSE
-                sta COLOR2
-                lda #$9A                ; LETTERS
-                sta COLOR3
-                lda #<VERTBLKD
-                sta VVBLKD
-                lda #>VERTBLKD
-                sta VVBLKD+1
-                jsr SCREEN_OFF
-_1              lda VCOUNT
-                bne _1
-                lda #$C0
-                sta NMIEN
-                cli
+                brl Title
 
 MAIN
                 lda MODE
                 cmp #GO_MODE
                 beq _2
+
                 lda FRAME
 _1              cmp FRAME
                 beq _1
-_2
 
-                lda MODE
+_2              lda MODE
                 cmp #GO_MODE
                 bne _6
+  
                 jsr MOVE_PODS
                 jsr MOVE_TANKS
                 jsr MOVE_CRUISE_MISSILES
                 jsr MOVE_SLAVES
+  
                 jsr SET_SCANNER
                 jsr CHECK_FUEL_BASE
                 jsr CHECK_FORT
@@ -270,21 +103,27 @@ _6              jsr CHECK_HYPER_CHAMBER
 
                 lda DEMO_STATUS
                 bpl _3
+  
                 inc DEMO_STATUS         ; =0
+  
                 lda #START_MODE
                 sta MODE
 
 _3              lda MODE
                 cmp #TITLE_MODE
                 beq _5
+
                 cmp #OPTION_MODE
                 bne _4
+
 _5              lda FRAME
                 and #%00000100
                 beq _4
+
                 dec TIM6_VAL
                 bne _4
-                jmp TITLE
+
+                jmp Title
 
 _4              JMP MAIN
 
@@ -1119,6 +958,7 @@ _6              iny
                 lda #-1
                 sta TIM6_VAL
                 ror SCREEN_OFF          ; PROT
+
                 lda #TITLE_MODE
                 sta MODE
                 sta DEMO_STATUS

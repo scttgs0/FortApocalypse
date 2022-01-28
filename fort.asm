@@ -71,6 +71,7 @@
 
                 .include "input.asm"
                 .include "text.asm"
+                .include "title.asm"
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF
