@@ -66,6 +66,7 @@
                 ; Engine
                 .include "displaylist.asm"
                 .include "input.asm"
+                .include "lineinterrupts.asm"
                 .include "sound.asm"
                 .include "text.asm"
 
