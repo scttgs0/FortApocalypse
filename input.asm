@@ -137,7 +137,7 @@ _2              ldx STICK
                 cpx #$F
                 bne _3
 
-                jsr HOVER
+                jsr Hover
                 lda #20
                 sta S1_2_VAL
 
@@ -206,7 +206,7 @@ _10             lda FUEL_STATUS
                 sta S1_2_VAL
 
                 dec CHOPPER_Y
-                jsr HOVER
+                jsr Hover
 
 _11             txa
                 and #DOWN
@@ -223,7 +223,7 @@ _11             txa
                 beq _12
 
                 inc CHOPPER_Y
-                jsr HOVER
+                jsr Hover
 
 _12             lda CHOPPER_ANGLE
                 bpl _13

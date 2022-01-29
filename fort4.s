@@ -14,38 +14,6 @@
 ;=======================================
 ;
 ;=======================================
-POS_CHOPPER
-                lda CHOP_X
-                sta TEMP1_I
-                lda CHOP_Y
-                sta TEMP2_I
-                jmp PositionRobot.POS_IT_I
-
-
-;=======================================
-;
-;=======================================
-HOVER           lda FRAME
-                and #7
-                bne _2
-                lda CHOPPER_ANGLE
-                cmp #4
-                blt _3
-                cmp #14
-                blt _2
-_3              cmp #8
-                bge _1
-                inc CHOPPER_ANGLE
-                inc CHOPPER_ANGLE
-                rts
-_1              dec CHOPPER_ANGLE
-                dec CHOPPER_ANGLE
-_2              rts
-
-
-;=======================================
-;
-;=======================================
 DO_BLOCKS
                 lda FRAME
                 and #$7F

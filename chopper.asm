@@ -259,7 +259,7 @@ _12             dec TIM3_VAL
 
                 lda #OFF
                 sta R_STATUS
-_23             jsr POS_CHOPPER
+_23             jsr PositionChopper
 
                 lda #NEW_PLAYER_MODE
                 sta MODE
@@ -276,7 +276,7 @@ _3              lda MODE
                 cmp #GO_MODE
                 bne CCEND
 
-                jsr POS_CHOPPER
+                jsr PositionChopper
 
 CCXY            lda CHOPPER_X
                 sec
@@ -300,9 +300,50 @@ CCXY            lda CHOPPER_X
 _1              clc
                 adc TEMP1_I
                 sta CHOP_Y
-                jmp POS_CHOPPER
+                jmp PositionChopper
 
 CCEND           rts
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+PositionChopper .proc
+                lda CHOP_X
+                sta TEMP1_I
+                lda CHOP_Y
+                sta TEMP2_I
+                jmp PositionRobot.POS_IT_I
+
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+Hover           .proc
+                lda FRAME
+                and #7
+                bne _XIT
+
+                lda CHOPPER_ANGLE
+                cmp #4
+                blt _1
+
+                cmp #14
+                blt _XIT
+
+_1              cmp #8
+                bge _2
+
+                inc CHOPPER_ANGLE
+                inc CHOPPER_ANGLE
+                rts
+
+_2              dec CHOPPER_ANGLE
+                dec CHOPPER_ANGLE
+_XIT            rts
                 .endproc
 
 ;---------------------------------------

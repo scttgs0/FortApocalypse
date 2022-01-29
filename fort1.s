@@ -229,7 +229,7 @@ _2              jsr MOVE_RAMP
                 ldy #5
 _3              ldx #5
                 jsr WAIT_FRAME
-                jsr HOVER
+                jsr Hover
                 inc CHOPPER_Y
                 dey
                 bpl _3
