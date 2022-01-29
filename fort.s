@@ -107,14 +107,17 @@ VVBLKD_RET      = $E462
 ; CONSTANTS
 ;---------------------------------------
 MIS             = $300
+
 PL0             = $400
 PL1             = $500
 PL2             = $600
 PL3             = $700
-RIGHT           = $8
-LEFT            = $4
-DOWN            = $2
+
 UP              = $1
+DOWN            = $2
+LEFT            = $4
+RIGHT           = $8
+
 CHECK_SUM       = $264C
 
 ;---------------------------------------
@@ -138,12 +141,15 @@ PL              = $8000
 PACKED_MAP      = PL                    ; $D34
 PACKED_SCAN     = PL+$D34               ; $4ED
 PROGRAM         = PL+$1221              ; $2D2C
+
 S_LINE1         = CHR_SET1+736
 S_LINE2         = CHR_SET1+832
 S_LINE3         = CHR_SET1+928
+
 LASERS_1        = CHR_SET2+8
 LASERS_2        = CHR_SET2+40
 LASER_3         = CHR_SET2+72
+
 BLOCK_1         = CHR_SET2+80
 BLOCK_2         = CHR_SET2+88
 BLOCK_3         = CHR_SET2+96
@@ -152,27 +158,33 @@ BLOCK_5         = CHR_SET2+112
 BLOCK_6         = CHR_SET2+120
 BLOCK_7         = CHR_SET2+128
 BLOCK_8         = CHR_SET2+136
+
 WINDOW_1        = CHR_SET2+712
 WINDOW_2        = CHR_SET2+720
+
 EXP             = $20
 EXP2            = $3F
 EXPLOSION       = CHR_SET2+256
 EXPLOSION2      = CHR_SET2+504
+EXP_WALL        = $47+128
+
 MISS_LEFT       = $71
 MISS_RIGHT      = $72
 MISS_CHR_LEFT   = CHR_SET2+904
 MISS_CHR_RIGHT  = CHR_SET2+912
-EXP_WALL        = $47+128
+
 
 MAX_LEFT        = 48
 MAX_RIGHT       = 192
 MAX_UP          = 100
 MAX_DOWN        = 212
-MAX_FUEL        = $2000
+
 MIN_LEFT        = 110
 MIN_RIGHT       = 130
 MIN_UP          = 146
 MIN_DOWN        = 166
+
+MAX_FUEL        = $2000
 MAX_TANKS       = 6
 POD_SPEED       = 15
 
@@ -229,11 +241,13 @@ DEMO_COUNT      .byte ?
 
 MAX_PODS        = 39
 
+;---------------------------------------
 
                 * = POD_1
 POD_STATUS      .fill MAX_PODS
 POD_DX          .fill MAX_PODS
 
+;---------------------------------------
 
                 * = POD_2
 POD_X           .fill MAX_PODS
@@ -241,12 +255,15 @@ POD_Y           .fill MAX_PODS
 POD_TEMP1       .fill MAX_PODS
 POD_TEMP2       .fill MAX_PODS
 
+;---------------------------------------
 
                 * = SLAVES
 SLAVE_STATUS    .fill 8
 SLAVE_X         .fill 8
 SLAVE_Y         .fill 8
 SLAVE_DX        .fill 8
+
+;---------------------------------------
 
                 * = $50
 
