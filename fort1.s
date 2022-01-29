@@ -4,6 +4,9 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+;=======================================
+;
+;=======================================
 START           sei
                 cld
                 ldx #Z2_LEN
@@ -44,7 +47,7 @@ _3              lda Z2,X
                 lda #TITLE_MODE
                 sta MODE
 
-SET_FONTS
+SET_FONTS ;unused
                 ldx #0
 _3              lda FNT1,X
                 sta CHR_SET1+15,X
@@ -74,6 +77,10 @@ _4              lda Z1,X
 
                 brl Title
 
+
+;=======================================
+;
+;=======================================
 MAIN
                 lda MODE
                 cmp #GO_MODE
@@ -125,8 +132,12 @@ _5              lda FRAME
 
                 jmp Title
 
-_4              JMP MAIN
+_4              jmp MAIN
 
+
+;=======================================
+;
+;=======================================
 CHECK_LEVEL
                 lda LEVEL
                 beq DO_LEVEL_1
@@ -136,6 +147,10 @@ CHECK_LEVEL
 _1              jmp DO_LEVEL_3
 _2              rts
 
+
+;=======================================
+;
+;=======================================
 DO_LEVEL_1
                 lda CHOPPER_STATUS
                 cmp #LAND
@@ -186,8 +201,16 @@ _3              ldx #5
                 sta MODE
 _1              rts
 
+
+;=======================================
+;
+;=======================================
 PSL             jmp PRINT_SLAVES_LEFT
 
+
+;=======================================
+;
+;=======================================
 MOVE_RAMP
                 ldx #4
 _1              lda ADR1
@@ -205,6 +228,10 @@ _2              lda (ADR2),Y
                 bpl _1
                 rts
 
+
+;=======================================
+;
+;=======================================
 DO_LEVEL_2
                 lda FORT_STATUS
                 cmp #OFF
@@ -226,6 +253,10 @@ DO_LEVEL_2
                 sta MODE
 _1              rts
 
+
+;=======================================
+;
+;=======================================
 DO_LEVEL_3
                 lda CHOPPER_STATUS
                 cmp #LAND
@@ -245,6 +276,10 @@ DO_LEVEL_3
                 sta MODE
 _1              rts
 
+
+;=======================================
+;
+;=======================================
 UNPACK
 _0              jsr GET_BYTE
                 ldy #0
@@ -281,6 +316,10 @@ _4              dex
                 bcc _0
                 rts
 
+
+;=======================================
+;
+;=======================================
 GET_BYTE
                 ldy #0
                 lda (ADR1),Y
@@ -289,6 +328,9 @@ GET_BYTE
                 inc ADR1+1
 _1              rts
 
+;---------------------------------------
+;---------------------------------------
+
 CHR1            .byte $00,$61,$0E,$0F,$10,$11,$0A,$0B       ; ' a./01*+' atari-ascii
                 .byte $0C,$0D,$03,$07,$1F,$73,$74           ; ',-#'?st'
 
@@ -296,18 +338,17 @@ CHR1            .byte $00,$61,$0E,$0F,$10,$11,$0A,$0B       ; ' a./01*+' atari-a
                 .byte $47+128
 CHR1_L          = *-CHR1
 
-CHR2
-                .byte $00,$55,$AA,$FF
+CHR2            .byte $00,$55,$AA,$FF
 CHR2_L          = *-CHR2
 
-PACK_ADR
-; LEVEL_1
-                .addr PACKED_MAP+$000
-; LEVEL_2
-                .addr PACKED_MAP+$62B
-; LEVEL_1
-                .addr PACKED_MAP+$000
+PACK_ADR        .addr PACKED_MAP+$000   ; LEVEL_1
+                .addr PACKED_MAP+$62B   ; LEVEL_2
+                .addr PACKED_MAP+$000   ; LEVEL_1
 
+
+;=======================================
+;
+;=======================================
 CHECK_MODES
                 lda MODE
 _1              cmp #START_MODE
@@ -326,6 +367,10 @@ _4              cmp #NEW_PLAYER_MODE
 _30             rol CHECK_MODES         ; PROT
                 rts
 
+
+;=======================================
+;
+;=======================================
 M_START
                 jsr SCREEN_OFF
                 ldx #0
@@ -397,6 +442,9 @@ _4              lda #NEW_LEVEL_MODE
                 sta MODE
                 rts
 
+;---------------------------------------
+;---------------------------------------
+
 GRAV_TAB
                 .byte $F,7
 ROBOT_TAB
@@ -414,6 +462,10 @@ MISSILE_TAB
 ELEVATOR_TAB
                 .byte 37+25,37+10,37+0
 
+
+;=======================================
+;
+;=======================================
 M_NEW_PLAYER
                 jsr SCREEN_OFF
                 sed
@@ -493,6 +545,10 @@ _10             lda #4
                 sta MODE
                 rts
 
+
+;=======================================
+;
+;=======================================
 M_NEW_LEVEL
                 jsr SCREEN_OFF
                 lda #12
@@ -599,7 +655,7 @@ _7              sta POD_STATUS,X
                 sta TEMP4
                 jsr UNPACK
 
-MAKE_CONTURE
+MAKE_CONTURE ;unused
                 lda #<MAP
                 sta ADR1
                 lda #>MAP
@@ -668,9 +724,7 @@ _70             sta (ADR1),Y
                 inc ADR1+1
                 dex
                 bpl _69
-_71
-
-                lda LEVEL
+_71             lda LEVEL
                 asl
                 tax
                 lda SCAN_INFO,X
@@ -719,7 +773,7 @@ _53             dex
                 bpl _50
                 inc MAIN                ; PROT
 
-S_BEGIN
+S_BEGIN ;unused
                 ldx #8
                 stx SLAVES_LEFT
                 dex                     ; X=7
@@ -785,6 +839,9 @@ _12
                 sta MODE
                 rts
 
+;---------------------------------------
+;---------------------------------------
+
 LEVEL_COLOR
                 .byte $42
                 .byte $C2
@@ -810,15 +867,25 @@ TANK_START_X_L2
 TANK_START_Y_L2
                 .byte $0C,$0C,$0C,$0C,$26,$26
 
+
+;=======================================
+;
+;=======================================
 INC_GAME_POINTS
                 clc
                 adc GAME_POINTS
                 sta GAME_POINTS
                 rts
 
+;---------------------------------------
+
 M_TAB
                 .char -2,-1,0
 
+
+;=======================================
+;
+;=======================================
 M_GAME_OVER
                 jsr SCREEN_OFF
 
@@ -901,17 +968,17 @@ _52             lda #2
                 sta TEMP1
                 lda #5
                 sta TEMP2
-                ldx #<txtGmOvrMission               ; YOUR
-                ldy #>txtGmOvrMission               ; MISSION
+                ldx #<txtGmOvrMission   ; YOUR
+                ldy #>txtGmOvrMission   ; MISSION
                 jsr PRINT
                 lda #21
                 sta TEMP1
-                ldx #<txtGmOvrAbort               ; ABORTED
+                ldx #<txtGmOvrAbort     ; ABORTED
                 ldy #>txtGmOvrAbort
                 lda LEVEL
                 cmp #3
                 bne _5
-                ldx #<txtGmOvrComplete               ; COMPLETED
+                ldx #<txtGmOvrComplete  ; COMPLETED
                 ldy #>txtGmOvrComplete
 _5              jsr PRINT
 
@@ -919,14 +986,14 @@ _5              jsr PRINT
                 stx TEMP1
                 inx                     ; X=8
                 stx TEMP2
-                ldx #<txtGmOvrRank               ; YOUR
-                ldy #>txtGmOvrRank               ; RANK
+                ldx #<txtGmOvrRank      ; YOUR
+                ldy #>txtGmOvrRank      ; RANK
                 jsr PRINT
                 lda #21
                 sta TEMP1
                 lda #10
                 sta TEMP2
-                ldx #<txtGmOvrClass               ; CLASS
+                ldx #<txtGmOvrClass     ; CLASS
                 ldy #>txtGmOvrClass
                 jsr PRINT
                 lda GAME_POINTS
