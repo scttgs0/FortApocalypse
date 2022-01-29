@@ -67,9 +67,9 @@
                 .include "fort4.s"
                 .include "fort5.s"
                 .include "fort6.s"
-                .include "fort8.s"
 
                 ; Engine
+                .include "displaylist.asm"
                 .include "input.asm"
                 .include "sound.asm"
                 .include "text.asm"
