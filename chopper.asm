@@ -134,7 +134,7 @@ _9              lda TEMP3_I
                 cpx #EMPTY
                 beq _4
 
-_8              cpx #REFUEL
+_8              cpx #kREFUEL
                 beq _7
 
                 lda TEMP4_I

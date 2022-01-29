@@ -9,7 +9,7 @@
 ;=======================================
 CheckFuelBase   .proc
                 lda FUEL_STATUS
-                cmp #REFUEL
+                cmp #kREFUEL
                 bne _1
 
                 jmp Refuel
@@ -43,7 +43,7 @@ _2              cpx #$82
                 cpx #$82+6
                 bge _4
 
-_3              lda #REFUEL
+_3              lda #kREFUEL
                 sta FUEL_STATUS
                 asl ComputeMapAddr     ; PROT
                 lda #1
@@ -52,7 +52,7 @@ _3              lda #REFUEL
                 sta FUEL_TEMP
 _4              lda #0
                 ldx FUEL_STATUS
-                cpx #REFUEL
+                cpx #kREFUEL
                 beq _6
 
                 lda FUEL2

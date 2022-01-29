@@ -23,7 +23,7 @@ LAND            = 6
 BEGIN           = 7
 FULL            = 8
 EMPTY           = 9
-REFUEL          = 10
+kREFUEL         = 10
 PICKUP          = 11
 
 TITLE_MODE      = 1
