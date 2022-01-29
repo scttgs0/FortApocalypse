@@ -588,7 +588,7 @@ _1              ldx LEVEL
 _4              sta SY_F
                 lda #8
                 sta CHOPPER_ANGLE
-                jsr SAVE_POS
+                jsr RestorePoint
                 jsr DO_CHECKSUM3
                 lda #$99
                 sta BONUS1

@@ -137,7 +137,7 @@ _1              stx S4_VAL
                 sta FUEL_TEMP
                 jsr DF1
 
-                jmp SAVE_POS
+                jmp RestorePoint
 
                 .endproc
 

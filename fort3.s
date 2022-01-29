@@ -458,11 +458,11 @@ _6              lda CHOP_X
                 lda #0
                 sta TEMP3_I
                 sta TEMP4_I
-                jsr CHECK_LAND
+                jsr CheckLanding
                 inc ADR1_I+1
-                jsr CHECK_LAND
+                jsr CheckLanding
                 inc ADR1_I+1
-                jsr CHECK_LAND
+                jsr CheckLanding
                 lda CHOPPER_COL
                 and #%11110000
                 bne _4
@@ -487,7 +487,7 @@ _8              cpx #REFUEL
                 beq _7
                 lda TEMP4_I
                 bne _7
-                jsr SAVE_POS
+                jsr RestorePoint
 _7              ldx #LAND
                 bne _5                  ; FORCED
 _4              lda #20
@@ -502,44 +502,12 @@ _5              stx CHOPPER_STATUS
 ;=======================================
 ;
 ;=======================================
-SAVE_POS
-                lda SX_F
-                sta LAND_FX
-                lda SY_F
-                sta LAND_FY
-                lda SX
-                sta LAND_X
-                lda SY
-                sta LAND_Y
-                lda CHOPPER_X
-                sta LAND_CHOP_X
-                lda CHOPPER_Y
-                sta LAND_CHOP_Y
-                lda CHOPPER_ANGLE
-                sta LAND_CHOP_ANGLE
-                rts
-
-
-;=======================================
-;
-;=======================================
-CHECK_LAND
-                ldy #0
-                ldx #LAND_LEN
-                lda (ADR1_I),Y
-_1              cmp LAND_CHR,X
-                beq _2
-                cmp #$48
-                beq _3
-                dex
-                bpl _1
-                inc TEMP3_I
-_2              rts
-_3              inc TEMP4_I
-                rts
-
-P1              ldx #OFF
+P1              .proc
+                ldx #OFF
                 jmp DRCE
+
+                .endproc
+
 
 ;=======================================
 ;
