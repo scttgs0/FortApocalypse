@@ -97,7 +97,7 @@ _2              lda MODE
                 jsr MovePods
                 jsr MOVE_TANKS
                 jsr MOVE_CRUISE_MISSILES
-                jsr MOVE_SLAVES
+                jsr MoveSlaves
   
                 jsr SET_SCANNER
                 jsr CHECK_FUEL_BASE
@@ -205,7 +205,7 @@ _1              rts
 ;=======================================
 ;
 ;=======================================
-PSL             jmp PRINT_SLAVES_LEFT
+PSL             jmp PrintSlavesLeft
 
 
 ;=======================================

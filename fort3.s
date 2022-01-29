@@ -159,7 +159,7 @@ _6              lda CHOP_X
                 lda CHOPPER_COL
                 and #%00000010
                 beq _9
-                jsr PICK_UP_SLAVE
+                jsr SlavePickUp
                 bcc _9
                 ldx #PICKUP
                 jmp _5
