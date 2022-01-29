@@ -102,8 +102,6 @@ MAX_RIGHT       = 192
 
 MAX_FUEL        = $2000
 
-MAX_PODS        = 39
-
 POD_SPEED       = 15
 
                 * = POD_1

@@ -94,7 +94,7 @@ _2              lda MODE
                 cmp #GO_MODE
                 bne _6
   
-                jsr MOVE_PODS
+                jsr MovePods
                 jsr MOVE_TANKS
                 jsr MOVE_CRUISE_MISSILES
                 jsr MOVE_SLAVES
