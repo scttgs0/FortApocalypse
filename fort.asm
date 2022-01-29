@@ -57,18 +57,17 @@
 
                 jml CartridgeStart
 
-                .include "fort1.s"
-                .include "fort2.s"
-                .include "fort3.s"
-                .include "fort4.s"
-                .include "fort5.s"
-
                 ; Engine
+                .include "engine_main.asm"
                 .include "displaylist.asm"
                 .include "input.asm"
-                .include "lineinterrupts.asm"
+                .include "miscellaneous.asm"
                 .include "sound.asm"
                 .include "text.asm"
+
+                ; Interrupts
+                .include "lineinterrupts.asm"
+                .include "vbinterrupts.asm"
 
                 ; Mode Screens
                 .include "options.asm"

@@ -183,6 +183,60 @@ ComputeMapAddr  .proc
 ;=======================================
 ;
 ;=======================================
+DoBlocks        .proc
+                lda FRAME
+                and #$7F
+                bne _9
+
+                ldx #32-1
+                lda #0
+_1              sta BLOCK_1,X
+                dex
+                bpl _1
+
+                lda RANDOM
+                bmi _3
+
+                ldx #7
+                lda #$55
+_2              sta BLOCK_1,X
+                dex
+                bpl _2
+
+_3              lda RANDOM
+                bmi _5
+
+                ldx #7
+                lda #$55
+_4              sta BLOCK_2,X
+                dex
+                bpl _4
+
+_5              lda RANDOM
+                bmi _7
+
+                ldx #7
+                lda #$55
+_6              sta BLOCK_3,X
+                dex
+                bpl _6
+
+_7              lda RANDOM
+                bmi _9
+
+                ldx #7
+                lda #$55
+_8              sta BLOCK_4,X
+                dex
+                bpl _8
+
+_9              rts
+                .endproc
+
+
+;=======================================
+;
+;=======================================
 CheckFort       .proc
                 lda FORT_STATUS
                 cmp #EXPLODE

@@ -4,8 +4,6 @@
 ;---------------------------------------
 ; MAIN INTERUPT DRIVER
 ;       PART (I)
-; UpdateChopper
-; DoChopper
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -54,7 +52,7 @@ VERTBLKD        sei
                 jsr UpdateRockets
                 jsr DoLaser1
                 jsr DoLaser2
-                jsr DO_BLOCKS
+                jsr DoBlocks
                 jsr DoElevator
                 jsr DoChopper
                 jsr RobotAI
