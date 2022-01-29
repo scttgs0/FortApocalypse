@@ -234,8 +234,7 @@ _6              ldx #2
 ;---------------------------------------
 ;---------------------------------------
 
-FORT_EXP
-                .addr FORT_EX1,FORT_EX2
+FORT_EXP        .addr FORT_EX1,FORT_EX2
                 .addr FORT_EX3,FORT_EX4
 
 
