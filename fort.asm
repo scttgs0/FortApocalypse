@@ -82,6 +82,7 @@
                 .include "cruisemissile.asm"
                 .include "pod.asm"
                 .include "robot.asm"
+                .include "rocket.asm"
                 .include "tank.asm"
 
                 ; Environment

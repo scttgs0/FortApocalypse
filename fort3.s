@@ -5,7 +5,6 @@
 ; MAIN INTERUPT DRIVER
 ;       PART (I)
 ; UPDATE_CHOPPER
-; UPDATE_ROCKETS
 ; DO_CHOPPER
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,7 +51,7 @@ VERTBLKD        sei
                 bne _1
 
                 jsr DoRobotChopper
-                jsr UPDATE_ROCKETS
+                jsr UpdateRockets
                 jsr DoLaser1
                 jsr DoLaser2
                 jsr DO_BLOCKS
@@ -327,206 +326,6 @@ _1              clc
                 jmp POS_CHOPPER
 CCEND           rts
 
-
-;=======================================
-;
-;=======================================
-UPDATE_ROCKETS
-
-                ldx #2
-NXT_RCK         lda ROCKET_STATUS,X
-                bne _23
-_9              jmp _6
-_23             cmp #7
-                beq _9
-                lda ROCKET_X,X
-                sec
-                sbc #32+1
-                lsr
-                lsr
-                clc
-                adc SX
-                sta TEMP1_I
-                sta ROCKET_TEMPX,X
-                lda #0
-                ldy SY
-                bmi _0
-                lda SY_F
-                and #7
-_0              clc
-                adc ROCKET_Y,X
-                sec
-                sbc #82+12
-                lsr
-                lsr
-                lsr
-                sta TEMP2_I
-                lda SY
-                bpl _1
-                lda #0
-_1              clc
-                adc TEMP2_I
-                sta TEMP2_I
-                sta ROCKET_TEMPY,X
-                jsr CHECK_CHR_I
-                bcc _6
-                ldy #1
-                sty S3_VAL
-                dey                     ; Y=0
-                sty S2_VAL
-                lda (ADR1_I),Y
-                sta ROCKET_TEMP,X
-                cmp #EXP2
-                bne _4
-                ldy LEVEL
-                dey
-                bne _4
-                sty ROCKET_TEMP+0
-                sty ROCKET_TEMP+1
-                sty ROCKET_TEMP+2
-                lda #EXPLODE
-                sta FORT_STATUS
-                bne _3                  ; FORCED
-_4              cmp #EXP_WALL
-                bne _10
-                stx TEMP1_I
-                lda #$10
-                sta BAK2_COLOR
-                ldx #$20
-                ldy #$00
-                jsr INC_SCORE
-                ldx TEMP1_I
-                lda #0
-                sta ROCKET_TEMP,X
-                beq _21                 ; FORCED
-_10             ldy #HIT_LIST_LEN
-_2              cmp HIT_LIST,Y
-                beq _3
-                dey
-                bpl _2
-_21             lda #7
-                bne _5                  ; FORCED
-_3              lda #0
-_5              sta ROCKET_STATUS,X
-                ldy #0
-                lda #EXP
-                sta (ADR1_I),Y
-                lda #7
-                sta ROCKET_TIM,X
-_6
-
-MOVE_ROCKETS ;unused
-                lda ROCKET_STATUS,X
-                beq _2
-                cmp #7                  ; EXP
-                beq _3
-                lda SSIZEM
-                sta SIZEM
-                lda ROCKET_X,X
-                cmp #0+4
-                blt _2
-                cmp #255-4
-                bge _2
-                lda ROCKET_Y,X
-                cmp #MAX_DOWN+18
-                bge _2
-                cmp #MAX_UP
-                bge _5
-_2              lda #0                  ; OFF
-                sta ROCKET_STATUS,X
-_3              lda #0
-                sta ROCKET_X,X
-                lda #$F0
-                sta ROCKET_Y,X
-_5              ldy OROCKET_Y,X
-                lda PLAYER+MIS+0,Y
-                and ROCKET1_MASK,X
-                sta PLAYER+MIS+0,Y
-                lda PLAYER+MIS+1,Y
-                and ROCKET1_MASK,X
-                sta PLAYER+MIS+1,Y
-                lda PLAYER+MIS+4,Y
-                and ROCKET1_MASK,X
-                sta PLAYER+MIS+4,Y
-                lda PLAYER+MIS+5,Y
-                and ROCKET1_MASK,X
-                sta PLAYER+MIS+5,Y
-                lda ROCKET_Y,X
-                sta OROCKET_Y,X
-                tay
-                lda ROCKET2_MASK,X
-                pha
-                ora PLAYER+MIS+0,Y
-                sta PLAYER+MIS+0,Y
-                pla
-                ora PLAYER+MIS+1,Y
-                sta PLAYER+MIS+1,Y
-                lda SSIZEM
-                and ROCKET1_MASK,X
-                sta SSIZEM
-                lda ROCKET_STATUS,X
-                cmp #3
-                beq _10
-                lda SSIZEM
-                ora ROCKET3_MASK,X
-                sta SSIZEM
-                lda ROCKET2_MASK,X
-                pha
-                ora PLAYER+MIS+4,Y
-                sta PLAYER+MIS+4,Y
-                pla
-                ora PLAYER+MIS+5,Y
-                sta PLAYER+MIS+5,Y
-_10             ldy ROCKET_STATUS,X
-                beq _4
-                cpy #7                  ; EXP
-                beq _4
-                lda ROCKET_X,X
-                clc
-                adc ROCKET_DX-1,Y
-                sta ROCKET_X,X
-                lda ROCKET_Y,X
-                clc
-                adc ROCKET_DY-1,Y
-                sta ROCKET_Y,X
-_4              dex
-                bmi ROCKET_EXP
-                jmp NXT_RCK
-
-
-;=======================================
-;
-;=======================================
-ROCKET_EXP
-                ldx #2
-_1              lda ROCKET_STATUS,X
-                cmp #7                  ; EXP
-                bne _2
-                dec ROCKET_TIM,X
-                bne _2
-                lda ROCKET_TEMPX,X
-                sta TEMP1_I
-                lda ROCKET_TEMPY,X
-                sta TEMP2_I
-                lda #0
-                sta BAK2_COLOR
-                jsr ComputeMapAddrI
-                lda ROCKET_TEMP,X
-                cmp #EXP
-                beq _4
-                ldy #HIT_LIST_LEN
-_0              cmp HIT_LIST,Y
-                beq _4
-                dey
-                bpl _0
-                iny                             ; Y=0
-                sta (ADR1_I),Y
-_4              lda #0                          ; OFF
-                sta ROCKET_STATUS,X
-_2              dex
-                bpl _1
-_3              rts
-
 ;---------------------------------------
 ;---------------------------------------
 
@@ -537,27 +336,6 @@ HIT_LIST_LEN    = *-HIT_LIST-1
                 .byte $61,$00                   ; 'a ' atari-ascii
                 .byte EXP
 HIT_LIST2_LEN   = *-HIT_LIST-1
-
-ROCKET_DX
-                .char -4,-4,0,4,4
-ROCKET_DY
-                .byte 2,0,2,0,2
-
-ROCKET1_MASK
-                .byte %11111100
-                .byte %11110011
-                .byte %11001111
-;               .byte %00111111
-ROCKET2_MASK
-                .byte %00000011
-                .byte %00001100
-                .byte %00110000
-;               .byte %11000000
-ROCKET3_MASK
-                .byte %00000001
-                .byte %00000100
-                .byte %00010000
-;               .byte %01000000
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF
