@@ -240,17 +240,17 @@ RobotLeft       .proc
                 sta TEMP1_I
                 lda R_Y
                 sta TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 dec TEMP1_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 dec TEMP1_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
@@ -278,17 +278,17 @@ RobotRight      .proc
                 sta TEMP1_I
                 lda R_Y
                 sta TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 inc TEMP1_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 inc TEMP1_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
@@ -318,17 +318,17 @@ RobotDown       .proc
                 sta TEMP1_I
                 lda R_Y
                 sta TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 inc TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 inc TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
@@ -354,22 +354,22 @@ RobotUp         .proc
                 blt _1
 
                 sta TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 dec TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 dec TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 
                 dec TEMP2_I
-                jsr CHECK_CHR_I
+                jsr CheckChrI
 
                 bcs _XIT
 

@@ -521,7 +521,7 @@ _1              lda #$1F                ; CHOPPER CLR
                 lda FUEL_STATUS
                 cmp #EMPTY
                 bne _10
-                dec UPDATE_CHOPPER      ; PROT
+                dec UpdateChopper      ; PROT
                 lda #FULL
                 sta FUEL_STATUS
                 ldx #0

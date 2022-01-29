@@ -49,7 +49,7 @@ _3              clc
                 adc TEMP2_I
                 sta TEMP2_I
                 sta ROCKET_TEMPY,X
-                jsr CHECK_CHR_I
+                jsr CheckChrI
                 bcc _XIT
 
                 ldy #1
