@@ -42,10 +42,10 @@ CART_START      sei
                 ldx #$00
                 txa
 _next1          sta $0000,X             ; zero-page
-                sta $D000,X             ; HPOSP0
-                sta $D400,X             ; DMACLT
-                sta $D200,X             ; AUDF1
-                sta $D300,X             ; PORTA
+                sta HPOSP0,X
+                sta DMACLT,X
+                sta AUDF1,X
+                sta PORTA,X
                 inx
                 bne _next1
 
@@ -393,16 +393,16 @@ _next1          lda $E480,X             ; PUPDIV
                 sta NMIEN
 
                 ldx #$3B
-                stx $D302               ; PACTL
-                stx $D303               ; PBCTL
+                stx PACTL
+                stx PBCTL
 
                 lda #$00
-                sta $D300               ; PORTA
-                sta $D301               ; PORTB
+                sta PORTA
+                sta PORTB
 
                 inx
-                stx $D302               ; PACTL
-                stx $D303               ; PBCTL
+                stx PACTL
+                stx PBCTL
 
                 rts
 

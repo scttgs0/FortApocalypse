@@ -20,14 +20,15 @@
 ; SYSTEM EQUATES
 ;---------------------------------------
 
-FRAME           = $14
 ATTRACT         = $4D
+
+
 VDSLST          = $200
-VVBLKI          = $222
 VVBLKD          = $224
 SDMCTL          = $22F
 SDLST           = $230
 PRIOR           = $26F
+STICK           = $278
 PCOLR0          = $2C0
 PCOLR1          = $2C1
 PCOLR2          = $2C2
@@ -37,12 +38,15 @@ COLOR1          = $2C5
 COLOR2          = $2C6
 COLOR3          = $2C7
 COLOR4          = $2C8
-DMACTL          = $D400
-M0PF            = $D000
-M1PF            = $D001
-M2PF            = $D002
-M3PF            = $D003
+CHBAS           = $2F4
+
+
+HPOSP0          = $D000
+HPOSP1          = $D001
+HPOSP2          = $D002
+HPOSP3          = $D003
 P0PF            = $D004
+HPOSM0          = $D004
 P1PF            = $D005
 P2PF            = $D006
 P3PF            = $D007
@@ -51,49 +55,21 @@ M1PL            = $D009
 M2PL            = $D00A
 M3PL            = $D00B
 P0PL            = $D00C
+SIZEM           = $D00C
 P1PL            = $D00D
 P2PL            = $D00E
 P3PL            = $D00F
-COLPM0          = $D012
-COLPM1          = $D013
-COLPM2          = $D014
-COLPM3          = $D015
+TRIG0           = $D010
 COLPF0          = $D016
 COLPF1          = $D017
 COLPF2          = $D018
 COLPF3          = $D019
 COLBK           = $D01A
-HITCLR          = $D01E
-CHBASE          = $D409
-RANDOM          = $D20A
-CHBAS           = $2F4
-CH              = $2FC
-CH2             = $2F2
-KBCODE          = $D209
 GRACTL          = $D01D
-SIZEP0          = $D008
-SIZEP1          = $D009
-SIZEP2          = $D00A
-SIZEP3          = $D00B
-PMBASE          = $D407
-HPOSP0          = $D000
-HPOSP1          = $D001
-HPOSP2          = $D002
-HPOSP3          = $D003
-HPOSM0          = $D004
-HPOSM1          = $D005
-HPOSM2          = $D006
-HPOSM3          = $D007
-SIZEM           = $D00C
+HITCLR          = $D01E
 CONSOL          = $D01F
-NMIEN           = $D40E
-DLIST           = $D402
-HSCROL          = $D404
-VSCROL          = $D405
-WSYNC           = $D40A
-VCOUNT          = $D40B
-STICK           = $278
-TRIG0           = $D010
+
+
 AUDF1           = $D200
 AUDC1           = $D201
 AUDF2           = $D202
@@ -103,13 +79,28 @@ AUDC3           = $D205
 AUDF4           = $D206
 AUDC4           = $D207
 AUDCTL          = $D208
+KBCODE          = $D209
+RANDOM          = $D20A
 SKCTL           = $D20F
 SKSTAT          = $D20F
-CDTMV1          = $218
-CDTMV2          = $21A
-CDTMA1          = $226
-CDTMA2          = $228
-VVBLKI_RET      = $E45F
+
+
+PORTA           = $D300
+PORTB           = $D301
+PACTL           = $D302
+PBCTL           = $D303
+
+
+DMACLT          = $D400
+HSCROL          = $D404
+VSCROL          = $D405
+PMBASE          = $D407
+CHBASE          = $D409
+WSYNC           = $D40A
+VCOUNT          = $D40B
+NMIEN           = $D40E
+
+
 VVBLKD_RET      = $E462
 
 ;---------------------------------------
@@ -189,7 +180,8 @@ POD_SPEED       = 15
 ; ZERO PAGE USAGE
 ;---------------------------------------
 
-                * = $15
+                * = $14
+FRAME           .byte ?
 ADR1            .word ?
 ADR2            .word ?
 TEMP1           .byte ?
