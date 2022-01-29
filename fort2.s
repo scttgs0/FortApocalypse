@@ -6,6 +6,33 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;=======================================
+; 
+;=======================================
+INIT_OS         ldx #$25
+_next1          lda $E480,X             ; PUPDIV
+                sta VDSLST,X
+                dex
+                bpl _next1
+
+                lda #$40
+                sta NMIEN
+
+                ldx #$3B
+                stx PACTL
+                stx PBCTL
+
+                lda #$00
+                sta PORTA
+                sta PORTB
+
+                inx
+                stx PACTL
+                stx PBCTL
+
+                rts
+
+
+;=======================================
 ;
 ;=======================================
 SCREEN_ON
