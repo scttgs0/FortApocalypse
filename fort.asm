@@ -70,10 +70,13 @@
                 .include "fort8.s"
 
                 .include "input.asm"
-                .include "options.asm"
                 .include "sound.asm"
                 .include "text.asm"
+
+                .include "options.asm"
                 .include "title.asm"
+
+                .include "tank.asm"
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF

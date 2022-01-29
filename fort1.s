@@ -445,22 +445,14 @@ _4              lda #NEW_LEVEL_MODE
 ;---------------------------------------
 ;---------------------------------------
 
-GRAV_TAB
-                .byte $F,7
-ROBOT_TAB
-                .byte 3,1,0
-CHOP_TAB
-                .byte $7,$9,$11
-LASER_TAB
-                .byte 4,8,16
-POD_TAB
-                .byte 13-1,26-1,MAX_PODS-1
-TANK_TAB
-                .byte 4
-MISSILE_TAB
-                .byte 3,2,1
-ELEVATOR_TAB
-                .byte 37+25,37+10,37+0
+GRAV_TAB        .byte $F,7
+ROBOT_TAB       .byte 3,1,0
+CHOP_TAB        .byte $7,$9,$11
+LASER_TAB       .byte 4,8,16
+POD_TAB         .byte 13-1,26-1,MAX_PODS-1
+TANK_TAB        .byte 4
+MISSILE_TAB     .byte 3,2,1
+ELEVATOR_TAB    .byte 37+25,37+10,37+0
 
 
 ;=======================================

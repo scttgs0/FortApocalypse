@@ -1052,8 +1052,7 @@ _3              rts
 
 HIT_LIST        .byte $40,$5B,$5C,$5D,$5E,$5F
                 .byte $3B,$3C,$3D,$3E,$49,$4A
-TANK_SHAPE      .byte $EC,$ED,$EE,$EF,$F0       ; 'lmnop' atari-ascii
-                .byte MISS_LEFT,MISS_RIGHT
+
 HIT_LIST_LEN    = *-HIT_LIST-1
                 .byte $61,$00                   ; 'a ' atari-ascii
                 .byte EXP

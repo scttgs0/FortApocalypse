@@ -101,7 +101,7 @@ MAX_LEFT        = 48
 MAX_RIGHT       = 192
 
 MAX_FUEL        = $2000
-MAX_TANKS       = 6
+
 MAX_PODS        = 39
 
 POD_SPEED       = 15
