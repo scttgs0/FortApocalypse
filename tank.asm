@@ -71,7 +71,7 @@ _5              cmp #CRASH
 ; RESTORE OLD POS
 _13             lda TANK_X,X
                 sta TEMP1
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 stx TEMP1
                 ldy #0
                 txa
@@ -119,7 +119,7 @@ _7              jsr POS_TANK
                 jsr POS_TANK
                 lda TANK_X,X
                 sta TEMP1
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 stx TEMP1
                 ldy #0
                 txa
@@ -179,7 +179,7 @@ _1              lda TANK_STATUS,X
                 sta TEMP1
                 lda TANK_Y,X
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 stx TEMP1
                 ldy #0
                 txa
@@ -219,7 +219,7 @@ _3              lda TANK_STATUS,X
                 sta TEMP1
                 lda TANK_START_Y,X
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 ldy #13-1
 _9              lda (ADR1),Y
                 bmi _10

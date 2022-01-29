@@ -13,7 +13,7 @@ SetScanner      .proc
                 lda #0
                 sta TEMP1
                 sta TEMP2
-                inc DRAW_MAP            ; PROT
+                inc DrawMap            ; PROT
                 lda SY
                 beq _2
                 bmi _2

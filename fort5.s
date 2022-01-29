@@ -167,7 +167,7 @@ _2              lda #121
                 sta TEMP1
                 lda #20
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 lda TEMP3
                 asl
                 tax

@@ -45,7 +45,7 @@ _2              cpx #$82
 
 _3              lda #REFUEL
                 sta FUEL_STATUS
-                asl COMPUTE_MAP_ADR     ; PROT
+                asl ComputeMapAddr     ; PROT
                 lda #1
                 sta TIM4_VAL
                 lda #4
@@ -147,7 +147,7 @@ _1              stx S4_VAL
 ;=======================================
 DRAW_BASE       .proc
 ;---
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
 
                 lda #4
                 sta TEMP4

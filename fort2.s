@@ -103,7 +103,7 @@ _5              lda ROCKET_STATUS,X
                 sta TEMP1
                 lda ROCKET_TEMPY,X
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 ldy #0
                 lda ROCKET_TEMP,X
                 sta (ADR1),Y

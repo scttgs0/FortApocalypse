@@ -77,7 +77,7 @@ GetPodAddr      .proc
                 sta TEMP1
                 lda POD_Y,X
                 sta TEMP2
-                jmp COMPUTE_MAP_ADR
+                jmp ComputeMapAddr
 
                 .endproc
 
@@ -276,7 +276,7 @@ _2              lda POD_X,X
                 sta TEMP1
                 lda POD_Y,X
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
 
                 ldy #0
                 lda (ADR1),Y

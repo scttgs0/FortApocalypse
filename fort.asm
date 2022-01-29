@@ -32,7 +32,7 @@
 ; Font1             $9300 - $95c8
 ; Font2             $9600 - $988f
 ;
-; Code              $a000 - $c884
+; Code              $a000 - $c882
 ;=======================================
 
                 .cpu "65816"
@@ -69,15 +69,30 @@
                 .include "fort6.s"
                 .include "fort8.s"
 
+                ; Engine
                 .include "input.asm"
                 .include "sound.asm"
                 .include "text.asm"
 
+                ; Mode Screens
                 .include "options.asm"
                 .include "title.asm"
 
+                ; Baddies
                 .include "cruisemissile.asm"
+                .include "pod.asm"
+                .include "robot.asm"
                 .include "tank.asm"
+
+                ; Environment
+                .include "elevator.asm"
+                .include "fuel.asm"
+                .include "hyperchamber.asm"
+                .include "landingpad.asm"
+                .include "laser.asm"
+                .include "navatron.asm"
+                .include "slaves.asm"
+                .include "world.asm"
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF

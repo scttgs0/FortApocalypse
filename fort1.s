@@ -175,7 +175,7 @@ DO_LEVEL_1
                 sta TEMP1
                 lda #40
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 lda ADR1
                 sta TEMP3
                 lda ADR1+1
@@ -706,7 +706,7 @@ _7              lda (ADR1),Y
                 sta TEMP1
                 lda #$13
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 ldx #2
 _69             ldy #$D
                 lda #0

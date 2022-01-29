@@ -41,7 +41,7 @@ VERTBLKD        sei
                 sta HITCLR
 
                 jsr DO_NUMBERS
-                jsr DRAW_MAP
+                jsr DrawMap
                 jsr UPDATE_CHOPPER
                 jsr UpdateRobotChopper
                 jsr ReadTrigger
@@ -71,7 +71,7 @@ _1
 ;
 ;=======================================
 CHECK_CHR_I
-                jsr COMPUTE_MAP_ADR_I
+                jsr ComputeMapAddrI
                 ldy #0
                 lda (ADR1_I),Y
                 and #$7F
@@ -144,7 +144,7 @@ _6              lda CHOP_X
                 sta TEMP1_I
                 lda CHOP_Y
                 sta TEMP2_I
-                jsr COMPUTE_MAP_ADR_I
+                jsr ComputeMapAddrI
                 lda #0
                 sta TEMP3_I
                 sta TEMP4_I
@@ -510,7 +510,7 @@ _1              lda ROCKET_STATUS,X
                 sta TEMP2_I
                 lda #0
                 sta BAK2_COLOR
-                jsr COMPUTE_MAP_ADR_I
+                jsr ComputeMapAddrI
                 lda ROCKET_TEMP,X
                 cmp #EXP
                 beq _4

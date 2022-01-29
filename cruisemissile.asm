@@ -84,7 +84,7 @@ GET_MISS_ADR    .proc
                 sta TEMP1
                 lda CM_Y,X
                 sta TEMP2
-                jmp COMPUTE_MAP_ADR
+                jmp ComputeMapAddr
 
                 .endproc
 

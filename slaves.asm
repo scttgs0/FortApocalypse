@@ -61,7 +61,7 @@ GetSlaveAddr    .proc
                 sta TEMP1
                 lda SLAVE_Y,X
                 sta TEMP2
-                jmp COMPUTE_MAP_ADR
+                jmp ComputeMapAddr
 
                 .endproc
 
