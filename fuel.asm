@@ -7,12 +7,12 @@
 ;=======================================
 ;
 ;=======================================
-CHECK_FUEL_BASE .proc
+CheckFuelBase   .proc
                 lda FUEL_STATUS
                 cmp #REFUEL
                 bne _1
 
-                jmp RE_FUEL
+                jmp Refuel
 
 _1              lda CHOPPER_STATUS
                 cmp #LAND
@@ -79,7 +79,7 @@ _5              lda #$A4
 _6              sta AUDC2
                 lda #$88
                 sta AUDF2
-                jsr CLEAR_INFO
+                jsr ClearInfo
 
 _XIT            rts
                 .endproc
@@ -88,7 +88,7 @@ _XIT            rts
 ;=======================================
 ;
 ;=======================================
-RE_FUEL         .proc
+Refuel          .proc
                 dec TIM4_VAL
                 bne FE
 
@@ -107,14 +107,14 @@ DF1             lda #9+2
 
                 lda #$15+2
                 sta TEMP1
-                jsr DRAW_BASE
+                jsr DrawBase
 
                 lda #$EC+2
                 bne _2                  ; FORCED
 
 _1              lda #$82
 _2              sta TEMP1
-                jsr DRAW_BASE
+                jsr DrawBase
 
                 dec FUEL_TEMP
 FE              rts
@@ -145,7 +145,7 @@ _1              stx S4_VAL
 ;=======================================
 ;
 ;=======================================
-DRAW_BASE       .proc
+DrawBase        .proc
 ;---
                 jsr ComputeMapAddr
 
@@ -174,8 +174,7 @@ _next2          lda BASE_SHAPE,X
 
 ;---------------------------------------
 ;---------------------------------------
-BASE_SHAPE
-                .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
+BASE_SHAPE      .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
                 .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
                 .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
                 .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....

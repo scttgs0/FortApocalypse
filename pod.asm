@@ -121,7 +121,7 @@ PositionPod     .proc
                 sta TEMP1
                 lda POD_Y,X
                 sta TEMP2
-                jmp POS_IT
+                jmp PositionIt
 
                 .endproc
 
@@ -197,7 +197,7 @@ _1              jsr PodErase
                 sta POD_STATUS,X
                 ldx #$50
                 ldy #$00
-                jsr INC_SCORE
+                jsr IncreaseScore
 
                 sec
                 rts
@@ -300,7 +300,6 @@ _4              lda POD_COM
                 sta POD_STATUS,X
                 rts
                 .endproc
-
 
 ;---------------------------------------
 ;---------------------------------------

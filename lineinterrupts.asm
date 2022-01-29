@@ -140,7 +140,7 @@ _next1          sta HPOSP0,X
                 cmp #GO_MODE
                 bne _2
 
-_1              jsr DO_SOUNDS
+_1              jsr DoSounds
 
 _2              plp
                 pla

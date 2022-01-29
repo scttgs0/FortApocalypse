@@ -63,7 +63,7 @@ _4              lda SKSTAT
                 pha
                 lda #PAUSE_MODE
                 sta MODE
-                jsr CLEAR_SOUNDS
+                jsr ClearSounds
 
 _wait1          lda SKSTAT
                 and #%00000100

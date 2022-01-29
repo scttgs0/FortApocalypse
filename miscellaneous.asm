@@ -1,6 +1,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE: FORT2.S
+; FILE: miscellaneous.asm
 ;---------------------------------------
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -8,7 +8,8 @@
 ;=======================================
 ; 
 ;=======================================
-INIT_OS         ldx #$25
+INIT_OS         .proc
+                ldx #$25
 _next1          lda $E480,X             ; PUPDIV
                 sta VDSLST,X
                 dex
@@ -30,24 +31,27 @@ _next1          lda $E480,X             ; PUPDIV
                 stx PBCTL
 
                 rts
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-SCREEN_ON
+SCREEN_ON       .proc
                 jsr SCREEN_OFF
+
                 lda #<DSP_LST1
                 sta SDLST
                 lda #>DSP_LST1
                 sta SDLST+1
                 rts
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-SCREEN_OFF
+SCREEN_OFF      .proc
                 lda #<DSP_LST2
                 sta SDLST
                 lda #>DSP_LST2
@@ -58,18 +62,21 @@ SCREEN_OFF
                 ldx R_STATUS
                 cpx #CRASH
                 bne _0
+
                 sta R_STATUS
 _0              ldx #$E0
                 lda #0
 _1              sta CHR_SET1+$200,X
                 inx
                 bne _1
+
 _2              sta CHR_SET1+$300,X
                 sta PLAY_SCRN+$000,X
                 sta PLAY_SCRN+$100,X
                 sta PLAY_SCRN+$200,X
                 inx
                 bne _2
+
                 sta S1_1_VAL
                 sta S2_VAL
                 sta S3_VAL
@@ -84,9 +91,10 @@ _2              sta CHR_SET1+$300,X
 _3              lda CM_STATUS,X
                 cmp #OFF
                 beq _4
+
                 lda #OFF
                 sta CM_STATUS,X
-                jsr M_ERASE
+                jsr MissileErase
 _4              dex
                 bpl _3
 
@@ -94,11 +102,13 @@ _4              dex
 _5              lda ROCKET_STATUS,X
                 cmp #7                  ; EXP
                 bne _6
+
                 lda ROCKET_TEMPX,X
                 sta TEMP1
                 lda ROCKET_TEMPY,X
                 sta TEMP2
                 jsr ComputeMapAddr
+
                 ldy #0
                 lda ROCKET_TEMP,X
                 sta (ADR1),Y
@@ -108,19 +118,21 @@ _6              lda #0
                 dex
                 bpl _5
 
-                brl CLEAR_SOUNDS
+                brl ClearSounds
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-CCL
+CCL             .proc
                 lda TEMP2
                 pha
                 lda TEMP1
                 pha
                 lda TEMP2
                 jsr MULT_BY_40
+
                 pla
                 pha
                 clc
@@ -135,23 +147,27 @@ CCL
                 pla
                 sta TEMP2
                 rts
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-PRINT
+PRINT           .proc
                 stx ADR2
                 sty ADR2+1
                 jsr CCL
+
                 ldy #0
                 sty TEMP5
                 sty TEMP6
 _1              ldy TEMP5
                 lda (ADR2),Y
                 beq _3
+
                 cmp #$FF
                 beq _2
+
                 ldy TEMP6
                 sta (ADR1),Y
                 inc TEMP6
@@ -162,16 +178,19 @@ _3              ldy TEMP6
                 inc TEMP6
                 inc TEMP5
                 bne _1                  ; FORCED
+
 _2              rts
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-GIVE_BONUS
+GiveBonus       .proc
                 ldx BONUS1
                 ldy BONUS2
-                jsr INC_SCORE
+                jsr IncreaseScore
+
                 lda #0
                 sta BONUS1
                 sta BONUS2
@@ -182,6 +201,7 @@ GIVE_BONUS
                 sta CHOP_LEFT
                 cld
                 ldx #2
+                .endproc
 
                 ;[fall-through]
 
@@ -189,40 +209,49 @@ GIVE_BONUS
 ;=======================================
 ;
 ;=======================================
-WAIT_FRAME
+WAIT_FRAME      .proc
                 lda MODE
                 sta TEMP_MODE
                 lda FRAME
 _1              cmp FRAME
                 beq _1
+
                 jsr ReadKeyboard
+
                 lda MODE
                 cmp TEMP_MODE
                 bne _2
+
                 dex
                 bne WAIT_FRAME
+
                 rts
 
 _2              ldx #$FF
                 txs
                 jmp MAIN
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-CLEAR_INFO
+ClearInfo       .proc
                 ldy #40-1
                 lda #0
 _1              sta PLAY_SCRN,Y
                 dey
                 bpl _1
+
                 rts
+                .endproc
+
 
 ;=======================================
 ;
 ;=======================================
-DO_CHECKSUM2    ldy #0
+DO_CHECKSUM2    .proc
+                ldy #0
                 sty TEMP1
                 sty ADR1
                 lda #$90
@@ -234,13 +263,16 @@ _next1          adc (ADR1),Y
                 inc TEMP1
 _1              iny
                 bne _next1
+
                 inc ADR1+1
                 ldx ADR1+1
                 cpx #$B0
                 bne _next1
+
                 ;cmp #0
                 cmp #$C7
                 bne _2
+
                 lda TEMP1
                 ;cmp #0
                 cmp #$f8
@@ -249,16 +281,18 @@ _1              iny
 _2              .byte $12
 
 _XIT            rts
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-POS_IT
+PositionIt      .proc
                 stx TEMP3
                 ldx TEMP1
                 lda TEMP2
                 jsr MULT_BY_40
+
                 txa
                 lsr
                 lsr
@@ -279,12 +313,13 @@ POS_IT
                 sta (ADR2),Y
                 ldx TEMP3
                 rts
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-MULT_BY_40
+MULT_BY_40      .proc
                 sta TEMP1
                 asl
                 asl
@@ -300,18 +335,20 @@ MULT_BY_40
                 rol TEMP2
                 sta TEMP1
                 rts
+                .endproc
 
 
 ;=======================================
 ;
 ;=======================================
-DO_CHECKSUM3
+DO_CHECKSUM3    .proc
                 ldx #0
                 txa
                 clc
 _1              adc $B980,X
                 inx
                 bne _1
+
                 ;cmp #$0
                 cmp #$90
                 beq _2
@@ -319,6 +356,7 @@ _1              adc $B980,X
                 .byte $12
 
 _2              rts
+                .endproc
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF

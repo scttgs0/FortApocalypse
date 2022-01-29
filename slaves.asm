@@ -21,7 +21,7 @@ MoveSlaves      .proc
                 ldx #$00
                 stx AUDC3
                 ldy #$08
-                jsr INC_SCORE
+                jsr IncreaseScore
 
                 inc SLAVES_SAVED
                 jmp _2
@@ -48,7 +48,7 @@ _3              stx SLAVE_NUM
                 dec TIM9_VAL
                 bne _XIT
 
-                jsr CLEAR_INFO
+                jsr ClearInfo
 _XIT            rts
                 .endproc
 

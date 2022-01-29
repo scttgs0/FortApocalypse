@@ -1,6 +1,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE: FORT3.S
+; FILE: vbinterrupts.asm
 ;---------------------------------------
 ; MAIN INTERUPT DRIVER
 ;       PART (I)
@@ -10,7 +10,8 @@
 ;=======================================
 ;
 ;=======================================
-VERTBLKD        sei
+VERTBLKD        .proc
+                sei
                 php
                 cld
                 lda #0
@@ -37,12 +38,12 @@ VERTBLKD        sei
                 sta ROBOT_COL
                 sta HITCLR
 
-                jsr DO_NUMBERS
+                jsr DoNumbers
                 jsr DrawMap
                 jsr UpdateChopper
                 jsr UpdateRobotChopper
                 jsr ReadTrigger
-                jsr DO_EXP
+                jsr DoExplode
 
                 lda MODE
                 cmp #GO_MODE
@@ -62,6 +63,9 @@ _1
                 plp
                 cli
                 jmp VVBLKD_RET
+
+                .endproc
+
 
 ;---------------------------------------
 ;---------------------------------------

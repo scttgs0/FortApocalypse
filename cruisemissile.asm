@@ -7,7 +7,7 @@
 ;=======================================
 ;
 ;=======================================
-MOVE_CRUISE_MISSILES .proc
+MoveCruiseMissiles .proc
                 dec MISSILE_SPD
                 bne MCE
                 lda MISSILE_SPEED
@@ -22,13 +22,13 @@ M_ST            .block
                 beq M_END
                 cmp #BEGIN
                 bne _1
-                jmp M_BEGIN
+                jmp MissileBegin
 
-_1              jsr M_COL
+_1              jsr MissileCollision
                 bcs M_END
-                jsr M_ERASE
-                jsr M_MOVE
-                jsr M_DRAW
+                jsr MissileErase
+                jsr MissileMove
+                jsr MissileDraw
                 .endblock
 
 
@@ -79,7 +79,7 @@ _XIT            rts
 ;=======================================
 ;
 ;=======================================
-GET_MISS_ADR    .proc
+GetMissileAddr  .proc
                 lda CM_X,X
                 sta TEMP1
                 lda CM_Y,X
@@ -92,7 +92,7 @@ GET_MISS_ADR    .proc
 ;=======================================
 ;
 ;=======================================
-M_BEGIN         .proc
+MissileBegin    .proc
                 ldy TANK_X,X
                 iny
                 tya
@@ -116,7 +116,7 @@ _1              tya
                 sta CM_TIME,X
                 lda #1
                 sta S6_VAL
-                jmp MOVE_CRUISE_MISSILES.M_END
+                jmp MoveCruiseMissiles.M_END
 
                 .endproc
 
@@ -124,8 +124,8 @@ _1              tya
 ;=======================================
 ;
 ;=======================================
-M_COL           .proc
-                jsr GET_MISS_ADR
+MissileCollision .proc
+                jsr GetMissileAddr
 
                 ldy #0
                 lda (ADR1),Y
@@ -134,14 +134,8 @@ M_COL           .proc
 
                 clc
                 rts
-                .endproc
 
-
-;=======================================
-;
-;=======================================
-M_COL2          .proc
-                jsr M_ERASE
+M_COL2          jsr MissileErase
 
                 lda #1
                 sta S3_VAL
@@ -152,7 +146,7 @@ M_COL2          .proc
                 stx TEMP1
                 ldx #$10
                 ldy #$00
-                jsr INC_SCORE
+                jsr IncreaseScore
 
                 ldx TEMP1
                 sec
@@ -163,8 +157,8 @@ M_COL2          .proc
 ;=======================================
 ;
 ;=======================================
-M_ERASE         .proc
-                jsr GET_MISS_ADR
+MissileErase    .proc
+                jsr GetMissileAddr
 
                 lda CM_TEMP,X
                 cmp #EXP_WALL
@@ -191,7 +185,7 @@ _XIT            rts
 ;=======================================
 ;
 ;=======================================
-M_MOVE          .proc
+MissileMove     .proc
                 lda CM_STATUS,X
                 cmp #LEFT
                 beq _1
@@ -216,7 +210,7 @@ _3              lda CHOP_X
 
                 lda TEMP1
                 bpl _4
-                bmi _6                  ; FORCED
+                bra _6
 
 _5              lda TEMP1
                 bmi _4
@@ -240,7 +234,7 @@ _6              lda CM_X,X
                 jmp _8
 
 _7              inc CM_Y,X
-_8              jsr GET_MISS_ADR
+_8              jsr GetMissileAddr
 
                 ldy #0
                 lda (ADR1),Y
@@ -261,8 +255,8 @@ _XIT             rts
 ;=======================================
 ;
 ;=======================================
-M_DRAW          .proc
-                jsr GET_MISS_ADR
+MissileDraw     .proc
+                jsr GetMissileAddr
 
                 ldy #0
                 lda (ADR1),Y
@@ -276,10 +270,10 @@ M_DRAW          .proc
 _1              ldy #0
                 sta (ADR1),Y
                 lda CM_TEMP,X
-                jsr CHECK_CHR
+                jsr CheckChr
 
                 bcc _XIT
-                jmp M_COL2
+                jmp MissileCollision.M_COL2
 
 _XIT            rts
                 .endproc
@@ -288,7 +282,7 @@ _XIT            rts
 ;=======================================
 ;
 ;=======================================
-CHECK_CHR
+CheckChr        .proc
                 ldy #0
                 sty ADR2+1
                 and #$7F
@@ -298,6 +292,7 @@ CHECK_CHR
                 rol ADR2+1
                 asl
                 rol ADR2+1
+
                 clc
                 adc #<CHR_SET2
                 sta ADR2
@@ -307,12 +302,16 @@ CHECK_CHR
                 ldy #7
 _1              lda (ADR2),Y
                 bne _2
+
                 dey
                 bpl _1
+
                 clc
                 rts
+
 _2              sec
                 rts
+                .endproc
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF

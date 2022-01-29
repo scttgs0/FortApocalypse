@@ -279,8 +279,8 @@ _XIT            .endblock
 NEXT_PART1      .block
                 ldx #$00
                 ldy #$50
-                jsr INC_SCORE
-                jsr GIVE_BONUS
+                jsr IncreaseScore
+                jsr GiveBonus
 
                 lda #STOP_MODE
                 sta MODE
@@ -388,7 +388,7 @@ _6              ldx #2
                 sta FORT_STATUS
                 sta LASER_STATUS
 
-                jmp CLEAR_SOUNDS
+                jmp ClearSounds
 
                 .endblock
                 .endproc

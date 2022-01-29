@@ -7,7 +7,7 @@
 ;=======================================
 ;
 ;=======================================
-DO_SOUNDS       .proc
+DoSounds        .proc
 
 S1              .block                  ; CHOPPER SOUND
                 lda CHOPPER_STATUS
@@ -131,13 +131,14 @@ _XIT            rts
 ;=======================================
 ;
 ;=======================================
-CLEAR_SOUNDS
+ClearSounds     .proc
                 lda #0
                 sta AUDC1
                 sta AUDC2
                 sta AUDC3
                 sta AUDC4
                 rts
+                .endproc
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF
