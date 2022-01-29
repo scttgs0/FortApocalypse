@@ -2,162 +2,12 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: FORT2.S
 ;---------------------------------------
-; OPTIONS SET-UP
 ; MOVE PODS
 ; MOVE CRUISE MISSILE
 ; MOVE TANKS
 ; CHECK HYPER CHAMBERS
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-;=======================================
-;
-;=======================================
-CHECK_OPTIONS
-                lda CONSOL
-                cmp #3                  ; OPTION
-                bne _2
-                ldx OPT_NUM
-                inx
-                cpx #3
-                blt _1
-                ldx #0
-_1              stx OPT_NUM
-_2              cmp #5                  ; SELECT
-                bne _8
-                lda OPT_NUM
-                bne _4
-                ldx GRAV_SKILL
-                inx
-                cpx #3
-                blt _3
-                ldx #0
-_3              stx GRAV_SKILL
-_4              cmp #1
-                bne _6
-                ldx PILOT_SKILL
-                inx
-                cpx #3
-                blt _5
-                ldx #0
-_5              stx PILOT_SKILL
-_6              cmp #2
-                bne _8
-                ldx CHOPS
-                inx
-                cpx #3
-                blt _7
-                ldx #0
-_7              stx CHOPS
-
-_8              lda #13
-                sta TEMP1
-                lda #1
-                sta TEMP2
-                ldx #<txtOptTitle1
-                ldy #>txtOptTitle1
-                jsr PRINT
-                lda #0
-                sta TEMP1
-                lda #3
-                sta TEMP2
-                ldx #<txtOptTitle2
-                ldy #>txtOptTitle2
-                jsr PRINT
-                lda #28
-                sta TEMP1
-                ldx #<txtOptTitle3
-                ldy #>txtOptTitle3
-                jsr PRINT
-
-PRINT_OPTS ;unused
-                lda #0
-                sta TEMP1
-                lda #7                  ; OPTION
-                sta TEMP2
-
-                ldx #<txtOptGravity
-                ldy #>txtOptGravity
-                jsr PRINT
-
-                inc TEMP2
-                inc TEMP2
-                ldx #<txtOptPilot
-                ldy #>txtOptPilot
-                jsr PRINT
-
-                inc TEMP2
-                inc TEMP2
-                ldx #<txtOptRobo
-                ldy #>txtOptRobo
-                jsr PRINT
-
-                lda OPT_NUM
-                asl
-                clc
-                adc #7                  ; OPTION
-                sta TEMP2
-                lda OPT_NUM
-                asl
-                tax
-                lda OptTable,X
-                sta ADR2
-                lda OptTable+1,X
-                sta ADR2+1
-                jsr CCL
-                ldy #0
-                sty TEMP5
-                sty TEMP6
-_1              ldy TEMP5
-                lda (ADR2),Y
-                beq _3
-                cmp #$FF
-                beq _2
-                ora #$80
-                ldy TEMP6
-                sta (ADR1),Y
-                inc TEMP6
-                clc
-                adc #32
-_3              ldy TEMP6
-                sta (ADR1),Y
-                inc TEMP6
-                inc TEMP5
-                bne _1                  ; FORCED
-_2
-
-                lda #28
-                sta TEMP1
-                lda #7                  ; OPTION
-                sta TEMP2
-                lda GRAV_SKILL
-                asl
-                tay
-                ldx OptGravityTable,Y
-                lda OptGravityTable+1,Y
-                tay
-                jsr PRINT
-
-                inc TEMP2
-                inc TEMP2
-                lda PILOT_SKILL
-                asl
-                tay
-                ldx OptPilotTable,Y
-                lda OptPilotTable+1,Y
-                tay
-                jsr PRINT
-
-                inc TEMP2
-                inc TEMP2
-                lda CHOPS
-                asl
-                tay
-                ldx OptRoboTable,Y
-                lda OptRoboTable+1,Y
-                tay
-                jmp PRINT
-
 
 ;=======================================
 ;
@@ -1042,7 +892,7 @@ _6              lda #0
                 dex
                 bpl _5
 
-                bra CLEAR_SOUNDS
+                brl CLEAR_SOUNDS
 
 
 ;=======================================

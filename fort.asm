@@ -70,6 +70,7 @@
                 .include "fort8.s"
 
                 .include "input.asm"
+                .include "options.asm"
                 .include "sound.asm"
                 .include "text.asm"
                 .include "title.asm"
