@@ -5,8 +5,6 @@
 ; MAIN INTERUPT DRIVER
 ;       PART (II)
 ; POSITION THINGS
-; DO_LASER_1
-; DO_LASER_2
 ; DO_BLOCKS
 ; DO_EXP
 ; DO_NUMBERS
@@ -242,82 +240,6 @@ COMPUTE_MAP_ADR
                 adc ADR1+1
                 sta ADR1+1
                 rts
-
-
-;=======================================
-;
-;=======================================
-DO_LASER_1
-                lda FRAME
-                and #7
-                bne _4
-                lda LASER_STATUS
-                cmp #OFF
-                beq _2
-                lda TIM1_VAL
-                clc
-                adc LASER_SPD
-                sta TIM1_VAL
-                bne _2
-                ldx #0
-_1              lda LASER_SHAPES,X
-                sta LASERS_1,X
-                inx
-                cpx #32
-                bne _1
-                ldx #0
-_5              lda LASER_SHAPES+24,X
-                sta LASER_3,X
-                inx
-                cpx #8
-                bne _5
-                rts
-_2              ldx #32-1
-                lda #0
-_3              sta LASERS_1,X
-                dex
-                bpl _3
-                ldx #8-1
-_6              sta LASER_3,X
-                dex
-                bpl _6
-_4              rts
-
-
-;=======================================
-;
-;=======================================
-DO_LASER_2
-                lda FRAME
-                and #7
-                bne _4
-                lda LASER_STATUS
-                cmp #OFF
-                beq _2
-                lda TIM2_VAL
-                clc
-                adc LASER_SPD
-                sta TIM2_VAL
-                bne _2
-                ldx #0
-_1              lda LASER_SHAPES,X
-                sta LASERS_2,X
-                inx
-                cpx #32
-                bne _1
-                ldx #0
-_5              lda LASER_SHAPES+16,X
-                sta LASER_3,X
-                inx
-                cpx #8
-                bne _5
-                rts
-_2              ldx #32-1
-                lda #0
-_3              sta LASERS_2,X
-                dex
-                bpl _3
-_4              rts
 
 
 ;=======================================

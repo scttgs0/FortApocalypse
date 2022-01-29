@@ -56,8 +56,8 @@ VERTBLKD        sei
 
                 jsr DO_ROBOT_CHOPPER
                 jsr UPDATE_ROCKETS
-                jsr DO_LASER_1
-                jsr DO_LASER_2
+                jsr DoLaser1
+                jsr DoLaser2
                 jsr DO_BLOCKS
                 jsr DoElevator
                 jsr DO_CHOPPER
