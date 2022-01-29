@@ -5,11 +5,8 @@
 ; MAIN INTERUPT DRIVER
 ;       PART (I)
 ; UPDATE_CHOPPER
-; UPDATE_ROBOT_CHOPPER
 ; UPDATE_ROCKETS
-; DO.ROBOT CHOPPER
 ; DO_CHOPPER
-; ROBOT_BRAINS
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -46,7 +43,7 @@ VERTBLKD        sei
                 jsr DO_NUMBERS
                 jsr DRAW_MAP
                 jsr UPDATE_CHOPPER
-                jsr UPDATE_ROBOT_CHOPPER
+                jsr UpdateRobotChopper
                 jsr ReadTrigger
                 jsr DO_EXP
 
@@ -54,327 +51,20 @@ VERTBLKD        sei
                 cmp #GO_MODE
                 bne _1
 
-                jsr DO_ROBOT_CHOPPER
+                jsr DoRobotChopper
                 jsr UPDATE_ROCKETS
                 jsr DoLaser1
                 jsr DoLaser2
                 jsr DO_BLOCKS
                 jsr DoElevator
                 jsr DO_CHOPPER
-                jsr ROBOT_BRAINS
+                jsr RobotAI
                 jsr ReadJoystick
 
 _1
                 plp
                 cli
                 jmp VVBLKD_RET
-
-
-;=======================================
-;
-;=======================================
-ROBOT_BRAINS
-                lda R_STATUS
-                cmp #OFF
-                beq _1
-                cmp #CRASH
-                beq _2
-                lda FRAME
-                and ROBOT_SPD
-                beq R_START
-                rts
-
-                lda TIM7_VAL
-                beq _0
-_1              dec TIM7_VAL
-                bne _2
-_0              lda #$88
-                sta PCOLR2
-                sta PCOLR3
-                lda #8
-                sta ROBOT_ANGLE
-                lda RANDOM
-                and #7
-                ldx LEVEL
-                dex                     ; X=1?
-                bne _3
-                clc
-                adc #8
-_3              tax
-                lda ROB_X,X
-                sta R_X
-                lda ROB_Y,X
-                sta R_Y
-                lda R_X
-                sec
-                sbc CHOP_X
-                bpl _4
-                eor #-2
-_4              cmp #34
-                bge _6
-                lda R_Y
-                sec
-                sbc CHOP_Y
-                bpl _5
-                eor #-2
-_5              cmp #8
-                blt _2
-_6              lda #FLY
-                sta R_STATUS
-                ldx #0
-                stx R_FX
-                stx R_FY
-                stx TIM7_VAL
-                inx                     ; X=1
-                stx TIM8_VAL
-                jmp POS_ROBOT
-_2              rts
-
-;---------------------------------------
-;---------------------------------------
-
-ROB_X
-                .byte $84,$C3,$49,$C3,$49,$84,$84,$84
-                .byte $D7,$D7,$D7,$D6,$D6,$D6,$33,$33
-ROB_Y
-                .byte $00,$16,$16,$21,$21,$00,$00,$00
-                .byte $12,$12,$12,$06,$06,$06,$06,$06
-
-
-;=======================================
-;
-;=======================================
-R_START         lda ROBOT_ANGLE
-                and #1
-                sta TEMP4_I
-                lda ROBOT_ANGLE
-                and #$FE
-                sta ROBOT_ANGLE
-
-                jsr POS_ROBOT
-R_F ;unused
-                dec TIM8_VAL
-                bne _10
-                lda #5
-                sta TIM8_VAL
-                lda ROBOT_STATUS
-                cmp #ON
-                bne _10
-                lda ROCKET_STATUS+2
-                bne _10
-_2              lda ROBOT_ANGLE
-                and #%00011110
-                lsr
-                cmp #4
-                blt _60
-                cmp #6
-                bge _70
-                lda #3
-                bne _60                 ; FORCED
-_70             sec
-                sbc #2
-_60             cmp #6
-                blt _4
-                lda #5
-_4              cmp #0
-                bne _5
-                lda #1
-_5              sta ROCKET_STATUS+2
-                lda ROBOT_X
-                and #3
-                clc
-                adc ROBOT_X
-                adc #8
-                sta ROCKET_X+2
-                lda ROBOT_Y
-                clc
-                adc #8
-                sta ROCKET_Y+2
-                lda #$3F
-                sta S2_VAL
-_10
-
-R_B
-                lda R_X
-                ldx #215
-                cmp #216
-                beq _90
-                ldx #49
-                cmp #48
-                bne _0
-_90
-                lda FRAME
-                and #3
-                bne _94
-                lda ROBOT_ANGLE
-                cmp #4
-                blt _95
-                cmp #14
-                blt _94
-_95             cmp #8
-                bge _34
-                inc ROBOT_ANGLE
-                inc ROBOT_ANGLE
-                bne _94                 ; FORCED
-_34             dec ROBOT_ANGLE
-                dec ROBOT_ANGLE
-_94             lda ROBOT_STATUS
-                cmp #OFF
-                bne _2
-                stx R_X
-                jmp _2
-
-_0              lda CHOP_X
-                sec
-                sbc R_X
-                beq _2
-                bpl _1
-                jsr R_LEFT
-                jmp _2
-_1              jsr R_RIGHT
-
-_2              lda CHOP_Y
-                sec
-                sbc R_Y
-                beq _4
-                bpl _3
-                jsr R_UP
-                jmp _4
-_3              jsr R_DOWN
-
-_4
-                jsr POS_ROBOT
-R_END ;unused
-                lda ROBOT_ANGLE
-                bpl _1
-                lda #0
-                sta ROBOT_ANGLE
-_1              cmp #18
-                blt _2
-                lda #16
-                sta ROBOT_ANGLE
-_2              lda ROBOT_ANGLE
-                ora TEMP4_I
-                sta ROBOT_ANGLE
-                lda R_FX
-                and #3
-                sta R_FX
-                lda R_FY
-                and #7
-                sta R_FY
-                rts
-
-
-;=======================================
-;
-;=======================================
-R_LEFT
-                lda R_X
-                sta TEMP1_I
-                lda R_Y
-                sta TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _2
-                dec TEMP1_I
-                jsr CHECK_CHR_I
-                bcs _2
-                dec TEMP1_I
-                jsr CHECK_CHR_I
-                bcs _2
-                dec R_FX
-                lda R_FX
-                cmp #-1
-                bne _1
-                dec R_X
-_1              lda FRAME
-                and #3
-                bne _2
-                dec ROBOT_ANGLE
-                dec ROBOT_ANGLE
-_2              rts
-
-
-;=======================================
-;
-;=======================================
-R_RIGHT
-                lda R_X
-                sta TEMP1_I
-                lda R_Y
-                sta TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _2
-                inc TEMP1_I
-                jsr CHECK_CHR_I
-                bcs _2
-                inc TEMP1_I
-                jsr CHECK_CHR_I
-                bcs _2
-                inc R_FX
-                lda R_FX
-                cmp #4
-                bne _1
-                inc R_X
-_1              lda FRAME
-                and #3
-                bne _2
-                inc ROBOT_ANGLE
-                inc ROBOT_ANGLE
-_2              rts
-
-
-;=======================================
-;
-;=======================================
-R_DOWN
-                lda R_X
-                sta TEMP1_I
-                lda R_Y
-                sta TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _2
-                inc TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _2
-                inc TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _2
-                inc R_FY
-                lda R_FY
-                cmp #8
-                bne _1
-                inc R_Y
-_1
-_2              rts
-
-
-;=======================================
-;
-;=======================================
-R_UP
-                lda R_X
-                sta TEMP1_I
-                lda R_Y
-                cmp #3
-                blt _0
-                sta TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _1
-                dec TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _1
-                dec TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _1
-                dec TEMP2_I
-                jsr CHECK_CHR_I
-                bcs _1
-_0              dec R_FY
-                lda R_FY
-                cmp #-1
-                bne _1
-                dec R_Y
-_1              rts
 
 
 ;=======================================
@@ -502,102 +192,6 @@ _5              stx CHOPPER_STATUS
 ;=======================================
 ;
 ;=======================================
-P1              .proc
-                ldx #OFF
-                jmp DRCE
-
-                .endproc
-
-
-;=======================================
-;
-;=======================================
-DO_ROBOT_CHOPPER
-                lda R_STATUS
-                cmp #OFF
-                beq P1
-                lda R_X
-                cmp SX
-                blt P1
-                sec
-                sbc SX
-                cmp #48
-                bge P1
-                ldy SY
-                bpl _1
-                ldy #0
-_1              sty TEMP1_I
-                lda R_Y
-                cmp TEMP1_I
-                blt P1
-                sec
-                sbc SY
-                cmp #19
-                bge P1
-
-                lda R_X
-                sec
-                sbc SX
-                asl
-                asl
-                clc
-                adc #22
-                sta TEMP1_I
-                lda SX_F
-                and #3
-                clc
-                adc TEMP1_I
-                adc R_FX
-                sta ROBOT_X
-                lda R_Y
-                ldy SY
-                bpl _2
-                ldy #0
-_2              sty TEMP1_I
-                sec
-                sbc TEMP1_I
-                asl
-                asl
-                asl
-                clc
-                adc #71+12
-                sta TEMP1_I
-                lda SY_F
-                eor #$FF
-                and #7
-                clc
-                adc TEMP1_I
-                ldy SY
-                bpl _3
-                clc
-                adc #8
-_3              clc
-                adc R_FY
-                sta ROBOT_Y
-                ldx #FLY
-                lda ROBOT_COL
-                beq _4
-                lda R_STATUS
-                cmp #CRASH
-                beq _4
-                ldx #CRASH
-                lda #20
-                sta TIM7_VAL
-                lda #1
-                sta S3_VAL
-_4              lda R_STATUS
-                cmp #CRASH
-                beq _5
-                stx R_STATUS
-_5              ldx #ON
-DRCE
-                stx ROBOT_STATUS
-                rts
-
-
-;=======================================
-;
-;=======================================
 UPDATE_CHOPPER
                 lda CHOPPER_STATUS
                 cmp #BEGIN
@@ -686,7 +280,7 @@ _12             dec TIM3_VAL
                 lda R_STATUS
                 cmp #OFF
                 beq _23
-                jsr POS_ROBOT
+                jsr PositionRobot
                 lda #OFF
                 sta R_STATUS
 _23             jsr POS_CHOPPER
@@ -732,88 +326,6 @@ _1              clc
 
                 jmp POS_CHOPPER
 CCEND           rts
-
-
-;=======================================
-;
-;=======================================
-UPDATE_ROBOT_CHOPPER
-                lda ROBOT_STATUS
-                cmp #OFF
-                bne _0
-                lda #0
-                sta ROBOT_X
-                sta ROBOT_Y
-
-_0              ldy OROBOT_Y
-                ldx #17
-                lda #0
-_1              sta PLAYER+PL2,Y
-                sta PLAYER+PL3,Y
-                iny
-                dex
-                bpl _1
-
-                lda ROBOT_ANGLE
-                asl
-                tax
-                lda CHOPPER_SHAPES,X
-                sta ADR1_I
-                lda CHOPPER_SHAPES+1,X
-                sta ADR1_I+1
-
-                lda #0
-                sta TEMP1_I
-                lda #18
-                sta TEMP2_I
-
-                ldx ROBOT_Y
-                stx OROBOT_Y
-_2              ldy TEMP1_I
-                lda (ADR1_I),Y
-                sta PLAYER+PL2,X
-                ldy TEMP2_I
-                lda (ADR1_I),Y
-                sta PLAYER+PL3,X
-                inc TEMP1_I
-                inc TEMP2_I
-                inx
-                lda TEMP1_I
-                cmp #18
-                bne _2
-
-                lda R_STATUS
-                cmp #CRASH
-                bne _12
-                ldx ROBOT_Y
-                ldy #18
-_10             lda PLAYER+PL2,X
-                and RANDOM
-                sta PLAYER+PL2,X
-                lda PLAYER+PL3,X
-                and RANDOM
-                sta PLAYER+PL3,X
-                inx
-                dey
-                bne _10
-                inc PCOLR2
-                inc PCOLR3
-                dec TIM7_VAL
-                bne _12
-                lda #OFF
-                sta R_STATUS
-                jsr POS_ROBOT
-                lda #255
-                sta TIM7_VAL
-_12
-                lda FRAME
-                and #3
-                bne _3
-                lda ROBOT_ANGLE
-                eor #1
-                sta ROBOT_ANGLE
-
-_3              rts
 
 
 ;=======================================

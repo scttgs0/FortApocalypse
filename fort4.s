@@ -20,54 +20,7 @@ POS_CHOPPER
                 sta TEMP1_I
                 lda CHOP_Y
                 sta TEMP2_I
-                jmp POS_IT_I
-
-
-;=======================================
-;
-;=======================================
-POS_ROBOT
-                lda R_X
-                sta TEMP1_I
-                lda R_Y
-                sta TEMP2_I
-
-POS_IT_I
-                ldx TEMP1_I
-                lda TEMP2_I
-
-                asl
-                asl
-                adc TEMP2_I
-                ldy #0
-                sty TEMP3_I
-                asl
-                rol TEMP3_I
-                asl
-                rol TEMP3_I
-                asl
-                rol TEMP3_I
-                sta TEMP2_I
-
-                txa
-                lsr
-                lsr
-                lsr
-                clc
-                adc #<SCANNER+3
-                adc TEMP2_I
-                sta ADR1_I
-                lda #>SCANNER
-                adc TEMP3_I
-                sta ADR1_I+1
-                txa
-                and #7
-                tax
-                ldy #0
-                lda (ADR1_I),Y
-                eor POS_MASK1,X
-                sta (ADR1_I),Y
-                rts
+                jmp PositionRobot.POS_IT_I
 
 
 ;=======================================
