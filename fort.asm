@@ -76,6 +76,7 @@
                 .include "options.asm"
                 .include "title.asm"
 
+                .include "cruisemissile.asm"
                 .include "tank.asm"
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
