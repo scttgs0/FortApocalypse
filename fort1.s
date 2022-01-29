@@ -99,7 +99,7 @@ _2              lda MODE
                 jsr MOVE_CRUISE_MISSILES
                 jsr MoveSlaves
   
-                jsr SET_SCANNER
+                jsr SetScanner
                 jsr CHECK_FUEL_BASE
                 jsr CHECK_FORT
                 jsr CHECK_LEVEL
