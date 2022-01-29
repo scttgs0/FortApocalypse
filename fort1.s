@@ -104,7 +104,7 @@ _2              lda MODE
                 jsr CHECK_FORT
                 jsr CHECK_LEVEL
 
-_6              jsr CHECK_HYPER_CHAMBER
+_6              jsr CheckHyperchamber
                 jsr CHECK_MODES
                 jsr ReadKeyboard
 

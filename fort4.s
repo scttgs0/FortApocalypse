@@ -8,7 +8,6 @@
 ; DO_LASER_1
 ; DO_LASER_2
 ; DO_BLOCKS
-; DO_ELEVATOR
 ; DO_EXP
 ; DO_NUMBERS
 ; DRAW_MAP
@@ -362,46 +361,6 @@ _8              sta BLOCK_4,X
                 dex
                 bpl _8
 _9              rts
-
-
-;=======================================
-;
-;=======================================
-DO_ELEVATOR
-                dec ELEVATOR_TIM
-                bne _3
-                lda ELEVATOR_SPD
-                sta ELEVATOR_TIM
-                ldx #32-1
-                lda #0
-_1              sta BLOCK_5,X
-                dex
-                bpl _1
-                lda ELEVATOR_NUM
-                clc
-                adc ELEVATOR_DX
-                sta ELEVATOR_NUM
-                and #3
-                sta ELEVATOR_NUM
-                asl
-                tax
-                lda ELEVATORS,X
-                sta ADR1_I
-                lda ELEVATORS+1,X
-                sta ADR1_I+1
-                ldy #7
-                lda #$55
-_2              sta (ADR1_I),Y
-                dey
-                bpl _2
-_3              rts
-
-;---------------------------------------
-;---------------------------------------
-
-ELEVATORS
-                .addr BLOCK_5,BLOCK_6
-                .addr BLOCK_7,BLOCK_8
 
 
 ;=======================================

@@ -59,7 +59,7 @@ VERTBLKD        sei
                 jsr DO_LASER_1
                 jsr DO_LASER_2
                 jsr DO_BLOCKS
-                jsr DO_ELEVATOR
+                jsr DoElevator
                 jsr DO_CHOPPER
                 jsr ROBOT_BRAINS
                 jsr ReadJoystick
