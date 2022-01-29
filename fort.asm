@@ -42,9 +42,6 @@
                 .include "equates_game.asm"
                 .include "macros.asm"
 
-                * = $50
-                .include "fort7.s"
-
                 * = $8000
                 .include "level.asm"
 
@@ -53,7 +50,6 @@
 
                 .align $100
                 .include "font2.asm"
-
 
                 .align $1000
                 clc
