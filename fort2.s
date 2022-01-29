@@ -1042,19 +1042,7 @@ _6              lda #0
                 dex
                 bpl _5
 
-                ;[fall-through]
-
-
-;=======================================
-;
-;=======================================
-CLEAR_SOUNDS
-                lda #0
-                sta AUDC1
-                sta AUDC2
-                sta AUDC3
-                sta AUDC4
-                rts
+                bra CLEAR_SOUNDS
 
 
 ;=======================================

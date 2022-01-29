@@ -8,7 +8,6 @@
 ; CHECK FORT
 ;
 ; LINE INTERUPTS
-; SOUNDS
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -862,130 +861,6 @@ _1              adc $B980,X
 
                 .byte $12
 
-_2              rts
-
-
-;=======================================
-;
-;=======================================
-DO_SOUNDS
-
-; CHOPPER SOUND
-S1 ;unused
-                lda CHOPPER_STATUS
-                cmp #OFF
-                beq _2
-                lda FRAME
-                and #2
-                bne _2
-                lda #$83
-                sta AUDC1
-                lda S1_1_VAL
-                bpl _1
-                lda S1_2_VAL
-_1              sec
-                sbc #4
-                sta S1_1_VAL
-                sta AUDF1
-_2
-; MISSILE SOUND
-S2 ;unused
-                lda S2_VAL
-                bmi _2
-                eor #$3F
-                clc
-                adc #16
-                sta AUDF2
-                ldx #$86
-                cmp #$3F+16
-                bne _1
-                ldx #0
-_1              stx AUDC2
-                dec S2_VAL
-_2
-; EXPLOSION
-S3 ;unused
-                lda S3_VAL
-                beq _3
-                lda RANDOM
-                and #3
-                ora S3_VAL
-                adc #$10
-                sta AUDF3
-                inc S3_VAL
-                lda S3_VAL
-                cmp #$31
-                bne _1
-                lda #0
-                sta S3_VAL
-_1              ldx #$48
-                cmp #0
-                bne _2
-                tax                     ; X=0
-_2              stx AUDC3
-_3
-; RE-FUEL
-S4 ;unused
-                lda S4_VAL
-                beq _3
-                ldx #0
-                lda FRAME
-                and #7
-                beq _1
-                ldx #$18
-_1
-
-                ldy #$00
-                lda FUEL1
-                cmp #<MAX_FUEL
-                lda FUEL2
-                sbc #>MAX_FUEL
-                bcs _2
-                ldy #$A6
-                sed
-                lda FUEL1
-                clc
-                adc #4
-                sta FUEL1
-                lda FUEL2
-                adc #0
-                sta FUEL2
-                cld
-_2              stx AUDF2
-                sty AUDC2
-_3
-;
-; HYPER CHAMBER SOUND
-;
-S5 ;unused
-                lda S5_VAL
-                beq _2
-                inc S5_VAL
-                cmp #$50
-                bne _1
-                lda #0
-                sta S5_VAL
-_1              sta AUDF2
-                lda #$A8
-                sta AUDC2
-_2
-;
-; CRUISE MISSILE SOUND
-;
-S6 ;unused
-                lda FRAME
-                and #1
-                bne _2
-                lda S6_VAL
-                beq _2
-                inc S6_VAL
-                cmp #$20
-                blt _1
-                ldx #0
-                stx S6_VAL
-_1              sta AUDF4
-                lda #$07
-                sta AUDC4
 _2              rts
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
