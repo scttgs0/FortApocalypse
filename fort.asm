@@ -62,7 +62,6 @@
                 .include "fort3.s"
                 .include "fort4.s"
                 .include "fort5.s"
-                .include "fort6.s"
 
                 ; Engine
                 .include "displaylist.asm"
@@ -73,6 +72,9 @@
                 ; Mode Screens
                 .include "options.asm"
                 .include "title.asm"
+
+                ; Protagonist
+                .include "chopper.asm"
 
                 ; Baddies
                 .include "cruisemissile.asm"
