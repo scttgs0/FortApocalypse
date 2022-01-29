@@ -55,7 +55,7 @@
                 clc
                 xce
 
-                jml CART_START
+                jml CartridgeStart
 
                 .include "fort1.s"
                 .include "fort2.s"

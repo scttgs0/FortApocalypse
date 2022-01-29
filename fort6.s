@@ -2,49 +2,9 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: FORT6.S
 ;---------------------------------------
-; DATA, SHAPES, DISPLAY LISTS
+; DATA, SHAPES
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-;=======================================
-;
-;=======================================
-CART_START      sei
-                lda #$B3
-                pha
-                ldx #$00
-                txa
-_next1          sta $0000,X             ; zero-page
-                sta HPOSP0,X
-                sta DMACLT,X
-                sta AUDF1,X
-                sta PORTA,X
-                inx
-                bne _next1
-
-                ldy #$01
-                sty ADR1+1
-                dey                     ; Y=0
-                sty ADR1
-_next2          sta (ADR1),Y
-                iny
-                bne _next2
-
-                inc ADR1+1
-                ldx ADR1+1
-                cpx #$C0
-                bne _next2
-
-                lda #$34
-                pha
-                ldx #$00
-_next3          lda BOOT_STUFF,X
-                sta $01C0,X             ; L01C0
-                inx
-                bpl _next3
-
-                cli
-                rts
 
 ;---------------------------------------
 ;---------------------------------------
