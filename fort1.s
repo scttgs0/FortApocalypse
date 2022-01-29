@@ -144,7 +144,7 @@ _2              lda MODE
   
                 jsr SetScanner
                 jsr CHECK_FUEL_BASE
-                jsr CHECK_FORT
+                jsr CheckFort
                 jsr CHECK_LEVEL
 
 _6              jsr CheckHyperchamber
