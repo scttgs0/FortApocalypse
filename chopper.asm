@@ -85,8 +85,8 @@ _3              lda CHOPPER_COL
                 lda #HYPERSPACE_MODE
                 sta MODE
                 lda #1
-                sta S3_VAL
-                sta S5_VAL
+                sta SND3_VAL
+                sta SND5_VAL
 _12             ldx #FLY
                 bne _5                  ; FORCED
 
@@ -148,7 +148,7 @@ _7              ldx #LAND
 _4              lda #20
                 sta TIM3_VAL
                 lda #1
-                sta S3_VAL
+                sta SND3_VAL
                 ldx #CRASH
 _5              stx CHOPPER_STATUS
                 rts

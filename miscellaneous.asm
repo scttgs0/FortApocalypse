@@ -6,7 +6,7 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;=======================================
-; 
+;
 ;=======================================
 INIT_OS         .proc
                 ldx #$25
@@ -52,13 +52,17 @@ SCREEN_ON       .proc
 ;
 ;=======================================
 SCREEN_OFF      .proc
+;---
+
                 lda #<DSP_LST2
                 sta SDLST
                 lda #>DSP_LST2
                 sta SDLST+1
+
                 lda #OFF
                 sta CHOPPER_STATUS
                 sta ROBOT_STATUS
+
                 ldx R_STATUS
                 cpx #CRASH
                 bne _0
@@ -77,15 +81,16 @@ _2              sta CHR_SET1+$300,x
                 inx
                 bne _2
 
-                sta S1_1_VAL
-                sta S2_VAL
-                sta S3_VAL
-                sta S4_VAL
-                sta S5_VAL
-                sta S6_VAL
-                sta BAK2_COLOR
+                stz SND1_1_VAL
+                stz SND2_VAL
+                stz SND3_VAL
+                stz SND4_VAL
+                stz SND5_VAL
+                stz SND6_VAL
+                stz BAK2_COLOR
+
                 lda #20
-                sta S1_2_VAL
+                sta SND1_2_VAL
                 ldx #MAX_TANKS-1
                 stx TIM7_VAL
 _3              lda CM_STATUS,x
@@ -130,6 +135,7 @@ CCL             .proc
                 pha
                 lda TEMP1
                 pha
+
                 lda TEMP2
                 jsr MULT_BY_40
 
@@ -142,6 +148,7 @@ CCL             .proc
                 lda #>PLAY_SCRN
                 adc TEMP2
                 sta ADR1+1
+
                 pla
                 sta TEMP1
                 pla

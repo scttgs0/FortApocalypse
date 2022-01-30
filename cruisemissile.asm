@@ -70,7 +70,7 @@ _next1          lda CM_STATUS,x
                 bpl _next1
                 lda #0
                 sta AUDC4
-                sta S6_VAL
+                sta SND6_VAL
 _XIT            rts
                 .endblock
                 .endproc
@@ -115,7 +115,7 @@ _1              tya
                 lda #20
                 sta CM_TIME,x
                 lda #1
-                sta S6_VAL
+                sta SND6_VAL
                 jmp MoveCruiseMissiles.M_END
 
                 .endproc
@@ -138,7 +138,7 @@ MissileCollision .proc
 M_COL2          jsr MissileErase
 
                 lda #1
-                sta S3_VAL
+                sta SND3_VAL
                 lda #OFF
                 sta CM_STATUS,x
                 lda #-1

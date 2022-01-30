@@ -8,6 +8,7 @@
                 * = DPADDR
 
 FRAME           .byte ?
+
 ADR1            .word ?
 ADR2            .word ?
 
@@ -28,9 +29,9 @@ TEMP2_I         .byte ?
 TEMP3_I         .byte ?
 TEMP4_I         .byte ?
 
-S_ADR           .word ?
-S_TEMP          .byte ?
-S_FLG           .byte ?                 ; [$17]
+SCRN_ADR        .word ?
+SCRN_TEMP       .byte ?
+SCRN_FLG        .byte ?                 ; [$17]
 
 TANK_START_X    .fill MAX_TANKS
 TANK_START_Y    .fill MAX_TANKS
@@ -49,13 +50,13 @@ SSIZEM          .byte ?
 
 ;---------------------------------------
 
-S1_1_VAL        .byte ?
-S1_2_VAL        .byte ?
-S2_VAL          .byte ?                 ; [$30]
-S3_VAL          .byte ?
-S4_VAL          .byte ?
-S5_VAL          .byte ?
-S6_VAL          .byte ?                 ; MISSILE SND
+SND1_1_VAL      .byte ?
+SND1_2_VAL      .byte ?
+SND2_VAL        .byte ?                 ; [$30]
+SND3_VAL        .byte ?
+SND4_VAL        .byte ?
+SND5_VAL        .byte ?
+SND6_VAL        .byte ?                 ; MISSILE SND
 
 GAME_POINTS     .byte ?
 

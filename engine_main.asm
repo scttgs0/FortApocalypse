@@ -628,12 +628,12 @@ _10             lda #4
                 jsr PRINT
 
                 lda #<PLAY_SCRN+428
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>PLAY_SCRN+428
-                sta S_ADR+1
+                sta SCRN_ADR+1
 
                 ldx #0
-                stx S_FLG
+                stx SCRN_FLG
                 stx DEMO_COUNT
                 inx                     ; X=1
                 lda CHOP_LEFT
@@ -1128,15 +1128,15 @@ _52             lda #2
                 sta TEMP1
                 lda #0
                 sta TEMP2
-                sta S_FLG
+                sta SCRN_FLG
                 ldx #<txtHighScore
                 ldy #>txtHighScore
                 jsr PRINT
 
                 lda #<PLAY_SCRN+24
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>PLAY_SCRN+24
-                sta S_ADR+1
+                sta SCRN_ADR+1
 
                 ldx #5
                 lda HI3
@@ -1272,11 +1272,11 @@ _1              rts
 ; SCORE
 DO_N            .block
                 lda #<SCORE_DIG
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>SCORE_DIG
-                sta S_ADR+1
+                sta SCRN_ADR+1
                 lda #0
-                sta S_FLG
+                sta SCRN_FLG
                 ldx #5
                 lda SCORE3
                 jsr DDIG
@@ -1312,11 +1312,11 @@ DO_N            .block
 
 ; BONUS
 _1              lda #<BONUS_DIG
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>BONUS_DIG
-                sta S_ADR+1
+                sta SCRN_ADR+1
                 lda #0
-                sta S_FLG
+                sta SCRN_FLG
                 ldx #3
                 lda BONUS2
                 jsr DDIG
@@ -1357,12 +1357,12 @@ _3              lda #EMPTY
 
 ; FUEL
 _4              lda #<FUEL_DIG
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>FUEL_DIG
-                sta S_ADR+1
+                sta SCRN_ADR+1
 
                 lda #0
-                sta S_FLG
+                sta SCRN_FLG
                 ldx #3
                 lda FUEL2
                 jsr DDIG
@@ -1373,7 +1373,7 @@ _4              lda #<FUEL_DIG
 
 DDIG            .block                  ; DRAW DIGIT
                 tay
-                lda S_FLG
+                lda SCRN_FLG
                 bne _1
 
                 tya
@@ -1386,8 +1386,8 @@ DDIG            .block                  ; DRAW DIGIT
                 bne _2
 
 _1              lda #1
-                sta S_FLG
-_2              lda S_FLG
+                sta SCRN_FLG
+_2              lda SCRN_FLG
                 bne _3
 
                 tya
@@ -1400,16 +1400,16 @@ _2              lda S_FLG
                 bne _4
 
 _3              lda #1
-                sta S_FLG
+                sta SCRN_FLG
 _4              tya
-                sta S_TEMP
+                sta SCRN_TEMP
                 lsr
                 lsr
                 lsr
                 lsr
                 jsr DRAW
 
-                lda S_TEMP
+                lda SCRN_TEMP
                 and #$F
                 .endblock
 
@@ -1428,21 +1428,21 @@ _0              lda #<$F0+128           ; BLANK
 _1              clc
                 adc #$10+128            ; '0'
                 ldy #0
-                sta (S_ADR),y
+                sta (SCRN_ADR),y
                 cmp #$10+128
                 bne _2
 
                 lda #$A+128
 _2              iny
                 and #$8F
-                sta (S_ADR),y
-                lda S_ADR
+                sta (SCRN_ADR),y
+                lda SCRN_ADR
                 clc
                 adc #2
-                sta S_ADR
-                lda S_ADR+1
+                sta SCRN_ADR
+                lda SCRN_ADR+1
                 adc #0
-                sta S_ADR+1
+                sta SCRN_ADR+1
                 dex
                 rts
                 .endblock

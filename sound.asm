@@ -18,18 +18,18 @@ S1              .block                  ; CHOPPER SOUND
                 bne _XIT
                 lda #$83
                 sta AUDC1
-                lda S1_1_VAL
+                lda SND1_1_VAL
                 bpl _1
-                lda S1_2_VAL
+                lda SND1_2_VAL
 _1              sec
                 sbc #4
-                sta S1_1_VAL
+                sta SND1_1_VAL
                 sta AUDF1
 _XIT            .endblock
 
 
 S2              .block                  ; MISSILE SOUND
-                lda S2_VAL
+                lda SND2_VAL
                 bmi _XIT
                 eor #$3F
                 clc
@@ -40,24 +40,24 @@ S2              .block                  ; MISSILE SOUND
                 bne _1
                 ldx #0
 _1              ;!! stx AUDC2
-                dec S2_VAL
+                dec SND2_VAL
 _XIT            .endblock
 
 
 S3              .block                  ; EXPLOSION SOUND
-                lda S3_VAL
+                lda SND3_VAL
                 beq _XIT
                 lda RANDOM
                 and #3
-                ora S3_VAL
+                ora SND3_VAL
                 adc #$10
                 sta AUDF3
-                inc S3_VAL
-                lda S3_VAL
+                inc SND3_VAL
+                lda SND3_VAL
                 cmp #$31
                 bne _1
                 lda #0
-                sta S3_VAL
+                sta SND3_VAL
 _1              ldx #$48
                 cmp #0
                 bne _2
@@ -67,7 +67,7 @@ _XIT            .endblock
 
 
 S4              .block                  ; RE-FUEL SOUND
-                lda S4_VAL
+                lda SND4_VAL
                 beq _XIT
                 ldx #0
                 lda FRAME
@@ -96,13 +96,13 @@ _XIT            .endblock
 
 
 S5              .block                  ; HYPER CHAMBER SOUND
-                lda S5_VAL
+                lda SND5_VAL
                 beq _XIT
-                inc S5_VAL
+                inc SND5_VAL
                 cmp #$50
                 bne _1
                 lda #0
-                sta S5_VAL
+                sta SND5_VAL
 _1              sta AUDF2
                 lda #$A8
                 sta AUDC2
@@ -113,13 +113,13 @@ S6              .block                  ; CRUISE MISSILE SOUND
                 lda FRAME
                 and #1
                 bne _XIT
-                lda S6_VAL
+                lda SND6_VAL
                 beq _XIT
-                inc S6_VAL
+                inc SND6_VAL
                 cmp #$20
                 blt _1
                 ldx #0
-                stx S6_VAL
+                stx SND6_VAL
 _1              sta AUDF4
                 lda #$07
                 sta AUDC4

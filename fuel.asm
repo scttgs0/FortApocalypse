@@ -126,7 +126,7 @@ F1              ldx #1
 
                 ldx #0
                 ;!! stx AUDC2
-_1              stx S4_VAL
+_1              stx SND4_VAL
                 lda CHOP_Y
                 cmp #8+2
                 bge FE

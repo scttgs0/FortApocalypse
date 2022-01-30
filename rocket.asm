@@ -53,9 +53,9 @@ _3              clc
                 bcc _XIT
 
                 ldy #1
-                sty S3_VAL
+                sty SND3_VAL
                 dey                     ; Y=0
-                sty S2_VAL
+                sty SND2_VAL
                 lda (ADR1_I),y
                 sta ROCKET_TEMP,x
                 cmp #EXP2

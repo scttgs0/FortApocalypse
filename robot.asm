@@ -140,7 +140,7 @@ _5              sta ROCKET_STATUS+2
                 adc #8
                 sta ROCKET_Y+2
                 lda #$3F
-                sta S2_VAL
+                sta SND2_VAL
 _XIT            .endblock
 
 R_B             .block
@@ -474,7 +474,7 @@ _3              clc
                 lda #20
                 sta TIM7_VAL
                 lda #1
-                sta S3_VAL
+                sta SND3_VAL
 _4              lda R_STATUS
                 cmp #CRASH
                 beq _5

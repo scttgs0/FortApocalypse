@@ -365,7 +365,7 @@ _6              ldx #2
 
                 inc BAK2_COLOR
                 lda #1
-                sta S3_VAL
+                sta SND3_VAL
                 lda RANDOM
                 sta AUDF4
                 dey
