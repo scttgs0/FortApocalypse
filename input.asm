@@ -2,89 +2,96 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: input.asm
 ;---------------------------------------
-; ReadKeyboard
-; ReadJoystick
-; ReadTrigger
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;=======================================
-;
+; Space = toggle Pause Mode
+; Option (F2) = delegate to Opt handler
+; Select (F3) = delegate to Opt handler
+; Start (F4) = switch to Start Mode
+;---------------------------------------
+; Any activity will cancel the Demo
+; All keypresses are delegated to the
+;   Option screen while in Option mode
+; Capture (endless loop) while Pasused
 ;=======================================
 ReadKeyboard    .proc
-                lda CONSOL
-                cmp CONSOL_FLAG
-                beq _4
+v_demoTimer     .var TIM6_VAL
+;---
 
+                lda CONSOL              ; read the console keys
+                cmp CONSOL_FLAG         ; update consol_flag if it has changed
+                beq _doSelect
                 sta CONSOL_FLAG
 
-                ldx #0
-                stx TIM6_VAL
-                cmp #6                  ; START
-                bne _1
+                ldx #0                  ; reset inactivity timer
+                stx v_demoTimer
 
-                lda #START_MODE
+                cmp #6                  ; START pressed? (0=pressed)
+                bne _chk_mode
+
+                lda #START_MODE         ; MODE=START
                 sta MODE
-                sta DEMO_STATUS
+                sta DEMO_STATUS         ; disable Demo
                 bra _XIT
 
-_1              ldx MODE
-                cpx #OPTION_MODE
-                bne _2
+_chk_mode       ldx MODE                ; Options Screen has its own handler
+                cpx #OPTION_MODE        ; continue if not on the Options screen
+                bne _determine_key
 
-                jsr CHECK_OPTIONS
+                jsr CHECK_OPTIONS       ; transfer to the Option handler
                 bra _XIT
 
-_2              cmp #3                  ; OPTION
-                beq _3
+_determine_key  cmp #3                  ; OPTION pressed?
+                beq _doOption
 
-                cmp #5                  ; SELECT
-                bne _4
+                cmp #5                  ; SELECT pressed?
+                bne _doSelect
 
-_3              lda #OPTION_MODE
+_doOption       lda #OPTION_MODE        ; switch to Options screen
                 sta MODE
-                sta DEMO_STATUS
-                jsr SCREEN_OFF
+                sta DEMO_STATUS         ; disable Demo
+                jsr SCREEN_OFF          ; update display
 
-                lda #0
-                sta OPT_NUM
-                jsr CHECK_OPTIONS
+                stz OPT_NUM
+                jsr CHECK_OPTIONS       ; transfer to the Option handler
                 bra _XIT
 
-_4              lda SKSTAT
+_doSelect       lda SKSTAT              ; is the key still pressed?
                 and #%00000100
-                bne _XIT
+                bne _XIT                ; still pressed then exit
 
-                lda KBCODE
-                cmp #$21                ; SPACE
-                bne _XIT
+                lda KBCODE              ; was it the spacebar?
+                cmp #$21
+                bne _XIT                ; ignore other keys... exit
 
-                lda MODE
+                lda MODE                ; enter Pause mode
                 pha
-                lda #PAUSE_MODE
+                lda #PAUSE_MODE         ; MODE=PAUSE
                 sta MODE
-                jsr ClearSounds
+                jsr ClearSounds         ; stop sounds
 
-_wait1          lda SKSTAT
+_wait1          lda SKSTAT              ; capture... 
                 and #%00000100
-                beq _wait1
+                beq _wait1              ; don't leave until we exist Pause mode
 
-_next1          lda SKSTAT
+_next1          lda SKSTAT              ; is the key still pressed?
                 and #%00000100
-                bne _5
+                bne _debounce
 
-                lda KBCODE
-                cmp #$21                ; SPACE
-                beq _wait2
+                lda KBCODE              ; was it the spacebar?
+                cmp #$21
+                beq _wait2              ; exit once the key is released
 
-_5              lda CONSOL
+_debounce       lda CONSOL              ; debounce... ensure all three console keys are released
                 cmp #7
                 bne _wait2
 
-                lda TRIG0
+                lda TRIG0               ; exit after debounce if trigger is pressed
                 bne _next1
 
-_wait2          lda SKSTAT
+_wait2          lda SKSTAT              ; debounce... wait for release
                 and #%00000100
                 beq _wait2
 
@@ -98,18 +105,21 @@ _XIT            rts
 ; 
 ;=======================================
 ReadJoystick    .proc
-                lda CHOPPER_STATUS      ; skip joystick read when off
+v_angleBit0     .var TEMP1_I
+;---
+
+                lda CHOPPER_STATUS      ; skip joystick read when Off
                 cmp #OFF
                 beq _XIT
 
-                cmp #CRASH              ; skip joystick read when crashed
+                cmp #CRASH              ; skip joystick read when Crashed
                 bne _doStick
 
 _XIT            rts
 
 _doStick        lda CHOPPER_ANGLE
                 and #1
-                sta TEMP1_I
+                sta v_angleBit0
 
                 lda CHOPPER_ANGLE
                 and #$FE
@@ -120,7 +130,7 @@ _doStick        lda CHOPPER_ANGLE
 
                 ldx DEMO_COUNT
                 lda DEMO_STICK,x
-                sta STICK
+                sta JOYSTICK0
 
                 lda FRAME
                 and #$F
@@ -133,26 +143,28 @@ _doStick        lda CHOPPER_ANGLE
                 ldx #0
 _1              stx DEMO_COUNT
 
-_2              ;!! ldx STICK
-                cpx #$F
+_2              lda JOYSTICK0
+                and #$1F
+                tax
+                cpx #$00
                 bne _3
 
                 jsr Hover
                 lda #20
-                sta S1_2_VAL
+                sta SND1_2_VAL
 
 _3              lda FUEL_STATUS
                 cmp #EMPTY
-                bne _4
+                bne _chk_right
 
                 lda #60
-                sta S1_2_VAL
-_4              txa
+                sta SND1_2_VAL
+_chk_right      txa
                 and #RIGHT
-                bne _7
+                beq _chk_left
 
                 lda #17
-                sta S1_2_VAL
+                sta SND1_2_VAL
 
                 lda CHOPPER_ANGLE
                 cmp #14
@@ -166,16 +178,16 @@ _5              inc CHOPPER_X
 
 _6              lda FRAME
                 and #3
-                bne _7
+                bne _chk_left
 
                 inc CHOPPER_ANGLE
                 inc CHOPPER_ANGLE
-_7              txa
+_chk_left       txa
                 and #LEFT
-                bne _10
+                beq _chk_up
 
                 lda #17
-                sta S1_2_VAL
+                sta SND1_2_VAL
 
                 lda CHOPPER_ANGLE
                 cmp #4
@@ -189,31 +201,31 @@ _8              dec CHOPPER_X
 
 _9              lda FRAME
                 and #3
-                bne _10
+                bne _chk_up
 
                 dec CHOPPER_ANGLE
                 dec CHOPPER_ANGLE
 
-_10             lda FUEL_STATUS
+_chk_up         lda FUEL_STATUS
                 cmp #EMPTY
-                beq _11
+                beq _chk_down
 
                 txa
                 and #UP
-                bne _11
+                bne _chk_down
 
                 lda #13
-                sta S1_2_VAL
+                sta SND1_2_VAL
 
                 dec CHOPPER_Y
                 jsr Hover
 
-_11             txa
+_chk_down       txa
                 and #DOWN
-                bne _12
+                beq _12
 
                 lda #26
-                sta S1_2_VAL
+                sta SND1_2_VAL
 
                 lda CHOPPER_STATUS
                 cmp #LAND
@@ -236,7 +248,7 @@ _13             cmp #18
                 lda #16
                 sta CHOPPER_ANGLE
 _14             lda CHOPPER_ANGLE
-                ora TEMP1_I
+                ora v_angleBit0
                 sta CHOPPER_ANGLE
 
                 rts
@@ -331,7 +343,7 @@ _9              sta ROCKET_STATUS,x
                 sta ROCKET_Y,x
 
                 lda #$3F
-                sta S2_VAL
+                sta SND2_VAL
 
                 rts
                 .endproc
