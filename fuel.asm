@@ -8,6 +8,10 @@
 ;
 ;=======================================
 CheckFuelBase   .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 lda FUEL_STATUS
                 cmp #kREFUEL
                 bne _1
@@ -89,6 +93,11 @@ _XIT            rts
 ;
 ;=======================================
 Refuel          .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;---
+
                 dec TIM4_VAL
                 bne FE
 
@@ -146,6 +155,8 @@ _1              stx SND4_VAL
 ;
 ;=======================================
 DrawBase        .proc
+;v_???          .var TEMP3
+;v_???          .var TEMP4
 ;---
                 jsr ComputeMapAddr
 

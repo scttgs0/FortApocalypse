@@ -71,6 +71,8 @@ _1              stx POD_NUM
 ;
 ;=======================================
 GetPodAddr      .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
 ;---
 
                 lda POD_X,x
@@ -85,6 +87,10 @@ GetPodAddr      .proc
 ;
 ;=======================================
 GetPodValue     .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 jsr GetPodAddr
 
                 ldy #0
@@ -101,6 +107,10 @@ GetPodValue     .proc
 ;
 ;=======================================
 PutPodValue     .proc
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
                 jsr GetPodAddr
 
                 ldy #0
@@ -117,6 +127,10 @@ PutPodValue     .proc
 ;
 ;=======================================
 PositionPod     .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 lda POD_X,x
                 sta TEMP1
                 lda POD_Y,x
@@ -167,6 +181,10 @@ _next2          lda RANDOM
 ;
 ;=======================================
 PodCollision    .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 jsr GetPodValue
                 lda TEMP1
                 cmp #MISS_LEFT
@@ -208,6 +226,10 @@ _1              jsr PodErase
 ;
 ;=======================================
 PodErase        .proc
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
                 jsr PositionPod
 
                 lda POD_TEMP1,x
@@ -223,6 +245,12 @@ PodErase        .proc
 ;
 ;=======================================
 PodDraw         .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
                 jsr PositionPod
                 jsr GetPodValue
 
@@ -248,6 +276,10 @@ PodDraw         .proc
 ;
 ;=======================================
 PodMove         .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
 _next1          lda POD_DX,x
                 bpl _1
 

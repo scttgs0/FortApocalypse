@@ -80,6 +80,10 @@ _XIT            rts
 ;
 ;=======================================
 GetMissileAddr  .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 lda CM_X,x
                 sta TEMP1
                 lda CM_Y,x
@@ -125,6 +129,8 @@ _1              tya
 ;
 ;=======================================
 MissileCollision .proc
+;v_???          .var TEMP1
+;---
                 jsr GetMissileAddr
 
                 ldy #0
@@ -186,6 +192,9 @@ _XIT            rts
 ;
 ;=======================================
 MissileMove     .proc
+;v_???          .var TEMP1
+;---
+
                 lda CM_STATUS,x
                 cmp #LEFT
                 beq _1

@@ -57,6 +57,10 @@ _XIT            rts
 ;
 ;=======================================
 GetSlaveAddr    .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 lda SLAVE_X,x
                 sta TEMP1
                 lda SLAVE_Y,x
@@ -107,6 +111,9 @@ SlaveCollision  .proc
 ;
 ;=======================================
 S_COL2          .proc
+;v_???          .var TEMP2
+;---
+
                 jsr SlaveErase
 
                 lda #OFF
@@ -117,6 +124,7 @@ S_COL2          .proc
                 ;[fall-through]
 
 PrintSlavesLeft .proc
+;v_???          .var TEMP1
 ;---
 
                 lda #9

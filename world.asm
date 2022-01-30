@@ -165,6 +165,10 @@ ComputeMapAddrI .proc
 ;
 ;=======================================
 ComputeMapAddr  .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 lda #<MAP-5
                 clc
                 adc TEMP1
@@ -238,6 +242,14 @@ _9              rts
 ;
 ;=======================================
 CheckFort       .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;v_???          .var TEMP5
+;v_???          .var TEMP6
+;---
+
                 lda FORT_STATUS
                 cmp #EXPLODE
                 beq DO_CHECKSUM1

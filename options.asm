@@ -10,6 +10,8 @@
 CHECK_OPTIONS   .proc
 v_posX          .var TEMP1
 v_posY          .var TEMP2
+;v_???          .var TEMP5
+;v_???          .var TEMP6
 ;---
 
                 lda CONSOL

@@ -208,6 +208,12 @@ _2              rts
 ;
 ;=======================================
 DoLevel1        .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
                 lda CHOPPER_STATUS
                 cmp #LAND
                 bne _1
@@ -369,6 +375,11 @@ _1              rts
 ;
 ;=======================================
 Unpack          .proc
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
 _0              jsr GetByte
 
                 ldy #0
@@ -582,6 +593,10 @@ ELEVATOR_TAB    .byte 37+25,37+10,37+0
 ;
 ;=======================================
 M_NewPlayer     .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 jsr SCREEN_OFF
 
                 sed
@@ -675,6 +690,12 @@ _10             lda #4
 ;
 ;=======================================
 M_NewLevel      .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
                 jsr SCREEN_OFF
 
                 lda #12
@@ -1055,6 +1076,10 @@ M_TAB           .char -2,-1,0
 ;
 ;=======================================
 M_GameOver      .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 jsr SCREEN_OFF
 
                 lda SLAVES_SAVED

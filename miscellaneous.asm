@@ -52,6 +52,9 @@ SCREEN_ON       .proc
 ;
 ;=======================================
 SCREEN_OFF      .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TIM7_VAL
 ;---
 
                 lda #<DSP_LST2
@@ -131,6 +134,10 @@ _6              lda #0
 ;
 ;=======================================
 CCL             .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 lda TEMP2
                 pha
                 lda TEMP1
@@ -161,6 +168,10 @@ CCL             .proc
 ;
 ;=======================================
 PRINT           .proc
+;v_???          .var TEMP5
+;v_???          .var TEMP6
+;---
+
                 stx ADR2
                 sty ADR2+1
                 jsr CCL
@@ -258,6 +269,9 @@ _1              sta PLAY_SCRN,y
 ;
 ;=======================================
 DO_CHECKSUM2    .proc
+;v_???          .var TEMP1
+;---
+
                 ldy #0
                 sty TEMP1
                 sty ADR1
@@ -295,6 +309,11 @@ _XIT            rts
 ;
 ;=======================================
 PositionIt      .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;---
+
                 stx TEMP3
                 ldx TEMP1
                 lda TEMP2
@@ -327,6 +346,10 @@ PositionIt      .proc
 ;
 ;=======================================
 MULT_BY_40      .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 sta TEMP1
                 asl
                 asl

@@ -14,6 +14,10 @@ TANK_SHAPE      .byte $EC,$ED,$EE,$EF,$F0       ; 'lmnop' atari-ascii
 ;
 ;=======================================
 PositionTank    .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 lda TANK_X,x
                 sta TEMP1
 
@@ -33,6 +37,10 @@ PositionTank    .proc
 ;
 ;=======================================
 MoveTanks       .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
 MT1             .block
                 dec TANK_SPD
                 beq _1
@@ -275,6 +283,9 @@ _2              dex
 ;
 ;=======================================
 CheckTankCollision .proc
+;v_???          .var TEMP1
+;---
+
                 ldx #HIT_LIST2_LEN
 _1              lda (ADR1),y
                 cmp HIT_LIST,x
