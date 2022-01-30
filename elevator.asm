@@ -16,7 +16,7 @@ DoElevator      .proc
 
                 ldx #32-1
                 lda #0
-_next1          sta BLOCK_5,X
+_next1          sta BLOCK_5,x
                 dex
                 bpl _next1
 
@@ -28,14 +28,14 @@ _next1          sta BLOCK_5,X
 
                 asl
                 tax
-                lda ELEVATORS,X
+                lda ELEVATORS,x
                 sta ADR1_I
-                lda ELEVATORS+1,X
+                lda ELEVATORS+1,x
                 sta ADR1_I+1
 
                 ldy #7
                 lda #$55
-_next2          sta (ADR1_I),Y
+_next2          sta (ADR1_I),y
                 dey
                 bpl _next2
 

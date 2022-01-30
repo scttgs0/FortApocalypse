@@ -125,7 +125,7 @@ F1              ldx #1
                 bge _1
 
                 ldx #0
-                stx AUDC2
+                ;!! stx AUDC2
 _1              stx S4_VAL
                 lda CHOP_Y
                 cmp #8+2
@@ -158,8 +158,8 @@ DrawBase        .proc
                 asl
                 tax
 _next1          ldy #0
-_next2          lda BASE_SHAPE,X
-                sta (ADR1),Y
+_next2          lda BASE_SHAPE,x
+                sta (ADR1),y
                 inx
                 iny
                 cpy #6

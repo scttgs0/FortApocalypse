@@ -23,16 +23,16 @@
 ;=======================================
 ; Memory Structure
 ;=======================================
-; Static Usage      18.2 K
+; Static Usage      18.0 K
 ; Dynamic Usage     ??? K
 ;
-; Level unpacked    $4000 - ???
+; Level unpacked    $03:4000 - ???
 ;
-; Level packed      $8000 - $9220
-; Font1             $9300 - $95c8
-; Font2             $9600 - $988f
+; Level packed      $03:8000 - $03:9220
+; Font1             $03:9300 - $02:95c8
+; Font2             $03:9600 - $03:988f
 ;
-; Code              $a000 - $c7c7
+; Code              $03:a000 - $03:c844
 ;=======================================
 
                 .cpu "65816"
@@ -42,7 +42,7 @@
                 .include "equates_game.asm"
                 .include "macros.asm"
 
-                * = $8000
+                * = $03_8000
                 .include "level.asm"
 
                 .align $100
@@ -54,6 +54,9 @@
                 .align $1000
                 clc
                 xce
+                .m8i8
+                .setdp $B000
+                .setbank $03
 
                 jml CartridgeStart
 

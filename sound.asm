@@ -39,7 +39,7 @@ S2              .block                  ; MISSILE SOUND
                 cmp #$3F+16
                 bne _1
                 ldx #0
-_1              stx AUDC2
+_1              ;!! stx AUDC2
                 dec S2_VAL
 _XIT            .endblock
 
@@ -62,7 +62,7 @@ _1              ldx #$48
                 cmp #0
                 bne _2
                 tax                     ; X=0
-_2              stx AUDC3
+_2              ;!! stx AUDC3
 _XIT            .endblock
 
 
@@ -90,8 +90,8 @@ _1              ldy #$00
                 adc #0
                 sta FUEL2
                 cld
-_2              stx AUDF2
-                sty AUDC2
+_2              ;!! stx AUDF2
+                ;!! sty AUDC2
 _XIT            .endblock
 
 

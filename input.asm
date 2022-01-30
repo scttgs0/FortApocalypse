@@ -119,7 +119,7 @@ _doStick        lda CHOPPER_ANGLE
                 bne _2
 
                 ldx DEMO_COUNT
-                lda DEMO_STICK,X
+                lda DEMO_STICK,x
                 sta STICK
 
                 lda FRAME
@@ -133,7 +133,7 @@ _doStick        lda CHOPPER_ANGLE
                 ldx #0
 _1              stx DEMO_COUNT
 
-_2              ldx STICK
+_2              ;!! ldx STICK
                 cpx #$F
                 bne _3
 
@@ -260,7 +260,7 @@ ReadTrigger     .proc
 
                 rts
 
-_1              ldx TRIG0
+_1              ;!! ldx TRIG0
                 beq _2
 
                 stx TRIG_FLAG
@@ -287,7 +287,7 @@ _4              lda ELEVATOR_DX
                 sta ELEVATOR_DX
 
                 ldx #1
-_next1          lda ROCKET_STATUS,X
+_next1          lda ROCKET_STATUS,x
                 beq _5
 
                 dex
@@ -316,19 +316,19 @@ _8              cmp #0
                 bne _9
 
                 lda #1
-_9              sta ROCKET_STATUS,X
+_9              sta ROCKET_STATUS,x
 
                 lda CHOPPER_X
                 and #3
                 clc
                 adc CHOPPER_X
                 adc #8
-                sta ROCKET_X,X
+                sta ROCKET_X,x
 
                 lda CHOPPER_Y
                 clc
                 adc #8
-                sta ROCKET_Y,X
+                sta ROCKET_Y,x
 
                 lda #$3F
                 sta S2_VAL

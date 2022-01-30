@@ -5,10 +5,9 @@
 ;---------------------------------------
 ;---------------------------------------
 
-FRAME           = $14
+                * = DPADDR
 
-                * = $15
-
+FRAME           .byte ?
 ADR1            .word ?
 ADR2            .word ?
 
@@ -24,19 +23,19 @@ TEMP_MODE       .byte ?
 ADR1_I          .word ?
 ADR2_I          .word ?
 
-TEMP1_I         .byte ?
+TEMP1_I         .byte ?                 ; [$10]
 TEMP2_I         .byte ?
 TEMP3_I         .byte ?
 TEMP4_I         .byte ?
 
 S_ADR           .word ?
 S_TEMP          .byte ?
-S_FLG           .byte ?
+S_FLG           .byte ?                 ; [$17]
 
 TANK_START_X    .fill MAX_TANKS
 TANK_START_Y    .fill MAX_TANKS
 
-TIM1_VAL        .byte ?                 ; LASER 1
+TIM1_VAL        .byte ?                 ; LASER 1   [$24]
 TIM2_VAL        .byte ?                 ; LASER 2
 TIM3_VAL        .byte ?                 ; CHOP EXPLODE
 TIM4_VAL        .byte ?                 ; RE FUEL
@@ -49,12 +48,10 @@ TIM9_VAL        .byte ?                 ; SLAVE MESS
 SSIZEM          .byte ?
 
 ;---------------------------------------
-;---------------------------------------
 
-                * = $43
 S1_1_VAL        .byte ?
 S1_2_VAL        .byte ?
-S2_VAL          .byte ?
+S2_VAL          .byte ?                 ; [$30]
 S3_VAL          .byte ?
 S4_VAL          .byte ?
 S5_VAL          .byte ?
@@ -63,4 +60,4 @@ S6_VAL          .byte ?                 ; MISSILE SND
 GAME_POINTS     .byte ?
 
 DEMO_STATUS     .byte ?
-DEMO_COUNT      .byte ?
+DEMO_COUNT      .byte ?                 ; [$37]

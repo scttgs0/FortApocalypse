@@ -62,7 +62,7 @@ VERTBLKD        .proc
 _1
                 plp
                 cli
-                jmp VVBLKD_RET
+                jml VVBLKD_RET
 
                 .endproc
 

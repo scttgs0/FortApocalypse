@@ -10,8 +10,8 @@
 ;=======================================
 INIT_OS         .proc
                 ldx #$25
-_next1          lda $E480,X             ; PUPDIV
-                sta VDSLST,X
+_next1          lda $E480,x             ; PUPDIV
+                sta VDSLST,x
                 dex
                 bpl _next1
 
@@ -66,14 +66,14 @@ SCREEN_OFF      .proc
                 sta R_STATUS
 _0              ldx #$E0
                 lda #0
-_1              sta CHR_SET1+$200,X
+_1              sta CHR_SET1+$200,x
                 inx
                 bne _1
 
-_2              sta CHR_SET1+$300,X
-                sta PLAY_SCRN+$000,X
-                sta PLAY_SCRN+$100,X
-                sta PLAY_SCRN+$200,X
+_2              sta CHR_SET1+$300,x
+                sta PLAY_SCRN+$000,x
+                sta PLAY_SCRN+$100,x
+                sta PLAY_SCRN+$200,x
                 inx
                 bne _2
 
@@ -88,33 +88,33 @@ _2              sta CHR_SET1+$300,X
                 sta S1_2_VAL
                 ldx #MAX_TANKS-1
                 stx TIM7_VAL
-_3              lda CM_STATUS,X
+_3              lda CM_STATUS,x
                 cmp #OFF
                 beq _4
 
                 lda #OFF
-                sta CM_STATUS,X
+                sta CM_STATUS,x
                 jsr MissileErase
 _4              dex
                 bpl _3
 
                 ldx #2
-_5              lda ROCKET_STATUS,X
+_5              lda ROCKET_STATUS,x
                 cmp #7                  ; EXP
                 bne _6
 
-                lda ROCKET_TEMPX,X
+                lda ROCKET_TEMPX,x
                 sta TEMP1
-                lda ROCKET_TEMPY,X
+                lda ROCKET_TEMPY,x
                 sta TEMP2
                 jsr ComputeMapAddr
 
                 ldy #0
-                lda ROCKET_TEMP,X
-                sta (ADR1),Y
+                lda ROCKET_TEMP,x
+                sta (ADR1),y
 _6              lda #0
-                sta ROCKET_STATUS,X
-                sta ROCKET_X,X
+                sta ROCKET_STATUS,x
+                sta ROCKET_X,x
                 dex
                 bpl _5
 
@@ -162,19 +162,19 @@ PRINT           .proc
                 sty TEMP5
                 sty TEMP6
 _1              ldy TEMP5
-                lda (ADR2),Y
+                lda (ADR2),y
                 beq _3
 
                 cmp #$FF
                 beq _2
 
                 ldy TEMP6
-                sta (ADR1),Y
+                sta (ADR1),y
                 inc TEMP6
                 clc
                 adc #32
 _3              ldy TEMP6
-                sta (ADR1),Y
+                sta (ADR1),y
                 inc TEMP6
                 inc TEMP5
                 bne _1                  ; FORCED
@@ -239,7 +239,7 @@ _2              ldx #$FF
 ClearInfo       .proc
                 ldy #40-1
                 lda #0
-_1              sta PLAY_SCRN,Y
+_1              sta PLAY_SCRN,y
                 dey
                 bpl _1
 
@@ -258,7 +258,7 @@ DO_CHECKSUM2    .proc
                 sta ADR1+1
                 clc
 
-_next1          adc (ADR1),Y
+_next1          adc (ADR1),y
                 bcc _1
                 inc TEMP1
 _1              iny
@@ -308,9 +308,9 @@ PositionIt      .proc
                 and #7
                 tax
                 ldy #0
-                lda (ADR2),Y
-                eor POS_MASK1,X
-                sta (ADR2),Y
+                lda (ADR2),y
+                eor POS_MASK1,x
+                sta (ADR2),y
                 ldx TEMP3
                 rts
                 .endproc
@@ -345,7 +345,7 @@ DO_CHECKSUM3    .proc
                 ldx #0
                 txa
                 clc
-_1              adc $B980,X
+_1              adc $B980,x
                 inx
                 bne _1
 

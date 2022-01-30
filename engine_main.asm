@@ -13,11 +13,11 @@ CartridgeStart  .proc
                 pha
                 ldx #$00
                 txa
-_next1          sta $0000,X             ; zero-page
-                sta HPOSP0,X
-                sta DMACLT,X
-                sta AUDF1,X
-                sta PORTA,X
+_next1          sta $0000,x             ; zero-page
+                sta HPOSP0,x
+                sta DMACLT,x
+                sta AUDF1,x
+                sta PORTA,x
                 inx
                 bne _next1
 
@@ -25,7 +25,7 @@ _next1          sta $0000,X             ; zero-page
                 sty ADR1+1
                 dey                     ; Y=0
                 sty ADR1
-_next2          sta (ADR1),Y
+_next2          sta (ADR1),y
                 iny
                 bne _next2
 
@@ -37,8 +37,8 @@ _next2          sta (ADR1),Y
                 lda #$34
                 pha
                 ldx #$00
-_next3          lda BOOT_STUFF,X
-                sta $01C0,X             ; L01C0
+_next3          lda BOOT_STUFF,x
+                sta $01C0,x             ; L01C0
                 inx
                 bpl _next3
 
@@ -54,8 +54,8 @@ START           .proc
                 sei
                 cld
                 ldx #Z2_LEN
-_3              lda Z2,X
-                sta RAM2_STUFF,X
+_3              lda Z2,x
+                sta RAM2_STUFF,x
                 dex
                 bne _3
 
@@ -95,25 +95,25 @@ _3              lda Z2,X
 
 SET_FONTS       .block
                 ldx #0
-_3              lda FNT1,X
-                sta CHR_SET1+15,X
-                lda FNT1+$100-15,X
-                sta CHR_SET1+$100,X
-                lda FNT1+$200-15,X
-                sta CHR_SET1+$200,X
+_3              lda FNT1,x
+                sta CHR_SET1+15,x
+                lda FNT1+$100-15,x
+                sta CHR_SET1+$100,x
+                lda FNT1+$200-15,x
+                sta CHR_SET1+$200,x
 
-                lda FNT2,X
-                sta CHR_SET2+$100+8,X
-                lda FNT2+$100-8,X
-                sta CHR_SET2+$200,X
-                lda FNT2+$200-8,X
-                sta CHR_SET2+$300,X
+                lda FNT2,x
+                sta CHR_SET2+$100+8,x
+                lda FNT2+$100-8,x
+                sta CHR_SET2+$200,x
+                lda FNT2+$200-8,x
+                sta CHR_SET2+$300,x
                 inx
                 bne _3
 
                 ldx #Z1_LEN
-_4              lda Z1,X
-                sta RAM1_STUFF,X
+_4              lda Z1,x
+                sta RAM1_STUFF,x
                 dex
                 bpl _4
 
@@ -291,8 +291,8 @@ _1              lda ADR1
                 dey
                 sty ADR2+1
                 ldy #5
-_2              lda (ADR2),Y
-                sta (ADR1),Y
+_2              lda (ADR2),y
+                sta (ADR1),y
                 dey
                 bpl _2
 
@@ -375,7 +375,7 @@ _0              jsr GetByte
                 ldx TEMP4
                 bne _10
 
-_1              cmp CHR1,Y
+_1              cmp CHR1,y
                 beq _2
 
                 iny
@@ -385,7 +385,7 @@ _1              cmp CHR1,Y
 _9              ldx #1
                 bra _3
 
-_10             cmp CHR2,Y
+_10             cmp CHR2,y
                 beq _2
 
                 iny
@@ -399,7 +399,7 @@ _2              sta TEMP1
                 tax
                 lda TEMP1
 _3              ldy #0
-                sta (ADR2),Y
+                sta (ADR2),y
                 inc ADR2
                 bne _4
 
@@ -422,7 +422,7 @@ _4              dex
 ;=======================================
 GetByte         .proc
                 ldy #0
-                lda (ADR1),Y
+                lda (ADR1),y
                 inc ADR1
                 bne _1
 
@@ -510,10 +510,10 @@ M_START         .proc
                 lda #OFF
                 sta R_STATUS
                 ldx GRAV_SKILL
-                lda GRAV_TAB,X
+                lda GRAV_TAB,x
                 sta GRAV_SKL
                 ldx CHOPS
-                lda CHOP_TAB,X
+                lda CHOP_TAB,x
                 ldy DEMO_STATUS
                 bne _0
 
@@ -522,41 +522,41 @@ _0              sta MAIN                ; PROT
                 sta CHOP_LEFT
 
                 ldx PILOT_SKILL
-                lda LASER_TAB,X
+                lda LASER_TAB,x
                 sta LASER_SPD
-                lda POD_TAB,X
+                lda POD_TAB,x
                 sta START_PODS
 
-                lda ROBOT_TAB,X
+                lda ROBOT_TAB,x
                 sta ROBOT_SPD
 
-                lda TANK_TAB,X
+                lda TANK_TAB,x
                 sta TANK_SPEED
 
-                lda MISSILE_TAB,X
+                lda MISSILE_TAB,x
                 sta MISSILE_SPEED
 
-                lda ELEVATOR_TAB,X
+                lda ELEVATOR_TAB,x
                 sta ELEVATOR_SPD
 
                 ldx #7
                 lda #0
-_1              sta WINDOW_1,X
-                sta WINDOW_2,X
+_1              sta WINDOW_1,x
+                sta WINDOW_2,x
                 dex
                 bpl _1
 
                 ldx #7
                 lda #$55
-                ldy RANDOM
+                ;!! ldy RANDOM
                 bmi _3
 
-_2              sta WINDOW_1,X
+_2              sta WINDOW_1,x
                 dex
                 bpl _2
                 bra _4
 
-_3              sta WINDOW_2,X
+_3              sta WINDOW_2,x
                 dex
                 bpl _3
 
@@ -703,20 +703,20 @@ _0              ldx #<txtEnterL2
                 jsr PRINT
 
 _1              ldx LEVEL
-                lda LEVEL_COLOR,X
+                lda LEVEL_COLOR,x
                 sta BAK_COLOR
                 sta COLOR0
                 txa
                 asl
                 tax
-                lda LEVEL_START,X
+                lda LEVEL_START,x
                 sta SX
-                lda LEVEL_START+1,X
+                lda LEVEL_START+1,x
                 sta SY
 
-                lda LEVEL_CHOP_START,X
+                lda LEVEL_CHOP_START,x
                 sta CHOPPER_X
-                lda LEVEL_CHOP_START+1,X
+                lda LEVEL_CHOP_START+1,x
                 sta CHOPPER_Y
 
                 lda #0
@@ -742,31 +742,31 @@ _2              ldy LEVEL
                 dey
                 beq _91
 
-                lda TANK_START_X_L1,X
-                sta TANK_START_X,X
-                lda TANK_START_Y_L1,X
+                lda TANK_START_X_L1,x
+                sta TANK_START_X,x
+                lda TANK_START_Y_L1,x
                 bne _92                 ; FORCED
 
-_91             lda TANK_START_X_L2,X
-                sta TANK_START_X,X
-                lda TANK_START_Y_L2,X
-_92             sta TANK_START_Y,X
+_91             lda TANK_START_X_L2,x
+                sta TANK_START_X,x
+                lda TANK_START_Y_L2,x
+_92             sta TANK_START_Y,x
                 lda #BEGIN
-                sta TANK_STATUS,X
+                sta TANK_STATUS,x
                 lda #OFF
-                sta CM_STATUS,X
+                sta CM_STATUS,x
                 dex
                 bpl _2
 
                 sta R_STATUS
                 ldx #MAX_PODS-1
-_6              sta POD_STATUS,X
+_6              sta POD_STATUS,x
                 dex
                 bpl _6
 
                 ldx START_PODS
                 lda #BEGIN
-_7              sta POD_STATUS,X
+_7              sta POD_STATUS,x
                 dex
                 bpl _7
 
@@ -777,9 +777,9 @@ _7              sta POD_STATUS,X
                 lda LEVEL
                 asl
                 tax
-                lda PACK_ADR,X
+                lda PACK_ADR,x
                 sta ADR1
-                lda PACK_ADR+1,X
+                lda PACK_ADR+1,x
                 sta ADR1+1
 
                 lda #<MAP
@@ -801,7 +801,7 @@ MAKE_CONTURE    .block
                 lda #>MAP
                 sta ADR1+1
                 ldy #0
-_1              lda (ADR1),Y
+_1              lda (ADR1),y
                 cmp #$73                ; 's'
                 bne _3
 
@@ -822,7 +822,7 @@ _4              lda RANDOM
 
                 clc
                 adc #$65-1
-_5              sta (ADR1),Y
+_5              sta (ADR1),y
                 iny
                 bne _1
 
@@ -843,8 +843,8 @@ _5              sta (ADR1),Y
 
                 ldx #0
 _6              ldy #0
-_7              lda (ADR1),Y
-                sta (ADR2),Y
+_7              lda (ADR1),y
+                sta (ADR2),y
                 iny
                 cpy #40
                 bne _7
@@ -868,7 +868,7 @@ _7              lda (ADR1),Y
                 ldx #2
 _69             ldy #$D
                 lda #0
-_70             sta (ADR1),Y
+_70             sta (ADR1),y
                 dey
                 bpl _70
 
@@ -879,9 +879,9 @@ _70             sta (ADR1),Y
 _71             lda LEVEL
                 asl
                 tax
-                lda SCAN_INFO,X
+                lda SCAN_INFO,x
                 sta ADR1
-                lda SCAN_INFO+1,X
+                lda SCAN_INFO+1,x
                 sta ADR1+1
 
                 lda #<SCANNER
@@ -908,8 +908,8 @@ _71             lda LEVEL
 
                 ldx #39
 _50             ldy #12
-_51             lda (ADR1),Y
-                sta (ADR2),Y
+_51             lda (ADR1),y
+                sta (ADR2),y
                 dey
                 bpl _51
 
@@ -939,7 +939,7 @@ S_BEGIN         .block
                 stx SLAVES_LEFT
                 dex                     ; X=7
                 lda #OFF
-_1              sta SLAVE_STATUS,X
+_1              sta SLAVE_STATUS,x
                 dex
                 bpl _1
 
@@ -954,18 +954,18 @@ _9              lda #<MAP
                 sta ADR1+1
 
                 ldy #0
-_10             lda (ADR1),Y
+_10             lda (ADR1),y
                 cmp #$48                ; '^H'
                 bne _11
 
                 iny
-                lda (ADR1),Y
+                lda (ADR1),y
                 dey
                 cmp #$48
                 bne _11
 
                 dec ADR1+1
-                lda (ADR1),Y
+                lda (ADR1),y
                 inc ADR1+1
                 cmp #$1F                ; '?'
                 bne _11
@@ -980,20 +980,20 @@ _10             lda (ADR1),Y
                 tya
                 clc
                 adc #5
-                sta SLAVE_X,X
+                sta SLAVE_X,x
                 lda ADR1+1
                 sec
                 sbc #>MAP
-                sta SLAVE_Y,X
+                sta SLAVE_Y,x
 
                 lda #1
-                sta (ADR1),Y
+                sta (ADR1),y
 
                 lda #ON
-                sta SLAVE_STATUS,X
+                sta SLAVE_STATUS,x
 
                 lda #$10
-                sta SLAVE_DX,X
+                sta SLAVE_DX,x
                 dex
                 bmi _12
 
@@ -1079,7 +1079,7 @@ _2              jsr IncreaseGamePoints
                 jsr IncreaseGamePoints
 
                 ldx GRAV_SKILL
-                lda M_TAB,X
+                lda M_TAB,x
                 jsr IncreaseGamePoints
 
                 lda #2
@@ -1089,7 +1089,7 @@ _2              jsr IncreaseGamePoints
                 jsr IncreaseGamePoints
 
                 ldx PILOT_SKILL
-                lda M_TAB,X
+                lda M_TAB,x
                 jsr IncreaseGamePoints
 
                 lda GAME_POINTS
@@ -1191,14 +1191,14 @@ _5              jsr PRINT
                 adc #1
                 ldy #12
                 ora #$10+$80
-                sta (ADR1),Y
+                sta (ADR1),y
                 cmp #$10+128
                 bne _6
 
                 lda #$A+128
 _6              iny
                 and #$8F
-                sta (ADR1),Y
+                sta (ADR1),y
                 lda #3
                 sta TEMP1
                 lda GAME_POINTS
@@ -1207,8 +1207,8 @@ _6              iny
                 and #3
                 asl
                 tay
-                ldx txtGmOvrRating,Y
-                lda txtGmOvrRating+1,Y
+                ldx txtGmOvrRating,y
+                lda txtGmOvrRating+1,y
                 tay
                 jsr PRINT
 
@@ -1227,10 +1227,10 @@ _6              iny
 ;=======================================
 DoExplode       .proc
                 ldx #7
-_1              lda EXP_SHAPE,X
+_1              lda EXP_SHAPE,x
                 and RANDOM
-                sta EXPLOSION,X
-                sta EXPLOSION2,X
+                sta EXPLOSION,x
+                sta EXPLOSION2,x
                 dex
                 bpl _1
 
@@ -1238,7 +1238,7 @@ _1              lda EXP_SHAPE,X
 _2              lda RANDOM
                 and #$0F
                 ora #$A0
-                sta MISS_CHR_LEFT,X
+                sta MISS_CHR_LEFT,x
                 inx
                 cpx #5
                 bne _2
@@ -1247,7 +1247,7 @@ _2              lda RANDOM
 _3              lda RANDOM
                 and #$E0
                 ora #$0A
-                sta MISS_CHR_RIGHT,X
+                sta MISS_CHR_RIGHT,x
                 inx
                 cpx #5
                 bne _3
@@ -1428,14 +1428,14 @@ _0              lda #<$F0+128           ; BLANK
 _1              clc
                 adc #$10+128            ; '0'
                 ldy #0
-                sta (S_ADR),Y
+                sta (S_ADR),y
                 cmp #$10+128
                 bne _2
 
                 lda #$A+128
 _2              iny
                 and #$8F
-                sta (S_ADR),Y
+                sta (S_ADR),y
                 lda S_ADR
                 clc
                 adc #2

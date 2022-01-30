@@ -17,7 +17,7 @@ MoveCruiseMissiles .proc
 
 
 M_ST            .block
-                lda CM_STATUS,X
+                lda CM_STATUS,x
                 cmp #OFF
                 beq M_END
                 cmp #BEGIN
@@ -33,28 +33,28 @@ _1              jsr MissileCollision
 
 
 M_END           .block
-                lda TANK_STATUS,X
+                lda TANK_STATUS,x
                 cmp #ON
                 bne _2
-                lda TANK_Y,X
+                lda TANK_Y,x
                 sec
                 sbc CHOP_Y
                 bmi _2
                 cmp #14
                 bge _2
-                lda CM_STATUS,X
+                lda CM_STATUS,x
                 cmp #OFF
                 bne _2
                 lda CHOP_X
                 sec
                 sbc #2
-                sbc TANK_X,X
+                sbc TANK_X,x
                 bpl _1
                 eor #-2
 _1              cmp #9
                 bge _2
                 lda #BEGIN
-                sta CM_STATUS,X
+                sta CM_STATUS,x
 
 _2              dex
                 bpl M_ST
@@ -63,7 +63,7 @@ _2              dex
 
 MCE             .block
                 ldx #MAX_TANKS-1
-_next1          lda CM_STATUS,X
+_next1          lda CM_STATUS,x
                 cmp #OFF
                 bne _XIT
                 dex
@@ -80,9 +80,9 @@ _XIT            rts
 ;
 ;=======================================
 GetMissileAddr  .proc
-                lda CM_X,X
+                lda CM_X,x
                 sta TEMP1
-                lda CM_Y,X
+                lda CM_Y,x
                 sta TEMP2
                 jmp ComputeMapAddr
 
@@ -93,27 +93,27 @@ GetMissileAddr  .proc
 ;
 ;=======================================
 MissileBegin    .proc
-                ldy TANK_X,X
+                ldy TANK_X,x
                 iny
                 tya
-                sta CM_X,X
-                lda TANK_Y,X
+                sta CM_X,x
+                lda TANK_Y,x
                 sec
                 sbc #2
-                sta CM_Y,X
+                sta CM_Y,x
                 ldy #LEFT
                 lda CHOP_X
                 sec
-                sbc TANK_X,X
+                sbc TANK_X,x
                 bmi _1
 
                 ldy #RIGHT
 _1              tya
-                sta CM_STATUS,X
+                sta CM_STATUS,x
                 lda #0
-                sta CM_TEMP,X
+                sta CM_TEMP,x
                 lda #20
-                sta CM_TIME,X
+                sta CM_TIME,x
                 lda #1
                 sta S6_VAL
                 jmp MoveCruiseMissiles.M_END
@@ -128,7 +128,7 @@ MissileCollision .proc
                 jsr GetMissileAddr
 
                 ldy #0
-                lda (ADR1),Y
+                lda (ADR1),y
                 cmp #EXP
                 beq M_COL2
 
@@ -140,9 +140,9 @@ M_COL2          jsr MissileErase
                 lda #1
                 sta S3_VAL
                 lda #OFF
-                sta CM_STATUS,X
+                sta CM_STATUS,x
                 lda #-1
-                sta CM_TIME,X
+                sta CM_TIME,x
                 stx TEMP1
                 ldx #$10
                 ldy #$00
@@ -160,7 +160,7 @@ M_COL2          jsr MissileErase
 MissileErase    .proc
                 jsr GetMissileAddr
 
-                lda CM_TEMP,X
+                lda CM_TEMP,x
                 cmp #EXP_WALL
                 beq _2
 
@@ -177,7 +177,7 @@ MissileErase    .proc
                 blt _XIT
 
 _2              ldy #0
-                sta (ADR1),Y
+                sta (ADR1),y
 _XIT            rts
                 .endproc
 
@@ -186,25 +186,25 @@ _XIT            rts
 ;
 ;=======================================
 MissileMove     .proc
-                lda CM_STATUS,X
+                lda CM_STATUS,x
                 cmp #LEFT
                 beq _1
 
-                inc CM_X,X
+                inc CM_X,x
                 jmp _2
 
-_1              dec CM_X,X
-_2              lda CM_TIME,X
+_1              dec CM_X,x
+_2              lda CM_TIME,x
                 bpl _3
 
-_4              inc CM_Y,X
+_4              inc CM_Y,x
                 jmp _8
 
 _3              lda CHOP_X
                 sec
-                sbc CM_X,X
+                sbc CM_X,x
                 sta TEMP1
-                lda CM_STATUS,X
+                lda CM_STATUS,x
                 cmp #LEFT
                 bne _5
 
@@ -215,7 +215,7 @@ _3              lda CHOP_X
 _5              lda TEMP1
                 bmi _4
 
-_6              lda CM_X,X
+_6              lda CM_X,x
                 cmp #$D8
                 bge _4
 
@@ -226,28 +226,28 @@ _6              lda CM_X,X
                 iny
                 tya
                 sec
-                sbc CM_Y,X
+                sbc CM_Y,x
                 beq _8
                 bpl _7
 
-                dec CM_Y,X
+                dec CM_Y,x
                 jmp _8
 
-_7              inc CM_Y,X
+_7              inc CM_Y,x
 _8              jsr GetMissileAddr
 
                 ldy #0
-                lda (ADR1),Y
+                lda (ADR1),y
                 cmp #MISS_LEFT
                 beq _7
 
                 cmp #MISS_RIGHT
                 beq _7
 
-_9              lda CM_TIME,X
+_9              lda CM_TIME,x
                 bmi _XIT
 
-                dec CM_TIME,X
+                dec CM_TIME,x
 _XIT             rts
                 .endproc
 
@@ -259,17 +259,17 @@ MissileDraw     .proc
                 jsr GetMissileAddr
 
                 ldy #0
-                lda (ADR1),Y
-                sta CM_TEMP,X
+                lda (ADR1),y
+                sta CM_TEMP,x
                 lda #MISS_LEFT
-                ldy CM_STATUS,X
+                ldy CM_STATUS,x
                 cpy #LEFT
                 beq _1
 
                 lda #MISS_RIGHT
 _1              ldy #0
-                sta (ADR1),Y
-                lda CM_TEMP,X
+                sta (ADR1),y
+                lda CM_TEMP,x
                 jsr CheckChr
 
                 bcc _XIT
@@ -300,7 +300,7 @@ CheckChr        .proc
                 adc ADR2+1
                 sta ADR2+1
                 ldy #7
-_1              lda (ADR2),Y
+_1              lda (ADR2),y
                 bne _2
 
                 dey

@@ -35,8 +35,8 @@ RestorePoint    .proc
 CheckLanding    .proc
                 ldy #0
                 ldx #LAND_LEN
-                lda (ADR1_I),Y
-_next1          cmp LAND_CHR,X
+                lda (ADR1_I),y
+_next1          cmp LAND_CHR,x
                 beq _XIT
 
                 cmp #$48

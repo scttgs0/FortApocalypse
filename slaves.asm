@@ -9,7 +9,7 @@
 ;=======================================
 MoveSlaves      .proc
                 ldx SLAVE_NUM
-                lda SLAVE_STATUS,X
+                lda SLAVE_STATUS,x
                 cmp #OFF
                 beq _2
 
@@ -19,7 +19,7 @@ MoveSlaves      .proc
                 jsr S_COL2
 
                 ldx #$00
-                stx AUDC3
+                ;!! stx AUDC3
                 ldy #$08
                 jsr IncreaseScore
 
@@ -57,9 +57,9 @@ _XIT            rts
 ;
 ;=======================================
 GetSlaveAddr    .proc
-                lda SLAVE_X,X
+                lda SLAVE_X,x
                 sta TEMP1
-                lda SLAVE_Y,X
+                lda SLAVE_Y,x
                 sta TEMP2
                 jmp ComputeMapAddr
 
@@ -73,7 +73,7 @@ SlaveCollision  .proc
                 jsr GetSlaveAddr
 
                 ldy #0
-                lda (ADR1),Y
+                lda (ADR1),y
                 beq S_COL2
 
                 cmp #EXP
@@ -86,7 +86,7 @@ SlaveCollision  .proc
                 beq S_COL2
 
                 dec ADR1+1
-                lda (ADR1),Y
+                lda (ADR1),y
                 beq S_COL2
 
                 cmp #EXP
@@ -110,7 +110,7 @@ S_COL2          .proc
                 jsr SlaveErase
 
                 lda #OFF
-                sta SLAVE_STATUS,X
+                sta SLAVE_STATUS,x
                 dec SLAVES_LEFT
                 .endproc
 
@@ -151,10 +151,10 @@ SlaveErase      .proc
 
                 ldy #0
                 lda #$48                ; '^H'
-                sta (ADR1),Y
+                sta (ADR1),y
                 dec ADR1+1
                 lda #$1F                ; '?'
-                sta (ADR1),Y
+                sta (ADR1),y
                 rts
                 .endproc
 
@@ -163,33 +163,33 @@ SlaveErase      .proc
 ;
 ;=======================================
 SlaveMove       .proc
-_next1          lda SLAVE_DX,X
+_next1          lda SLAVE_DX,x
                 bmi _1
 
-                inc SLAVE_DX,X
-                lda SLAVE_DX,X
+                inc SLAVE_DX,x
+                lda SLAVE_DX,x
                 and #$01
                 ora #$10
-                sta SLAVE_DX,X
-                inc SLAVE_X,X
+                sta SLAVE_DX,x
+                inc SLAVE_X,x
                 jmp _2
 
-_1              dec SLAVE_DX,X
-                lda SLAVE_DX,X
+_1              dec SLAVE_DX,x
+                lda SLAVE_DX,x
                 and #$01
                 ora #$F0
-                sta SLAVE_DX,X
-                dec SLAVE_X,X
+                sta SLAVE_DX,x
+                dec SLAVE_X,x
 _2              jsr GetSlaveAddr
 
                 ldy #0
-                lda (ADR1),Y
+                lda (ADR1),y
                 cmp #$48
                 beq _XIT
 
-                lda SLAVE_DX,X
+                lda SLAVE_DX,x
                 eor #$E0
-                sta SLAVE_DX,X
+                sta SLAVE_DX,x
                 jmp _next1
 
 _XIT            rts
@@ -203,25 +203,25 @@ SlaveDraw       .proc
                 jsr GetSlaveAddr
 
                 ldy #0
-                lda SLAVE_DX,X
+                lda SLAVE_DX,x
                 pha
                 and #$03
                 tax
                 pla
                 bpl _1
 
-                lda SLAVE_CHR_B_L,X
-                sta (ADR1),Y
+                lda SLAVE_CHR_B_L,x
+                sta (ADR1),y
                 dec ADR1+1
-                lda SLAVE_CHR_T_L,X
-                sta (ADR1),Y
+                lda SLAVE_CHR_T_L,x
+                sta (ADR1),y
                 rts
 
-_1              lda SLAVE_CHR_B_R,X
-                sta (ADR1),Y
+_1              lda SLAVE_CHR_B_R,x
+                sta (ADR1),y
                 dec ADR1+1
-                lda SLAVE_CHR_T_R,X
-                sta (ADR1),Y
+                lda SLAVE_CHR_T_R,x
+                sta (ADR1),y
                 rts
                 .endproc
 
@@ -237,11 +237,11 @@ _next1          dex
                 clc
                 rts
 
-_1              lda SLAVE_STATUS,X
+_1              lda SLAVE_STATUS,x
                 cmp #OFF
                 beq _next1
 
-                lda SLAVE_X,X
+                lda SLAVE_X,x
                 sec
                 sbc CHOP_X
                 bpl _2
@@ -250,7 +250,7 @@ _1              lda SLAVE_STATUS,X
 _2              cmp #4
                 bge _next1
 
-                lda SLAVE_Y,X
+                lda SLAVE_Y,x
                 sec
                 sbc CHOP_Y
                 bpl _3
@@ -260,7 +260,7 @@ _3              cmp #4
                 bge _next1
 
                 lda #PICKUP
-                sta SLAVE_STATUS,X
+                sta SLAVE_STATUS,x
                 lda #$A8
                 sta AUDC3
                 lda #32

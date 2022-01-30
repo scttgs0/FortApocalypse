@@ -13,7 +13,7 @@ CheckChrI       .proc
                 jsr ComputeMapAddrI
 
                 ldy #0
-                lda (ADR1_I),Y
+                lda (ADR1_I),y
                 and #$7F
                 ldy #0
                 sty ADR2_I+1
@@ -32,7 +32,7 @@ CheckChrI       .proc
                 sta ADR2_I+1
 
                 ldy #7
-_next1          lda (ADR2_I),Y
+_next1          lda (ADR2_I),y
                 bne _1
                 dey
                 bpl _next1
@@ -178,8 +178,8 @@ _20             lda #FLY
 _0              ldy OCHOPPER_Y
                 ldx #17
                 lda #0
-_1              sta PLAYER+PL0,Y
-                sta PLAYER+PL1,Y
+_1              sta PLAYER+PL0,y
+                sta PLAYER+PL1,y
                 iny
                 dex
                 bpl _1
@@ -193,9 +193,9 @@ _1              sta PLAYER+PL0,Y
                 lda CHOPPER_ANGLE
                 asl
                 tax
-                lda CHOPPER_SHAPES,X
+                lda CHOPPER_SHAPES,x
                 sta ADR1_I
-                lda CHOPPER_SHAPES+1,X
+                lda CHOPPER_SHAPES+1,x
                 sta ADR1_I+1
 
                 lda #0
@@ -206,11 +206,11 @@ _1              sta PLAYER+PL0,Y
                 ldx CHOPPER_Y
                 stx OCHOPPER_Y
 _2              ldy TEMP1_I
-                lda (ADR1_I),Y
-                sta PLAYER+PL0,X
+                lda (ADR1_I),y
+                sta PLAYER+PL0,x
                 ldy TEMP2_I
-                lda (ADR1_I),Y
-                sta PLAYER+PL1,X
+                lda (ADR1_I),y
+                sta PLAYER+PL1,x
                 inc TEMP1_I
                 inc TEMP2_I
                 inx
@@ -224,18 +224,18 @@ _2              ldy TEMP1_I
 
                 ldx CHOPPER_Y
                 ldy #18
-_10             lda PLAYER+PL0,X
+_10             lda PLAYER+PL0,x
                 and RANDOM
-                sta PLAYER+PL0,X
-                lda PLAYER+PL1,X
+                sta PLAYER+PL0,x
+                lda PLAYER+PL1,x
                 and RANDOM
-                sta PLAYER+PL1,X
+                sta PLAYER+PL1,x
                 inx
                 dey
                 bne _10
 
-                inc PCOLR0
-                inc PCOLR1
+                ;!! inc PCOLR0
+                ;!! inc PCOLR1
                 lda RANDOM
                 ora #$F
                 sta BAK2_COLOR

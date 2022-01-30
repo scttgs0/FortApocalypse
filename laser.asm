@@ -23,15 +23,15 @@ DoLaser1        .proc
                 bne _1
 
                 ldx #0
-_next1          lda LASER_SHAPES,X
-                sta LASERS_1,X
+_next1          lda LASER_SHAPES,x
+                sta LASERS_1,x
                 inx
                 cpx #32
                 bne _next1
 
                 ldx #0
-_next2          lda LASER_SHAPES+24,X
-                sta LASER_3,X
+_next2          lda LASER_SHAPES+24,x
+                sta LASER_3,x
                 inx
                 cpx #8
                 bne _next2
@@ -40,12 +40,12 @@ _next2          lda LASER_SHAPES+24,X
 
 _1              ldx #32-1
                 lda #0
-_next3          sta LASERS_1,X
+_next3          sta LASERS_1,x
                 dex
                 bpl _next3
 
                 ldx #8-1
-_next4          sta LASER_3,X
+_next4          sta LASER_3,x
                 dex
                 bpl _next4
 
@@ -71,15 +71,15 @@ DoLaser2        .proc
                 bne _1
 
                 ldx #0
-_next1          lda LASER_SHAPES,X
-                sta LASERS_2,X
+_next1          lda LASER_SHAPES,x
+                sta LASERS_2,x
                 inx
                 cpx #32
                 bne _next1
 
                 ldx #0
-_next2          lda LASER_SHAPES+16,X
-                sta LASER_3,X
+_next2          lda LASER_SHAPES+16,x
+                sta LASER_3,x
                 inx
                 cpx #8
                 bne _next2
@@ -88,7 +88,7 @@ _next2          lda LASER_SHAPES+16,X
 
 _1              ldx #32-1
                 lda #0
-_next3          sta LASERS_2,X
+_next3          sta LASERS_2,x
                 dex
                 bpl _next3
 

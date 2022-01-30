@@ -2,6 +2,8 @@
 ; CONSTANTS
 ;---------------------------------------
 
+DPADDR          = $B000
+
 MIS             = $300
 
 PL0             = $400
@@ -43,21 +45,21 @@ HYPERSPACE_MODE = 10
 ;---------------------------------------
 
 ;                START                  ; LEN
-PLAYER          = $0                    ; $800  R
-PLAY_SCRN       = $300                  ; $300  R
-CHR_SET1        = $800                  ; $400  R
-CHR_SET2        = $C00                  ; $400  R
-POD_1           = $C00+920              ; $4E   R
-POD_2           = $3925                 ; $9B   R
-MAP             = $1100+3               ; $2800 R
-SLAVES          = $3904                 ; $20   R
-SCANNER         = $39C0                 ; $640  R
-RAM1_STUFF      = $C00+144              ; $48
-RAM2_STUFF      = $100
-PL              = $8000
+PLAYER          = $03_0000              ; $800  R
+PLAY_SCRN       = $03_0300              ; $300  R
+CHR_SET1        = $03_0800              ; $400  R
+CHR_SET2        = $03_0C00              ; $400  R
+POD_1           = $03_0C00+920          ; $4E   R
+POD_2           = $03_3925              ; $9B   R
+MAP             = $03_1100+3            ; $2800 R
+SLAVES          = $03_3904              ; $20   R
+SCANNER         = $03_39C0              ; $640  R
+RAM1_STUFF      = $03_0C00+144          ; $48
+RAM2_STUFF      = $03_0100
+PL              = $03_8000
 PACKED_MAP      = PL                    ; $D34
 PACKED_SCAN     = PL+$D34               ; $4ED
-PROGRAM         = $A000
+PROGRAM         = $03_A000
 
 S_LINE1         = CHR_SET1+736
 S_LINE2         = CHR_SET1+832
@@ -106,7 +108,7 @@ POD_SPEED       = 15
 
 ;---------------------------------------
 
-                * = $50
+                * = DPADDR+$50
 
 SCAN_ADR1       .word ?
 SCAN_ADR2       .word ?
@@ -122,7 +124,7 @@ LAND_Y          .byte ?
 LAND_FX         .byte ?
 LAND_FY         .byte ?
 LAND_CHOP_X     .byte ?
-LAND_CHOP_Y     .byte ?
+LAND_CHOP_Y     .byte ?                 ; [$60]
 LAND_CHOP_ANGLE .byte ?
 
 CHOPPER_STATUS  .byte ?
@@ -140,7 +142,7 @@ ROBOT_STATUS    .byte ?
 R_STATUS        .byte ?
 ROBOT_X         .byte ?
 ROBOT_Y         .byte ?
-OROBOT_Y        .byte ?
+OROBOT_Y        .byte ?                 ; [$70]
 ROBOT_ANGLE     .byte ?
 ROBOT_SPD       .byte ?
 ROBOT_COL       .byte ?
@@ -151,12 +153,12 @@ R_Y             .byte ?
 ROCKET_STATUS   .fill 3
 ROCKET_X        .fill 3
 ROCKET_Y        .fill 3
-ROCKET_TEMP     .fill 3
+ROCKET_TEMP     .fill 3                 ; [$81]
 ROCKET_TEMPX    .fill 3
 ROCKET_TEMPY    .fill 3
 ROCKET_TIM      .fill 3
 OROCKET_Y       .fill 3
-ELEVATOR_NUM    .byte ?
+ELEVATOR_NUM    .byte ?                 ; [$90]
 ELEVATOR_DX     .byte ?
 ELEVATOR_TIM    .byte ?
 ELEVATOR_SPD    .byte ?
@@ -173,29 +175,29 @@ FUEL_TEMP       .byte ?
 FUEL1           .byte ?
 FUEL2           .byte ?
 
-MODE            .byte ?
+MODE            .byte ?                 ; [$A0]
 BAK_COLOR       .byte ?
 BAK2_COLOR      .byte ?
 
 CM_STATUS       .fill MAX_TANKS
 CM_X            .fill MAX_TANKS
-CM_Y            .fill MAX_TANKS
+CM_Y            .fill MAX_TANKS         ; [$AF]
 CM_TIME         .fill MAX_TANKS
 CM_TEMP         .fill MAX_TANKS
 
-TANK_STATUS     .fill MAX_TANKS
+TANK_STATUS     .fill MAX_TANKS         ; [$C1]
 TANK_X          .fill MAX_TANKS
 TANK_Y          .fill MAX_TANKS
-TANK_DX         .fill MAX_TANKS
+TANK_DX         .fill MAX_TANKS         ; [$D3]
 TANK_TEMP       .fill 18                ; MAX_TANKS*3     6*3=18
 
-POD_NUM         .byte ?
+POD_NUM         .byte ?                 ; [$EB]
 POD_COM         .byte ?
 SLAVE_NUM       .byte ?
 SLAVES_LEFT     .byte ?
 SLAVES_SAVED    .byte ?
 
-FORT_STATUS     .byte ?
+FORT_STATUS     .byte ?                 ; [$F0]
 LASER_STATUS    .byte ?
 LASER_SPD       .byte ?
 TANK_SPD        .byte ?
@@ -209,7 +211,7 @@ PILOT_SKL       .byte ?
 CHOPS           .byte ?
 CHOP_LEFT       .byte ?
 OPT_NUM         .byte ?
-START_PODS      .byte ?
+START_PODS      .byte ?                 ; [$FE]
 
 ;---------------------------------------
 

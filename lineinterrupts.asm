@@ -44,8 +44,8 @@ LINE2           .proc
                 sta VDSLST+1
 
                 ldx #2
-_next1          lda ROCKET_X,X
-                sta HPOSM0,X
+_next1          lda ROCKET_X,x
+                sta HPOSM0,x
                 dex
                 bpl _next1
 
@@ -126,7 +126,7 @@ LINE4           .proc
 
                 ldx #7
                 lda #0
-_next1          sta HPOSP0,X
+_next1          sta HPOSP0,x
                 dex
                 bpl _next1
 

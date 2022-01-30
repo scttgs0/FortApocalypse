@@ -128,10 +128,10 @@ _4              lda SX_F
                 ldy #MAP_LINES
 _5              inx
                 lda ADR1_I
-                sta DSP_MAP,X
+                sta DSP_MAP,x
                 inx
                 lda ADR1_I+1
-                sta DSP_MAP,X
+                sta DSP_MAP,x
                 inc ADR1_I+1
                 inx
                 dey
@@ -190,7 +190,7 @@ DoBlocks        .proc
 
                 ldx #32-1
                 lda #0
-_1              sta BLOCK_1,X
+_1              sta BLOCK_1,x
                 dex
                 bpl _1
 
@@ -199,7 +199,7 @@ _1              sta BLOCK_1,X
 
                 ldx #7
                 lda #$55
-_2              sta BLOCK_1,X
+_2              sta BLOCK_1,x
                 dex
                 bpl _2
 
@@ -208,7 +208,7 @@ _3              lda RANDOM
 
                 ldx #7
                 lda #$55
-_4              sta BLOCK_2,X
+_4              sta BLOCK_2,x
                 dex
                 bpl _4
 
@@ -217,7 +217,7 @@ _5              lda RANDOM
 
                 ldx #7
                 lda #$55
-_6              sta BLOCK_3,X
+_6              sta BLOCK_3,x
                 dex
                 bpl _6
 
@@ -226,7 +226,7 @@ _7              lda RANDOM
 
                 ldx #7
                 lda #$55
-_8              sta BLOCK_4,X
+_8              sta BLOCK_4,x
                 dex
                 bpl _8
 
@@ -251,7 +251,7 @@ DO_CHECKSUM1    .block
                 lda #$90
                 sta ADR1+1
                 clc
-_1              adc (ADR1),Y
+_1              adc (ADR1),y
                 bcc _2
 
                 inc TEMP1
@@ -304,15 +304,13 @@ NEXT_PART1      .block
                 lda #8
                 sta LAND_CHOP_ANGLE
                 ldx #16-1
-                lda #0
-_90             sta WINDOW_1,X
+_90             stz WINDOW_1,x
                 dex
                 bpl _90
 
-                lda #0
-                sta TEMP3
-                sta TEMP4
-                sta TEMP6
+                stz TEMP3
+                stz TEMP4
+                stz TEMP6
 _2              lda #121
                 sta TEMP1
                 lda #20
@@ -322,12 +320,12 @@ _2              lda #121
                 lda TEMP3
                 asl
                 tax
-                lda FORT_EXP,X
+                lda FORT_EXP,x
                 sta ADR2
-                lda FORT_EXP+1,X
+                lda FORT_EXP+1,x
                 sta ADR2+1
 _3              ldy TEMP4
-                lda (ADR2),Y
+                lda (ADR2),y
                 sta TEMP5
                 ldy #7+8+8
 _4              ldx #2
@@ -336,7 +334,7 @@ _4              ldx #2
                 bcc _5
 
                 lda #EXP
-_5              sta (ADR1),Y
+_5              sta (ADR1),y
                 dey
                 dex
                 bpl _5
@@ -350,15 +348,13 @@ _5              sta (ADR1),Y
                 cmp #3
                 bne _3
 
-                lda #0
-                sta TEMP6
+                stz TEMP6
                 inc TEMP4
                 lda TEMP4
                 cmp #6
                 bne _3
 
-                lda #0
-                sta TEMP4
+                stz TEMP4
                 lda #$10
                 sta BAK2_COLOR
                 lda #$CF
@@ -375,8 +371,7 @@ _6              ldx #2
                 dey
                 bpl _6
 
-                lda #0
-                sta BAK2_COLOR
+                stz BAK2_COLOR
                 inc TEMP3
                 lda TEMP3
                 cmp #4

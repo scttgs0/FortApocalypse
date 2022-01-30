@@ -28,7 +28,7 @@ HPOSP1          = $D001
 HPOSP2          = $D002
 HPOSP3          = $D003
 P0PF            = $D004
-HPOSM0          = $D004     ; ??
+HPOSM0          = $D004
 P1PF            = $D005
 P2PF            = $D006
 P3PF            = $D007
@@ -37,7 +37,7 @@ M1PL            = $D009
 M2PL            = $D00A
 M3PL            = $D00B
 P0PL            = $D00C
-SIZEM           = $D00C     ; ??
+SIZEM           = $D00C
 P1PL            = $D00D
 P2PL            = $D00E
 P3PL            = $D00F
@@ -64,7 +64,7 @@ AUDCTL          = $D208
 KBCODE          = $D209
 RANDOM          = $D20A
 SKCTL           = $D20F
-SKSTAT          = $D20F     ; ??
+SKSTAT          = $D20F
 
 
 PORTA           = $D300

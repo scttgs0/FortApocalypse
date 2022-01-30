@@ -27,19 +27,19 @@ CheckHyperchamber .proc
                 and #3
 
                 tax
-                lda H_XF,X
+                lda H_XF,x
                 sta SX_F
-                lda H_YF,X
+                lda H_YF,x
                 sta SY_F
 
-                lda H_X,X
+                lda H_X,x
                 sta SX
-                lda H_Y,X
+                lda H_Y,x
                 sta SY
 
-                lda H_CX,X
+                lda H_CX,x
                 sta CHOPPER_X
-                lda H_CY,X
+                lda H_CY,x
                 sta CHOPPER_Y
 
                 lda #8

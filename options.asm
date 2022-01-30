@@ -107,9 +107,9 @@ PRINT_OPTS      .block
                 lda OPT_NUM
                 asl
                 tax
-                lda OptTable,X
+                lda OptTable,x
                 sta ADR2
-                lda OptTable+1,X
+                lda OptTable+1,x
                 sta ADR2+1
                 jsr CCL
 
@@ -117,19 +117,19 @@ PRINT_OPTS      .block
                 sty TEMP5
                 sty TEMP6
 _1              ldy TEMP5
-                lda (ADR2),Y
+                lda (ADR2),y
                 beq _3
                 cmp #$FF
                 beq _2
 
                 ora #$80
                 ldy TEMP6
-                sta (ADR1),Y
+                sta (ADR1),y
                 inc TEMP6
                 clc
                 adc #32
 _3              ldy TEMP6
-                sta (ADR1),Y
+                sta (ADR1),y
                 inc TEMP6
                 inc TEMP5
                 bne _1                  ; FORCED
@@ -141,8 +141,8 @@ _2              lda #28
                 lda GRAV_SKILL
                 asl
                 tay
-                ldx OptGravityTable,Y
-                lda OptGravityTable+1,Y
+                ldx OptGravityTable,y
+                lda OptGravityTable+1,y
                 tay
                 jsr PRINT               ; (28, 7) 'WEAK|NORMAL|STRONG'
 
@@ -151,8 +151,8 @@ _2              lda #28
                 lda PILOT_SKILL
                 asl
                 tay
-                ldx OptPilotTable,Y
-                lda OptPilotTable+1,Y
+                ldx OptPilotTable,y
+                lda OptPilotTable+1,y
                 tay
                 jsr PRINT               ; (28, 9) 'NOVICE|PRO|EXPERT'
 
@@ -161,8 +161,8 @@ _2              lda #28
                 lda CHOPS
                 asl
                 tay
-                ldx OptRoboTable,Y
-                lda OptRoboTable+1,Y
+                ldx OptRoboTable,y
+                lda OptRoboTable+1,y
                 tay
                 jmp PRINT               ; (28, 11) 'SEVEN|NINE|ELEVEN'
 

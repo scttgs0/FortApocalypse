@@ -41,7 +41,7 @@ v_marqueeGlyph  .var TEMP3
                 ldy #0                  ; start with low tones and increase to higher tones
                 sty v_audiofreq
 _next1          lda v_marqueeGlyph      ; place a dot
-                sta PLAY_SCRN,Y
+                sta PLAY_SCRN,y
                 jsr CycleGlyph          ; move to next dot
 
                 iny
@@ -59,11 +59,11 @@ _next1          lda v_marqueeGlyph      ; place a dot
                 ldx #c_vertCount
                 ldy #0
 _next2          lda v_marqueeGlyph
-                sta (ADR1),Y            ; place a dot
+                sta (ADR1),y            ; place a dot
                 iny
                 jsr CycleGlyph          ; change to the next dot color
 
-                sta (ADR1),Y            ; place a horz adjacent dot
+                sta (ADR1),y            ; place a horz adjacent dot
                 dey                     ; back up one position
 
                 lda ADR1                ; calculate the vert adjacent dot
@@ -104,8 +104,8 @@ _next2          lda v_marqueeGlyph
                 jsr PRINT               ; (6, 10) 'Copyright 1982'
 
                 ldx #7
-_3              lda T_5,X
-                sta PLAY_SCRN+426,X     ; output the copyright date (1982)
+_3              lda T_5,x
+                sta PLAY_SCRN+426,x     ; output the copyright date (1982)
                 dex
                 bpl _3
 
@@ -165,7 +165,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 sta AUDF1               ; this is a divide-by-N circuit - larger numbers are lower freq
                 tax
                 dex
-                stx AUDF2               ; audio channel 2 leads channel 1
+                ;!! stx AUDF2               ; audio channel 2 leads channel 1
 
                 lda v_audiofreq         ; launch demo near the end of the audio scale (avoid the highest notes)
                 cmp #$F3
@@ -183,7 +183,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 cmp #7
                 bne _3
 
-                jmp VVBLKD_RET          ; exit VBI
+                jml VVBLKD_RET       ; exit VBI
 
 _3              stx MODE
                 ldx #0

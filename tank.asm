@@ -14,16 +14,16 @@ TANK_SHAPE      .byte $EC,$ED,$EE,$EF,$F0       ; 'lmnop' atari-ascii
 ;
 ;=======================================
 PositionTank    .proc
-                lda TANK_X,X
+                lda TANK_X,x
                 sta TEMP1
 
-                ldy TANK_Y,X
+                ldy TANK_Y,x
                 dey
                 sty TEMP2
 
                 jsr PositionIt
 
-                lda TANK_Y,X
+                lda TANK_Y,x
                 sta TEMP2
                 rts
                 .endproc
@@ -33,7 +33,7 @@ PositionTank    .proc
 ;
 ;=======================================
 MoveTanks       .proc
-MT1
+MT1             .block
                 dec TANK_SPD
                 beq _1
                 jmp MT2
@@ -43,9 +43,9 @@ _1              lda TANK_SPEED
 
                 ldx #MAX_TANKS-1
 
-_2              lda TANK_Y,X
+_2              lda TANK_Y,x
                 sta TEMP2
-                lda TANK_STATUS,X
+                lda TANK_STATUS,x
                 cmp #OFF
                 bne _3
 
@@ -55,17 +55,17 @@ _3              cmp #BEGIN
                 bne _5
 
                 lda #ON
-                sta TANK_STATUS,X
-                lda TANK_START_X,X
-                sta TANK_X,X
-                lda TANK_START_Y,X
-                sta TANK_Y,X
+                sta TANK_STATUS,x
+                lda TANK_START_X,x
+                sta TANK_X,x
+                lda TANK_START_Y,x
+                sta TANK_Y,x
                 lda #-1
-                ldy RANDOM
+                ;!! ldy RANDOM
                 bpl _4
 
                 lda #1
-_4              sta TANK_DX,X
+_4              sta TANK_DX,x
                 jsr PositionTank
                 jmp _7
 
@@ -74,7 +74,7 @@ _5              cmp #CRASH
                 jmp _11
 
 ; RESTORE OLD POS
-_13             lda TANK_X,X
+_13             lda TANK_X,x
                 sta TEMP1
                 jsr ComputeMapAddr
 
@@ -84,7 +84,7 @@ _13             lda TANK_X,X
                 asl
                 adc TEMP1
                 tax
-_6              lda (ADR1),Y
+_6              lda (ADR1),y
                 cmp #EXP
                 beq _15
 
@@ -96,10 +96,10 @@ _6              lda (ADR1),Y
 
 _15             ldx TEMP1
                 lda #CRASH
-                sta TANK_STATUS,X
+                sta TANK_STATUS,x
                 ldy #2
                 lda #EXP
-_14             sta (ADR1),Y
+_14             sta (ADR1),y
                 dey
                 bpl _14
 
@@ -107,8 +107,8 @@ _14             sta (ADR1),Y
                 sta TIM5_VAL
                 jmp _11
 
-_12             lda TANK_TEMP,X
-                sta (ADR1),Y
+_12             lda TANK_TEMP,x
+                sta (ADR1),y
                 inx
                 iny
                 cpy #3
@@ -117,21 +117,21 @@ _12             lda TANK_TEMP,X
                 ldy #1
                 dec ADR1+1
                 lda #0
-                sta (ADR1),Y
+                sta (ADR1),y
 
 ; MOVE X
                 ldx TEMP1
 _7              jsr PositionTank
 
-                lda TANK_X,X
+                lda TANK_X,x
                 clc
-                adc TANK_DX,X
-                sta TANK_X,X
+                adc TANK_DX,x
+                sta TANK_X,x
 
 ; SAVE NEW POS
                 jsr PositionTank
 
-                lda TANK_X,X
+                lda TANK_X,x
                 sta TEMP1
                 jsr ComputeMapAddr
 
@@ -141,8 +141,8 @@ _7              jsr PositionTank
                 asl
                 adc TEMP1
                 tax
-_8              lda (ADR1),Y
-                sta TANK_TEMP,X
+_8              lda (ADR1),y
+                sta TANK_TEMP,x
                 inx
                 iny
                 cpy #3
@@ -161,8 +161,8 @@ _8              lda (ADR1),Y
 
 ; DRAW TANK
                 ldy #2
-_9              lda TANK_SHAPE,Y
-                sta (ADR1),Y
+_9              lda TANK_SHAPE,y
+                sta (ADR1),y
                 dey
                 bpl _9
 
@@ -170,36 +170,41 @@ _9              lda TANK_SHAPE,Y
                 ldy #$6F+128            ; 'o'
                 lda CHOP_X
                 sec
-                sbc TANK_X,X
+                sbc TANK_X,x
                 bpl _10
 
                 ldy #$70+128            ; 'p'
 _10             tya
                 ldy #1
-                sta (ADR1),Y
+                sta (ADR1),y
 
 _11             dex
                 bmi MT2
 
                 jmp _2
+                .endblock
 
-MT2
+
+_XIT            rts
+
+
+MT2             .block
                 dec TIM5_VAL
-                bne _4
+                bne MoveTanks._XIT
 
                 lda #10
                 sta TIM5_VAL
 
                 ldx #MAX_TANKS-1
-_1              lda TANK_STATUS,X
+_next1          lda TANK_STATUS,x
                 cmp #CRASH
-                bne _3
+                bne _1
 
                 lda #OFF
-                sta TANK_STATUS,X
-                lda TANK_X,X
+                sta TANK_STATUS,x
+                lda TANK_X,x
                 sta TEMP1
-                lda TANK_Y,X
+                lda TANK_Y,x
                 sta TEMP2
                 jsr ComputeMapAddr
 
@@ -209,17 +214,17 @@ _1              lda TANK_STATUS,X
                 asl
                 adc TEMP1
                 tax
-_2              lda TANK_TEMP,X
-                sta (ADR1),Y
+_next2          lda TANK_TEMP,x
+                sta (ADR1),y
                 inx
                 iny
                 cpy #3
-                bne _2
+                bne _next2
 
                 dec ADR1+1
                 ldy #1
                 lda #0
-                sta (ADR1),Y
+                sta (ADR1),y
                 ldx #$50
                 ldy #$2
                 jsr IncreaseScore
@@ -227,41 +232,42 @@ _2              lda TANK_TEMP,X
                 ldx TEMP1
                 jsr PositionTank
 
-_3              lda TANK_STATUS,X
+_1              lda TANK_STATUS,x
                 cmp #OFF
-                bne _10
+                bne _2
 
                 lda CHOP_Y
                 cmp #3
-                blt _10
+                blt _2
 
                 sec
                 sbc #3
-                cmp TANK_START_Y,X
-                blt _10
+                cmp TANK_START_Y,x
+                blt _2
 
-                lda TANK_START_X,X
+                lda TANK_START_X,x
                 sec
                 sbc #5
                 sta TEMP1
-                lda TANK_START_Y,X
+                lda TANK_START_Y,x
                 sta TEMP2
                 jsr ComputeMapAddr
 
                 ldy #13-1
-_9              lda (ADR1),Y
-                bmi _10
+_next3          lda (ADR1),y
+                bmi _2
 
                 dey
-                bpl _9
+                bpl _next3
 
                 lda #BEGIN
-                sta TANK_STATUS,X
+                sta TANK_STATUS,x
 
-_10             dex
-                bpl _1
+_2              dex
+                bpl _next1
 
-_4              rts
+                rts
+                .endblock
                 .endproc
 
 
@@ -270,8 +276,8 @@ _4              rts
 ;=======================================
 CheckTankCollision .proc
                 ldx #HIT_LIST2_LEN
-_1              lda (ADR1),Y
-                cmp HIT_LIST,X
+_1              lda (ADR1),y
+                cmp HIT_LIST,x
                 beq _2
 
                 dex
@@ -282,9 +288,9 @@ _1              lda (ADR1),Y
                 rts
 
 _2              ldx TEMP1
-                lda TANK_DX,X
+                lda TANK_DX,x
                 eor #-2
-                sta TANK_DX,X
+                sta TANK_DX,x
                 sec
                 rts
                 .endproc

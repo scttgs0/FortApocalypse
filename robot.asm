@@ -4,6 +4,11 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ROB_X           .byte $84,$C3,$49,$C3,$49,$84,$84,$84
+                .byte $D7,$D7,$D7,$D6,$D6,$D6,$33,$33
+ROB_Y           .byte $00,$16,$16,$21,$21,$00,$00,$00
+                .byte $12,$12,$12,$06,$06,$06,$06,$06
+
 ;=======================================
 ;
 ;=======================================
@@ -40,9 +45,9 @@ _2              lda #$88
                 clc
                 adc #8
 _3              tax
-                lda ROB_X,X
+                lda ROB_X,x
                 sta R_X
-                lda ROB_Y,X
+                lda ROB_Y,x
                 sta R_Y
                 lda R_X
                 sec
@@ -74,14 +79,6 @@ _6              lda #FLY
 
 _XIT            rts
                 .endproc
-
-;---------------------------------------
-;---------------------------------------
-
-ROB_X           .byte $84,$C3,$49,$C3,$49,$84,$84,$84
-                .byte $D7,$D7,$D7,$D6,$D6,$D6,$33,$33
-ROB_Y           .byte $00,$16,$16,$21,$21,$00,$00,$00
-                .byte $12,$12,$12,$06,$06,$06,$06,$06
 
 
 ;=======================================
@@ -504,8 +501,8 @@ UpdateRobotChopper .proc
 _0              ldy OROBOT_Y
                 ldx #17
                 lda #0
-_1              sta PLAYER+PL2,Y
-                sta PLAYER+PL3,Y
+_1              sta PLAYER+PL2,y
+                sta PLAYER+PL3,y
                 iny
                 dex
                 bpl _1
@@ -513,9 +510,9 @@ _1              sta PLAYER+PL2,Y
                 lda ROBOT_ANGLE
                 asl
                 tax
-                lda CHOPPER_SHAPES,X
+                lda CHOPPER_SHAPES,x
                 sta ADR1_I
-                lda CHOPPER_SHAPES+1,X
+                lda CHOPPER_SHAPES+1,x
                 sta ADR1_I+1
 
                 lda #0
@@ -526,11 +523,11 @@ _1              sta PLAYER+PL2,Y
                 ldx ROBOT_Y
                 stx OROBOT_Y
 _2              ldy TEMP1_I
-                lda (ADR1_I),Y
-                sta PLAYER+PL2,X
+                lda (ADR1_I),y
+                sta PLAYER+PL2,x
                 ldy TEMP2_I
-                lda (ADR1_I),Y
-                sta PLAYER+PL3,X
+                lda (ADR1_I),y
+                sta PLAYER+PL3,x
                 inc TEMP1_I
                 inc TEMP2_I
                 inx
@@ -544,18 +541,18 @@ _2              ldy TEMP1_I
 
                 ldx ROBOT_Y
                 ldy #18
-_10             lda PLAYER+PL2,X
+_10             lda PLAYER+PL2,x
                 and RANDOM
-                sta PLAYER+PL2,X
-                lda PLAYER+PL3,X
+                sta PLAYER+PL2,x
+                lda PLAYER+PL3,x
                 and RANDOM
-                sta PLAYER+PL3,X
+                sta PLAYER+PL3,x
                 inx
                 dey
                 bne _10
 
-                inc PCOLR2
-                inc PCOLR3
+                ;!! inc PCOLR2
+                ;!! inc PCOLR3
                 dec TIM7_VAL
                 bne _12
 
@@ -618,9 +615,9 @@ POS_IT_I        ldx TEMP1_I
                 and #7
                 tax
                 ldy #0
-                lda (ADR1_I),Y
-                eor POS_MASK1,X
-                sta (ADR1_I),Y
+                lda (ADR1_I),y
+                eor POS_MASK1,x
+                sta (ADR1_I),y
                 rts
                 .endproc
 

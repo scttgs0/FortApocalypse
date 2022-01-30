@@ -79,8 +79,8 @@ DO_LINE         .proc
                 sta TEMP1
 _0              ldx #12
                 ldy #0
-_1              lda (ADR1),Y
-                sta (ADR2),Y
+_1              lda (ADR1),y
+                sta (ADR2),y
                 inc ADR1
                 bne _2
 
