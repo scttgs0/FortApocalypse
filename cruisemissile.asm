@@ -80,14 +80,15 @@ _XIT            rts
 ;
 ;=======================================
 GetMissileAddr  .proc
-;v_???          .var TEMP1
-;v_???          .var TEMP2
+v_posX          .var TEMP1
+v_posY          .var TEMP2
 ;---
 
                 lda CM_X,x
-                sta TEMP1
+                sta v_posX
                 lda CM_Y,x
-                sta TEMP2
+                sta v_posY
+
                 jmp ComputeMapAddr
 
                 .endproc
@@ -129,7 +130,7 @@ _1              tya
 ;
 ;=======================================
 MissileCollision .proc
-;v_???          .var TEMP1
+v_preserveX     .var TEMP1
 ;---
                 jsr GetMissileAddr
 
@@ -147,14 +148,17 @@ M_COL2          jsr MissileErase
                 sta SND3_VAL
                 lda #OFF
                 sta CM_STATUS,x
+
                 lda #-1
                 sta CM_TIME,x
-                stx TEMP1
+
+                stx v_preserveX
                 ldx #$10
                 ldy #$00
                 jsr IncreaseScore
 
-                ldx TEMP1
+                ldx v_preserveX
+
                 sec
                 rts
                 .endproc
@@ -192,7 +196,7 @@ _XIT            rts
 ;
 ;=======================================
 MissileMove     .proc
-;v_???          .var TEMP1
+v_distance      .var TEMP1
 ;---
 
                 lda CM_STATUS,x
@@ -212,16 +216,17 @@ _4              inc CM_Y,x
 _3              lda CHOP_X
                 sec
                 sbc CM_X,x
-                sta TEMP1
+                sta v_distance
+
                 lda CM_STATUS,x
                 cmp #LEFT
                 bne _5
 
-                lda TEMP1
+                lda v_distance
                 bpl _4
                 bra _6
 
-_5              lda TEMP1
+_5              lda v_distance
                 bmi _4
 
 _6              lda CM_X,x

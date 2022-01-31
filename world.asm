@@ -167,18 +167,19 @@ ComputeMapAddrI .proc
 ;
 ;=======================================
 ComputeMapAddr  .proc
-;v_???          .var TEMP1
-;v_???          .var TEMP2
+v_posX          .var TEMP1
+v_posY          .var TEMP2
 ;---
 
                 lda #<MAP-5
                 clc
-                adc TEMP1
+                adc v_posX
                 sta ADR1
                 lda #>MAP-5
                 adc #0
                 sta ADR1+1
-                lda TEMP2
+
+                lda v_posY
                 clc
                 adc ADR1+1
                 sta ADR1+1
