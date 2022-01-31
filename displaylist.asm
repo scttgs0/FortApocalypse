@@ -192,7 +192,7 @@ DSP_LST3        .byte AEMPTY8           ; 48 blank lines
                     .addr PLAY_SCRN
 
                 .byte AVB+AJMP          ; vblank jump
-                    .addr $41DSP_LST3
+                    .addr DSP_LST3
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF
