@@ -8,8 +8,8 @@
 ;
 ;=======================================
 CheckFuelBase   .proc
-;v_???          .var TEMP1
-;v_???          .var TEMP2
+v_posX          .var TEMP1
+v_posY          .var TEMP2
 ;---
 
                 lda FUEL_STATUS
@@ -67,15 +67,17 @@ _4              lda #0
                 bne _5
 
                 lda #9
-                sta TEMP1
+                sta v_posX
                 lda #0
-                sta TEMP2
+                sta v_posY
+
                 lda #$A4
                 sta AUDC2
                 sta AUDF2
+
                 ldx #<txtLowOnFuel
                 ldy #>txtLowOnFuel
-                jsr PRINT
+                jsr Print
 
                 jmp _XIT
 
@@ -162,11 +164,13 @@ DrawBase        .proc
 
                 lda #4
                 sta TEMP4
-                lda TEMP3
+
+                lda TEMP3               ; x6
                 asl
                 clc
                 adc TEMP3
                 asl
+
                 tax
 _next1          ldy #0
 _next2          lda BASE_SHAPE,x

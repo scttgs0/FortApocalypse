@@ -633,7 +633,7 @@ _10             lda #4
                 sta TEMP2
                 ldx #<txtPilot1
                 ldy #>txtPilot1
-                jsr PRINT
+                jsr Print
 
                 lda #5
                 sta TEMP1
@@ -641,7 +641,7 @@ _10             lda #4
                 sta TEMP2
                 ldx #<txtPilot2
                 ldy #>txtPilot2
-                jsr PRINT
+                jsr Print
 
                 lda #<PLAY_SCRN+428
                 sta SCRN_ADR
@@ -705,7 +705,7 @@ M_NewLevel      .proc
                 sta TEMP2
                 ldx #<txtEnter
                 ldy #>txtEnter
-                jsr PRINT
+                jsr Print
 
                 lda #2
                 sta TEMP1
@@ -717,12 +717,12 @@ M_NewLevel      .proc
 
 _5              ldx #<txtEnterL1
                 ldy #>txtEnterL1
-                jsr PRINT
+                jsr Print
                 jmp _1
 
 _0              ldx #<txtEnterL2
                 ldy #>txtEnterL2
-                jsr PRINT
+                jsr Print
 
 _1              ldx LEVEL
                 lda LEVEL_COLOR,x
@@ -1157,7 +1157,7 @@ _52             lda #2
                 sta SCRN_FLG
                 ldx #<txtHighScore
                 ldy #>txtHighScore
-                jsr PRINT
+                jsr Print
 
                 lda #<PLAY_SCRN+24
                 sta SCRN_ADR
@@ -1180,7 +1180,7 @@ _52             lda #2
                 sta TEMP2
                 ldx #<txtGmOvrMission   ; YOUR
                 ldy #>txtGmOvrMission   ; MISSION
-                jsr PRINT
+                jsr Print
 
                 lda #21
                 sta TEMP1
@@ -1192,7 +1192,7 @@ _52             lda #2
 
                 ldx #<txtGmOvrComplete  ; COMPLETED
                 ldy #>txtGmOvrComplete
-_5              jsr PRINT
+_5              jsr Print
 
                 ldx #7
                 stx TEMP1
@@ -1200,7 +1200,7 @@ _5              jsr PRINT
                 stx TEMP2
                 ldx #<txtGmOvrRank      ; YOUR
                 ldy #>txtGmOvrRank      ; RANK
-                jsr PRINT
+                jsr Print
 
                 lda #21
                 sta TEMP1
@@ -1208,7 +1208,7 @@ _5              jsr PRINT
                 sta TEMP2
                 ldx #<txtGmOvrClass     ; CLASS
                 ldy #>txtGmOvrClass
-                jsr PRINT
+                jsr Print
 
                 lda GAME_POINTS
                 and #3
@@ -1236,7 +1236,7 @@ _6              iny
                 ldx txtGmOvrRating,y
                 lda txtGmOvrRating+1,y
                 tay
-                jsr PRINT
+                jsr Print
 
                 lda #-1
                 sta TIM6_VAL

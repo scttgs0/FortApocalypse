@@ -64,7 +64,7 @@ _8              lda #13
                 sta v_posY
                 ldx #<txtOptTitle1
                 ldy #>txtOptTitle1
-                jsr PRINT               ; (13, 1) 'OPTIONS'
+                jsr Print               ; (13, 1) 'OPTIONS'
 
                 lda #0
                 sta v_posX
@@ -72,13 +72,13 @@ _8              lda #13
                 sta v_posY
                 ldx #<txtOptTitle2
                 ldy #>txtOptTitle2
-                jsr PRINT               ; (0, 3) 'OPTION'
+                jsr Print               ; (0, 3) 'OPTION'
 
                 lda #28
                 sta v_posX
                 ldx #<txtOptTitle3
                 ldy #>txtOptTitle3
-                jsr PRINT               ; (28, 3) 'SELECT'
+                jsr Print               ; (28, 3) 'SELECT'
 
 PRINT_OPTS      .block
                 lda #0
@@ -87,19 +87,19 @@ PRINT_OPTS      .block
                 sta v_posY
                 ldx #<txtOptGravity
                 ldy #>txtOptGravity
-                jsr PRINT               ; (0, 7) 'GRAVITY SKILL'
+                jsr Print               ; (0, 7) 'GRAVITY SKILL'
 
                 inc v_posY
                 inc v_posY
                 ldx #<txtOptPilot
                 ldy #>txtOptPilot
-                jsr PRINT               ; (0, 9) 'PILOT SKILL'
+                jsr Print               ; (0, 9) 'PILOT SKILL'
 
                 inc v_posY
                 inc v_posY
                 ldx #<txtOptRobo
                 ldy #>txtOptRobo
-                jsr PRINT               ; (0, 11) 'ROBO PILOTS'
+                jsr Print               ; (0, 11) 'ROBO PILOTS'
 
                 lda OPT_NUM
                 asl
@@ -113,7 +113,7 @@ PRINT_OPTS      .block
                 sta ADR2
                 lda OptTable+1,x
                 sta ADR2+1
-                jsr CCL
+                jsr CalcCursorLoc
 
                 ldy #0
                 sty TEMP5
@@ -146,7 +146,7 @@ _2              lda #28
                 ldx OptGravityTable,y
                 lda OptGravityTable+1,y
                 tay
-                jsr PRINT               ; (28, 7) 'WEAK|NORMAL|STRONG'
+                jsr Print               ; (28, 7) 'WEAK|NORMAL|STRONG'
 
                 inc v_posY
                 inc v_posY
@@ -156,7 +156,7 @@ _2              lda #28
                 ldx OptPilotTable,y
                 lda OptPilotTable+1,y
                 tay
-                jsr PRINT               ; (28, 9) 'NOVICE|PRO|EXPERT'
+                jsr Print               ; (28, 9) 'NOVICE|PRO|EXPERT'
 
                 inc v_posY
                 inc v_posY
@@ -166,7 +166,7 @@ _2              lda #28
                 ldx OptRoboTable,y
                 lda OptRoboTable+1,y
                 tay
-                jmp PRINT               ; (28, 11) 'SEVEN|NINE|ELEVEN'
+                jmp Print               ; (28, 11) 'SEVEN|NINE|ELEVEN'
 
                 .endblock
                 .endproc

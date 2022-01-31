@@ -133,7 +133,7 @@ PrintSlavesLeft .proc
                 sta TEMP2
                 ldx #<txtMenRemain
                 ldy #>txtMenRemain
-                jsr PRINT
+                jsr Print
 
                 lda SLAVES_LEFT
                 ora #$10+128

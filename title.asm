@@ -30,10 +30,11 @@ v_marqueeGlyph  .var TEMP3
 
                 jsr SCREEN_OFF
 
-                lda #<DSP_LST3          ; title screen display list
-                sta SDLST
-                lda #>DSP_LST3
-                sta SDLST+1
+                .graphicMode320
+                ; lda #<DSP_LST3        ; title screen display list
+                ; sta SDLST
+                ; lda #>DSP_LST3
+                ; sta SDLST+1
 
                 lda #$3B                ; start with red marquee dot
                 sta v_marqueeGlyph
@@ -88,20 +89,20 @@ _next2          lda v_marqueeGlyph
                 stx v_posY
                 ldx #<txtTitle1         ; output the first title
                 ldy #>txtTitle1
-                jsr PRINT               ; (5, 4) 'Fort Apocalypse'
+                jsr Print               ; (5, 4) 'Fort Apocalypse'
 
                 inc v_posX
                 lda #6
                 sta v_posY
                 ldx #<txtTitle2         ; output the second title
                 ldy #>txtTitle2
-                jsr PRINT               ; (6, 6) 'By Steve Hales'
+                jsr Print               ; (6, 6) 'By Steve Hales'
 
                 lda #10
                 sta v_posY
                 ldx #<txtTitle3         ; output the third title
                 ldy #>txtTitle3
-                jsr PRINT               ; (6, 10) 'Copyright 1982'
+                jsr Print               ; (6, 10) 'Copyright 1982'
 
                 ldx #7
 _3              lda T_5,x
@@ -115,7 +116,7 @@ _3              lda T_5,x
                 sta v_posY
                 ldx #<txtTitle4         ; output the fourth title
                 ldy #>txtTitle4
-                jsr PRINT               ; (4, 12) 'Synapse Software'
+                jsr Print               ; (4, 12) 'Synapse Software'
 
 ; change the text color for each scan line
 _endless1       lda VCOUNT              ; current scan line being draw on screen (divided by 2)
