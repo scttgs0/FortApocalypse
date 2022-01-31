@@ -91,3 +91,18 @@ mouse_on        .macro
                 plp
                 pla
                 .endm
+
+graphicMode320  .macro
+                pha
+                php
+
+                .m8
+                lda #Mstr_Ctrl_Graph_Mode_En    ; + Mstr_Ctrl_TileMap_En + Mstr_Ctrl_Sprite_En
+                sta MASTER_CTRL_REG_L
+
+                lda #Mstr_Ctrl_Video_Mode1
+                sta MASTER_CTRL_REG_H
+
+                plp
+                pla
+                .endm
