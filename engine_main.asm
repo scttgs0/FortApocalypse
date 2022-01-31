@@ -95,7 +95,7 @@ _3              lda Z2,x
 
 SET_FONTS       .block
                 ldx #0
-_3              lda FNT1,x
+_next1          lda FNT1,x
                 sta CHR_SET1+15,x
                 lda FNT1+$100-15,x
                 sta CHR_SET1+$100,x
@@ -109,13 +109,14 @@ _3              lda FNT1,x
                 lda FNT2+$200-8,x
                 sta CHR_SET2+$300,x
                 inx
-                bne _3
+                bne _next1
 
+; relocate the display list into RAM
                 ldx #Z1_LEN
-_4              lda Z1,x
+_next2          lda Z1,x
                 sta RAM1_STUFF,x
                 dex
-                bpl _4
+                bpl _next2
 
                 lda #$40
                 sta NMIEN

@@ -124,18 +124,20 @@ _4              lda SX_F
                 sta TEMP2_I
                 jsr ComputeMapAddrI
 
+; for each map row, recalculate the display list LMS address
                 ldx #0
                 ldy #MAP_LINES
-_5              inx
+_nextRow        inx
                 lda ADR1_I
                 sta DSP_MAP,x
                 inx
                 lda ADR1_I+1
                 sta DSP_MAP,x
+
                 inc ADR1_I+1
                 inx
                 dey
-                bne _5
+                bne _nextRow
 
                 rts
                 .endblock

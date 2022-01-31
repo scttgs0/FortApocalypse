@@ -2,6 +2,19 @@
 ; SYSTEM EQUATES
 ;---------------------------------------
 
+; ANTIC instructions
+AJMP            = $0001
+AVB             = $0040
+AHSCR           = $0010
+AVSCR           = $0020
+ALMS            = $0040
+ADLI            = $0080
+AEMPTY3         = $0020
+AEMPTY6         = $0050
+AEMPTY8         = $0070
+
+;---------------------------------------
+
 ATTRACT         = $4D
 
 
