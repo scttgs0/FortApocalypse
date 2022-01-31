@@ -40,10 +40,10 @@ _next1          lda $E480,x             ; PUPDIV
 SCREEN_ON       .proc
                 jsr SCREEN_OFF
 
-                lda #<DSP_LST1
-                sta SDLST
-                lda #>DSP_LST1
-                sta SDLST+1
+                ; lda #<DSP_LST1
+                ; sta SDLST
+                ; lda #>DSP_LST1
+                ; sta SDLST+1
                 rts
                 .endproc
 
@@ -54,13 +54,13 @@ SCREEN_ON       .proc
 SCREEN_OFF      .proc
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
-;v_???          .var TIM7_VAL
+v_roboExplodeTimer .var TIM7_VAL
 ;---
 
-                lda #<DSP_LST2
-                sta SDLST
-                lda #>DSP_LST2
-                sta SDLST+1
+                ; lda #<DSP_LST2
+                ; sta SDLST
+                ; lda #>DSP_LST2
+                ; sta SDLST+1
 
                 lda #OFF
                 sta CHOPPER_STATUS
@@ -95,7 +95,7 @@ _2              sta CHR_SET1+$300,x
                 lda #20
                 sta SND1_2_VAL
                 ldx #MAX_TANKS-1
-                stx TIM7_VAL
+                stx v_roboExplodeTimer
 _3              lda CM_STATUS,x
                 cmp #OFF
                 beq _4
@@ -131,73 +131,94 @@ _6              lda #0
 
 
 ;=======================================
-;
+; Calculates the cursor address within
+; PLAY_SCRN based on the provided
+; (x, y) coordinates
+;---------------------------------------
+; on entry:
+;   TEMP1       x coordinate
+;   TEMP2       y coordinate
+; at exit:
+;   ADR1        address of (x, y)
+; preserved:
+;   TEMP1 TEMP2
 ;=======================================
-CCL             .proc
-;v_???          .var TEMP1
-;v_???          .var TEMP2
+CalcCursorLoc   .proc
+v_posX          .var TEMP1
+v_posY          .var TEMP2
 ;---
 
-                lda TEMP2
+                lda v_posY
                 pha
-                lda TEMP1
+                lda v_posX
                 pha
 
-                lda TEMP2
+                lda v_posY
                 jsr MULT_BY_40
 
                 pla
                 pha
+
                 clc
-                adc TEMP1
+                adc v_posX
                 adc #<PLAY_SCRN
                 sta ADR1
                 lda #>PLAY_SCRN
-                adc TEMP2
+                adc v_posY
                 sta ADR1+1
 
                 pla
-                sta TEMP1
+                sta v_posX
                 pla
-                sta TEMP2
+                sta v_posY
                 rts
                 .endproc
 
 
 ;=======================================
-;
+; Output characters to the screen
+;---------------------------------------
+; Numerals and letters have 2-halves
+;---------------------------------------
+; on entry:
+;   TEMP1       output x coordinate
+;   TEMP2       output y coordinate
+;   (X,Y)       input source address
 ;=======================================
-PRINT           .proc
-;v_???          .var TEMP5
-;v_???          .var TEMP6
+Print           .proc
+v_destAddr      .var ADR1
+v_sourceAddr    .var ADR2
+v_sourceIdx     .var TEMP5
+v_destIdx       .var TEMP6
 ;---
 
-                stx ADR2
-                sty ADR2+1
-                jsr CCL
+                stx v_sourceAddr
+                sty v_sourceAddr+1
+                jsr CalcCursorLoc
 
                 ldy #0
-                sty TEMP5
-                sty TEMP6
-_1              ldy TEMP5
-                lda (ADR2),y
-                beq _3
+                sty v_sourceIdx
+                sty v_destIdx
 
-                cmp #$FF
-                beq _2
+_nextChar       ldy v_sourceIdx
+                lda (v_sourceAddr),y
+                beq _isSpaceChar        ; blank space does not have 2-halves
 
-                ldy TEMP6
-                sta (ADR1),y
-                inc TEMP6
+                cmp #$FF                ; check for termination character
+                beq _XIT
+
+                ldy v_destIdx           ; left-half of glyph
+                sta (v_destAddr),y
+                inc v_destIdx
                 clc
                 adc #32
-_3              ldy TEMP6
-                sta (ADR1),y
-                inc TEMP6
-                inc TEMP5
-                bne _1                  ; FORCED
+_isSpaceChar    ldy v_destIdx           ; right-half of glyph
+                sta (v_destAddr),y
+                inc v_destIdx
+                inc v_sourceIdx
+                bra _nextChar
 
-_2              rts
+_XIT            rts
                 .endproc
 
 
