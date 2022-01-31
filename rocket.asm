@@ -70,7 +70,7 @@ _3              clc
                 sty ROCKET_TEMP+2
                 lda #EXPLODE
                 sta FORT_STATUS
-                bne _7                  ; FORCED
+                bra _7
 
 _4              cmp #EXP_WALL
                 bne _5
@@ -84,7 +84,7 @@ _4              cmp #EXP_WALL
                 ldx TEMP1_I
                 lda #0
                 sta ROCKET_TEMP,x
-                beq _6                 ; FORCED
+                bra _6
 
 _5              ldy #HIT_LIST_LEN
 _next2          cmp HIT_LIST,y
@@ -94,7 +94,7 @@ _next2          cmp HIT_LIST,y
                 bpl _next2
 
 _6              lda #7
-                bne _8                  ; FORCED
+                bra _8
 
 _7              lda #0
 _8              sta ROCKET_STATUS,x

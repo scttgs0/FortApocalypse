@@ -116,7 +116,7 @@ _2              lda ROBOT_ANGLE
                 bge _70
 
                 lda #3
-                bne _60                 ; FORCED
+                bra _60
 
 _70             sec
                 sbc #2
@@ -169,7 +169,7 @@ _95             cmp #8
 
                 inc ROBOT_ANGLE
                 inc ROBOT_ANGLE
-                bne _94                 ; FORCED
+                bra _94
 
 _34             dec ROBOT_ANGLE
                 dec ROBOT_ANGLE

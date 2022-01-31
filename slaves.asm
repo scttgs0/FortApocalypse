@@ -34,7 +34,12 @@ _1              jsr SlaveCollision
                 jsr SlaveMove
                 jsr SlaveDraw
 
-                dec SlaveMove              ; PROT
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ; dec SlaveMove
+                ;-----------------------
+
 _2              ldx SLAVE_NUM
                 inx
                 cpx #8

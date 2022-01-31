@@ -88,7 +88,7 @@ _3              lda CHOPPER_COL
                 sta SND3_VAL
                 sta SND5_VAL
 _12             ldx #FLY
-                bne _5                  ; FORCED
+                bra _5
 
 _6              lda CHOP_X
                 sta TEMP1_I
@@ -143,7 +143,7 @@ _8              cpx #kREFUEL
                 jsr RestorePoint
 
 _7              ldx #LAND
-                bne _5                  ; FORCED
+                bra _5
 
 _4              lda #20
                 sta TIM3_VAL

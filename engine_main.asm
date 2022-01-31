@@ -271,7 +271,12 @@ _3              ldx #5
                 dec TEMP2
                 bne _2
 
-                dec MAIN+32             ; PROT
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ; dec MAIN+32
+                ;-----------------------
+
                 lda #NEW_LEVEL_MODE
                 sta MODE
 _1              rts
@@ -336,7 +341,12 @@ DoLevel2        .proc
                 inc LEVEL               ; =2
                 jsr GiveBonus
 
-                asl M_NewPlayer        ; PROT
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ; asl M_NewPlayer
+                ;-----------------------
+
                 lda #NEW_LEVEL_MODE
                 sta MODE
 _1              rts
@@ -481,7 +491,12 @@ _4              cmp #NEW_PLAYER_MODE
                 bne _30
                 jmp M_NewPlayer
 
-_30             rol CheckModes         ; PROT
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+_30             ; rol CheckModes
+                ;-----------------------
+
                 rts
                 .endproc
 
@@ -530,7 +545,13 @@ M_START         .proc
                 bne _0
 
                 lda #2
-_0              sta MAIN                ; PROT
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+_0              ; sta MAIN
+                ;-----------------------
+
                 sta CHOP_LEFT
 
                 ldx PILOT_SKILL
@@ -620,7 +641,12 @@ _1              lda #$1F                ; CHOPPER CLR
                 cmp #EMPTY
                 bne _10
 
-                dec UpdateChopper      ; PROT
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ; dec UpdateChopper
+                ;-----------------------
+
                 lda #FULL
                 sta FUEL_STATUS
                 ldx #0
@@ -767,7 +793,7 @@ _2              ldy LEVEL
                 lda TANK_START_X_L1,x
                 sta TANK_START_X,x
                 lda TANK_START_Y_L1,x
-                bne _92                 ; FORCED
+                bra _92
 
 _91             lda TANK_START_X_L2,x
                 sta TANK_START_X,x
@@ -833,7 +859,7 @@ _2              lda RANDOM
 
                 clc
                 adc #$62-1
-                bne _5                  ; FORCED
+                bra _5
 
 _3              cmp #$74                ; 't'
                 bne _5
@@ -952,7 +978,12 @@ _52             lda ADR2
 _53             dex
                 bpl _50
 
-                inc MAIN                ; PROT
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ; inc MAIN
+                ;-----------------------
+
                 .endblock
 
 
@@ -1240,7 +1271,13 @@ _6              iny
 
                 lda #-1
                 sta TIM6_VAL
-                ror SCREEN_OFF          ; PROT
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ; ror SCREEN_OFF
+                ;-----------------------
+
                 lda #TITLE_MODE
                 sta MODE
                 sta DEMO_STATUS
@@ -1448,7 +1485,7 @@ DRAW            .block
                 bne _0
 
                 lda #0
-                beq _1                  ; FORCED
+                bra _1
 
 _0              lda #<$F0+128           ; BLANK
 _1              clc

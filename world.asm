@@ -58,7 +58,7 @@ DO_Y            .block
 
                 ldx #MIN_DOWN
                 stx CHOPPER_Y
-                bne _21                 ; FORCED
+                bra _21
 
 _80             ldx CHOPPER_Y
                 cpx #MAX_DOWN+1
@@ -89,7 +89,7 @@ _3              lda SY
 
                 ldx #MIN_UP
                 stx CHOPPER_Y
-                bne _31                 ; FORCED
+                bra _31
 
 _81             cpx #MAX_UP
                 bge _4

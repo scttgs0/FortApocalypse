@@ -15,7 +15,13 @@ SetScanner      .proc
                 lda #0
                 sta TEMP1
                 sta TEMP2
-                inc DrawMap            ; PROT
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ; inc DrawMap
+                ;-----------------------
+
                 lda SY
                 beq _2
                 bmi _2

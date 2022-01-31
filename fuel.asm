@@ -49,7 +49,13 @@ _2              cpx #$82
 
 _3              lda #kREFUEL
                 sta FUEL_STATUS
-                asl ComputeMapAddr     ; PROT
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ; asl ComputeMapAddr
+                ;-----------------------
+
                 lda #1
                 sta TIM4_VAL
                 lda #4
@@ -121,7 +127,7 @@ DF1             lda #9+2
                 jsr DrawBase
 
                 lda #$EC+2
-                bne _2                  ; FORCED
+                bra _2
 
 _1              lda #$82
 _2              sta TEMP1

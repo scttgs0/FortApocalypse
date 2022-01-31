@@ -118,7 +118,7 @@ PRINT_OPTS      .block
                 ldy #0
                 sty TEMP5
                 sty TEMP6
-_1              ldy TEMP5
+_next1          ldy TEMP5
                 lda (ADR2),y
                 beq _3
                 cmp #$FF
@@ -134,7 +134,7 @@ _3              ldy TEMP6
                 sta (ADR1),y
                 inc TEMP6
                 inc TEMP5
-                bne _1                  ; FORCED
+                bra _next1
 
 _2              lda #28
                 sta v_posX
