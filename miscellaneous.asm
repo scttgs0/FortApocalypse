@@ -52,6 +52,7 @@ SCREEN_ON       .proc
 ;
 ;=======================================
 SCREEN_OFF      .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 v_roboExplodeTimer .var TIM7_VAL
@@ -144,6 +145,7 @@ _6              lda #0
 ;   TEMP1 TEMP2
 ;=======================================
 CalcCursorLoc   .proc
+;v_???          .var ADR1
 v_posX          .var TEMP1
 v_posY          .var TEMP2
 ;---
@@ -290,6 +292,7 @@ _1              sta PLAY_SCRN,y
 ;
 ;=======================================
 DO_CHECKSUM2    .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;---
 
@@ -330,6 +333,7 @@ _XIT            rts
 ;
 ;=======================================
 PositionIt      .proc
+;v_???          .var ADR2
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;v_???          .var TEMP3

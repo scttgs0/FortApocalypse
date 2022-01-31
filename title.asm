@@ -10,6 +10,7 @@
 Title           .proc
 c_horzCount     = 40
 c_vertCount     = 17
+;v_???          .var ADR1
 v_audiofreq     .var TEMP1_I
 v_posX          .var TEMP1
 v_posY          .var TEMP2

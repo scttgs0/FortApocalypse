@@ -8,6 +8,9 @@
 ;
 ;=======================================
 CartridgeStart  .proc
+;v_???          .var ADR1
+;---
+
                 sei
                 lda #$B3
                 pha
@@ -209,6 +212,7 @@ _2              rts
 ;
 ;=======================================
 DoLevel1        .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;v_???          .var TEMP3
@@ -296,6 +300,10 @@ PSL             .proc
 ;
 ;=======================================
 MoveRamp        .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
+;---
+
                 ldx #4
 _1              lda ADR1
                 sta ADR2
@@ -386,6 +394,7 @@ _1              rts
 ;
 ;=======================================
 Unpack          .proc
+;v_???          .var ADR2
 ;v_???          .var TEMP2
 ;v_???          .var TEMP3
 ;v_???          .var TEMP4
@@ -443,6 +452,9 @@ _4              dex
 ;
 ;=======================================
 GetByte         .proc
+;v_???          .var ADR1
+;---
+
                 ldy #0
                 lda (ADR1),y
                 inc ADR1
@@ -717,6 +729,8 @@ _10             lda #4
 ;
 ;=======================================
 M_NewLevel      .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;v_???          .var TEMP3
@@ -1108,6 +1122,7 @@ M_TAB           .char -2,-1,0
 ;
 ;=======================================
 M_GameOver      .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;---

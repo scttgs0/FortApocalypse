@@ -85,6 +85,9 @@ _XIT            rts
 ;
 ;=======================================
 RobotStart      .proc
+;v_???          .var TEMP4_I
+;---
+
                 lda ROBOT_ANGLE
                 and #1
                 sta TEMP4_I
@@ -233,6 +236,10 @@ _2              lda ROBOT_ANGLE
 ;
 ;=======================================
 RobotLeft       .proc
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 lda R_X
                 sta TEMP1_I
                 lda R_Y
@@ -271,6 +278,10 @@ _XIT            rts
 ;
 ;=======================================
 RobotRight      .proc
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 lda R_X
                 sta TEMP1_I
                 lda R_Y
@@ -309,6 +320,8 @@ _XIT            rts
 ;
 ;=======================================
 RobotDown       .proc
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
 ;---
 
                 lda R_X
@@ -344,6 +357,10 @@ _XIT            rts
 ;
 ;=======================================
 RobotUp         .proc
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 lda R_X
                 sta TEMP1_I
                 lda R_Y
@@ -394,6 +411,9 @@ P1              .proc
 ;
 ;=======================================
 DoRobotChopper  .proc
+;v_???          .var TEMP1_I
+;---
+
                 lda R_STATUS
                 cmp #OFF
                 beq P1
@@ -490,6 +510,11 @@ DRCE            stx ROBOT_STATUS
 ;
 ;=======================================
 UpdateRobotChopper .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 lda ROBOT_STATUS
                 cmp #OFF
                 bne _0
@@ -579,6 +604,12 @@ _XIT            rts
 ;
 ;=======================================
 PositionRobot   .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;v_???          .var TEMP3_I
+;---
+
                 lda R_X
                 sta TEMP1_I
                 lda R_Y

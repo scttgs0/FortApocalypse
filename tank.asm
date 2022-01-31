@@ -37,6 +37,7 @@ PositionTank    .proc
 ;
 ;=======================================
 MoveTanks       .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;---
@@ -283,6 +284,7 @@ _2              dex
 ;
 ;=======================================
 CheckTankCollision .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;---
 

@@ -8,6 +8,8 @@
 ;
 ;=======================================
 SetScanner      .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;---
@@ -81,6 +83,8 @@ _3              rts
 ;
 ;=======================================
 DO_LINE         .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
 ;v_???          .var TEMP1
 ;---
 

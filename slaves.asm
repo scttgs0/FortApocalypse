@@ -79,6 +79,9 @@ GetSlaveAddr    .proc
 ;
 ;=======================================
 SlaveCollision  .proc
+;v_???          .var ADR1
+;---
+
                 jsr GetSlaveAddr
 
                 ldy #0
@@ -160,6 +163,9 @@ _1              and #$8F
 ;
 ;=======================================
 SlaveErase      .proc
+;v_???          .var ADR1
+;---
+
                 jsr GetSlaveAddr
 
                 ldy #0
@@ -176,6 +182,9 @@ SlaveErase      .proc
 ;
 ;=======================================
 SlaveMove       .proc
+;v_???          .var ADR1
+;---
+
 _next1          lda SLAVE_DX,x
                 bmi _1
 
@@ -213,6 +222,9 @@ _XIT            rts
 ;
 ;=======================================
 SlaveDraw       .proc
+;v_???          .var ADR1
+;---
+
                 jsr GetSlaveAddr
 
                 ldy #0

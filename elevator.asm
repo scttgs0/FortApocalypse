@@ -8,6 +8,9 @@
 ;
 ;=======================================
 DoElevator      .proc
+;v_???          .var ADR1_I
+;---
+
                 dec ELEVATOR_TIM
                 bne _XIT
 

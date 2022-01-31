@@ -33,6 +33,11 @@ RestorePoint    .proc
 ;
 ;=======================================
 CheckLanding    .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP3_I
+;v_???          .var TEMP4_I
+;---
+
                 ldy #0
                 ldx #LAND_LEN
                 lda (ADR1_I),y

@@ -163,6 +163,7 @@ _1              stx SND4_VAL
 ;
 ;=======================================
 DrawBase        .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP3
 ;v_???          .var TEMP4
 ;---

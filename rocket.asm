@@ -8,6 +8,11 @@
 ;
 ;=======================================
 UpdateRockets   .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 ldx #2
 NXT_RCK         .block
                 lda ROCKET_STATUS,x
@@ -200,6 +205,11 @@ _5              dex
 ;
 ;=======================================
 RocketExplode   .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 ldx #2
 _next1          lda ROCKET_STATUS,x
                 cmp #7                  ; EXP

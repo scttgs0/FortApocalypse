@@ -8,6 +8,11 @@
 ;
 ;=======================================
 DrawMap         .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
 DO_X            .block
                 ldx CHOPPER_X
                 cpx #MIN_RIGHT+1
@@ -148,6 +153,11 @@ _nextRow        inx
 ;
 ;=======================================
 ComputeMapAddrI .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 lda #<MAP-5
                 clc
                 adc TEMP1_I
@@ -167,6 +177,7 @@ ComputeMapAddrI .proc
 ;
 ;=======================================
 ComputeMapAddr  .proc
+;v_???          .var ADR1
 v_posX          .var TEMP1
 v_posY          .var TEMP2
 ;---
@@ -245,6 +256,8 @@ _9              rts
 ;
 ;=======================================
 CheckFort       .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;v_???          .var TEMP3

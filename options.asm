@@ -8,6 +8,8 @@
 ;
 ;=======================================
 CHECK_OPTIONS   .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
 v_posX          .var TEMP1
 v_posY          .var TEMP2
 ;v_???          .var TEMP5

@@ -2,14 +2,18 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: chopper.asm
 ;---------------------------------------
-; DATA, SHAPES
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;=======================================
-;
+; at exit:
+;   C           ???
 ;=======================================
 CheckChrI       .proc
+;v_???          .var ADR1_I
+;v_???          .var ADR2_I
+;---
+
                 jsr ComputeMapAddrI
 
                 ldy #0
@@ -33,12 +37,12 @@ CheckChrI       .proc
 
                 ldy #7
 _next1          lda (ADR2_I),y
-                bne _1
+                bne _XIT
                 dey
                 bpl _next1
                 clc
                 rts
-_1              sec
+_XIT            sec
                 rts
                 .endproc
 
@@ -47,16 +51,23 @@ _1              sec
 ;
 ;=======================================
 DoChopper       .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;v_???          .var TEMP3_I
+;v_???          .var TEMP4_I
+;---
+
                 lda CHOPPER_STATUS
                 cmp #OFF
                 bne _2
 
-_1              rts
+_XIT            rts
 
 _20             jmp _4
 
 _2              cmp #CRASH
-                beq _1
+                beq _XIT
 
                 cmp #LAND
                 beq _3
@@ -84,6 +95,7 @@ _3              lda CHOPPER_COL
                 sta CHOPPER_COL
                 lda #HYPERSPACE_MODE
                 sta MODE
+
                 lda #1
                 sta SND3_VAL
                 sta SND5_VAL
@@ -159,6 +171,11 @@ _5              stx CHOPPER_STATUS
 ;
 ;=======================================
 UpdateChopper   .proc
+;v_???          .var ADR1_I
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 lda CHOPPER_STATUS
                 cmp #BEGIN
                 beq _20
@@ -310,6 +327,10 @@ CCEND           rts
 ;
 ;=======================================
 PositionChopper .proc
+;v_???          .var TEMP1_I
+;v_???          .var TEMP2_I
+;---
+
                 lda CHOP_X
                 sta TEMP1_I
                 lda CHOP_Y

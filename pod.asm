@@ -87,6 +87,7 @@ GetPodAddr      .proc
 ;
 ;=======================================
 GetPodValue     .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;---
@@ -107,6 +108,7 @@ GetPodValue     .proc
 ;
 ;=======================================
 PutPodValue     .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP3
 ;v_???          .var TEMP4
 ;---
@@ -144,6 +146,9 @@ PositionPod     .proc
 ;
 ;=======================================
 PodBegin        .proc
+;v_???          .var ADR1
+;---
+
 _next1          lda RANDOM
                 cmp #50
                 blt _next1
@@ -276,6 +281,7 @@ PodDraw         .proc
 ;
 ;=======================================
 PodMove         .proc
+;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
 ;---

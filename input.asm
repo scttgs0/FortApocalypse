@@ -72,7 +72,7 @@ _doSelect       lda SKSTAT              ; is the key still pressed?
                 sta MODE
                 jsr ClearSounds         ; stop sounds
 
-_wait1          lda SKSTAT              ; capture... 
+_wait1          lda SKSTAT              ; capture...
                 and #%00000100
                 beq _wait1              ; don't leave until we exist Pause mode
 
@@ -102,7 +102,7 @@ _XIT            rts
 
 
 ;=======================================
-; 
+;
 ;=======================================
 ReadJoystick    .proc
 v_angleBit0     .var TEMP1_I
@@ -256,7 +256,7 @@ _14             lda CHOPPER_ANGLE
 
 
 ;=======================================
-; 
+;
 ;=======================================
 ReadTrigger     .proc
                 lda CHOPPER_STATUS      ; skip trigger read when crashed

@@ -130,6 +130,7 @@ _1              tya
 ;
 ;=======================================
 MissileCollision .proc
+;v_???          .var ADR1
 v_preserveX     .var TEMP1
 ;---
                 jsr GetMissileAddr
@@ -168,6 +169,9 @@ M_COL2          jsr MissileErase
 ;
 ;=======================================
 MissileErase    .proc
+;v_???          .var ADR1
+;---
+
                 jsr GetMissileAddr
 
                 lda CM_TEMP,x
@@ -196,6 +200,7 @@ _XIT            rts
 ;
 ;=======================================
 MissileMove     .proc
+;v_???          .var ADR1
 v_distance      .var TEMP1
 ;---
 
@@ -270,6 +275,9 @@ _XIT             rts
 ;
 ;=======================================
 MissileDraw     .proc
+;v_???          .var ADR1
+;---
+
                 jsr GetMissileAddr
 
                 ldy #0
@@ -297,6 +305,9 @@ _XIT            rts
 ;
 ;=======================================
 CheckChr        .proc
+;v_???          .var ADR2
+;---
+
                 ldy #0
                 sty ADR2+1
                 and #$7F
