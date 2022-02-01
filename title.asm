@@ -29,7 +29,7 @@ v_marqueeGlyph  .var TEMP3
                 lda #$83
                 sta COLOR2
 
-                jsr SCREEN_OFF
+                jsr ScreenOff
 
                 .graphicMode320
                 ; lda #<DSP_LST3        ; title screen display list
@@ -185,7 +185,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 cmp #7
                 bne _3
 
-                jml VVBLKD_RET       ; exit VBI
+                jml VVBLKD_RET          ; exit VBI
 
 _3              stx MODE
                 ldx #0
@@ -196,6 +196,7 @@ _4              stx DEMO_STATUS
 
 _5              ldx #-1                 ; START DEMO
                 bra _4
+
                 .endproc
 
 
@@ -239,7 +240,7 @@ T3              .proc
                 lda #>VERTBLKD
                 sta VVBLKD+1
 
-                jsr SCREEN_OFF
+                jsr ScreenOff
 
 _wait1          lda VCOUNT              ; wait for next horz sync
                 bne _wait1

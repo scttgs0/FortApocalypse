@@ -19,7 +19,7 @@ CheckHyperchamber .proc
                 sta BAK2_COLOR
 
                 ldx #2
-                jsr WAIT_FRAME
+                jsr WaitFrame
 
                 stz BAK2_COLOR
 

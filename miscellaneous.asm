@@ -37,8 +37,8 @@ _next1          lda $E480,x             ; PUPDIV
 ;=======================================
 ;
 ;=======================================
-SCREEN_ON       .proc
-                jsr SCREEN_OFF
+ScreenOn        .proc
+                jsr ScreenOff
 
                 ; lda #<DSP_LST1
                 ; sta SDLST
@@ -51,7 +51,7 @@ SCREEN_ON       .proc
 ;=======================================
 ;
 ;=======================================
-SCREEN_OFF      .proc
+ScreenOff      .proc
 ;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
@@ -250,7 +250,7 @@ GiveBonus       .proc
 ;=======================================
 ;
 ;=======================================
-WAIT_FRAME      .proc
+WaitFrame       .proc
                 lda MODE
                 sta TEMP_MODE
                 lda FRAME
@@ -264,7 +264,7 @@ _1              cmp FRAME
                 bne _2
 
                 dex
-                bne WAIT_FRAME
+                bne WaitFrame
 
                 rts
 

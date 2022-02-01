@@ -389,7 +389,7 @@ _next5          sta (ADR1),y
                 sta AUDC4
                 ldy #15
 _next6          ldx #2
-                jsr WAIT_FRAME
+                jsr WaitFrame
 
                 inc BAK2_COLOR
                 lda #1

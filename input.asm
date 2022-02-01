@@ -40,7 +40,7 @@ _chk_mode       ldx MODE                ; Options Screen has its own handler
                 cpx #OPTION_MODE        ; continue if not on the Options screen
                 bne _determine_key
 
-                jsr CHECK_OPTIONS       ; transfer to the Option handler
+                jsr CheckOptions       ; transfer to the Option handler
                 bra _XIT
 
 _determine_key  cmp #3                  ; OPTION pressed?
@@ -52,10 +52,10 @@ _determine_key  cmp #3                  ; OPTION pressed?
 _doOption       lda #OPTION_MODE        ; switch to Options screen
                 sta MODE
                 sta DEMO_STATUS         ; disable Demo
-                jsr SCREEN_OFF          ; update display
+                jsr ScreenOff          ; update display
 
                 stz OPT_NUM
-                jsr CHECK_OPTIONS       ; transfer to the Option handler
+                jsr CheckOptions       ; transfer to the Option handler
                 bra _XIT
 
 _doSelect       lda SKSTAT              ; is the key still pressed?

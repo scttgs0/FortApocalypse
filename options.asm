@@ -7,7 +7,7 @@
 ;=======================================
 ;
 ;=======================================
-CHECK_OPTIONS   .proc
+CheckOptions   .proc
 ;v_???          .var ADR1
 ;v_???          .var ADR2
 v_posX          .var TEMP1
@@ -82,7 +82,7 @@ _8              lda #13
                 ldy #>txtOptTitle3
                 jsr Print               ; (28, 3) 'SELECT'
 
-PRINT_OPTS      .block
+PrintOptions      .block
                 lda #0
                 sta v_posX
                 lda #7
