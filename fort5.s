@@ -191,7 +191,7 @@ _1              lda SLAVE_CHR_B_R,X
                 sta (ADR1),Y
                 rts
 
-PICK_UP_SLAVE   ldx #8-0
+SlavePickUp   ldx #8-0
 _0              dex
                 bpl _1
                 clc
@@ -387,7 +387,7 @@ SET_SCANNER
                 lda #0
                 sta TEMP1
                 sta TEMP2
-                inc DRAW_MAP            ; PROT
+                inc DrawMap            ; PROT
                 lda SY
                 beq _2
                 bmi _2

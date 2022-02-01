@@ -5,26 +5,26 @@
 ; MAIN INTERUPT DRIVER
 ;       PART (II)
 ; POSITION THINGS
-; READ_STICK
-; READ_TRIG
-; DO_LASER_1
-; DO_LASER_2
-; DO_BLOCKS
-; DO_ELEVATOR
-; DO_EXP
+; ReadJoystick
+; ReadTrigger
+; DoLaser1
+; DoLaser2
+; DoBlocks
+; DoElevator
+; DoExplode
 ; DoNumbers
-; DRAW_MAP
+; DrawMap
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-POS_CHOPPER
+PositionChopper
                 lda CHOP_X
                 sta TEMP1_I
                 lda CHOP_Y
                 sta TEMP2_I
                 jmp POS_IT_I
 
-POS_ROBOT
+PositionRobot
                 lda R_X
                 sta TEMP1_I
                 lda R_Y
@@ -68,7 +68,7 @@ POS_IT_I
                 sta (ADR1_I),Y
                 rts
 
-READ_STICK
+ReadJoystick
                 lda CHOPPER_STATUS
                 cmp #OFF
                 beq _1
@@ -177,7 +177,7 @@ _6              lda CHOPPER_ANGLE
                 sta CHOPPER_ANGLE
                 rts
 
-READ_TRIG
+ReadTrigger
                 lda CHOPPER_STATUS
                 cmp #CRASH
                 beq _2
@@ -265,7 +265,7 @@ _1              dec CHOPPER_ANGLE
                 dec CHOPPER_ANGLE
 _2              rts
 
-DRAW_MAP
+DrawMap
 DO_X
                 ldx CHOPPER_X
                 cpx #MIN_RIGHT+1
@@ -364,7 +364,7 @@ _4              lda SX_F
                 sta TEMP1_I
                 lda SY
                 sta TEMP2_I
-                jsr COMPUTE_MAP_ADR_I
+                jsr ComputeMapAddrI
                 ldx #0
                 ldy #MAP_LINES
 _5              inx
@@ -379,7 +379,7 @@ _5              inx
                 bne _5
                 rts
 
-COMPUTE_MAP_ADR_I
+ComputeMapAddrI
                 lda #<MAP-5
                 clc
                 adc TEMP1_I
@@ -407,7 +407,7 @@ ComputeMapAddr
                 sta ADR1+1
                 rts
 
-DO_LASER_1
+DoLaser1
                 lda FRAME
                 and #7
                 bne _4
@@ -444,7 +444,7 @@ _6              sta LASER_3,X
                 bpl _6
 _4              rts
 
-DO_LASER_2
+DoLaser2
                 lda FRAME
                 and #7
                 bne _4
@@ -476,7 +476,7 @@ _3              sta LASERS_2,X
                 bpl _3
 _4              rts
 
-DO_BLOCKS
+DoBlocks
                 lda FRAME
                 and #$7F
                 bne _9
@@ -515,7 +515,7 @@ _8              sta BLOCK_4,X
                 bpl _8
 _9              rts
 
-DO_ELEVATOR
+DoElevator
                 dec ELEVATOR_TIM
                 bne _3
                 lda ELEVATOR_SPD
@@ -548,7 +548,7 @@ ELEVATORS
                 .addr BLOCK_5,BLOCK_6
                 .addr BLOCK_7,BLOCK_8
 
-DO_EXP
+DoExplode
                 ldx #7
 _1              lda EXP_SHAPE,X
                 and RANDOM
