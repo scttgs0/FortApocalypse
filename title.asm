@@ -106,10 +106,10 @@ _next2          lda v_marqueeGlyph
                 jsr Print               ; (6, 10) 'Copyright 1982'
 
                 ldx #7
-_3              lda T_5,x
+_next3          lda T_5,x
                 sta PLAY_SCRN+426,x     ; output the copyright date (1982)
                 dex
-                bpl _3
+                bpl _next3
 
                 lda #4
                 sta v_posX
@@ -171,7 +171,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
 
                 lda v_audiofreq         ; launch demo near the end of the audio scale (avoid the highest notes)
                 cmp #$F3
-                beq _4
+                beq _5
 
                 ldx #START_MODE         ; trigger causes game start
                 lda TRIG0
@@ -191,11 +191,11 @@ _3              stx MODE
                 ldx #0
                 stx OPT_NUM
                 inx                     ; X=1
-_5              stx DEMO_STATUS
+_4              stx DEMO_STATUS
                 jmp T3
 
-_4              ldx #-1                 ; START DEMO
-                bra _5
+_5              ldx #-1                 ; START DEMO
+                bra _4
                 .endproc
 
 

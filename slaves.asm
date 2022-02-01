@@ -131,6 +131,11 @@ S_COL2          .proc
 
                 ;[fall-through]
 
+
+;=======================================
+;
+;=======================================
+
 PrintSlavesLeft .proc
 ;v_???          .var TEMP1
 ;---
@@ -194,7 +199,7 @@ _next1          lda SLAVE_DX,x
                 ora #$10
                 sta SLAVE_DX,x
                 inc SLAVE_X,x
-                jmp _2
+                bra _2
 
 _1              dec SLAVE_DX,x
                 lda SLAVE_DX,x

@@ -14,6 +14,8 @@ UpdateRockets   .proc
 ;---
 
                 ldx #2
+
+
 NXT_RCK         .block
                 lda ROCKET_STATUS,x
                 bne _1
@@ -109,6 +111,7 @@ _8              sta ROCKET_STATUS,x
                 lda #7
                 sta ROCKET_TIM,x
 _XIT            .endblock
+
 
 MOVE_ROCKETS    .block
                 lda ROCKET_STATUS,x

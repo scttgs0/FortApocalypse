@@ -20,7 +20,7 @@ _next1          pha
                 sbc #1
                 bne _next1
 
-_2              rts
+                rts
                 .endproc
 
 

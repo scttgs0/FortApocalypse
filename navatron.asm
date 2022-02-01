@@ -75,7 +75,7 @@ _2              lda SX
                 sta ADR2+1
                 jmp DO_LINE
 
-_3              rts
+                rts
                 .endproc
 
 
@@ -90,15 +90,15 @@ DO_LINE         .proc
 
                 lda #7
                 sta TEMP1
-_0              ldx #12
+_next1          ldx #12
                 ldy #0
-_1              lda (ADR1),y
+_next2          lda (ADR1),y
                 sta (ADR2),y
                 inc ADR1
-                bne _2
+                bne _1
 
                 inc ADR1+1
-_2              lda ADR2
+_1              lda ADR2
                 clc
                 adc #8
                 sta ADR2
@@ -106,7 +106,7 @@ _2              lda ADR2
                 adc #0
                 sta ADR2+1
                 dex
-                bne _1
+                bne _next2
 
                 lda SCAN_ADR1
                 clc
@@ -118,15 +118,15 @@ _2              lda ADR2
                 sta SCAN_ADR1+1
                 sta ADR1+1
                 inc SCAN_ADR2
-                bne _3
+                bne _2
 
                 inc SCAN_ADR2+1
-_3              lda SCAN_ADR2
+_2              lda SCAN_ADR2
                 sta ADR2
                 lda SCAN_ADR2+1
                 sta ADR2+1
                 dec TEMP1
-                bpl _0
+                bpl _next1
 
                 rts
                 .endproc

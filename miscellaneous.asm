@@ -69,21 +69,21 @@ v_roboExplodeTimer .var TIM7_VAL
 
                 ldx R_STATUS
                 cpx #CRASH
-                bne _0
-
-                sta R_STATUS
-_0              ldx #$E0
-                lda #0
-_1              sta CHR_SET1+$200,x
-                inx
                 bne _1
 
-_2              sta CHR_SET1+$300,x
+                sta R_STATUS
+_1              ldx #$E0
+                lda #0
+_next1          sta CHR_SET1+$200,x
+                inx
+                bne _next1
+
+_next2          sta CHR_SET1+$300,x
                 sta PLAY_SCRN+$000,x
                 sta PLAY_SCRN+$100,x
                 sta PLAY_SCRN+$200,x
                 inx
-                bne _2
+                bne _next2
 
                 stz SND1_1_VAL
                 stz SND2_VAL
@@ -97,20 +97,20 @@ _2              sta CHR_SET1+$300,x
                 sta SND1_2_VAL
                 ldx #MAX_TANKS-1
                 stx v_roboExplodeTimer
-_3              lda CM_STATUS,x
+_next3          lda CM_STATUS,x
                 cmp #OFF
-                beq _4
+                beq _2
 
                 lda #OFF
                 sta CM_STATUS,x
                 jsr MissileErase
-_4              dex
-                bpl _3
+_2              dex
+                bpl _next3
 
                 ldx #2
-_5              lda ROCKET_STATUS,x
+_next4          lda ROCKET_STATUS,x
                 cmp #7                  ; EXP
-                bne _6
+                bne _3
 
                 lda ROCKET_TEMPX,x
                 sta TEMP1
@@ -121,11 +121,11 @@ _5              lda ROCKET_STATUS,x
                 ldy #0
                 lda ROCKET_TEMP,x
                 sta (ADR1),y
-_6              lda #0
+_3              lda #0
                 sta ROCKET_STATUS,x
                 sta ROCKET_X,x
                 dex
-                bpl _5
+                bpl _next4
 
                 brl ClearSounds
                 .endproc
@@ -280,9 +280,9 @@ _2              ldx #$FF
 ClearInfo       .proc
                 ldy #40-1
                 lda #0
-_1              sta PLAY_SCRN,y
+_next1          sta PLAY_SCRN,y
                 dey
-                bpl _1
+                bpl _next1
 
                 rts
                 .endproc
@@ -400,17 +400,17 @@ DO_CHECKSUM3    .proc
                 ldx #0
                 txa
                 clc
-_1              adc $B980,x
+_next1          adc $B980,x
                 inx
-                bne _1
+                bne _next1
 
                 ;cmp #$0
                 cmp #$90
-                beq _2
+                beq _XIT
 
                 .byte $12
 
-_2              rts
+_XIT            rts
                 .endproc
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

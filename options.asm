@@ -122,7 +122,7 @@ PRINT_OPTS      .block
                 sty TEMP6
 _next1          ldy TEMP5
                 lda (ADR2),y
-                beq _3
+                beq _1
                 cmp #$FF
                 beq _2
 
@@ -132,7 +132,7 @@ _next1          ldy TEMP5
                 inc TEMP6
                 clc
                 adc #32
-_3              ldy TEMP6
+_1              ldy TEMP6
                 sta (ADR1),y
                 inc TEMP6
                 inc TEMP5

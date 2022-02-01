@@ -168,15 +168,15 @@ _chk_right      txa
 
                 lda CHOPPER_ANGLE
                 cmp #14
-                bge _5
+                bge _4
 
                 lda FRAME
                 and #1
-                bne _6
+                bne _5
 
-_5              inc CHOPPER_X
+_4              inc CHOPPER_X
 
-_6              lda FRAME
+_5              lda FRAME
                 and #3
                 bne _chk_left
 
@@ -191,15 +191,15 @@ _chk_left       txa
 
                 lda CHOPPER_ANGLE
                 cmp #4
-                blt _8
+                blt _6
 
                 lda FRAME
                 and #1
-                bne _9
+                bne _7
 
-_8              dec CHOPPER_X
+_6              dec CHOPPER_X
 
-_9              lda FRAME
+_7              lda FRAME
                 and #3
                 bne _chk_up
 
@@ -222,32 +222,32 @@ _chk_up         lda FUEL_STATUS
 
 _chk_down       txa
                 and #DOWN
-                beq _12
+                beq _8
 
                 lda #26
                 sta SND1_2_VAL
 
                 lda CHOPPER_STATUS
                 cmp #LAND
-                beq _12
+                beq _8
 
                 cmp #PICKUP
-                beq _12
+                beq _8
 
                 inc CHOPPER_Y
                 jsr Hover
 
-_12             lda CHOPPER_ANGLE
-                bpl _13
+_8              lda CHOPPER_ANGLE
+                bpl _9
 
                 lda #0
                 sta CHOPPER_ANGLE
-_13             cmp #18
-                blt _14
+_9              cmp #18
+                blt _10
 
                 lda #16
                 sta CHOPPER_ANGLE
-_14             lda CHOPPER_ANGLE
+_10             lda CHOPPER_ANGLE
                 ora v_angleBit0
                 sta CHOPPER_ANGLE
 

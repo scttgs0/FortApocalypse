@@ -109,29 +109,29 @@ R_F             .block
                 lda ROCKET_STATUS+2
                 bne _XIT
 
-_2              lda ROBOT_ANGLE
+                lda ROBOT_ANGLE
                 and #%00011110
                 lsr
                 cmp #4
-                blt _60
+                blt _2
 
                 cmp #6
-                bge _70
+                bge _1
 
                 lda #3
-                bra _60
+                bra _2
 
-_70             sec
+_1              sec
                 sbc #2
-_60             cmp #6
-                blt _4
+_2              cmp #6
+                blt _3
 
                 lda #5
-_4              cmp #0
-                bne _5
+_3              cmp #0
+                bne _4
 
                 lda #1
-_5              sta ROCKET_STATUS+2
+_4              sta ROCKET_STATUS+2
                 lda ROBOT_X
                 and #3
                 clc
@@ -150,61 +150,61 @@ R_B             .block
                 lda R_X
                 ldx #215
                 cmp #216
-                beq _90
+                beq _1
 
                 ldx #49
                 cmp #48
-                bne _0
+                bne _5
 
-_90             lda FRAME
+_1              lda FRAME
                 and #3
-                bne _94
+                bne _4
 
                 lda ROBOT_ANGLE
                 cmp #4
-                blt _95
+                blt _2
 
                 cmp #14
-                blt _94
+                blt _4
 
-_95             cmp #8
-                bge _34
+_2              cmp #8
+                bge _3
 
                 inc ROBOT_ANGLE
                 inc ROBOT_ANGLE
-                bra _94
+                bra _4
 
-_34             dec ROBOT_ANGLE
+_3              dec ROBOT_ANGLE
                 dec ROBOT_ANGLE
-_94             lda ROBOT_STATUS
+_4              lda ROBOT_STATUS
                 cmp #OFF
-                bne _2
+                bne _7
 
                 stx R_X
-                jmp _2
+                jmp _7
 
-_0              lda CHOP_X
+_5              lda CHOP_X
                 sec
                 sbc R_X
-                beq _2
-                bpl _1
+                beq _7
+                bpl _6
 
                 jsr RobotLeft
-                jmp _2
+                jmp _7
 
-_1              jsr RobotRight
+_6              jsr RobotRight
 
-_2              lda CHOP_Y
+_7              lda CHOP_Y
                 sec
                 sbc R_Y
-                beq _4
-                bpl _3
+                beq _9
+                bpl _8
 
                 jsr RobotUp
-                jmp _4
+                jmp _9
 
-_3              jsr RobotDown
-_4              jsr PositionRobot
+_8              jsr RobotDown
+_9              jsr PositionRobot
                 .endblock
 
 R_END           .block
@@ -517,20 +517,20 @@ UpdateRobotChopper .proc
 
                 lda ROBOT_STATUS
                 cmp #OFF
-                bne _0
+                bne _1
 
                 lda #0
                 sta ROBOT_X
                 sta ROBOT_Y
 
-_0              ldy OROBOT_Y
+_1              ldy OROBOT_Y
                 ldx #17
                 lda #0
-_1              sta PLAYER+PL2,y
+_next1          sta PLAYER+PL2,y
                 sta PLAYER+PL3,y
                 iny
                 dex
-                bpl _1
+                bpl _next1
 
                 lda ROBOT_ANGLE
                 asl
@@ -547,7 +547,7 @@ _1              sta PLAYER+PL2,y
 
                 ldx ROBOT_Y
                 stx OROBOT_Y
-_2              ldy TEMP1_I
+_next2          ldy TEMP1_I
                 lda (ADR1_I),y
                 sta PLAYER+PL2,x
                 ldy TEMP2_I
@@ -558,15 +558,15 @@ _2              ldy TEMP1_I
                 inx
                 lda TEMP1_I
                 cmp #18
-                bne _2
+                bne _next2
 
                 lda R_STATUS
                 cmp #CRASH
-                bne _12
+                bne _2
 
                 ldx ROBOT_Y
                 ldy #18
-_10             lda PLAYER+PL2,x
+_next3          lda PLAYER+PL2,x
                 and RANDOM
                 sta PLAYER+PL2,x
                 lda PLAYER+PL3,x
@@ -574,12 +574,12 @@ _10             lda PLAYER+PL2,x
                 sta PLAYER+PL3,x
                 inx
                 dey
-                bne _10
+                bne _next3
 
                 ;!! inc PCOLR2
                 ;!! inc PCOLR3
                 dec TIM7_VAL
-                bne _12
+                bne _2
 
                 lda #OFF
                 sta R_STATUS
@@ -587,8 +587,7 @@ _10             lda PLAYER+PL2,x
 
                 lda #255
                 sta TIM7_VAL
-_12
-                lda FRAME
+_2              lda FRAME
                 and #3
                 bne _XIT
 
