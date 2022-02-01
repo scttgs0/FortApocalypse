@@ -7,7 +7,7 @@
 
 ;=======================================
 ; at exit:
-;   C           ???
+;   C           completion status
 ;=======================================
 CheckChrI       .proc
 ;v_???          .var ADR1_I
@@ -40,8 +40,10 @@ _next1          lda (ADR2_I),y
                 bne _XIT
                 dey
                 bpl _next1
+
                 clc
                 rts
+
 _XIT            sec
                 rts
                 .endproc
@@ -60,37 +62,37 @@ DoChopper       .proc
 
                 lda CHOPPER_STATUS
                 cmp #OFF
-                bne _2
+                bne _1
 
 _XIT            rts
 
-_20             jmp _4
+_leap           jmp _8
 
-_2              cmp #CRASH
+_1              cmp #CRASH
                 beq _XIT
 
                 cmp #LAND
-                beq _3
+                beq _2
 
                 cmp #PICKUP
-                beq _3
+                beq _2
 
                 lda FRAME
                 and GRAV_SKL
-                bne _3
+                bne _2
 
                 inc CHOPPER_Y
-_3              lda CHOPPER_COL
-                beq _12
+_2              lda CHOPPER_COL
+                beq _3
 
                 cmp #4
-                beq _20                 ; LASER
+                beq _leap               ; LASER
 
                 cmp #8
-                bne _6                  ; HYPER
+                bne _4                  ; HYPER
 
                 lda LEVEL
-                bne _20
+                bne _leap
 
                 sta CHOPPER_COL
                 lda #HYPERSPACE_MODE
@@ -99,10 +101,10 @@ _3              lda CHOPPER_COL
                 lda #1
                 sta SND3_VAL
                 sta SND5_VAL
-_12             ldx #FLY
-                bra _5
+_3              ldx #FLY
+                bra _9
 
-_6              lda CHOP_X
+_4              lda CHOP_X
                 sta TEMP1_I
                 lda CHOP_Y
                 sta TEMP2_I
@@ -121,32 +123,32 @@ _6              lda CHOP_X
 
                 lda CHOPPER_COL
                 and #%11110000
-                bne _4
+                bne _8
 
                 lda CHOPPER_COL
                 and #%00000010
-                beq _9
+                beq _5
 
                 jsr SlavePickUp
-                bcc _9
+                bcc _5
 
                 ldx #PICKUP
-                jmp _5
+                jmp _9
 
-_9              lda TEMP3_I
+_5              lda TEMP3_I
                 cmp #3
-                beq _4
+                beq _8
 
                 dec CHOPPER_Y
                 ldx FUEL_STATUS
                 lda CHOP_Y
                 cmp #10+4
-                blt _8
+                blt _6
 
                 cpx #EMPTY
-                beq _4
+                beq _8
 
-_8              cpx #kREFUEL
+_6              cpx #kREFUEL
                 beq _7
 
                 lda TEMP4_I
@@ -155,14 +157,14 @@ _8              cpx #kREFUEL
                 jsr RestorePoint
 
 _7              ldx #LAND
-                bra _5
+                bra _9
 
-_4              lda #20
+_8              lda #20
                 sta TIM3_VAL
                 lda #1
                 sta SND3_VAL
                 ldx #CRASH
-_5              stx CHOPPER_STATUS
+_9              stx CHOPPER_STATUS
                 rts
                 .endproc
 
@@ -178,28 +180,28 @@ UpdateChopper   .proc
 
                 lda CHOPPER_STATUS
                 cmp #BEGIN
-                beq _20
+                beq _1
 
                 cmp #OFF
-                bne _0
+                bne _2
 
                 lda #0
                 sta HPOSP0
                 sta HPOSP1
                 rts
 
-_20             lda #FLY
+_1              lda #FLY
                 sta CHOPPER_STATUS
-                jmp CCXY
+                jmp _CCXY
 
-_0              ldy OCHOPPER_Y
+_2              ldy OCHOPPER_Y
                 ldx #17
                 lda #0
-_1              sta PLAYER+PL0,y
+_next1          sta PLAYER+PL0,y
                 sta PLAYER+PL1,y
                 iny
                 dex
-                bpl _1
+                bpl _next1
 
                 lda CHOPPER_X
                 sta HPOSP0
@@ -222,26 +224,29 @@ _1              sta PLAYER+PL0,y
 
                 ldx CHOPPER_Y
                 stx OCHOPPER_Y
-_2              ldy TEMP1_I
+
+_next2          ldy TEMP1_I
                 lda (ADR1_I),y
                 sta PLAYER+PL0,x
                 ldy TEMP2_I
                 lda (ADR1_I),y
                 sta PLAYER+PL1,x
+
                 inc TEMP1_I
                 inc TEMP2_I
                 inx
+
                 lda TEMP1_I
                 cmp #18
-                bne _2
+                bne _next2
 
                 lda CHOPPER_STATUS
                 cmp #CRASH
-                bne _11
+                bne _5
 
                 ldx CHOPPER_Y
                 ldy #18
-_10             lda PLAYER+PL0,x
+_next3          lda PLAYER+PL0,x
                 and RANDOM
                 sta PLAYER+PL0,x
                 lda PLAYER+PL1,x
@@ -249,7 +254,7 @@ _10             lda PLAYER+PL0,x
                 sta PLAYER+PL1,x
                 inx
                 dey
-                bne _10
+                bne _next3
 
                 ;!! inc PCOLR0
                 ;!! inc PCOLR1
@@ -258,44 +263,44 @@ _10             lda PLAYER+PL0,x
                 sta BAK2_COLOR
                 lda MODE
                 cmp #GO_MODE
-                bne _11
+                bne _5
 
                 lda FRAME
                 and #1
-                bne _12
+                bne _3
 
                 inc CHOPPER_Y
-_12             dec TIM3_VAL
-                bne _11
+_3              dec TIM3_VAL
+                bne _5
 
                 lda R_STATUS
                 cmp #OFF
-                beq _23
+                beq _4
 
                 jsr PositionRobot
 
                 lda #OFF
                 sta R_STATUS
-_23             jsr PositionChopper
+_4              jsr PositionChopper
 
                 lda #NEW_PLAYER_MODE
                 sta MODE
 
-_11             lda FRAME
+_5              lda FRAME
                 and #3
-                bne _3
+                bne _6
 
                 lda CHOPPER_ANGLE
                 eor #1
                 sta CHOPPER_ANGLE
 
-_3              lda MODE
+_6              lda MODE
                 cmp #GO_MODE
-                bne CCEND
+                bne _XIT
 
                 jsr PositionChopper
 
-CCXY            lda CHOPPER_X
+_CCXY           lda CHOPPER_X
                 sec
                 sbc #24
                 lsr
@@ -311,15 +316,15 @@ CCXY            lda CHOPPER_X
                 lsr
                 sta TEMP1_I
                 lda SY
-                bpl _1
+                bpl _7
 
                 lda #0
-_1              clc
+_7              clc
                 adc TEMP1_I
                 sta CHOP_Y
                 jmp PositionChopper
 
-CCEND           rts
+_XIT            rts
                 .endproc
 
 
@@ -327,14 +332,14 @@ CCEND           rts
 ;
 ;=======================================
 PositionChopper .proc
-;v_???          .var TEMP1_I
-;v_???          .var TEMP2_I
+v_posX          .var TEMP1_I
+v_posY          .var TEMP2_I
 ;---
 
                 lda CHOP_X
-                sta TEMP1_I
+                sta v_posX
                 lda CHOP_Y
-                sta TEMP2_I
+                sta v_posY
                 jmp PositionRobot.POS_IT_I
 
                 .endproc
