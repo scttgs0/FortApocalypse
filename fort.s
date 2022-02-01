@@ -287,7 +287,6 @@ GAME_POINTS     .byte ?
 DEMO_STATUS     .byte ?
 DEMO_COUNT      .byte ?
 
-MAX_PODS        = 39
 
 ;---------------------------------------
 
