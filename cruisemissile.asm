@@ -10,6 +10,7 @@
 MoveCruiseMissiles .proc
                 dec MISSILE_SPD
                 bne MCE
+
                 lda MISSILE_SPEED
                 sta MISSILE_SPD
 
@@ -20,15 +21,20 @@ M_ST            .block
                 lda CM_STATUS,x
                 cmp #OFF
                 beq M_END
+
                 cmp #BEGIN
                 bne _1
+
                 jmp MissileBegin
 
 _1              jsr MissileCollision
+
                 bcs M_END
+
                 jsr MissileErase
                 jsr MissileMove
                 jsr MissileDraw
+
                 .endblock
 
 
@@ -36,28 +42,34 @@ M_END           .block
                 lda TANK_STATUS,x
                 cmp #ON
                 bne _2
+
                 lda TANK_Y,x
                 sec
                 sbc CHOP_Y
                 bmi _2
+
                 cmp #14
                 bge _2
+
                 lda CM_STATUS,x
                 cmp #OFF
                 bne _2
+
                 lda CHOP_X
                 sec
                 sbc #2
                 sbc TANK_X,x
                 bpl _1
+
                 eor #-2
 _1              cmp #9
                 bge _2
+
                 lda #BEGIN
                 sta CM_STATUS,x
-
 _2              dex
                 bpl M_ST
+
                 .endblock
 
 
@@ -66,8 +78,10 @@ MCE             .block
 _next1          lda CM_STATUS,x
                 cmp #OFF
                 bne _XIT
+
                 dex
                 bpl _next1
+
                 lda #0
                 sta AUDC4
                 sta SND6_VAL
@@ -88,7 +102,6 @@ v_posY          .var TEMP2
                 sta v_posX
                 lda CM_Y,x
                 sta v_posY
-
                 jmp ComputeMapAddr
 
                 .endproc
@@ -133,6 +146,7 @@ MissileCollision .proc
 ;v_???          .var ADR1
 v_preserveX     .var TEMP1
 ;---
+
                 jsr GetMissileAddr
 
                 ldy #0
@@ -176,7 +190,7 @@ MissileErase    .proc
 
                 lda CM_TEMP,x
                 cmp #EXP_WALL
-                beq _2
+                beq _1
 
                 cmp #$60+128
                 bge _XIT
@@ -185,12 +199,12 @@ MissileErase    .proc
                 beq _XIT
 
                 cmp #$5B
-                blt _2
+                blt _1
 
                 cmp #$5F+1
                 blt _XIT
 
-_2              ldy #0
+_1              ldy #0
                 sta (ADR1),y
 _XIT            rts
                 .endproc
@@ -209,14 +223,14 @@ v_distance      .var TEMP1
                 beq _1
 
                 inc CM_X,x
-                jmp _2
+                bra _2
 
 _1              dec CM_X,x
 _2              lda CM_TIME,x
                 bpl _3
 
-_4              inc CM_Y,x
-                jmp _8
+_next1          inc CM_Y,x
+                jmp _6
 
 _3              lda CHOP_X
                 sec
@@ -225,45 +239,45 @@ _3              lda CHOP_X
 
                 lda CM_STATUS,x
                 cmp #LEFT
-                bne _5
+                bne _4
 
                 lda v_distance
-                bpl _4
-                bra _6
+                bpl _next1
+                bra _5
 
-_5              lda v_distance
-                bmi _4
+_4              lda v_distance
+                bmi _next1
 
-_6              lda CM_X,x
+_5              lda CM_X,x
                 cmp #$D8
-                bge _4
+                bge _next1
 
                 cmp #$2D
-                blt _4
+                blt _next1
 
                 ldy CHOP_Y
                 iny
                 tya
                 sec
                 sbc CM_Y,x
-                beq _8
-                bpl _7
+                beq _6
+                bpl _next2
 
                 dec CM_Y,x
-                jmp _8
+                jmp _6
 
-_7              inc CM_Y,x
-_8              jsr GetMissileAddr
+_next2          inc CM_Y,x
+_6              jsr GetMissileAddr
 
                 ldy #0
                 lda (ADR1),y
                 cmp #MISS_LEFT
-                beq _7
+                beq _next2
 
                 cmp #MISS_RIGHT
-                beq _7
+                beq _next2
 
-_9              lda CM_TIME,x
+                lda CM_TIME,x
                 bmi _XIT
 
                 dec CM_TIME,x
@@ -325,16 +339,16 @@ CheckChr        .proc
                 adc ADR2+1
                 sta ADR2+1
                 ldy #7
-_1              lda (ADR2),y
-                bne _2
+_next1          lda (ADR2),y
+                bne _XIT
 
                 dey
-                bpl _1
+                bpl _next1
 
                 clc
                 rts
 
-_2              sec
+_XIT            sec
                 rts
                 .endproc
 
