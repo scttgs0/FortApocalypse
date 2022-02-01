@@ -12,9 +12,9 @@
 
 ;=======================================
 ; Space = toggle Pause Mode
-; Option (F2) = delegate to Opt handler
-; Select (F3) = delegate to Opt handler
-; Start (F4) = switch to Start Mode
+; Option = delegate to Opt handler
+; Select = delegate to Opt handler
+; Start = switch to Start Mode
 ;---------------------------------------
 ; Any activity will cancel the Demo
 ; All keypresses are delegated to the
@@ -1465,6 +1465,7 @@ _3              lda #0
                 bpl _next4
 
                 .endproc
+
                 ;[fall-through]
 
 ;=======================================
@@ -1607,6 +1608,7 @@ _1              cmp FRAME
 _2              ldx #$FF
                 txs
                 jmp MAIN
+
                 .endproc
 
 
