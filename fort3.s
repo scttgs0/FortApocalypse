@@ -882,7 +882,7 @@ _4              cmp #EXP_WALL
                 sta BAK2_COLOR
                 ldx #$20
                 ldy #$00
-                jsr INC_SCORE
+                jsr IncreaseScore
                 ldx TEMP1_I
                 lda #0
                 sta ROCKET_TEMP,X

@@ -109,7 +109,7 @@ v_marqueeGlyph  .var TEMP3
                 lda #$83
                 sta COLOR2
 
-                jsr SCREEN_OFF
+                jsr ScreenOff
 
                 lda #<DSP_LST3        ; title screen display list
                 sta SDLST
@@ -339,7 +339,7 @@ T3              .proc
                 lda #>VERTBLKD
                 sta VVBLKD+1
 
-                jsr SCREEN_OFF
+                jsr ScreenOff
 
 _wait1          lda VCOUNT              ; wait for next horz sync
                 bne _wait1
@@ -364,18 +364,18 @@ _2
                 lda MODE
                 cmp #GO_MODE
                 bne _6
-                jsr MOVE_PODS
-                jsr MOVE_TANKS
-                jsr MOVE_CRUISE_MISSILES
+                jsr MovePods
+                jsr MoveTanks
+                jsr MoveCruiseMissiles
                 jsr MOVE_SLAVES
                 jsr SET_SCANNER
                 jsr CHECK_FUEL_BASE
                 jsr CHECK_FORT
                 jsr CheckLevel
 
-_6              jsr CHECK_HYPER_CHAMBER
+_6              jsr CheckHyperchamber
                 jsr CheckModes
-                jsr READ_USER
+                jsr ReadKeyboard
 
                 lda DEMO_STATUS
                 bpl _3
@@ -469,7 +469,7 @@ _next1          jsr MoveRamp
 
                 ldy #5
 _next2          ldx #5
-                jsr WAIT_FRAME
+                jsr WaitFrame
                 jsr Hover
 
                 inc CHOPPER_Y
@@ -725,7 +725,7 @@ _4              rol CheckModes
 ;
 ;=======================================
 M_START         .proc
-                jsr SCREEN_OFF
+                jsr ScreenOff
                 ldx #0
                 stx LEVEL
                 stx SCORE1
@@ -839,7 +839,7 @@ M_NewPlayer     .proc
 ;v_???          .var TEMP2
 ;---
 
-                jsr SCREEN_OFF
+                jsr ScreenOff
 
                 sed
                 lda CHOP_LEFT
@@ -903,7 +903,7 @@ _2              lda #4
 
                 jsr DO_CHECKSUM2
                 ldx #75
-                jsr WAIT_FRAME
+                jsr WaitFrame
 
                 lda LAND_X
                 sta SX
@@ -923,7 +923,7 @@ _2              lda #4
                 lda #0
                 sta CHOPPER_COL
 
-                jsr SCREEN_ON
+                jsr ScreenOn
 
                 lda #BEGIN
                 sta CHOPPER_STATUS
@@ -956,7 +956,7 @@ M_NewLevel      .proc
 ;v_???          .var TEMP4
 ;---
 
-                jsr SCREEN_OFF
+                jsr ScreenOff
 
                 lda #12
                 sta TEMP1
@@ -1357,7 +1357,7 @@ M_GameOver      .proc
 ;v_???          .var TEMP2
 ;---
 
-                jsr SCREEN_OFF
+                jsr ScreenOff
 
                 lda SLAVES_SAVED
                 lsr
@@ -1520,7 +1520,7 @@ _8              iny
                 ;-----------------------
                 ; Copy Protection
                 ;-----------------------
-                ror SCREEN_OFF
+                ror ScreenOff
                 ;-----------------------
 
                 lda #TITLE_MODE

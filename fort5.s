@@ -53,7 +53,7 @@ MOVE_SLAVES     ldx SLAVE_NUM
                 ldx #$00
                 stx AUDC3
                 ldy #$08
-                jsr INC_SCORE
+                jsr IncreaseScore
                 inc SLAVES_SAVED
                 jmp _2
 
@@ -433,7 +433,7 @@ _2              lda SX
                 jmp DO_LINE
 _3              rts
 
-POS_IT
+PositionIt
                 stx TEMP3
                 ldx TEMP1
                 lda TEMP2
@@ -553,7 +553,7 @@ _3
 NEXT_PART1
                 ldx #$00
                 ldy #$50
-                jsr INC_SCORE
+                jsr IncreaseScore
                 jsr GiveBonus
                 lda #STOP_MODE
                 sta MODE
@@ -629,7 +629,7 @@ _5              sta (ADR1),Y
                 sta AUDC4
                 ldy #15
 _6              ldx #2
-                jsr WAIT_FRAME
+                jsr WaitFrame
                 inc BAK2_COLOR
                 lda #1
                 sta SND3_VAL

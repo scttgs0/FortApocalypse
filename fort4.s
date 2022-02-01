@@ -734,7 +734,7 @@ _2              iny
                 dex
                 rts
 
-INC_SCORE
+IncreaseScore
                 lda DEMO_STATUS
 ;               CMP #0                  ; ON
                 beq _1
