@@ -12,7 +12,7 @@
 ; DO_BLOCKS
 ; DO_ELEVATOR
 ; DO_EXP
-; DO_NUMBERS
+; DoNumbers
 ; DRAW_MAP
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,17 +101,17 @@ _20             ldx STICK
                 bne _0
                 jsr HOVER
                 lda #20
-                sta S1_2_VAL
+                sta SND1_2_VAL
 _0              lda FUEL_STATUS
                 cmp #EMPTY
                 bne _10
                 lda #60
-                sta S1_2_VAL
+                sta SND1_2_VAL
 _10             txa
                 and #RIGHT
                 bne _1
                 lda #17
-                sta S1_2_VAL
+                sta SND1_2_VAL
                 lda CHOPPER_ANGLE
                 cmp #14
                 bge _70
@@ -128,7 +128,7 @@ _1              txa
                 and #LEFT
                 bne _2
                 lda #17
-                sta S1_2_VAL
+                sta SND1_2_VAL
                 lda CHOPPER_ANGLE
                 cmp #4
                 blt _73
@@ -148,14 +148,14 @@ _2              lda FUEL_STATUS
                 and #UP
                 bne _3
                 lda #13
-                sta S1_2_VAL
+                sta SND1_2_VAL
                 dec CHOPPER_Y
                 jsr HOVER
 _3              txa
                 and #DOWN
                 bne _4
                 lda #26
-                sta S1_2_VAL
+                sta SND1_2_VAL
                 lda CHOPPER_STATUS
                 cmp #LAND
                 beq _4
@@ -245,7 +245,7 @@ _5              sta ROCKET_STATUS,X
                 adc #8
                 sta ROCKET_Y,X
                 lda #$3F
-                sta S2_VAL
+                sta SND2_VAL
                 rts
 
 HOVER           lda FRAME
@@ -393,7 +393,7 @@ COMPUTE_MAP_ADR_I
                 sta ADR1_I+1
                 rts
 
-COMPUTE_MAP_ADR
+ComputeMapAddr
                 lda #<MAP-5
                 clc
                 adc TEMP1
@@ -574,7 +574,7 @@ _3              lda RANDOM
                 bne _3
                 rts
 
-DO_NUMBERS
+DoNumbers
                 lda MODE
                 cmp #NEW_PLAYER_MODE
                 beq _1
@@ -583,11 +583,11 @@ DO_NUMBERS
 _1              rts
 ; SCORE
 DO_N            lda #<SCORE_DIG
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>SCORE_DIG
-                sta S_ADR+1
+                sta SCRN_ADR+1
                 lda #0
-                sta S_FLG
+                sta SCRN_FLG
                 ldx #5
                 lda SCORE3
                 jsr DDIG
@@ -618,11 +618,11 @@ DO_N            lda #<SCORE_DIG
 
 ; BONUS
 _1              lda #<BONUS_DIG
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>BONUS_DIG
-                sta S_ADR+1
+                sta SCRN_ADR+1
                 lda #0
-                sta S_FLG
+                sta SCRN_FLG
                 ldx #3
                 lda BONUS2
                 jsr DDIG
@@ -657,11 +657,11 @@ _3              lda #EMPTY
 
 ; FUEL
 _4              lda #<FUEL_DIG
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>FUEL_DIG
-                sta S_ADR+1
+                sta SCRN_ADR+1
                 lda #0
-                sta S_FLG
+                sta SCRN_FLG
                 ldx #3
                 lda FUEL2
                 jsr DDIG
@@ -673,7 +673,7 @@ _4              lda #<FUEL_DIG
 ; DRAW DIGIT
 ;
 DDIG            tay
-                lda S_FLG
+                lda SCRN_FLG
                 bne _1
                 tya
                 and #$F0
@@ -683,8 +683,8 @@ DDIG            tay
                 tay
                 bne _2
 _1              lda #1
-                sta S_FLG
-_2              lda S_FLG
+                sta SCRN_FLG
+_2              lda SCRN_FLG
                 bne _3
                 tya
                 and #$F
@@ -694,15 +694,15 @@ _2              lda S_FLG
                 tay
                 bne _4
 _3              lda #1
-                sta S_FLG
+                sta SCRN_FLG
 _4              tya
-                sta S_TEMP
+                sta SCRN_TEMP
                 lsr
                 lsr
                 lsr
                 lsr
                 jsr DRAW
-                lda S_TEMP
+                lda SCRN_TEMP
                 and #$F
 ;               JSR DRAW
 ;               RTS
@@ -717,20 +717,20 @@ _0              lda #<$F0+128           ; BLANK
 _1              clc
                 adc #$10+128            ; '0'
                 ldy #0
-                sta (S_ADR),Y
+                sta (SCRN_ADR),Y
                 cmp #$10+128
                 bne _2
                 lda #$A+128
 _2              iny
                 and #$8F
-                sta (S_ADR),Y
-                lda S_ADR
+                sta (SCRN_ADR),Y
+                lda SCRN_ADR
                 clc
                 adc #2
-                sta S_ADR
-                lda S_ADR+1
+                sta SCRN_ADR
+                lda SCRN_ADR+1
                 adc #0
-                sta S_ADR+1
+                sta SCRN_ADR+1
                 dex
                 rts
 

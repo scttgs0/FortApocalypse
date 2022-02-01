@@ -6,18 +6,6 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-OFF             = 1
-ON              = 2
-FLY             = 3
-CRASH           = 4
-EXPLODE         = 5
-LAND            = 6
-BEGIN           = 7
-FULL            = 8
-EMPTY           = 9
-REFUEL          = 10
-PICKUP          = 11
-
 SCAN_ADR1       .word ?
 SCAN_ADR2       .word ?
 SX              .byte ?
@@ -86,17 +74,6 @@ FUEL2           .byte ?
 MODE            .byte ?
 BAK_COLOR       .byte ?
 BAK2_COLOR      .byte ?
-
-TITLE_MODE      = 1
-GO_MODE         = 2
-START_MODE      = 3
-NEW_LEVEL_MODE  = 4
-NEW_PLAYER_MODE = 5
-GAME_OVER_MODE  = 6
-STOP_MODE       = 7
-PAUSE_MODE      = 8
-OPTION_MODE     = 9
-HYPERSPACE_MODE = 10
 
 CM_STATUS       .fill MAX_TANKS
 CM_X            .fill MAX_TANKS

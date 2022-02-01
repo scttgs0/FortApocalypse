@@ -74,14 +74,14 @@ _3              stx SLAVE_NUM
                 beq _XIT
                 dec TIM9_VAL
                 bne _XIT
-                jsr CLEAR_INFO
+                jsr ClearInfo
 _XIT            rts
 
 GET_SLAVE_ADR   lda SLAVE_X,X
                 sta TEMP1
                 lda SLAVE_Y,X
                 sta TEMP2
-                jmp COMPUTE_MAP_ADR
+                jmp ComputeMapAddr
 
 S_COL           jsr GET_SLAVE_ADR
                 ldy #0
@@ -111,7 +111,7 @@ S_COL2          jsr S_ERASE
                 lda #OFF
                 sta SLAVE_STATUS,X
                 dec SLAVES_LEFT
-PRINT_SLAVES_LEFT
+PrintSlavesLeft
                 lda #9
                 sta TEMP1
                 lda #0
@@ -243,7 +243,7 @@ SLAVE_PICKUP_MESS
 
 CHECK_FUEL_BASE
                 lda FUEL_STATUS
-                cmp #REFUEL
+                cmp #kREFUEL
                 bne _3
                 jmp RE_FUEL
 _3              lda CHOPPER_STATUS
@@ -267,9 +267,9 @@ _1              cpx #$82
                 blt _9
                 cpx #$82+6
                 bge _9
-_2              lda #REFUEL
+_2              lda #kREFUEL
                 sta FUEL_STATUS
-                asl COMPUTE_MAP_ADR     ; PROT
+                asl ComputeMapAddr     ; PROT
                 lda #1
                 sta TIM4_VAL
                 lda #4
@@ -277,7 +277,7 @@ _2              lda #REFUEL
 _9
                 lda #0
                 ldx FUEL_STATUS
-                cpx #REFUEL
+                cpx #kREFUEL
                 beq _11
                 lda FUEL2
                 bne _20
@@ -300,7 +300,7 @@ _10             lda #$A4
 _11             sta AUDC2
                 lda #$88
                 sta AUDF2
-                jsr CLEAR_INFO
+                jsr ClearInfo
 _20             rts
 
 WARNING         .byte $AC,$AF,$B7,$00,$00       ; 'LOW  ' atari-ascii
@@ -339,7 +339,7 @@ F1              ldx #1
                 bge _1
                 ldx #0
                 stx AUDC2
-_1              stx S4_VAL
+_1              stx SND4_VAL
                 lda CHOP_Y
                 cmp #8+2
                 bge FE
@@ -348,10 +348,10 @@ _1              stx S4_VAL
                 lda #4
                 sta FUEL_TEMP
                 jsr DF1
-                jmp SAVE_POS
+                jmp RestorePoint
 
 DRAW_BASE
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 lda #4
                 sta TEMP4
                 lda TEMP3
@@ -554,7 +554,7 @@ NEXT_PART1
                 ldx #$00
                 ldy #$50
                 jsr INC_SCORE
-                jsr GIVE_BONUS
+                jsr GiveBonus
                 lda #STOP_MODE
                 sta MODE
                 lda #$99
@@ -587,7 +587,7 @@ _2              lda #121
                 sta TEMP1
                 lda #20
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 lda TEMP3
                 asl
                 tax
@@ -632,7 +632,7 @@ _6              ldx #2
                 jsr WAIT_FRAME
                 inc BAK2_COLOR
                 lda #1
-                sta S3_VAL
+                sta SND3_VAL
                 lda RANDOM
                 sta AUDF4
                 dey
@@ -649,7 +649,7 @@ _6              ldx #2
                 sta FORT_STATUS
                 sta LASER_STATUS
 
-                jmp CLEAR_SOUNDS
+                jmp ClearSounds
 
 FORT_EXP
                 .addr FORT_EX1,FORT_EX2
@@ -798,17 +798,17 @@ S1
                 bne _2
                 lda #$83
                 sta AUDC1
-                lda S1_1_VAL
+                lda SND1_1_VAL
                 bpl _1
-                lda S1_2_VAL
+                lda SND1_2_VAL
 _1              sec
                 sbc #4
-                sta S1_1_VAL
+                sta SND1_1_VAL
                 sta AUDF1
 _2
 ; MISSILE SOUND
 S2
-                lda S2_VAL
+                lda SND2_VAL
                 bmi _2
                 eor #$3F
                 clc
@@ -819,23 +819,23 @@ S2
                 bne _1
                 ldx #0
 _1              stx AUDC2
-                dec S2_VAL
+                dec SND2_VAL
 _2
 ; EXPLOSION
 S3
-                lda S3_VAL
+                lda SND3_VAL
                 beq _3
                 lda RANDOM
                 and #3
-                ora S3_VAL
+                ora SND3_VAL
                 adc #$10
                 sta AUDF3
-                inc S3_VAL
-                lda S3_VAL
+                inc SND3_VAL
+                lda SND3_VAL
                 cmp #$31
                 bne _1
                 lda #0
-                sta S3_VAL
+                sta SND3_VAL
 _1              ldx #$48
                 cmp #0
                 bne _2
@@ -844,7 +844,7 @@ _2              stx AUDC3
 _3
 ; RE-FUEL
 S4
-                lda S4_VAL
+                lda SND4_VAL
                 beq _3
                 ldx #0
                 lda FRAME
@@ -875,13 +875,13 @@ _3
 ;
 ; HYPER CHAMBER SOUND
 ;
-S5              lda S5_VAL
+S5              lda SND5_VAL
                 beq _2
-                inc S5_VAL
+                inc SND5_VAL
                 cmp #$50
                 bne _1
                 lda #0
-                sta S5_VAL
+                sta SND5_VAL
 _1              sta AUDF2
                 lda #$A8
                 sta AUDC2
@@ -892,13 +892,13 @@ _2
 S6              lda FRAME
                 and #1
                 bne _2
-                lda S6_VAL
+                lda SND6_VAL
                 beq _2
-                inc S6_VAL
+                inc SND6_VAL
                 cmp #$20
                 blt _1
                 ldx #0
-                stx S6_VAL
+                stx SND6_VAL
 _1              sta AUDF4
                 lda #$07
                 sta AUDC4

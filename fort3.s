@@ -4,7 +4,7 @@
 ;---------------------------------------
 ; MAIN INTERUPT DRIVER
 ;       PART (I)
-; UPDATE_CHOPPER
+; UpdateChopper
 ; UPDATE_ROBOT_CHOPPER
 ; UPDATE_ROCKETS
 ; DO.ROBOT CHOPPER
@@ -41,9 +41,9 @@ VERTBLKD        sei
                 sta ROBOT_COL
                 sta HITCLR
 
-                jsr DO_NUMBERS
+                jsr DoNumbers
                 jsr DRAW_MAP
-                jsr UPDATE_CHOPPER
+                jsr UpdateChopper
                 jsr UPDATE_ROBOT_CHOPPER
                 jsr READ_TRIG
                 jsr DO_EXP
@@ -198,7 +198,7 @@ _5              sta ROCKET_STATUS+2
                 adc #8
                 sta ROCKET_Y+2
                 lda #$3F
-                sta S2_VAL
+                sta SND2_VAL
 _10
 
 R_B
@@ -433,8 +433,8 @@ _3              lda CHOPPER_COL
                 lda #HYPERSPACE_MODE
                 sta MODE
                 lda #1
-                sta S3_VAL
-                sta S5_VAL
+                sta SND3_VAL
+                sta SND5_VAL
 _12             ldx #FLY
                 bne _5                  ; FORCED
 
@@ -471,22 +471,22 @@ _9              lda TEMP3_I
                 blt _8
                 cpx #EMPTY
                 beq _4
-_8              cpx #REFUEL
+_8              cpx #kREFUEL
                 beq _7
                 lda TEMP4_I
                 bne _7
-                jsr SAVE_POS
+                jsr RestorePoint
 _7              ldx #LAND
                 bne _5                  ; FORCED
 _4              lda #20
                 sta TIM3_VAL
                 lda #1
-                sta S3_VAL
+                sta SND3_VAL
                 ldx #CRASH
 _5              stx CHOPPER_STATUS
                 rts
 
-SAVE_POS
+RestorePoint
                 lda SX_F
                 sta LAND_FX
                 lda SY_F
@@ -593,7 +593,7 @@ _3              clc
                 lda #20
                 sta TIM7_VAL
                 lda #1
-                sta S3_VAL
+                sta SND3_VAL
 _4              lda R_STATUS
                 cmp #CRASH
                 beq _5
@@ -603,7 +603,7 @@ DRCE
                 stx ROBOT_STATUS
                 rts
 
-UPDATE_CHOPPER
+UpdateChopper
                 lda CHOPPER_STATUS
                 cmp #BEGIN
                 beq _20
@@ -859,9 +859,9 @@ _1              clc
                 jsr CHECK_CHR_I
                 bcc _6
                 ldy #1
-                sty S3_VAL
+                sty SND3_VAL
                 dey                     ; Y=0
-                sty S2_VAL
+                sty SND2_VAL
                 lda (ADR1_I),Y
                 sta ROCKET_TEMP,X
                 cmp #EXP2

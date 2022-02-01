@@ -52,7 +52,7 @@ _4              lda SKSTAT
                 pha
                 lda #PAUSE_MODE
                 sta MODE
-                jsr CLEAR_SOUNDS
+                jsr ClearSounds
 _37             lda SKSTAT
                 and #%00000100
                 beq _37
@@ -310,7 +310,7 @@ GET_POD_ADR
                 sta TEMP1
                 lda POD_Y,X
                 sta TEMP2
-                jmp COMPUTE_MAP_ADR
+                jmp ComputeMapAddr
 
 GET_POD_VAL
                 jsr GET_POD_ADR
@@ -443,7 +443,7 @@ _2              lda POD_X,X
                 sta TEMP1
                 lda POD_Y,X
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 ldy #0
                 lda (ADR1),Y
                 iny
@@ -527,7 +527,7 @@ _1              lda CM_STATUS,X
                 bpl _1
                 lda #0
                 sta AUDC4
-                sta S6_VAL
+                sta SND6_VAL
 _2              rts
 
 GET_MISS_ADR
@@ -535,7 +535,7 @@ GET_MISS_ADR
                 sta TEMP1
                 lda CM_Y,X
                 sta TEMP2
-                jmp COMPUTE_MAP_ADR
+                jmp ComputeMapAddr
 
 M_BEGIN
                 ldy TANK_X,X
@@ -559,7 +559,7 @@ _1              tya
                 lda #20
                 sta CM_TIME,X
                 lda #1
-                sta S6_VAL
+                sta SND6_VAL
                 jmp M_END
 
 M_COL
@@ -574,7 +574,7 @@ M_COL
 M_COL2
                 jsr M_ERASE
                 lda #1
-                sta S3_VAL
+                sta SND3_VAL
                 lda #OFF
                 sta CM_STATUS,X
                 lda #-1
@@ -705,7 +705,7 @@ CHECK_HYPER_CHAMBER
                 sta CHOPPER_COL
                 lda #GO_MODE
                 sta MODE
-;               JSR SAVE_POS
+;               JSR RestorePoint
 _1              rts
 
 H_XF
@@ -797,7 +797,7 @@ _5              cmp #CRASH
 ; RESTORE OLD POS
 _13             lda TANK_X,X
                 sta TEMP1
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 stx TEMP1
                 ldy #0
                 txa
@@ -845,7 +845,7 @@ _7              jsr POS_TANK
                 jsr POS_TANK
                 lda TANK_X,X
                 sta TEMP1
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 stx TEMP1
                 ldy #0
                 txa
@@ -905,7 +905,7 @@ _1              lda TANK_STATUS,X
                 sta TEMP1
                 lda TANK_Y,X
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 stx TEMP1
                 ldy #0
                 txa
@@ -945,7 +945,7 @@ _3              lda TANK_STATUS,X
                 sta TEMP1
                 lda TANK_START_Y,X
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 ldy #13-1
 _9              lda (ADR1),Y
                 bmi _10
@@ -1009,15 +1009,15 @@ _2              sta CHR_SET1+$300,X
                 inx
                 bne _2
 ;               LDA #0
-                sta S1_1_VAL
-                sta S2_VAL
-                sta S3_VAL
-                sta S4_VAL
-                sta S5_VAL
-                sta S6_VAL
+                sta SND1_1_VAL
+                sta SND2_VAL
+                sta SND3_VAL
+                sta SND4_VAL
+                sta SND5_VAL
+                sta SND6_VAL
                 sta BAK2_COLOR
                 lda #20
-                sta S1_2_VAL
+                sta SND1_2_VAL
                 ldx #MAX_TANKS-1
                 stx TIM7_VAL
 _3              lda CM_STATUS,X
@@ -1037,7 +1037,7 @@ _5              lda ROCKET_STATUS,X
                 sta TEMP1
                 lda ROCKET_TEMPY,X
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
                 ldy #0
                 lda ROCKET_TEMP,X
                 sta (ADR1),Y
@@ -1047,7 +1047,7 @@ _6              lda #0
                 dex
                 bpl _5
 
-CLEAR_SOUNDS
+ClearSounds
                 lda #0
                 sta AUDC1
                 sta AUDC2
@@ -1102,7 +1102,7 @@ _3              ldy TEMP6
                 bne _1                  ; FORCED
 _2              rts
 
-GIVE_BONUS
+GiveBonus
                 ldx BONUS1
                 ldy BONUS2
                 jsr INC_SCORE
@@ -1137,7 +1137,7 @@ _2              ldx #$FF
                 txs
                 jmp MAIN
 
-CLEAR_INFO
+ClearInfo
                 ldy #40-1
                 lda #0
 _1              sta PLAY_SCRN,Y

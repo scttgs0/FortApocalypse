@@ -2,3 +2,6 @@
 *.lbl
 *.lst
 *.rom
+*.hex
+*.txt
+*.png

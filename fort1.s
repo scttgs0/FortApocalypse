@@ -4,278 +4,353 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-START           sei
+;=======================================
+;
+;=======================================
+START           ;.proc                  ; never called
+                sei
                 cld
                 ldx #Z2_LEN
-_3              lda Z2,X
-                sta RAM2_STUFF,X
+_next1          lda Z2,x
+                sta RAM2_STUFF,x
                 dex
-                bne _3
+                bne _next1
+
                 lda #%00111110
                 sta SDMCTL
                 lda #$14
                 sta PRIOR
                 lda #%00000011
                 sta GRACTL
-;               LDA #3
                 sta SKCTL
+
                 lda #>PLAYER
                 sta PMBASE
                 lda #>CHR_SET1
                 sta CHBAS
+
                 ldx #0
                 stx AUDCTL
                 stx COLOR4
                 stx TIM6_VAL
-
                 stx PILOT_SKILL
                 stx GRAV_SKILL
                 inx                     ; X=1
                 stx ELEVATOR_DX
                 inx                     ; X=2
                 stx CHOPS
+
                 lda #<LINE1
                 sta VDSLST
                 lda #>LINE1
                 sta VDSLST+1
+
                 jsr M_START
+
                 lda #TITLE_MODE
                 sta MODE
 
-SET_FONTS
-;               LDA #CHR_SET1
-;               STA ADR1
-;               LDA /CHR_SET1
-;               STA ADR1+1
-
-;1              LDY #0
-;               TYA
-;2              STA (ADR1),Y
-;               INY
-;               BNE _2
-;               INC ADR1+1
-;               LDA ADR1+1
-;               CMP /CHR_SET1+$800
-;               BNE _1
-
+SET_FONTS       .block
                 ldx #0
-_3              lda FNT1,X
-                sta CHR_SET1+15,X
-                lda FNT1+$100-15,X
-                sta CHR_SET1+$100,X
-                lda FNT1+$200-15,X
-                sta CHR_SET1+$200,X
+_next1          lda FNT1,x
+                sta CHR_SET1+15,x
+                lda FNT1+$100-15,x
+                sta CHR_SET1+$100,x
+                lda FNT1+$200-15,x
+                sta CHR_SET1+$200,x
 
-                lda FNT2,X
-                sta CHR_SET2+$100+8,X
-                lda FNT2+$100-8,X
-                sta CHR_SET2+$200,X
-                lda FNT2+$200-8,X
-                sta CHR_SET2+$300,X
+                lda FNT2,x
+                sta CHR_SET2+$100+8,x
+                lda FNT2+$100-8,x
+                sta CHR_SET2+$200,x
+                lda FNT2+$200-8,x
+                sta CHR_SET2+$300,x
                 inx
-                bne _3
+                bne _next1
 
+; relocate the display list into RAM
                 ldx #Z1_LEN
-_4              lda Z1,X
-                sta RAM1_STUFF,X
+_next2          lda Z1,x
+                sta RAM1_STUFF,x
                 dex
-                bpl _4
+                bpl _next2
 
                 lda #$40
                 sta NMIEN
                 cli
-; TITLE
-TITLE
-                ldx #$FF
+                .endblock
+                ;.endproc
+
+                ;[fall-through]
+
+
+;=======================================
+; Title Screen handler
+;=======================================
+Title           .proc
+c_horzCount     = 40
+c_vertCount     = 17
+;v_???          .var ADR1
+v_audiofreq     .var TEMP1_I
+v_posX          .var TEMP1
+v_posY          .var TEMP2
+v_marqueeGlyph  .var TEMP3
+;---
+
+                ldx #$FF                ; reset stack pointer
                 txs
-                lda #$43
+
+                lda #$43                ; reset colors
                 sta COLOR0
+
                 lda #$0F
                 sta COLOR1
+
                 lda #$83
                 sta COLOR2
+
                 jsr SCREEN_OFF
-                lda #<DSP_LST3
+
+                lda #<DSP_LST3        ; title screen display list
                 sta SDLST
                 lda #>DSP_LST3
                 sta SDLST+1
-                lda #$3B
-                sta TEMP3
-                ldy #0
-                sty TEMP1_I
-_1              lda TEMP3
-                sta PLAY_SCRN,Y
-                jsr INC_CHR
+
+                lda #$3B                ; start with red marquee dot
+                sta v_marqueeGlyph
+
+                ldy #0                  ; start with low tones and increase to higher tones
+                sty v_audiofreq
+_next1          lda v_marqueeGlyph      ; place a dot
+                sta PLAY_SCRN,y
+                jsr CycleGlyph          ; move to next dot
+
                 iny
                 cpy #40
-                bne _1
-                lda #<PLAY_SCRN+39
+                bne _next1              ; loop until end of line
+
+                lda #<PLAY_SCRN+39      ; move to right edge
                 sta ADR1
                 lda #>PLAY_SCRN+39
                 sta ADR1+1
-                lda #$3B
-                sta TEMP3
-                ldx #17
+
+                lda #$3B                ; always start with a red marquee dot
+                sta v_marqueeGlyph
+
+                ldx #c_vertCount
                 ldy #0
-_2              lda TEMP3
-                sta (ADR1),Y
+_next2          lda v_marqueeGlyph
+                sta (ADR1),y            ; place a dot
                 iny
-                jsr INC_CHR
-                sta (ADR1),Y
-                dey
-                lda ADR1
+                jsr CycleGlyph          ; change to the next dot color
+
+                sta (ADR1),y            ; place a horz adjacent dot
+                dey                     ; back up one position
+
+                lda ADR1                ; calculate the vert adjacent dot
                 clc
-                adc #40
+                adc #c_horzCount
                 sta ADR1
+
                 lda ADR1+1
                 adc #0
                 sta ADR1+1
                 dex
-                bpl _2
+                bpl _next2
 
-                lda #<T2
+                lda #<T2                ; setup the deferred VBI (move the dots)
                 sta VVBLKD
                 lda #>T2
                 sta VVBLKD+1
 
                 ldx #5
-                stx TEMP1
-                dex                     ; X=4
-                stx TEMP2
-                ldx #<T_1
-                ldy #>T_1
-                jsr PRINT
-                inc TEMP1               ; =6
-                lda #6
-                sta TEMP2
-                ldx #<T_2
-                ldy #>T_2
-                jsr PRINT
-                lda #10
-                sta TEMP2
-                ldx #<T_3
-                ldy #>T_3
-                jsr PRINT
-                ldx #7
-_3              lda T_5,X
-                sta PLAY_SCRN+426,X
+                stx v_posX
                 dex
-                bpl _3
+                stx v_posY
+                ldx #<txtTitle1         ; output the first title
+                ldy #>txtTitle1
+                jsr Print               ; (5, 4) 'Fort Apocalypse'
+
+                inc v_posX
+                lda #6
+                sta v_posY
+                ldx #<txtTitle2         ; output the second title
+                ldy #>txtTitle2
+                jsr Print               ; (6, 6) 'By Steve Hales'
+
+                lda #10
+                sta v_posY
+                ldx #<txtTitle3         ; output the third title
+                ldy #>txtTitle3
+                jsr Print               ; (6, 10) 'Copyright 1982'
+
+                ldx #7
+_next3          lda T_5,x
+                sta PLAY_SCRN+426,x     ; output the copyright date (1982)
+                dex
+                bpl _next3
+
                 lda #4
-                sta TEMP1
+                sta v_posX
                 lda #12
-                sta TEMP2
-                ldx #<T_4
-                ldy #>T_4
-                jsr PRINT
+                sta v_posY
+                ldx #<txtTitle4         ; output the fourth title
+                ldy #>txtTitle4
+                jsr Print               ; (4, 12) 'Synapse Software'
 
-T1
-                lda VCOUNT
-                asl
-                sta WSYNC
-                sta COLPF3
-                jmp T1
+; change the text color for each scan line
+_endless1       lda VCOUNT              ; current scan line being draw on screen (divided by 2)
+                asl                     ; double it to get the real scan line number
+                sta WSYNC               ; halt until next horz sync
+                sta COLPF3              ; alter the playfield color
+                jmp _endless1
 
-T2
-                lda FRAME
+                .endproc
+
+
+;=======================================
+; Deferred VBlank Interrupt
+;=======================================
+T2              .proc
+v_audiofreq     .var TEMP1_I
+;---
+
+                lda FRAME               ; rotate the marquee dots every 4th frame
                 and #3
                 bne _1
-                lda COLOR2
+
+                lda COLOR2              ; color0 -> color1 -> color2 -> color0...
                 pha
+
                 lda COLOR1
                 sta COLOR2
+
                 lda COLOR0
                 sta COLOR1
+
                 pla
                 sta COLOR0
 
-_1              lda FRAME
+_1              lda FRAME               ; increment v_audiofreq every 8th frame
                 and #7
                 bne _2
-                inc TEMP1_I
+                inc v_audiofreq
 
-_2              lda #$AF
+_2              lda #$AF                ; set audio channels to full-volume, pure tone
                 sta AUDC1
                 sta AUDC2
-                lda #$FF
+
+                lda #$FF                ; audio freq increases as v_audiofreq is incremented
                 sec
-                sbc TEMP1_I
-                sta AUDF1
+                sbc v_audiofreq
+                sta AUDF1               ; this is a divide-by-N circuit - larger numbers are lower freq
                 tax
                 dex
-                stx AUDF2
+                stx AUDF2               ; audio channel 2 leads channel 1
 
-                lda TEMP1_I
+                lda v_audiofreq         ; launch demo near the end of the audio scale (avoid the highest notes)
                 cmp #$F3
-                beq _4
-                ldx #START_MODE
+                beq _5
+
+                ldx #START_MODE         ; trigger causes game start
                 lda TRIG0
                 beq _3
-                lda CONSOL
+
+                lda CONSOL              ; START button causes game to start
                 cmp #6
                 beq _3
-                ldx #OPTION_MODE
+
+                ldx #OPTION_MODE        ; switch to Option screen when SELECT or OPTION is pressed
                 cmp #7
                 bne _3
 
-                jmp VVBLKD_RET
+                jmp VVBLKD_RET          ; exit VBI
 _3              stx MODE
                 ldx #0
                 stx OPT_NUM
                 inx                     ; X=1
-_5              stx DEMO_STATUS
+_4              stx DEMO_STATUS
                 jmp T3
-_4              ldx #-1                 ; START DEMO
-                bne _5                  ; FORCED
 
-INC_CHR
-                inc TEMP3
-                lda TEMP3
+_5              ldx #-1                 ; START DEMO
+                bne _4                  ; FORCED
+
+                .endproc
+
+
+;=======================================
+; Cycle through $3B -> $3D -> $3B...
+;---------------------------------------
+; marquee dots order: red, white, green
+;=======================================
+CycleGlyph      .proc
+v_marqueeGlyph  .var TEMP3
+;---
+
+                inc v_marqueeGlyph
+                lda v_marqueeGlyph
                 cmp #$3E
                 bne _1
+
                 lda #$3B
-_1              sta TEMP3
+_1              sta v_marqueeGlyph
                 rts
+                .endproc
 
 ;---------------------------------------
 ;---------------------------------------
 
-T_1             .byte $A6,$AF,$B2,$B4,$00,$00                       ; 'FORT  ' inverse atari-ascii
-                .byte $A1,$B0,$AF,$A3,$A1,$AC,$B9,$B0,$B3,$A5       ; 'APOCALYPSE'
+txtTitle1       .byte $A6,$AF,$B2,$B4,$00,$00               ; 'FORT  ' inverse atari-ascii
+                .byte $A1,$B0,$AF,$A3,$A1,$AC,$B9,$B0       ; 'APOCALYPSE'
+                .byte $B3,$A5
                 .byte $FF
 
-T_2             .byte $A2,$B9,$00,$00                               ; 'BY  ' inverse atari-ascii
-                .byte $B3,$B4,$A5,$B6,$A5,$00,$00                   ; 'STEVE  '
-                .byte $A8,$A1,$AC,$A5,$B3                           ; 'HALES'
+txtTitle2       .byte $A2,$B9,$00,$00                       ; 'BY  ' inverse atari-ascii
+                .byte $B3,$B4,$A5,$B6,$A5,$00,$00           ; 'STEVE  '
+                .byte $A8,$A1,$AC,$A5,$B3                   ; 'HALES'
                 .byte $FF
 
-T_3             .byte $A3,$AF,$B0,$B9,$B2,$A9,$A7,$A8,$B4           ; 'COPYRIGHT' inverse atari-ascii
+txtTitle3       .byte $A3,$AF,$B0,$B9,$B2,$A9,$A7,$A8       ; 'COPYRIGHT' inverse atari-ascii
+                .byte $B4
                 .byte $FF
 
-T_4             .byte $B3,$B9,$AE,$A1,$B0,$B3,$A5,$00,$00           ; 'SYNAPSE  ' inverse atari-ascii
-                .byte $B3,$AF,$A6,$B4,$B7,$A1,$B2,$A5               ; 'SOFTWARE'
+txtTitle4       .byte $B3,$B9,$AE,$A1,$B0,$B3,$A5           ; 'SYNAPSE' inverse atari-ascii
+                .byte $00,$00                               ; '  '
+                .byte $B3,$AF,$A6,$B4,$B7,$A1,$B2,$A5       ; 'SOFTWARE'
                 .byte $FF
 
 ;=======================================
 ;
 ;=======================================
-T3              sei
-                lda #$A                 ; LASER BLOCK
+T3              .proc
+                sei
+
+                lda #$0A                ; LASER BLOCK
                 sta COLOR1
+
                 lda #$94                ; LASERS,HOUSE
                 sta COLOR2
+
                 lda #$9A                ; LETTERS
                 sta COLOR3
-                lda #<VERTBLKD
+
+                lda #<VERTBLKD          ; enable deferred VBI
                 sta VVBLKD
                 lda #>VERTBLKD
                 sta VVBLKD+1
+
                 jsr SCREEN_OFF
-_1              lda VCOUNT
-                bne _1
-                lda #$C0
+
+_wait1          lda VCOUNT              ; wait for next horz sync
+                bne _wait1
+
+                lda #$C0                ; enable VBI & DLI
                 sta NMIEN
+
                 cli
+                .endproc
+                ;[fall-through]
+
 
 MAIN
                 lda MODE
@@ -296,10 +371,10 @@ _2
                 jsr SET_SCANNER
                 jsr CHECK_FUEL_BASE
                 jsr CHECK_FORT
-                jsr CHECK_LEVEL
+                jsr CheckLevel
 
 _6              jsr CHECK_HYPER_CHAMBER
-                jsr CHECK_MODES
+                jsr CheckModes
                 jsr READ_USER
 
                 lda DEMO_STATUS
@@ -322,168 +397,283 @@ _5              lda FRAME
 
 _4              JMP MAIN
 
-CHECK_LEVEL
+
+;=======================================
+;
+;=======================================
+CheckLevel      .proc
                 lda LEVEL
-;               CMP #0
-                beq DO_LEVEL_1
+                beq DoLevel1
+
                 cmp #1
                 bne _1
-                jmp DO_LEVEL_2
-_1              jmp DO_LEVEL_3
-_2              rts
 
-DO_LEVEL_1
+                jmp DoLevel2
+
+_1              jmp DoLevel3
+
+                rts
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+DoLevel1        .proc
+;v_???          .var ADR1
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
                 lda CHOPPER_STATUS
                 cmp #LAND
-                bne _1
+                bne _XIT
+
                 lda CHOP_Y
                 cmp #35
-                blt _1
+                blt _XIT
+
                 lda CHOP_X
                 cmp #130
-                blt _1
+                blt _XIT
+
                 cmp #130+6+1
-                bge _1
+                bge _XIT
+
                 lda SLAVES_LEFT
                 bne PSL
+
                 inc LEVEL               ; =1
-                jsr GIVE_BONUS
-                jsr CLEAR_INFO
-                jsr CLEAR_SOUNDS
+                jsr GiveBonus
+                jsr ClearInfo
+                jsr ClearSounds
+
                 lda #STOP_MODE
                 sta MODE
                 lda #130
                 sta TEMP1
                 lda #40
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
+
                 lda ADR1
                 sta TEMP3
                 lda ADR1+1
                 sta TEMP4
+
                 lda #3
                 sta TEMP2
-_2              jsr MOVE_RAMP
+_next1          jsr MoveRamp
+
                 ldy #5
-_3              ldx #5
+_next2          ldx #5
                 jsr WAIT_FRAME
-                jsr HOVER
+                jsr Hover
+
                 inc CHOPPER_Y
                 dey
-                bpl _3
+                bpl _next2
+
                 lda TEMP3
                 sta ADR1
                 lda TEMP4
                 sta ADR1+1
                 dec TEMP2
-                bne _2
-                dec MAIN+32             ; PROT
+                bne _next1
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                dec MAIN+32
+                ;-----------------------
+
                 lda #NEW_LEVEL_MODE
                 sta MODE
-_1              rts
+_XIT            rts
+                .endproc
 
-PSL             jmp PRINT_SLAVES_LEFT
 
-MOVE_RAMP
+;=======================================
+;
+;=======================================
+PSL             .proc
+                jmp PrintSlavesLeft
+
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+MoveRamp        .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
+;---
+
                 ldx #4
-_1              lda ADR1
+_next1          lda ADR1
                 sta ADR2
                 ldy ADR1+1
                 dey
                 sty ADR2+1
                 ldy #5
-_2              lda (ADR2),Y
-                sta (ADR1),Y
+_next2          lda (ADR2),y
+                sta (ADR1),y
                 dey
-                bpl _2
+                bpl _next2
+
                 dec ADR1+1
                 dex
-                bpl _1
-                rts
+                bpl _next1
 
-DO_LEVEL_2
+                rts
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+DoLevel2        .proc
                 lda FORT_STATUS
                 cmp #OFF
-                bne _1
+                bne _XIT
+
                 lda CHOP_Y
                 cmp #2
-                bge _1
+                bge _XIT
+
                 lda CHOP_X
                 cmp #130
-                blt _1
+                blt _XIT
+
                 cmp #130+4+1
-                bge _1
+                bge _XIT
+
                 lda SLAVES_LEFT
                 bne PSL
+
                 inc LEVEL               ; =2
-                jsr GIVE_BONUS
-                asl M_NEW_PLAYER        ; PROT
+                jsr GiveBonus
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                asl M_NewPlayer
+                ;-----------------------
+
                 lda #NEW_LEVEL_MODE
                 sta MODE
-_1              rts
+_XIT            rts
+                .endproc
 
-DO_LEVEL_3
+
+;=======================================
+;
+;=======================================
+DoLevel3        .proc
                 lda CHOPPER_STATUS
                 cmp #LAND
-                bne _1
+                bne _XIT
+
                 lda CHOP_Y
                 cmp #13
-                bge _1
+                bge _XIT
+
                 lda CHOP_X
                 cmp #$17
-                blt _1
+                blt _XIT
+
                 cmp #$F4
-                bge _1
-                jsr GIVE_BONUS
+                bge _XIT
+
+                jsr GiveBonus
+
                 inc LEVEL               ; =3
-                dec M_GAME_OVER
+                dec M_GameOver
                 lda #GAME_OVER_MODE
                 sta MODE
-_1              rts
+_XIT            rts
+                .endproc
 
-UNPACK
-_0              jsr GET_BYTE
+
+;=======================================
+;
+;=======================================
+Unpack          .proc
+;v_???          .var ADR2
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
+_next1          jsr GetByte
+
                 ldy #0
                 ldx TEMP4
-                bne _10
-_1              cmp CHR1,Y
-                beq _2
+                bne _next4
+
+_next2          cmp CHR1,y
+                beq _1
+
                 iny
                 cpy #CHR1_L
-                bne _1
-_9              ldx #1
-                bne _3                  ; FORCED
-_10             cmp CHR2,Y
-                beq _2
+                bne _next2
+
+_next3          ldx #1
+                bne _next5              ; FORCED
+
+_next4          cmp CHR2,y
+                beq _1
+
                 iny
                 cpy #CHR2_L
-                bne _10
-                beq _9                  ; FORCED
-_2              sta TEMP1
-                jsr GET_BYTE
+                bne _next4
+                beq _next3              ; FORCED
+
+_1              sta TEMP1
+                jsr GetByte
+
                 tax
                 lda TEMP1
-_3              ldy #0
-                sta (ADR2),Y
+_next5          ldy #0
+                sta (ADR2),y
                 inc ADR2
-                bne _4
+                bne _2
+
                 inc ADR2+1
-_4              dex
-                bne _3
+_2              dex
+                bne _next5
+
                 lda ADR2
                 cmp TEMP2
                 lda ADR2+1
                 sbc TEMP3
-                bcc _0
-                rts
+                bcc _next1
 
-GET_BYTE
+                rts
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+GetByte         .proc
+;v_???          .var ADR1
+;---
+
                 ldy #0
-                lda (ADR1),Y
+                lda (ADR1),y
                 inc ADR1
-                bne _1
+                bne _XIT
+
                 inc ADR1+1
-_1              rts
+_XIT            rts
+                .endproc
+
+;---------------------------------------
+;---------------------------------------
 
 CHR1            .byte $00,$61,$0E,$0F,$10,$11,$0A,$0B       ; ' a./01*+' atari-ascii
                 .byte $0C,$0D,$03,$07,$1F,$73,$74           ; ',-#'?st'
@@ -492,37 +682,49 @@ CHR1            .byte $00,$61,$0E,$0F,$10,$11,$0A,$0B       ; ' a./01*+' atari-a
                 .byte $47+128
 CHR1_L          = *-CHR1
 
-CHR2
-                .byte $00,$55,$AA,$FF
+CHR2            .byte $00,$55,$AA,$FF
 CHR2_L          = *-CHR2
 
-PACK_ADR
-; LEVEL_1
-                .addr PACKED_MAP+$000
-; LEVEL_2
-                .addr PACKED_MAP+$62B
-; LEVEL_1
-                .addr PACKED_MAP+$000
+PACK_ADR        .addr PACKED_MAP+$000   ; LEVEL_1
+                .addr PACKED_MAP+$62B   ; LEVEL_2
+                .addr PACKED_MAP+$000   ; LEVEL_1
 
-CHECK_MODES
+
+;=======================================
+;
+;=======================================
+CheckModes      .proc
                 lda MODE
-_1              cmp #START_MODE
-                bne _2
+                cmp #START_MODE
+                bne _1
                 jmp M_START
-_2              cmp #GAME_OVER_MODE
+
+_1              cmp #GAME_OVER_MODE
+                bne _2
+                jmp M_GameOver
+
+_2              cmp #NEW_LEVEL_MODE
                 bne _3
-                jmp M_GAME_OVER
-_3              cmp #NEW_LEVEL_MODE
+                jmp M_NewLevel
+
+_3              cmp #NEW_PLAYER_MODE
                 bne _4
-                jmp M_NEW_LEVEL
-_4              cmp #NEW_PLAYER_MODE
-                bne _30
-                jmp M_NEW_PLAYER
+                jmp M_NewPlayer
 
-_30             rol CHECK_MODES         ; PROT
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+_4              rol CheckModes
+                ;-----------------------
+
                 rts
+                .endproc
 
-M_START
+
+;=======================================
+;
+;=======================================
+M_START         .proc
                 jsr SCREEN_OFF
                 ldx #0
                 stx LEVEL
@@ -536,92 +738,118 @@ M_START
                 stx FUEL2
                 stx GAME_POINTS
                 stx SLAVES_SAVED
+
                 inx                     ; X=1
                 stx ELEVATOR_TIM
                 stx TANK_SPD
                 stx MISSILE_SPD
+
                 lda #128
                 sta TIM2_VAL
+
                 lda #ON
                 sta FORT_STATUS
                 sta LASER_STATUS
+
                 lda #EMPTY
                 sta FUEL_STATUS
+
                 lda #OFF
                 sta R_STATUS
                 ldx GRAV_SKILL
-                lda GRAV_TAB,X
+                lda GRAV_TAB,x
                 sta GRAV_SKL
                 ldx CHOPS
-                lda CHOP_TAB,X
+                lda CHOP_TAB,x
                 ldy DEMO_STATUS
-;               CPY #0                  ; ON
-                bne _0
+                bne _1
+
                 lda #2
-_0              sta MAIN                ; PROT
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+_1              sta MAIN
+                ;-----------------------
+
                 sta CHOP_LEFT
+
                 ldx PILOT_SKILL
-                lda LASER_TAB,X
+                lda LASER_TAB,x
                 sta LASER_SPD
-                lda POD_TAB,X
+                lda POD_TAB,x
                 sta START_PODS
-                lda ROBOT_TAB,X
+
+                lda ROBOT_TAB,x
                 sta ROBOT_SPD
-                lda TANK_TAB,X
+
+                lda TANK_TAB,x
                 sta TANK_SPEED
-                lda MISSILE_TAB,X
+
+                lda MISSILE_TAB,x
                 sta MISSILE_SPEED
-                lda ELEVATOR_TAB,X
+
+                lda ELEVATOR_TAB,x
                 sta ELEVATOR_SPD
+
                 ldx #7
                 lda #0
-_1              sta WINDOW_1,X
-                sta WINDOW_2,X
+_next1          sta WINDOW_1,x
+                sta WINDOW_2,x
                 dex
-                bpl _1
+                bpl _next1
+
                 ldx #7
                 lda #$55
                 ldy RANDOM
-                bmi _3
-_2              sta WINDOW_1,X
+                bmi _next3
+
+_next2          sta WINDOW_1,x
                 dex
-                bpl _2
-                bmi _4                  ; FORCED
-_3              sta WINDOW_2,X
+                bpl _next2
+                bmi _2                  ; FORCED
+
+_next3          sta WINDOW_2,x
                 dex
-                bpl _3
-_4              lda #NEW_LEVEL_MODE
+                bpl _next3
+
+_2              lda #NEW_LEVEL_MODE
                 sta MODE
                 rts
+                .endproc
 
-GRAV_TAB
-                .byte $F,7
-ROBOT_TAB
-                .byte 3,1,0
-CHOP_TAB
-                .byte $7,$9,$11
-LASER_TAB
-                .byte 4,8,16
-POD_TAB
-                .byte 13-1,26-1,MAX_PODS-1
-TANK_TAB
-                .byte 4
-MISSILE_TAB
-                .byte 3,2,1
-ELEVATOR_TAB
-                .byte 37+25,37+10,37+0
+;---------------------------------------
+;---------------------------------------
 
-M_NEW_PLAYER
+GRAV_TAB        .byte $F,7
+ROBOT_TAB       .byte 3,1,0
+CHOP_TAB        .byte $7,$9,$11
+LASER_TAB       .byte 4,8,16
+POD_TAB         .byte 13-1,26-1,MAX_PODS-1
+TANK_TAB        .byte 4
+MISSILE_TAB     .byte 3,2,1
+ELEVATOR_TAB    .byte 37+25,37+10,37+0
+
+
+;=======================================
+;
+;=======================================
+M_NewPlayer     .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 jsr SCREEN_OFF
+
                 sed
                 lda CHOP_LEFT
                 sec
                 sbc #1
                 sta CHOP_LEFT
                 cld
-;               LDA CHOP_LEFT
                 cmp #$99
                 bne _1
+
                 lda #GAME_OVER_MODE
                 sta MODE
                 rts
@@ -631,34 +859,43 @@ _1              lda #$1F                ; CHOPPER CLR
                 sta PCOLR1
                 lda FUEL_STATUS
                 cmp #EMPTY
-                bne _10
-                dec UPDATE_CHOPPER      ; PROT
+                bne _2
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                dec UpdateChopper
+                ;-----------------------
+
                 lda #FULL
                 sta FUEL_STATUS
                 ldx #0
                 stx FUEL1
                 inx                     ; X=1
                 stx FUEL2
-_10             lda #4
+_2              lda #4
                 sta TEMP1
                 lda #8
                 sta TEMP2
-                ldx #<NEW_PILOT
-                ldy #>NEW_PILOT
-                jsr PRINT
+                ldx #<txtPilot1
+                ldy #>txtPilot1
+                jsr Print
+
                 lda #5
                 sta TEMP1
                 lda #10
                 sta TEMP2
-                ldx #<PILOTS_LEFT
-                ldy #>PILOTS_LEFT
-                jsr PRINT
+                ldx #<txtPilot2
+                ldy #>txtPilot2
+                jsr Print
+
                 lda #<PLAY_SCRN+428
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>PLAY_SCRN+428
-                sta S_ADR+1
+                sta SCRN_ADR+1
+
                 ldx #0
-                stx S_FLG
+                stx SCRN_FLG
                 stx DEMO_COUNT
                 inx                     ; X=1
                 lda CHOP_LEFT
@@ -676,6 +913,7 @@ _10             lda #4
                 sta SX_F
                 lda LAND_FY
                 sta SY_F
+
                 lda LAND_CHOP_X
                 sta CHOPPER_X
                 lda LAND_CHOP_Y
@@ -684,106 +922,135 @@ _10             lda #4
                 sta CHOPPER_ANGLE
                 lda #0
                 sta CHOPPER_COL
+
                 jsr SCREEN_ON
+
                 lda #BEGIN
                 sta CHOPPER_STATUS
                 lda #GO_MODE
                 sta MODE
                 rts
+                .endproc
 
-NEW_PILOT       .byte $A7,$A5,$B4,$00,$00                   ; 'GET  ' atari-ascii
+;---------------------------------------
+;---------------------------------------
+
+txtPilot1       .byte $A7,$A5,$B4,$00,$00                   ; 'GET  ' atari-ascii
                 .byte $B2,$A5,$A1,$A4,$B9,$00,$00           ; 'READY  '
                 .byte $B0,$A9,$AC,$AF,$B4                   ; 'PILOT'
                 .byte $FF
-PILOTS_LEFT     .byte $B0,$A9,$AC,$AF,$B4,$B3,$00,$00       ; 'PILOTS  '
+txtPilot2       .byte $B0,$A9,$AC,$AF,$B4,$B3,$00,$00       ; 'PILOTS  '
                 .byte $AC,$A5,$A6,$B4                       ; 'LEFT'
                 .byte $FF
 
-M_NEW_LEVEL
+
+;=======================================
+;
+;=======================================
+M_NewLevel      .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
+
                 jsr SCREEN_OFF
+
                 lda #12
                 sta TEMP1
                 lda #6
                 sta TEMP2
-                ldx #<ENTER
-                ldy #>ENTER
-                jsr PRINT
+                ldx #<txtEnter
+                ldy #>txtEnter
+                jsr Print
+
                 lda #2
                 sta TEMP1
                 lda #8
                 sta TEMP2
                 ldy LEVEL
                 dey                     ; Y=0
-                beq _0
-_5              ldx #<LVL_1
-                ldy #>LVL_1
-                jsr PRINT
-                jmp _1
-_0              ldx #<LVL_2
-                ldy #>LVL_2
-                jsr PRINT
-_1              ldx LEVEL
-                lda LEVEL_COLOR,X
+                beq _1
+
+                ldx #<txtEnterL1
+                ldy #>txtEnterL1
+                jsr Print
+                jmp _2
+
+_1              ldx #<txtEnterL2
+                ldy #>txtEnterL2
+                jsr Print
+
+_2              ldx LEVEL
+                lda LEVEL_COLOR,x
                 sta BAK_COLOR
                 sta COLOR0
                 txa
                 asl
                 tax
-                lda LEVEL_START,X
+                lda LEVEL_START,x
                 sta SX
-                lda LEVEL_START+1,X
+                lda LEVEL_START+1,x
                 sta SY
-                lda LEVEL_CHOP_START,X
+
+                lda LEVEL_CHOP_START,x
                 sta CHOPPER_X
-                lda LEVEL_CHOP_START+1,X
+                lda LEVEL_CHOP_START+1,x
                 sta CHOPPER_Y
+
                 lda #0
                 sta SX_F
                 ldy LEVEL
                 cpy #2
-                beq _4
+                beq _3
+
                 lda #7
-_4              sta SY_F
+_3              sta SY_F
                 lda #8
                 sta CHOPPER_ANGLE
-                jsr SAVE_POS
+
+                jsr RestorePoint
                 jsr DO_CHECKSUM3
+
                 lda #$99
                 sta BONUS1
                 sta BONUS2
 
                 ldx #MAX_TANKS-1
-_2              ldy LEVEL
+_next1          ldy LEVEL
                 dey
-                beq _91
-                lda TANK_START_X_L1,X
-                sta TANK_START_X,X
-                lda TANK_START_Y_L1,X
-                bne _92                 ; FORCED
-_91             lda TANK_START_X_L2,X
-                sta TANK_START_X,X
-                lda TANK_START_Y_L2,X
-_92             sta TANK_START_Y,X
+                beq _4
+
+                lda TANK_START_X_L1,x
+                sta TANK_START_X,x
+                lda TANK_START_Y_L1,x
+                bne _5                  ; FORCED
+
+_4              lda TANK_START_X_L2,x
+                sta TANK_START_X,x
+                lda TANK_START_Y_L2,x
+_5              sta TANK_START_Y,x
                 lda #BEGIN
-                sta TANK_STATUS,X
+                sta TANK_STATUS,x
                 lda #OFF
-                sta CM_STATUS,X
+                sta CM_STATUS,x
                 dex
-                bpl _2
+                bpl _next1
 
-;               LDA #OFF
                 sta R_STATUS
-
                 ldx #MAX_PODS-1
-;               LDA #OFF
-_6              sta POD_STATUS,X
+_next2          sta POD_STATUS,x
                 dex
-                bpl _6
+                bpl _next2
+
                 ldx START_PODS
                 lda #BEGIN
-_7              sta POD_STATUS,X
+_next3          sta POD_STATUS,x
                 dex
-                bpl _7
+                bpl _next3
+
                 lda #0
                 sta POD_NUM
                 sta SLAVE_NUM
@@ -791,102 +1058,113 @@ _7              sta POD_STATUS,X
                 lda LEVEL
                 asl
                 tax
-                lda PACK_ADR,X
+                lda PACK_ADR,x
                 sta ADR1
-                lda PACK_ADR+1,X
+                lda PACK_ADR+1,x
                 sta ADR1+1
+
                 lda #<MAP
                 sta ADR2
                 lda #>MAP
                 sta ADR2+1
                 lda #<MAP+$2800
+
                 sta TEMP2
                 lda #>MAP+$2800
                 sta TEMP3
                 lda #0
                 sta TEMP4
-                jsr UNPACK
+                jsr Unpack
 
-MAKE_CONTURE
+MAKE_CONTURE    .block
                 lda #<MAP
                 sta ADR1
                 lda #>MAP
                 sta ADR1+1
                 ldy #0
-_1              lda (ADR1),Y
+_next1          lda (ADR1),y
                 cmp #$73                ; 's'
-                bne _3
-_2              lda RANDOM
+                bne _1
+
+_next2          lda RANDOM
                 and #3
-;               CMP #0
-                beq _2
+                beq _next2
+
                 clc
                 adc #$62-1
-                bne _5                  ; FORCED
-_3              cmp #$74                ; 't'
-                bne _5
-_4              lda RANDOM
+                bne _2                  ; FORCED
+
+_1              cmp #$74                ; 't'
+                bne _2
+
+_next3          lda RANDOM
                 and #3
-;               CMP #0
-                beq _4
+                beq _next3
+
                 clc
                 adc #$65-1
-_5              sta (ADR1),Y
+_2              sta (ADR1),y
                 iny
-                bne _1
+                bne _next1
+
                 inc ADR1+1
                 lda ADR1+1
                 cmp #>MAP+$2800
-                bne _1
+                bne _next1
 
                 lda #<MAP
                 sta ADR1
                 lda #>MAP
                 sta ADR1+1
+
                 lda #<MAP+255-40
                 sta ADR2
                 lda #>MAP+255-40
                 sta ADR2+1
+
                 ldx #0
-_6              ldy #0
-_7              lda (ADR1),Y
-                sta (ADR2),Y
+_next4          ldy #0
+_next5          lda (ADR1),y
+                sta (ADR2),y
                 iny
                 cpy #40
-                bne _7
+                bne _next5
+
                 inc ADR1+1
                 inc ADR2+1
                 inx
                 cpx #40
-                bne _6
+                bne _next4
 
                 ldy LEVEL
                 cpy #2
-                bne _71
+                bne _3
 
                 lda #$7E
                 sta TEMP1
                 lda #$13
                 sta TEMP2
-                jsr COMPUTE_MAP_ADR
+                jsr ComputeMapAddr
+
                 ldx #2
-_69             ldy #$D
+_next6          ldy #$D
                 lda #0
-_70             sta (ADR1),Y
+_next7          sta (ADR1),y
                 dey
-                bpl _70
+                bpl _next7
+
                 inc ADR1+1
                 dex
-                bpl _69
-_71
+                bpl _next6
 
-                lda LEVEL
+_3              lda LEVEL
                 asl
                 tax
-                lda SCAN_INFO,X
+                lda SCAN_INFO,x
                 sta ADR1
-                lda SCAN_INFO+1,X
+                lda SCAN_INFO+1,x
                 sta ADR1+1
+
                 lda #<SCANNER
                 sta ADR2
                 lda #>SCANNER
@@ -894,10 +1172,11 @@ _71
                 lda #<SCANNER+1600
                 sta TEMP2
                 lda #>SCANNER+1600
+
                 sta TEMP3
                 lda #1
                 sta TEMP4
-                jsr UNPACK
+                jsr Unpack
 
                 lda #<SCANNER
                 sta ADR1
@@ -907,214 +1186,267 @@ _71
                 sta ADR2
                 lda #>SCANNER+$1B
                 sta ADR2+1
+
                 ldx #39
-_50             ldy #12
-_51             lda (ADR1),Y
-                sta (ADR2),Y
+_next8          ldy #12
+_next9          lda (ADR1),y
+                sta (ADR2),y
                 dey
-                bpl _51
+                bpl _next9
+
                 lda ADR1
                 clc
                 adc #40
                 sta ADR1
-                bcc _52
+                bcc _4
+
                 inc ADR1+1
-_52             lda ADR2
+_4              lda ADR2
                 clc
                 adc #40
                 sta ADR2
-                bcc _53
-                inc ADR2+1
-_53             dex
-                bpl _50
-                inc MAIN                ; PROT
+                bcc _5
 
-S_BEGIN
+                inc ADR2+1
+_5              dex
+                bpl _next8
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                inc MAIN
+                ;-----------------------
+
+                .endblock
+
+
+S_BEGIN         .block
                 ldx #8
                 stx SLAVES_LEFT
                 dex                     ; X=7
                 lda #OFF
-_1              sta SLAVE_STATUS,X
+_next1          sta SLAVE_STATUS,x
                 dex
-                bpl _1
+                bpl _next1
+
                 lda LEVEL
                 cmp #2
-                beq _12
+                beq _2
+
                 ldx #7
-_9              lda #<MAP
+_next2          lda #<MAP
                 sta ADR1
                 lda #>MAP
                 sta ADR1+1
 
                 ldy #0
-_10             lda (ADR1),Y
+_next3          lda (ADR1),y
                 cmp #$48                ; '^H'
-                bne _11
+                bne _1
+
                 iny
-                lda (ADR1),Y
+                lda (ADR1),y
                 dey
                 cmp #$48
-                bne _11
+                bne _1
+
                 dec ADR1+1
-                lda (ADR1),Y
+                lda (ADR1),y
                 inc ADR1+1
                 cmp #$1F                ; '?'
-                bne _11
+                bne _1
+
                 lda RANDOM
                 cmp #10
-                blt _11
+                blt _1
+
                 cmp #50
-                bge _11
+                bge _1
+
                 tya
                 clc
                 adc #5
-                sta SLAVE_X,X
+                sta SLAVE_X,x
                 lda ADR1+1
                 sec
                 sbc #>MAP
-                sta SLAVE_Y,X
+                sta SLAVE_Y,x
+
                 lda #1
-                sta (ADR1),Y
+                sta (ADR1),y
+
                 lda #ON
-                sta SLAVE_STATUS,X
+                sta SLAVE_STATUS,x
+
                 lda #$10
-                sta SLAVE_DX,X
+                sta SLAVE_DX,x
                 dex
-                bmi _12
-_11             iny
-                bne _10
+                bmi _2
+
+_1              iny
+                bne _next3
+
                 inc ADR1+1
                 lda ADR1+1
                 cmp #>MAP+$2800
-                bne _10
-                txa
-                bpl _9
+                bne _next3
 
-_12
-                lda #NEW_PLAYER_MODE
+                txa
+                bpl _next2
+
+_2              lda #NEW_PLAYER_MODE
                 sta MODE
                 rts
+                .endblock
+                .endproc
 
-LEVEL_COLOR
-                .byte $42
+;---------------------------------------
+;---------------------------------------
+
+LEVEL_COLOR     .byte $42
                 .byte $C2
                 .byte $42
 LEVEL_CHOP_START
                 .byte 90,100
                 .byte 119,100
                 .byte 116,170
-LEVEL_START
-                .byte $02,$FF
+LEVEL_START     .byte $02,$FF
                 .byte $6D,$FF
                 .byte $6E,$18
-SCAN_INFO
-                .addr PACKED_SCAN+0     ; LVL 1
+SCAN_INFO       .addr PACKED_SCAN+0     ; LVL 1
                 .addr PACKED_SCAN+$1E9  ; LVL 2
                 .addr PACKED_SCAN+0     ; LVL 1
-TANK_START_X_L1
-                .byte $53,$63,$90,$A0,$59,$AE
-TANK_START_Y_L1
-                .byte $12,$12,$12,$12,$26,$26
-TANK_START_X_L2
-                .byte $50,$65,$A0,$B5,$3D,$54
-TANK_START_Y_L2
-                .byte $0C,$0C,$0C,$0C,$26,$26
+TANK_START_X_L1 .byte $53,$63,$90,$A0,$59,$AE
+TANK_START_Y_L1 .byte $12,$12,$12,$12,$26,$26
+TANK_START_X_L2 .byte $50,$65,$A0,$B5,$3D,$54
+TANK_START_Y_L2 .byte $0C,$0C,$0C,$0C,$26,$26
 
-ENTER           .byte $A5,$AE,$B4,$A5,$B2,$A9,$AE,$A7       ; 'ENTERING' atari-ascii
+txtEnter        .byte $A5,$AE,$B4,$A5,$B2,$A9,$AE,$A7       ; 'ENTERING' atari-ascii
                 .byte $FF
-LVL_1           .byte $B6,$A1,$B5,$AC,$B4,$B3,$00,$00       ; 'VAULTS  '
+txtEnterL1      .byte $B6,$A1,$B5,$AC,$B4,$B3,$00,$00       ; 'VAULTS  '
                 .byte $AF,$A6,$00,$00                       ; 'OF  '
                 .byte $A4,$B2,$A1,$A3,$AF,$AE,$A9,$B3       ; 'DRACONIS'
                 .byte $FF
-LVL_2           .byte $A3,$B2,$B9,$B3,$B4,$A1,$AC,$AC       ; 'CRYSTALLINE  '
+txtEnterL2      .byte $A3,$B2,$B9,$B3,$B4,$A1,$AC,$AC       ; 'CRYSTALLINE  '
                 .byte $A9,$AE,$A5,$00,$00
                 .byte $A3,$A1,$B6,$A5,$B3                   ; 'CAVES'
                 .byte $FF
 
-INC_GAME_POINTS
+
+;=======================================
+;
+;=======================================
+IncreaseGamePoints .proc
                 clc
                 adc GAME_POINTS
                 sta GAME_POINTS
                 rts
+                .endproc
 
-M_TAB
-                .char -2,-1,0
+;---------------------------------------
 
-M_GAME_OVER
+M_TAB           .char -2,-1,0
+
+
+;=======================================
+;
+;=======================================
+M_GameOver      .proc
+;v_???          .var ADR1
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 jsr SCREEN_OFF
 
                 lda SLAVES_SAVED
                 lsr
                 lsr
-                jsr INC_GAME_POINTS
+                jsr IncreaseGamePoints
                 lda FORT_STATUS
                 cmp #OFF
                 bne _1
+
                 lda #3
-                jsr INC_GAME_POINTS
+                jsr IncreaseGamePoints
+
 _1              lda LEVEL
                 cmp #3
                 bne _2
+
                 inc GAME_POINTS
-_2              jsr INC_GAME_POINTS
+_2              jsr IncreaseGamePoints
+
                 lda SCORE3
-                jsr INC_GAME_POINTS
+                jsr IncreaseGamePoints
 
                 ldx GRAV_SKILL
-                lda M_TAB,X
-                jsr INC_GAME_POINTS
+                lda M_TAB,x
+                jsr IncreaseGamePoints
+
                 lda #2
                 clc
                 sbc CHOPS
                 eor #-1
-                jsr INC_GAME_POINTS
+                jsr IncreaseGamePoints
+
                 ldx PILOT_SKILL
-                lda M_TAB,X
-                jsr INC_GAME_POINTS
+                lda M_TAB,x
+                jsr IncreaseGamePoints
 
                 lda GAME_POINTS
                 bpl _3
+
                 lda #0
 _3              cmp #16
                 blt _4
+
                 lda #15
 _4              sta GAME_POINTS
 
                 lda SCORE3
                 cmp HI3
-                bne _51
+                bne _5
+
                 lda SCORE2
                 cmp HI2
-                bne _51
+                bne _5
+
                 lda SCORE1
                 cmp HI1
-                blt _52
-_53             lda SCORE1
+                blt _6
+
+_next1          lda SCORE1
                 sta HI1
                 lda SCORE2
                 sta HI2
                 lda SCORE3
                 sta HI3
-                jmp _52
-_51             bge _53
+                jmp _6
 
-_52             lda #2
+_5              bge _next1
+
+_6              lda #2
                 sta TEMP1
                 lda #0
                 sta TEMP2
-                sta S_FLG
-                ldx #<HS
-                ldy #>HS
-                jsr PRINT
+                sta SCRN_FLG
+                ldx #<txtHighScore
+                ldy #>txtHighScore
+                jsr Print
+
                 lda #<PLAY_SCRN+24
-                sta S_ADR
+                sta SCRN_ADR
                 lda #>PLAY_SCRN+24
-                sta S_ADR+1
+                sta SCRN_ADR+1
+
                 ldx #5
                 lda HI3
                 jsr DDIG
+
                 lda HI2
                 jsr DDIG
+
                 lda HI1
                 jsr DDIG
 
@@ -1122,34 +1454,38 @@ _52             lda #2
                 sta TEMP1
                 lda #5
                 sta TEMP2
-                ldx #<G_1               ; YOUR
-                ldy #>G_1               ; MISSION
-                jsr PRINT
+                ldx #<txtGmOvrMission   ; YOUR
+                ldy #>txtGmOvrMission   ; MISSION
+                jsr Print
+
                 lda #21
                 sta TEMP1
-                ldx #<G_A               ; ABORTED
-                ldy #>G_A
+                ldx #<txtGmOvrAbort     ; ABORTED
+                ldy #>txtGmOvrAbort
                 lda LEVEL
                 cmp #3
-                bne _5
-                ldx #<G_C               ; COMPLETED
-                ldy #>G_C
-_5              jsr PRINT
+                bne _7
+
+                ldx #<txtGmOvrComplete  ; COMPLETED
+                ldy #>txtGmOvrComplete
+_7              jsr Print
 
                 ldx #7
                 stx TEMP1
                 inx                     ; X=8
                 stx TEMP2
-                ldx #<G_2               ; YOUR
-                ldy #>G_2               ; RANK
-                jsr PRINT
+                ldx #<txtGmOvrRank      ; YOUR
+                ldy #>txtGmOvrRank      ; RANK
+                jsr Print
+
                 lda #21
                 sta TEMP1
                 lda #10
                 sta TEMP2
-                ldx #<G_3               ; CLASS
-                ldy #>G_3
-                jsr PRINT
+                ldx #<txtGmOvrClass     ; CLASS
+                ldy #>txtGmOvrClass
+                jsr Print
+
                 lda GAME_POINTS
                 and #3
                 eor #3
@@ -1157,13 +1493,14 @@ _5              jsr PRINT
                 adc #1
                 ldy #12
                 ora #$10+$80
-                sta (ADR1),Y
+                sta (ADR1),y
                 cmp #$10+128
-                bne _6
+                bne _8
+
                 lda #$A+128
-_6              iny
+_8              iny
                 and #$8F
-                sta (ADR1),Y
+                sta (ADR1),y
                 lda #3
                 sta TEMP1
                 lda GAME_POINTS
@@ -1172,41 +1509,56 @@ _6              iny
                 and #3
                 asl
                 tay
-                ldx RATING,Y
-                lda RATING+1,Y
+                ldx txtGmOvrRating,y
+                lda txtGmOvrRating+1,y
                 tay
-                jsr PRINT
+                jsr Print
+
                 lda #-1
                 sta TIM6_VAL
-                ror SCREEN_OFF          ; PROT
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                ror SCREEN_OFF
+                ;-----------------------
+
                 lda #TITLE_MODE
                 sta MODE
-;               LDA #1
                 sta DEMO_STATUS
                 rts
+                .endproc
 
-G_1             .byte $2D,$29,$33,$33,$29,$2F,$2E           ; 'MISSION' atari-ascii
+;---------------------------------------
+;---------------------------------------
+
+txtGmOvrMission .byte $2D,$29,$33,$33,$29,$2F,$2E           ; 'MISSION' atari-ascii
                 .byte $FF
-G_A             .byte $21,$22,$2F,$32,$34,$25,$24           ; 'ABORTED'
+txtGmOvrAbort   .byte $21,$22,$2F,$32,$34,$25,$24           ; 'ABORTED'
                 .byte $FF
-G_C             .byte $23,$2F,$2D,$30,$2C,$25,$34,$25,$24   ; 'COMPLETED'
+txtGmOvrComplete .byte $23,$2F,$2D,$30,$2C,$25,$34,$25      ; 'COMPLETED'
+                .byte $24
                 .byte $FF
-G_2             .byte $39,$2F,$35,$32,$00,$00               ; 'YOUR  '
+txtGmOvrRank    .byte $39,$2F,$35,$32,$00,$00               ; 'YOUR  '
                 .byte $32,$21,$2E,$2B,$00,$00,$29,$33       ; 'RANK  IS'
                 .byte $FF
 
-G_3             .byte $A3,$AC,$A1,$B3,$B3                   ; 'CLASS'
+txtGmOvrClass   .byte $A3,$AC,$A1,$B3,$B3                   ; 'CLASS'
                 .byte $FF
-RATING          .addr R_1,R_2,R_3,R_4
-R_1             .byte $B3,$B0,$A1,$B2,$B2,$AF,$B7           ; 'SPARROW'
+
+txtGmOvrRating  .addr txtGmOvrRating1,txtGmOvrRating2
+                .addr txtGmOvrRating3,txtGmOvrRating4
+
+txtGmOvrRating1 .byte $B3,$B0,$A1,$B2,$B2,$AF,$B7           ; 'SPARROW'
                 .byte $FF
-R_2             .byte $A3,$AF,$AE,$A4,$AF,$B2               ; 'CONDOR'
+txtGmOvrRating2 .byte $A3,$AF,$AE,$A4,$AF,$B2               ; 'CONDOR'
                 .byte $FF
-R_3             .byte $A8,$A1,$B7,$AB                       ; 'HAWK'
+txtGmOvrRating3 .byte $A8,$A1,$B7,$AB                       ; 'HAWK'
                 .byte $FF
-R_4             .byte $A5,$A1,$A7,$AC,$A5                   ; 'EAGLE'
+txtGmOvrRating4 .byte $A5,$A1,$A7,$AC,$A5                   ; 'EAGLE'
                 .byte $FF
-HS              .byte $A8,$A9,$A7,$A8,$00,$00               ; 'HIGH  '
+
+txtHighScore    .byte $A8,$A9,$A7,$A8,$00,$00               ; 'HIGH  '
                 .byte $B3,$A3,$AF,$B2,$A5                   ; 'SCORE'
                 .byte $FF
 

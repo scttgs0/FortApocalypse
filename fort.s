@@ -20,14 +20,28 @@
 ; SYSTEM EQUATES
 ;---------------------------------------
 
-FRAME           = $14
+; ANTIC instructions
+AJMP            = $0001
+AVB             = $0040
+AHSCR           = $0010
+AVSCR           = $0020
+ALMS            = $0040
+ADLI            = $0080
+AEMPTY3         = $0020
+AEMPTY6         = $0050
+AEMPTY8         = $0070
+
+;---------------------------------------
+
 ATTRACT         = $4D
+
+
 VDSLST          = $200
-VVBLKI          = $222
 VVBLKD          = $224
 SDMCTL          = $22F
 SDLST           = $230
 PRIOR           = $26F
+STICK           = $278
 PCOLR0          = $2C0
 PCOLR1          = $2C1
 PCOLR2          = $2C2
@@ -37,12 +51,15 @@ COLOR1          = $2C5
 COLOR2          = $2C6
 COLOR3          = $2C7
 COLOR4          = $2C8
-DMACTL          = $D400
-M0PF            = $D000
-M1PF            = $D001
-M2PF            = $D002
-M3PF            = $D003
+CHBAS           = $2F4
+
+
+HPOSP0          = $D000
+HPOSP1          = $D001
+HPOSP2          = $D002
+HPOSP3          = $D003
 P0PF            = $D004
+HPOSM0          = $D004
 P1PF            = $D005
 P2PF            = $D006
 P3PF            = $D007
@@ -51,49 +68,21 @@ M1PL            = $D009
 M2PL            = $D00A
 M3PL            = $D00B
 P0PL            = $D00C
+SIZEM           = $D00C
 P1PL            = $D00D
 P2PL            = $D00E
 P3PL            = $D00F
-COLPM0          = $D012
-COLPM1          = $D013
-COLPM2          = $D014
-COLPM3          = $D015
+TRIG0           = $D010
 COLPF0          = $D016
 COLPF1          = $D017
 COLPF2          = $D018
 COLPF3          = $D019
 COLBK           = $D01A
-HITCLR          = $D01E
-CHBASE          = $D409
-RANDOM          = $D20A
-CHBAS           = $2F4
-CH              = $2FC
-CH2             = $2F2
-KBCODE          = $D209
 GRACTL          = $D01D
-SIZEP0          = $D008
-SIZEP1          = $D009
-SIZEP2          = $D00A
-SIZEP3          = $D00B
-PMBASE          = $D407
-HPOSP0          = $D000
-HPOSP1          = $D001
-HPOSP2          = $D002
-HPOSP3          = $D003
-HPOSM0          = $D004
-HPOSM1          = $D005
-HPOSM2          = $D006
-HPOSM3          = $D007
-SIZEM           = $D00C
+HITCLR          = $D01E
 CONSOL          = $D01F
-NMIEN           = $D40E
-DLIST           = $D402
-HSCROL          = $D404
-VSCROL          = $D405
-WSYNC           = $D40A
-VCOUNT          = $D40B
-STICK           = $278
-TRIG0           = $D010
+
+
 AUDF1           = $D200
 AUDC1           = $D201
 AUDF2           = $D202
@@ -103,28 +92,68 @@ AUDC3           = $D205
 AUDF4           = $D206
 AUDC4           = $D207
 AUDCTL          = $D208
+KBCODE          = $D209
+RANDOM          = $D20A
 SKCTL           = $D20F
 SKSTAT          = $D20F
-CDTMV1          = $218
-CDTMV2          = $21A
-CDTMA1          = $226
-CDTMA2          = $228
-VVBLKI_RET      = $E45F
+
+
+PORTA           = $D300
+PORTB           = $D301
+PACTL           = $D302
+PBCTL           = $D303
+
+
+DMACLT          = $D400
+HSCROL          = $D404
+VSCROL          = $D405
+PMBASE          = $D407
+CHBASE          = $D409
+WSYNC           = $D40A
+VCOUNT          = $D40B
+NMIEN           = $D40E
+
+
 VVBLKD_RET      = $E462
+
 
 ;---------------------------------------
 ; CONSTANTS
 ;---------------------------------------
 MIS             = $300
+
 PL0             = $400
 PL1             = $500
 PL2             = $600
 PL3             = $700
-RIGHT           = $8
-LEFT            = $4
-DOWN            = $2
+
 UP              = $1
-CHECK_SUM       = $264C
+DOWN            = $2
+LEFT            = $4
+RIGHT           = $8
+
+OFF             = 1
+ON              = 2
+FLY             = 3
+CRASH           = 4
+EXPLODE         = 5
+LAND            = 6
+BEGIN           = 7
+FULL            = 8
+EMPTY           = 9
+kREFUEL         = 10
+PICKUP          = 11
+
+TITLE_MODE      = 1
+GO_MODE         = 2
+START_MODE      = 3
+NEW_LEVEL_MODE  = 4
+NEW_PLAYER_MODE = 5
+GAME_OVER_MODE  = 6
+STOP_MODE       = 7
+PAUSE_MODE      = 8
+OPTION_MODE     = 9
+HYPERSPACE_MODE = 10
 
 ;---------------------------------------
 ; CHANGE THESE CONSTANTS
@@ -147,12 +176,15 @@ PL              = $8000
 PACKED_MAP      = PL                    ; $D34
 PACKED_SCAN     = PL+$D34               ; $4ED
 PROGRAM         = PL+$1221              ; $2D2C
+
 S_LINE1         = CHR_SET1+736
 S_LINE2         = CHR_SET1+832
 S_LINE3         = CHR_SET1+928
+
 LASERS_1        = CHR_SET2+8
 LASERS_2        = CHR_SET2+40
 LASER_3         = CHR_SET2+72
+
 BLOCK_1         = CHR_SET2+80
 BLOCK_2         = CHR_SET2+88
 BLOCK_3         = CHR_SET2+96
@@ -161,56 +193,74 @@ BLOCK_5         = CHR_SET2+112
 BLOCK_6         = CHR_SET2+120
 BLOCK_7         = CHR_SET2+128
 BLOCK_8         = CHR_SET2+136
+
 WINDOW_1        = CHR_SET2+712
 WINDOW_2        = CHR_SET2+720
+
 EXP             = $20
 EXP2            = $3F
 EXPLOSION       = CHR_SET2+256
 EXPLOSION2      = CHR_SET2+504
+EXP_WALL        = $47+128
+
 MISS_LEFT       = $71
 MISS_RIGHT      = $72
 MISS_CHR_LEFT   = CHR_SET2+904
 MISS_CHR_RIGHT  = CHR_SET2+912
-EXP_WALL        = $47+128
 
-MAX_LEFT        = 48
-MAX_RIGHT       = 192
-MAX_UP          = 100
-MAX_DOWN        = 212
-MAX_FUEL        = $2000
-MIN_LEFT        = 110
-MIN_RIGHT       = 130
 MIN_UP          = 146
 MIN_DOWN        = 166
+MIN_LEFT        = 110
+MIN_RIGHT       = 130
+
+MAX_UP          = 100
+MAX_DOWN        = 212
+MAX_LEFT        = 48
+MAX_RIGHT       = 192
+
+MAX_FUEL        = $2000
+
 MAX_TANKS       = 6
+
+MAX_PODS        = 39
+
 POD_SPEED       = 15
 
 ;---------------------------------------
 ; ZERO PAGE USAGE
 ;---------------------------------------
 
-                * = $15
+                * = $14
+
+FRAME           .byte ?
+
 ADR1            .word ?
 ADR2            .word ?
+
 TEMP1           .byte ?
 TEMP2           .byte ?
 TEMP3           .byte ?
 TEMP4           .byte ?
 TEMP5           .byte ?
 TEMP6           .byte ?
+
 TEMP_MODE       .byte ?
 
 ADR1_I          .word ?
 ADR2_I          .word ?
+
 TEMP1_I         .byte ?
 TEMP2_I         .byte ?
 TEMP3_I         .byte ?
 TEMP4_I         .byte ?
-S_ADR           .word ?
-S_TEMP          .byte ?
-S_FLG           .byte ?
+
+SCRN_ADR        .word ?
+SCRN_TEMP       .byte ?
+SCRN_FLG        .byte ?
+
 TANK_START_X    .fill MAX_TANKS
 TANK_START_Y    .fill MAX_TANKS
+
 TIM1_VAL        .byte ?                 ; LASER 1
 TIM2_VAL        .byte ?                 ; LASER 2
 TIM3_VAL        .byte ?                 ; CHOP EXPLODE
@@ -220,22 +270,24 @@ TIM6_VAL        .byte ?                 ; DEMO TIMER
 TIM7_VAL        .byte ?                 ; ROBO EXPLODE
 TIM8_VAL        .byte ?                 ; ROBO MISSILE
 TIM9_VAL        .byte ?                 ; SLAVE MESS
+
 SSIZEM          .byte ?
 
 
                 * = $43
-S1_1_VAL        .byte ?
-S1_2_VAL        .byte ?
-S2_VAL          .byte ?
-S3_VAL          .byte ?
-S4_VAL          .byte ?
-S5_VAL          .byte ?
-S6_VAL          .byte ?                 ; MISSILE SND
+
+SND1_1_VAL      .byte ?
+SND1_2_VAL      .byte ?
+SND2_VAL        .byte ?
+SND3_VAL        .byte ?
+SND4_VAL        .byte ?
+SND5_VAL        .byte ?
+SND6_VAL        .byte ?                 ; MISSILE SND
+
 GAME_POINTS     .byte ?
+
 DEMO_STATUS     .byte ?
 DEMO_COUNT      .byte ?
-
-MAX_PODS        = 39
 
 
                 * = POD_1
@@ -285,8 +337,8 @@ SLAVE_DX        .fill 8
 
                 .include "fort5.s"
 
-END_CART        ;.fill $BFFA-*
-                .byte $00
+END_CART        .fill $BFFA-*
+                ;.byte $00
 
                 .addr CART_START
                 .byte $00
