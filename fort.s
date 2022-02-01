@@ -231,9 +231,7 @@ POD_SPEED       = 15
 ;---------------------------------------
 
                 * = $14
-
 FRAME           .byte ?
-
 ADR1            .word ?
 ADR2            .word ?
 
@@ -289,11 +287,15 @@ GAME_POINTS     .byte ?
 DEMO_STATUS     .byte ?
 DEMO_COUNT      .byte ?
 
+MAX_PODS        = 39
+
+;---------------------------------------
 
                 * = POD_1
 POD_STATUS      .fill MAX_PODS
 POD_DX          .fill MAX_PODS
 
+;---------------------------------------
 
                 * = POD_2
 POD_X           .fill MAX_PODS
@@ -301,12 +303,15 @@ POD_Y           .fill MAX_PODS
 POD_TEMP1       .fill MAX_PODS
 POD_TEMP2       .fill MAX_PODS
 
+;---------------------------------------
 
                 * = SLAVES
 SLAVE_STATUS    .fill 8
 SLAVE_X         .fill 8
 SLAVE_Y         .fill 8
 SLAVE_DX        .fill 8
+
+;---------------------------------------
 
                 * = $50
 
