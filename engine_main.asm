@@ -693,7 +693,7 @@ _2              lda #4
                 lda CHOP_LEFT
                 jsr DoNumbers.DDIG
 
-                jsr DO_CHECKSUM2
+                jsr DoChecksum2
                 ldx #75
                 jsr WaitFrame
 
@@ -793,7 +793,7 @@ _3              sta SY_F
                 sta CHOPPER_ANGLE
 
                 jsr RestorePoint
-                jsr DO_CHECKSUM3
+                jsr DoChecksum3
 
                 lda #$99
                 sta BONUS1

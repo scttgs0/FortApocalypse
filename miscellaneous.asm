@@ -291,7 +291,7 @@ _next1          sta PLAY_SCRN,y
 ;=======================================
 ;
 ;=======================================
-DO_CHECKSUM2    .proc
+DoChecksum2    .proc
 ;v_???          .var ADR1
 ;v_???          .var TEMP1
 ;---
@@ -396,7 +396,7 @@ MULT_BY_40      .proc
 ;=======================================
 ;
 ;=======================================
-DO_CHECKSUM3    .proc
+DoChecksum3     .proc
                 ldx #0
                 txa
                 clc

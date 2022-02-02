@@ -140,8 +140,10 @@ BONUS_DIG       = *-Z2+RAM2_STUFF
 
 Z2_LEN          = *-Z2-1
 
-;---------------------------------------
 
+;---------------------------------------
+; Options Screen
+;---------------------------------------
 DSP_LST2        .byte AEMPTY8           ; 25 blank lines
                 .byte AEMPTY8
                 .byte ADLI

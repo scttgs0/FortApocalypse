@@ -59,8 +59,7 @@ VERTBLKD        .proc
                 jsr RobotAI
                 jsr ReadJoystick
 
-_1
-                plp
+_1              plp
                 cli
                 jml VVBLKD_RET
 

@@ -268,11 +268,11 @@ CheckFort       .proc
 
                 lda FORT_STATUS
                 cmp #EXPLODE
-                beq DO_CHECKSUM1
+                beq DoChecksum1
 
                 rts
 
-DO_CHECKSUM1    .block
+DoChecksum1    .block
                 ldy #0
                 sty TEMP1
                 sty ADR1
