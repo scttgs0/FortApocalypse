@@ -899,7 +899,7 @@ _2              lda #4
                 stx DEMO_COUNT
                 inx                     ; X=1
                 lda CHOP_LEFT
-                jsr DDIG
+                jsr DoNumbers.DDIG
 
                 jsr DO_CHECKSUM2
                 ldx #75
@@ -1442,13 +1442,13 @@ _6              lda #2
 
                 ldx #5
                 lda HI3
-                jsr DDIG
+                jsr DoNumbers.DDIG
 
                 lda HI2
-                jsr DDIG
+                jsr DoNumbers.DDIG
 
                 lda HI1
-                jsr DDIG
+                jsr DoNumbers.DDIG
 
                 lda #3
                 sta TEMP1
