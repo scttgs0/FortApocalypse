@@ -342,12 +342,11 @@ SLAVE_DX        .fill 8
                 .include "fort5.s"
 
 END_CART        .fill $BFFA-*
-                ;.byte $00
 
-                .addr CART_START
+                .addr CartridgeStart
                 .byte $00
                 .byte %10000100
-                .addr CART_START
+                .addr CartridgeStart
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF

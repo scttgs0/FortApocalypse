@@ -6,46 +6,79 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-DSP_LST2        .byte $70,$70,$80,$70
-                .byte $44,$00,$01       ; .DA #$44,PANEL
+;---------------------------------------
+; Options Screen
+;---------------------------------------
+DSP_LST2        .byte AEMPTY8           ; 25 blank lines
+                .byte AEMPTY8
+                .byte ADLI
+                .byte AEMPTY8
+
+                .byte $04+ALMS          ; 40 lines of 40 pixels
+                    .addr PANEL
                 .byte $04,$04,$04,$04
-                .byte $70,$70
-                .byte $80,$50,$20
-                .byte $44,$00,$03       ; .DA #$44,PLAY_SCRN
+
+                .byte AEMPTY8           ; 26 blank lines
+                .byte AEMPTY8
+                .byte ADLI
+                .byte AEMPTY6
+                .byte AEMPTY3
+
+                .byte $04+ALMS          ; 120 lines of 40 pixels
+                    .addr PLAY_SCRN
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04
-                .byte $80,$70,$80
-                .byte $41,$54,$93       ; .DA #$41,DSP_LST2
 
-DSP_LST3        .byte $70,$70,$70,$70,$70,$70
-                .byte $44,$00,$03       ; .DA #$44,PLAY_SCRN
+                .byte ADLI              ; 10 blank lines
+                .byte AEMPTY8
+                .byte ADLI
+
+                .byte AVB+AJMP          ; vblank jump
+                    .addr DSP_LST2
+
+;---------------------------------------
+; Title Screen
+;---------------------------------------
+DSP_LST3        .byte AEMPTY8           ; 48 blank lines
+                .byte AEMPTY8
+                .byte AEMPTY8
+                .byte AEMPTY8
+                .byte AEMPTY8
+                .byte AEMPTY8
+
+                .byte $04+ALMS          ; 152 lines of 40 pixels
+                    .addr PLAY_SCRN
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04
-                .byte $44,$00,$03       ; .DA #$44,PLAY_SCRN
-                .byte $41,$7B,$93       ; .DA #$41,DSP_LST3
+                .byte $04+ALMS
+                    .addr PLAY_SCRN
 
-;---------------------------------------
-;---------------------------------------
+                .byte AVB+AJMP          ; vblank jump
+                    .addr DSP_LST3
 
-CART_START      sei
-;               LDX #$FF
-;               TXS
-;               PHA
-;               PHA
+
+;=======================================
+;
+;=======================================
+CartridgeStart  .proc
+;v_???          .var ADR1
+;---
+
+                sei
                 lda #$B3
                 pha
                 ldx #$00
                 txa
-_next1          sta $0000,X             ; zero-page
-                sta HPOSP0,X
-                sta DMACLT,X
-                sta AUDF1,X
-                sta PORTA,X
+_next1          sta $0000,x             ; zero-page
+                sta HPOSP0,x
+                sta DMACLT,x
+                sta AUDF1,x
+                sta PORTA,x
                 inx
                 bne _next1
 
@@ -53,26 +86,29 @@ _next1          sta $0000,X             ; zero-page
                 sty ADR1+1
                 dey                     ; Y=0
                 sty ADR1
-_next2          sta (ADR1),Y
+_next2          sta (ADR1),y
                 iny
                 bne _next2
 
                 inc ADR1+1
                 ldx ADR1+1
-;               CPX #$50
                 cpx #$C0
                 bne _next2
 
                 lda #$34
                 pha
                 ldx #$00
-_next3          lda BOOT_STUFF,X
-                sta $01C0,X             ; L01C0
+_next3          lda BOOT_STUFF,x
+                sta $01C0,x             ; L01C0
                 inx
                 bpl _next3
 
                 cli
                 rts
+                .endproc
+
+;---------------------------------------
+;---------------------------------------
 
 CHOPPER_SHAPES  .addr CL3_1,CL3_2       ; 0   ANGLE
                 .addr CL2_1,CL2_2       ; 2
@@ -364,28 +400,12 @@ BOOT_STUFF      .byte $84,$C4,$76,$9E,$E6,$7C,$08,$88,$79,$06               ; #.
 
 
 ;=======================================
-; 
+;
 ;=======================================
-;02030 INIT.OS
-;02040          LDA $E463
-;02050          STA $224
-;02060          LDA $E464
-;02070          STA $225
-;02080          LDA $E460
-;02090          STA $222
-;02100          LDA $E461
-;02110          STA $223
-;02120          RTS
-;02130 *
-;02140          .AS /f3DSdsIaApPLa;/
-;02150          .AS /Steve Hales/
-;02160 *
-;02170          .DA INIT.OS-1
-;02180          .DA START-1
-
-INIT_OS         ldx #$25
-_next1          lda $E480,X             ; PUPDIV
-                sta VDSLST,X
+INIT_OS         ;.proc                  ; never called
+                ldx #$25
+_next1          lda $E480,x             ; PUPDIV
+                sta VDSLST,x
                 dex
                 bpl _next1
 
@@ -405,6 +425,7 @@ _next1          lda $E480,X             ; PUPDIV
                 stx PBCTL
 
                 rts
+                ;.endproc
 
 ;---------------------------------------
 ;---------------------------------------
