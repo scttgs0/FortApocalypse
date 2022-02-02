@@ -633,6 +633,9 @@ _9              stx CHOPPER_STATUS
                 .endproc
 
 
+;=======================================
+;
+;=======================================
 RestorePoint    .proc
                 lda SX_F
                 sta LAND_FX
