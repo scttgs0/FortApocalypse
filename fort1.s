@@ -367,10 +367,10 @@ _2
                 jsr MovePods
                 jsr MoveTanks
                 jsr MoveCruiseMissiles
-                jsr MOVE_SLAVES
-                jsr SET_SCANNER
-                jsr CHECK_FUEL_BASE
-                jsr CHECK_FORT
+                jsr MoveSlaves
+                jsr SetScanner
+                jsr CheckFuelBase
+                jsr CheckFort
                 jsr CheckLevel
 
 _6              jsr CheckHyperchamber
@@ -901,7 +901,7 @@ _2              lda #4
                 lda CHOP_LEFT
                 jsr DoNumbers.DDIG
 
-                jsr DO_CHECKSUM2
+                jsr DoChecksum2
                 ldx #75
                 jsr WaitFrame
 
@@ -1012,7 +1012,7 @@ _3              sta SY_F
                 sta CHOPPER_ANGLE
 
                 jsr RestorePoint
-                jsr DO_CHECKSUM3
+                jsr DoChecksum3
 
                 lda #$99
                 sta BONUS1

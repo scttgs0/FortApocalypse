@@ -12,25 +12,35 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-DO_CHECKSUM2    ldy #0
+;=======================================
+;
+;=======================================
+DoChecksum2    .proc
+;v_???          .var ADR1
+;v_???          .var TEMP1
+;---
+
+                ldy #0
                 sty TEMP1
                 sty ADR1
                 lda #$90
                 sta ADR1+1
                 clc
 
-_next1          adc (ADR1),Y
+_next1          adc (ADR1),y
                 bcc _1
                 inc TEMP1
 _1              iny
                 bne _next1
+
                 inc ADR1+1
                 ldx ADR1+1
                 cpx #$B0
                 bne _next1
-                ;cmp #0
+
                 cmp #$C7
                 bne _2
+
                 lda TEMP1
                 ;cmp #0
                 cmp #$f8
@@ -39,91 +49,159 @@ _1              iny
 _2              .byte $12
 
 _XIT            rts
+                .endproc
 
-MOVE_SLAVES     ldx SLAVE_NUM
 
-                lda SLAVE_STATUS,X
-
+;=======================================
+;
+;=======================================
+MoveSlaves      .proc
+                ldx SLAVE_NUM
+                lda SLAVE_STATUS,x
                 cmp #OFF
                 beq _2
 
                 cmp #PICKUP
                 bne _1
+
                 jsr S_COL2
+
                 ldx #$00
                 stx AUDC3
                 ldy #$08
                 jsr IncreaseScore
+
                 inc SLAVES_SAVED
                 jmp _2
 
-_1              jsr S_COL
+_1              jsr SlaveCollision
+
                 bcs _2
-                jsr S_ERASE
-                jsr S_MOVE
-                jsr S_DRAW
-                dec S_MOVE              ; PROT
+
+                jsr SlaveErase
+                jsr SlaveMove
+                jsr SlaveDraw
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                dec SlaveMove
+                ;-----------------------
 
 _2              ldx SLAVE_NUM
                 inx
                 cpx #8
                 blt _3
+
                 ldx #0
 _3              stx SLAVE_NUM
                 lda PLAY_SCRN+5
                 beq _XIT
+
                 dec TIM9_VAL
                 bne _XIT
+
                 jsr ClearInfo
 _XIT            rts
+                .endproc
 
-GET_SLAVE_ADR   lda SLAVE_X,X
+
+;=======================================
+;
+;=======================================
+GetSlaveAddr    .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
+                lda SLAVE_X,x
                 sta TEMP1
-                lda SLAVE_Y,X
+                lda SLAVE_Y,x
                 sta TEMP2
                 jmp ComputeMapAddr
 
-S_COL           jsr GET_SLAVE_ADR
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+SlaveCollision  .proc
+;v_???          .var ADR1
+;---
+
+                jsr GetSlaveAddr
+
                 ldy #0
-                lda (ADR1),Y
-;               CMP #0
-                beq _1
+                lda (ADR1),y
+                beq S_COL2
+
                 cmp #EXP
-                beq _1
+                beq S_COL2
+
                 cmp #MISS_LEFT
-                beq _1
+                beq S_COL2
+
                 cmp #MISS_RIGHT
-                beq _1
+                beq S_COL2
+
                 dec ADR1+1
-                lda (ADR1),Y
-;               CMP #0
-                beq _1
+                lda (ADR1),y
+                beq S_COL2
+
                 cmp #EXP
-                beq _1
+                beq S_COL2
+
                 cmp #MISS_LEFT
-                beq _1
+                beq S_COL2
+
                 cmp #MISS_RIGHT
-                beq _1
+                beq S_COL2
+
                 clc
                 rts
-_1
-S_COL2          jsr S_ERASE
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+S_COL2          .proc
+;v_???          .var TEMP2
+;---
+
+                jsr SlaveErase
+
                 lda #OFF
-                sta SLAVE_STATUS,X
+                sta SLAVE_STATUS,x
                 dec SLAVES_LEFT
-PrintSlavesLeft
+                .endproc
+
+                ;[fall-through]
+
+
+;=======================================
+;
+;=======================================
+
+PrintSlavesLeft .proc
+;v_???          .var TEMP1
+;---
+
                 lda #9
                 sta TEMP1
                 lda #0
                 sta TEMP2
-                ldx #<SLAVE_PICKUP_MESS
-                ldy #>SLAVE_PICKUP_MESS
-                jsr PRINT
+                ldx #<txtMenRemain
+                ldy #>txtMenRemain
+                jsr Print
+
                 lda SLAVES_LEFT
                 ora #$10+128
                 sta PLAY_SCRN+5
                 cmp #$10+128
                 bne _1
+
                 lda #$A+128
 _1              and #$8F
                 sta PLAY_SCRN+6
@@ -131,91 +209,135 @@ _1              and #$8F
                 sta TIM9_VAL
                 sec
                 rts
+                .endproc
 
-S_ERASE         jsr GET_SLAVE_ADR
+
+;=======================================
+;
+;=======================================
+SlaveErase      .proc
+;v_???          .var ADR1
+;---
+
+                jsr GetSlaveAddr
+
                 ldy #0
                 lda #$48                ; '^H'
-                sta (ADR1),Y
+                sta (ADR1),y
                 dec ADR1+1
                 lda #$1F                ; '?'
-                sta (ADR1),Y
+                sta (ADR1),y
                 rts
+                .endproc
 
-S_MOVE
-_next1          lda SLAVE_DX,X
+
+;=======================================
+;
+;=======================================
+SlaveMove       .proc
+;v_???          .var ADR1
+;---
+
+_next1          lda SLAVE_DX,x
                 bmi _1
-                inc SLAVE_DX,X
-                lda SLAVE_DX,X
+
+                inc SLAVE_DX,x
+                lda SLAVE_DX,x
                 and #$01
                 ora #$10
-                sta SLAVE_DX,X
-                inc SLAVE_X,X
+                sta SLAVE_DX,x
+                inc SLAVE_X,x
                 jmp _2
-_1              dec SLAVE_DX,X
-                lda SLAVE_DX,X
+_1              dec SLAVE_DX,x
+                lda SLAVE_DX,x
                 and #$01
                 ora #$F0
-                sta SLAVE_DX,X
-                dec SLAVE_X,X
-_2              jsr GET_SLAVE_ADR
+                sta SLAVE_DX,x
+                dec SLAVE_X,x
+_2              jsr GetSlaveAddr
+
                 ldy #0
-                lda (ADR1),Y
+                lda (ADR1),y
                 cmp #$48
                 beq _XIT
-                lda SLAVE_DX,X
-                eor #$E0
-                sta SLAVE_DX,X
-                jmp _next1
-_XIT            rts
 
-S_DRAW          jsr GET_SLAVE_ADR
+                lda SLAVE_DX,x
+                eor #$E0
+                sta SLAVE_DX,x
+                jmp _next1
+
+_XIT            rts
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+SlaveDraw       .proc
+;v_???          .var ADR1
+;---
+
+                jsr GetSlaveAddr
+
                 ldy #0
-                lda SLAVE_DX,X
+                lda SLAVE_DX,x
                 pha
                 and #$03
                 tax
                 pla
                 bpl _1
 
-                lda SLAVE_CHR_B_L,X
-                sta (ADR1),Y
+                lda SLAVE_CHR_B_L,x
+                sta (ADR1),y
                 dec ADR1+1
-                lda SLAVE_CHR_T_L,X
-                sta (ADR1),Y
+                lda SLAVE_CHR_T_L,x
+                sta (ADR1),y
                 rts
 
-_1              lda SLAVE_CHR_B_R,X
-                sta (ADR1),Y
+_1              lda SLAVE_CHR_B_R,x
+                sta (ADR1),y
                 dec ADR1+1
-                lda SLAVE_CHR_T_R,X
-                sta (ADR1),Y
+                lda SLAVE_CHR_T_R,x
+                sta (ADR1),y
                 rts
+                .endproc
 
-SlavePickUp   ldx #8-0
-_0              dex
+
+;=======================================
+;
+;=======================================
+SlavePickUp     .proc
+                ldx #8-0
+_next1          dex
                 bpl _1
+
                 clc
                 rts
 
-_1              lda SLAVE_STATUS,X
+_1              lda SLAVE_STATUS,x
                 cmp #OFF
-                beq _0
-                lda SLAVE_X,X
+                beq _next1
+
+                lda SLAVE_X,x
                 sec
                 sbc CHOP_X
                 bpl _2
+
                 eor #-2
 _2              cmp #4
-                bge _0
-                lda SLAVE_Y,X
+                bge _next1
+
+                lda SLAVE_Y,x
                 sec
                 sbc CHOP_Y
                 bpl _3
+
                 eor #-2
 _3              cmp #4
-                bge _0
+                bge _next1
+
                 lda #PICKUP
-                sta SLAVE_STATUS,X
+                sta SLAVE_STATUS,x
                 lda #$A8
                 sta AUDC3
                 lda #32
@@ -223,98 +345,144 @@ _3              cmp #4
 
                 sec
                 rts
+                .endproc
 
-SLAVE_CHR_T_L
-                .byte $4A,$4A
-SLAVE_CHR_T_R
-                .byte $49,$49
+;---------------------------------------
+;---------------------------------------
+
+SLAVE_CHR_T_L   .byte $4A,$4A
+SLAVE_CHR_T_R   .byte $49,$49
+
 LAND_CHR
-SLAVE_CHR_B_L
-                .byte $3E,$3D
-SLAVE_CHR_B_R
-                .byte $3B,$3C
+SLAVE_CHR_B_L   .byte $3E,$3D
+SLAVE_CHR_B_R   .byte $3B,$3C
                 .byte $44
 LAND_LEN        = *-LAND_CHR-1
-SLAVE_PICKUP_MESS
-                .byte $AD,$A5,$AE,$00,$00           ; 'MEN  ' atari-ascii
-                .byte $B4,$AF,$00,$00               ; 'TO  '
-                .byte $B2,$A5,$B3,$A3,$B5,$A5       ; 'RESCUE'
+
+txtMenRemain    .byte $AD,$A5,$AE,$00,$00                   ; 'MEN  ' atari-ascii
+                .byte $B4,$AF,$00,$00                       ; 'TO  '
+                .byte $B2,$A5,$B3,$A3,$B5,$A5               ; 'RESCUE'
                 .byte $FF
 
-CHECK_FUEL_BASE
+
+;=======================================
+;
+;=======================================
+CheckFuelBase   .proc
+v_posX          .var TEMP1
+v_posY          .var TEMP2
+;---
+
                 lda FUEL_STATUS
                 cmp #kREFUEL
-                bne _3
-                jmp RE_FUEL
-_3              lda CHOPPER_STATUS
+                bne _1
+
+                jmp Refuel
+
+_1              lda CHOPPER_STATUS
                 cmp #LAND
-                bne _9
+                bne _4
+
                 lda CHOP_Y
                 cmp #7+2
-                blt _9
+                blt _4
+
                 cmp #11+2
-                bge _9
+                bge _4
+
                 ldx CHOP_X
                 lda LEVEL
-;               CMP #0
-                bne _1
+                bne _2
+
                 cpx #$15+2
-                blt _9
+                blt _4
+
                 cpx #$EC+2+6
-                bge _9
-                jmp _2
-_1              cpx #$82
-                blt _9
+                bge _4
+
+                jmp _3
+
+_2              cpx #$82
+                blt _4
+
                 cpx #$82+6
-                bge _9
-_2              lda #kREFUEL
+                bge _4
+
+_3              lda #kREFUEL
                 sta FUEL_STATUS
-                asl ComputeMapAddr     ; PROT
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                asl ComputeMapAddr
+                ;-----------------------
+
                 lda #1
                 sta TIM4_VAL
                 lda #4
                 sta FUEL_TEMP
-_9
-                lda #0
+_4              lda #0
                 ldx FUEL_STATUS
                 cpx #kREFUEL
-                beq _11
+                beq _6
+
                 lda FUEL2
-                bne _20
+                bne _XIT
 
                 lda FRAME
                 and #%00001000
-                bne _10
+                bne _5
+
                 lda #9
-                sta TEMP1
+                sta v_posX
                 lda #0
-                sta TEMP2
+                sta v_posY
+
                 lda #$A4
                 sta AUDC2
                 sta AUDF2
-                ldx #<WARNING
-                ldy #>WARNING
-                jsr PRINT
-                jmp _20
-_10             lda #$A4
-_11             sta AUDC2
+
+                ldx #<txtLowOnFuel
+                ldy #>txtLowOnFuel
+                jsr Print
+
+                jmp _XIT
+
+_5              lda #$A4
+_6              sta AUDC2
                 lda #$88
                 sta AUDF2
                 jsr ClearInfo
-_20             rts
 
-WARNING         .byte $AC,$AF,$B7,$00,$00       ; 'LOW  ' atari-ascii
-                .byte $AF,$AE,$00,$00           ; 'ON  '
-                .byte $A6,$B5,$A5,$AC           ; 'FUEL'
+_XIT            rts
+                .endproc
+
+;---------------------------------------
+;---------------------------------------
+
+txtLowOnFuel    .byte $AC,$AF,$B7,$00,$00                   ; 'LOW  ' atari-ascii
+                .byte $AF,$AE,$00,$00                       ; 'ON  '
+                .byte $A6,$B5,$A5,$AC                       ; 'FUEL'
                 .byte $FF
 
-RE_FUEL
+
+;=======================================
+;
+;=======================================
+Refuel          .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;---
+
                 dec TIM4_VAL
                 bne FE
+
                 lda #1
                 sta TIM4_VAL
                 lda FUEL_TEMP
                 bmi F1
+
 DF1             lda #9+2
                 sta TEMP2
                 lda FUEL_TEMP
@@ -322,14 +490,18 @@ DF1             lda #9+2
                 ldx LEVEL
                 dex                     ; X=1?
                 beq _1
+
                 lda #$15+2
                 sta TEMP1
-                jsr DRAW_BASE
+                jsr DrawBase
+
                 lda #$EC+2
                 bne _2                  ; FORCED
+
 _1              lda #$82
 _2              sta TEMP1
-                jsr DRAW_BASE
+                jsr DrawBase
+
                 dec FUEL_TEMP
 FE              rts
 
@@ -337,64 +509,104 @@ F1              ldx #1
                 lda CHOP_Y
                 cmp #11+2
                 bge _1
+
                 ldx #0
                 stx AUDC2
 _1              stx SND4_VAL
                 lda CHOP_Y
                 cmp #8+2
                 bge FE
+
                 lda #FULL
                 sta FUEL_STATUS
                 lda #4
                 sta FUEL_TEMP
                 jsr DF1
+
                 jmp RestorePoint
 
-DRAW_BASE
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+DrawBase        .proc
+;v_???          .var ADR1
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;---
                 jsr ComputeMapAddr
+
                 lda #4
                 sta TEMP4
-                lda TEMP3
+
+                lda TEMP3               ; x6
                 asl
                 clc
                 adc TEMP3
                 asl
+
                 tax
-_1              ldy #0
-_2              lda BASE_SHAPE,X
-                sta (ADR1),Y
+_next1          ldy #0
+_next2          lda BASE_SHAPE,x
+                sta (ADR1),y
                 inx
                 iny
                 cpy #6
-                bne _2
+                bne _next2
+
                 inc ADR1+1
                 dec TEMP4
-                bpl _1
+                bpl _next1
+
                 rts
+                .endproc
 
-BASE_SHAPE
-                .byte $00,$00,$00,$00,$00,$00    ; 0
-                .byte $00,$00,$00,$00,$00,$00    ; 1
-                .byte $00,$00,$00,$00,$00,$00    ; 2
-                .byte $00,$00,$00,$00,$00,$00    ; 3
-                .byte $44,$44,$44,$44,$44,$44    ; 4
-                .byte $55,$58,$58,$58,$58,$56    ; 5
-                .byte $55,$26,$35,$25,$2C,$56    ; 6
-                .byte $55,$58,$58,$58,$58,$56    ; 7
-                .byte $54,$00,$00,$00,$00,$54    ; 8
+;---------------------------------------
+;---------------------------------------
 
-SET_SCANNER
+BASE_SHAPE      .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
+                .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
+                .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
+                .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
+                .byte $44,$44,$44,$44,$44,$44    ; G.G. G.G. G.G. G.G. G.G. G.G.
+                .byte $55,$58,$58,$58,$58,$56    ; GGGG GGR. GGR. GGR. GGR. GGGR
+                .byte $55,$26,$35,$25,$2C,$56    ; GGGG .RGR .#GG .RGG .R#. GGGR
+                .byte $55,$58,$58,$58,$58,$56    ; GGGG GGR. GGR. GGR. GGR. GGGR
+                .byte $54,$00,$00,$00,$00,$54    ; GGG. .... .... .... .... GGG.
+
+
+;=======================================
+;
+;=======================================
+SetScanner      .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 lda #0
                 sta TEMP1
                 sta TEMP2
-                inc DrawMap            ; PROT
+
+                ;-----------------------
+                ; Copy Protection
+                ;-----------------------
+                inc DrawMap
+                ;-----------------------
+
                 lda SY
                 beq _2
                 bmi _2
+
                 cmp #17
                 blt _1
+
                 lda #16
 _1              jsr MULT_BY_40
+
 _2              lda SX
                 lsr
                 lsr
@@ -406,10 +618,12 @@ _2              lda SX
                 lda #>SCANNER
                 adc TEMP2
                 sta ADR1+1
+
                 lda ADR1
                 sta SCAN_ADR1
                 lda ADR1+1
                 sta SCAN_ADR1+1
+
                 lda #<S_LINE1
                 sta SCAN_ADR2
                 sta ADR2
@@ -417,6 +631,7 @@ _2              lda SX
                 sta SCAN_ADR2+1
                 sta ADR2+1
                 jsr DO_LINE
+
                 lda #<S_LINE2
                 sta SCAN_ADR2
                 sta ADR2
@@ -424,6 +639,7 @@ _2              lda SX
                 sta SCAN_ADR2+1
                 sta ADR2+1
                 jsr DO_LINE
+
                 lda #<S_LINE3
                 sta SCAN_ADR2
                 sta ADR2
@@ -431,13 +647,26 @@ _2              lda SX
                 sta SCAN_ADR2+1
                 sta ADR2+1
                 jmp DO_LINE
-_3              rts
 
-PositionIt
+                rts
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+PositionIt      .proc
+;v_???          .var ADR2
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;---
+
                 stx TEMP3
                 ldx TEMP1
                 lda TEMP2
                 jsr MULT_BY_40
+
                 txa
                 lsr
                 lsr
@@ -453,13 +682,22 @@ PositionIt
                 and #7
                 tax
                 ldy #0
-                lda (ADR2),Y
-                eor POS_MASK1,X
-                sta (ADR2),Y
+                lda (ADR2),y
+                eor POS_MASK1,x
+                sta (ADR2),y
                 ldx TEMP3
                 rts
+                .endproc
 
-MULT_BY_40
+
+;=======================================
+;
+;=======================================
+MULT_BY_40      .proc
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;---
+
                 sta TEMP1
                 asl
                 asl
@@ -475,18 +713,29 @@ MULT_BY_40
                 rol TEMP2
                 sta TEMP1
                 rts
+                .endproc
 
-DO_LINE
+
+;=======================================
+;
+;=======================================
+DO_LINE         .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
+;v_???          .var TEMP1
+;---
+
                 lda #7
                 sta TEMP1
-_0              ldx #12
+_next1          ldx #12
                 ldy #0
-_1              lda (ADR1),Y
-                sta (ADR2),Y
+_next2          lda (ADR1),y
+                sta (ADR2),y
                 inc ADR1
-                bne _2
+                bne _1
+
                 inc ADR1+1
-_2              lda ADR2
+_1              lda ADR2
                 clc
                 adc #8
                 sta ADR2
@@ -494,7 +743,8 @@ _2              lda ADR2
                 adc #0
                 sta ADR2+1
                 dex
-                bne _1
+                bne _next2
+
                 lda SCAN_ADR1
                 clc
                 adc #40
@@ -505,56 +755,78 @@ _2              lda ADR2
                 sta SCAN_ADR1+1
                 sta ADR1+1
                 inc SCAN_ADR2
-                bne _3
+                bne _2
+
                 inc SCAN_ADR2+1
-_3              lda SCAN_ADR2
+_2              lda SCAN_ADR2
                 sta ADR2
                 lda SCAN_ADR2+1
                 sta ADR2+1
                 dec TEMP1
-                bpl _0
-                rts
+                bpl _next1
 
-CHECK_FORT
+                rts
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+CheckFort       .proc
+;v_???          .var ADR1
+;v_???          .var ADR2
+;v_???          .var TEMP1
+;v_???          .var TEMP2
+;v_???          .var TEMP3
+;v_???          .var TEMP4
+;v_???          .var TEMP5
+;v_???          .var TEMP6
+;---
+
                 lda FORT_STATUS
                 cmp #EXPLODE
-                beq _1
+                beq DoChecksum1
+
                 rts
 
-_1
-DO_CHECKSUM1
+DoChecksum1    .block
                 ldy #0
                 sty TEMP1
                 sty ADR1
                 lda #$90
                 sta ADR1+1
                 clc
+_next1          adc (ADR1),y
+                bcc _1
 
-_1              adc (ADR1),Y
-                bcc _2
                 inc TEMP1
-_2              iny
-                bne _1
+_1              iny
+                bne _next1
+
                 inc ADR1+1
                 ldx ADR1+1
                 cpx #$B0
-                bne _1
+                bne _next1
+
                 ;cmp #0
                 cmp #$C7
-                bne _4
+                bne _2
+
                 lda TEMP1
                 ;cmp #0
                 cmp #$F8
-                beq _3
+                beq _XIT
 
-_4              .byte $12
-_3
+_2              .byte $12
+_XIT            .endblock
 
-NEXT_PART1
+
+NEXT_PART1      .block
                 ldx #$00
                 ldy #$50
                 jsr IncreaseScore
                 jsr GiveBonus
+
                 lda #STOP_MODE
                 sta MODE
                 lda #$99
@@ -564,6 +836,7 @@ NEXT_PART1
                 sta LAND_CHOP_X
                 lda #$A0
                 sta LAND_CHOP_Y
+
                 lda #$6E
                 sta LAND_X
                 lda #$11
@@ -572,55 +845,63 @@ NEXT_PART1
                 sta LAND_FX
                 lda #$96
                 sta LAND_FY
+
                 lda #8
                 sta LAND_CHOP_ANGLE
                 ldx #16-1
                 lda #0
-_90             sta WINDOW_1,X
+_next1          sta WINDOW_1,x
                 dex
-                bpl _90
+                bpl _next1
+
                 lda #0
                 sta TEMP3
                 sta TEMP4
                 sta TEMP6
-_2              lda #121
+_next2          lda #121
                 sta TEMP1
                 lda #20
                 sta TEMP2
                 jsr ComputeMapAddr
+
                 lda TEMP3
                 asl
                 tax
-                lda FORT_EXP,X
+                lda FORT_EXP,x
                 sta ADR2
-                lda FORT_EXP+1,X
+                lda FORT_EXP+1,x
                 sta ADR2+1
-_3              ldy TEMP4
-                lda (ADR2),Y
+_next3          ldy TEMP4
+                lda (ADR2),y
                 sta TEMP5
                 ldy #7+8+8
-_4              ldx #2
+_next4          ldx #2
                 lda #0
                 ror TEMP5
-                bcc _5
+                bcc _next5
+
                 lda #EXP
-_5              sta (ADR1),Y
+_next5          sta (ADR1),y
                 dey
                 dex
-                bpl _5
+                bpl _next5
+
                 tya
-                bpl _4
+                bpl _next4
+
                 inc ADR1+1
                 inc TEMP6
                 lda TEMP6
                 cmp #3
-                bne _3
+                bne _next3
+
                 lda #0
                 sta TEMP6
                 inc TEMP4
                 lda TEMP4
                 cmp #6
-                bne _3
+                bne _next3
+
                 lda #0
                 sta TEMP4
                 lda #$10
@@ -628,21 +909,24 @@ _5              sta (ADR1),Y
                 lda #$CF
                 sta AUDC4
                 ldy #15
-_6              ldx #2
+_next6          ldx #2
                 jsr WaitFrame
+
                 inc BAK2_COLOR
                 lda #1
                 sta SND3_VAL
                 lda RANDOM
                 sta AUDF4
                 dey
-                bpl _6
+                bpl _next6
+
                 lda #0
                 sta BAK2_COLOR
                 inc TEMP3
                 lda TEMP3
                 cmp #4
-                bne _2
+                bne _next2
+
                 lda #GO_MODE
                 sta MODE
                 lda #OFF
@@ -651,11 +935,21 @@ _6              ldx #2
 
                 jmp ClearSounds
 
-FORT_EXP
-                .addr FORT_EX1,FORT_EX2
+                .endblock
+                .endproc
+
+;---------------------------------------
+;---------------------------------------
+
+FORT_EXP        .addr FORT_EX1,FORT_EX2
                 .addr FORT_EX3,FORT_EX4
 
-LINE1           pha
+
+;=======================================
+;
+;=======================================
+LINE1           .proc
+                pha
                 txa
                 pha
                 lda #<LINE2
@@ -664,18 +958,24 @@ LINE1           pha
                 sta VDSLST+1
 
                 ldx #0
-_1              txa
+_next1          txa
                 sta WSYNC
                 asl
                 ora #$E0
                 sta COLBK
                 inx
                 cpx #8
-                bne _1
+                bne _next1
 
-                beq LINEC               ; FORCED
+                beq LINE2.LINEC         ; FORCED
 
-LINE2
+                .endproc
+
+
+;=======================================
+;
+;=======================================
+LINE2           .proc
                 pha
                 txa
                 pha
@@ -683,20 +983,21 @@ LINE2
                 sta VDSLST
                 lda #>LINE3
                 sta VDSLST+1
+
                 ldx #2
-_0              lda ROCKET_X,X
-                sta HPOSM0,X
+_next1          lda ROCKET_X,x
+                sta HPOSM0,x
                 dex
-                bpl _0
+                bpl _next1
 
                 ldx #7
-_1              txa
+_next2          txa
                 sta WSYNC
                 asl
                 ora #$E0
                 sta COLBK
                 dex
-                bpl _1
+                bpl _next2
 
 LINEC           lda #0
                 sta COLBK
@@ -704,15 +1005,22 @@ LINEC           lda #0
                 tax
                 pla
                 rti
+                .endproc
 
-LINE3
+
+;=======================================
+;
+;=======================================
+LINE3           .proc
                 pha
                 php
                 cld
+
                 lda #<LINE4
                 sta VDSLST
                 lda #>LINE4
                 sta VDSLST+1
+
                 lda ROBOT_X
                 sta HPOSP2
                 clc
@@ -721,6 +1029,7 @@ LINE3
                 lda #>CHR_SET2
                 sta WSYNC
                 sta CHBASE
+
                 lda BAK_COLOR
                 sta COLPF0
                 lda #$0A
@@ -729,14 +1038,20 @@ LINE3
                 sta COLPF2
                 lda FRAME
                 sta COLPF3
+
                 sta WSYNC
                 lda BAK2_COLOR
                 sta COLBK
+
                 plp
                 pla
                 rti
+                .endproc
 
-LINE4
+;=======================================
+;
+;=======================================
+LINE4           .proc
                 pha
                 txa
                 pha
@@ -749,19 +1064,24 @@ LINE4
                 sta VDSLST
                 lda #>LINE1
                 sta VDSLST+1
+
                 ldx #7
                 lda #0
-_0              sta HPOSP0,X
+_next1          sta HPOSP0,x
                 dex
-                bpl _0
+                bpl _next1
+
                 sta WSYNC
                 sta COLBK
+
                 lda MODE
                 cmp #STOP_MODE
                 beq _1
+
                 cmp #GO_MODE
                 bne _2
-_1              jsr DO_SOUNDS
+
+_1              jsr DoSounds
 
 _2              plp
                 pla
@@ -770,46 +1090,61 @@ _2              plp
                 tax
                 pla
                 rti
+                .endproc
 
-DO_CHECKSUM3
+
+;=======================================
+;
+;=======================================
+DoChecksum3     .proc
                 ldx #0
                 txa
                 clc
-_1              adc $B980,X
+_next1          adc $B980,x
                 inx
-                bne _1
+                bne _next1
+
                 ;cmp #$0
                 cmp #$90
-                beq _2
+                beq _XIT
 
                 .byte $12
 
-_2              rts
+_XIT            rts
+                .endproc
 
-DO_SOUNDS
 
-; CHOPPER SOUND
-S1
+;=======================================
+;
+;=======================================
+DoSounds        .proc
+
+S1              .block                  ; CHOPPER SOUND
                 lda CHOPPER_STATUS
                 cmp #OFF
-                beq _2
+                beq _XIT
+
                 lda FRAME
                 and #2
-                bne _2
+                bne _XIT
+
                 lda #$83
                 sta AUDC1
                 lda SND1_1_VAL
                 bpl _1
+
                 lda SND1_2_VAL
 _1              sec
                 sbc #4
                 sta SND1_1_VAL
                 sta AUDF1
-_2
-; MISSILE SOUND
-S2
+_XIT            .endblock
+
+
+S2              .block                  ; MISSILE SOUND
                 lda SND2_VAL
-                bmi _2
+                bmi _XIT
+
                 eor #$3F
                 clc
                 adc #16
@@ -817,14 +1152,17 @@ S2
                 ldx #$86
                 cmp #$3F+16
                 bne _1
+
                 ldx #0
 _1              stx AUDC2
                 dec SND2_VAL
-_2
-; EXPLOSION
-S3
+_XIT            .endblock
+
+
+S3              .block                  ; EXPLOSION SOUND
                 lda SND3_VAL
-                beq _3
+                beq _XIT
+
                 lda RANDOM
                 and #3
                 ora SND3_VAL
@@ -834,31 +1172,35 @@ S3
                 lda SND3_VAL
                 cmp #$31
                 bne _1
+
                 lda #0
                 sta SND3_VAL
 _1              ldx #$48
                 cmp #0
                 bne _2
+
                 tax                     ; X=0
 _2              stx AUDC3
-_3
-; RE-FUEL
-S4
+_XIT            .endblock
+
+
+S4              .block                  ; RE-FUEL SOUND
                 lda SND4_VAL
-                beq _3
+                beq _XIT
+
                 ldx #0
                 lda FRAME
                 and #7
                 beq _1
-                ldx #$18
-_1
 
-                ldy #$00
+                ldx #$18
+_1              ldy #$00
                 lda FUEL1
                 cmp #<MAX_FUEL
                 lda FUEL2
                 sbc #>MAX_FUEL
                 bcs _2
+
                 ldy #$A6
                 sed
                 lda FUEL1
@@ -871,38 +1213,45 @@ _1
                 cld
 _2              stx AUDF2
                 sty AUDC2
-_3
-;
-; HYPER CHAMBER SOUND
-;
-S5              lda SND5_VAL
-                beq _2
+_XIT            .endblock
+
+
+S5              .block                  ; HYPER CHAMBER SOUND
+                lda SND5_VAL
+                beq _XIT
+
                 inc SND5_VAL
                 cmp #$50
                 bne _1
+
                 lda #0
                 sta SND5_VAL
 _1              sta AUDF2
                 lda #$A8
                 sta AUDC2
-_2
-;
-; CRUISE MISSILE SOUND
-;
-S6              lda FRAME
+_XIT            .endblock
+
+
+S6              .block                  ; CRUISE MISSILE SOUND
+                lda FRAME
                 and #1
-                bne _2
+                bne _XIT
+
                 lda SND6_VAL
-                beq _2
+                beq _XIT
+
                 inc SND6_VAL
                 cmp #$20
                 blt _1
+
                 ldx #0
                 stx SND6_VAL
 _1              sta AUDF4
                 lda #$07
                 sta AUDC4
-_2              rts
+_XIT            rts
+                .endblock
+                .endproc
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; EOF
