@@ -2,47 +2,47 @@ m8i8            .macro
                 sep #$30
                 .as
                 .xs
-                .endm
+                .endmacro
 
 m8i16           .macro
                 sep #$20
                 .as
                 rep #$10
                 .xl
-                .endm
+                .endmacro
 
 m16i8           .macro
                 rep #$20
                 .al
                 sep #$10
                 .xs
-                .endm
+                .endmacro
 
 m16i16          .macro
                 rep #$30
                 .al
                 .xl
-                .endm
+                .endmacro
 
 m8              .macro
                 sep #$20
                 .as
-                .endm
+                .endmacro
 
 m16             .macro
                 rep #$20
                 .al
-                .endm
+                .endmacro
 
 i8              .macro
                 sep #$10
                 .xs
-                .endm
+                .endmacro
 
 i16             .macro
                 rep #$10
                 .xl
-                .endm
+                .endmacro
 
 setdp           .macro
                 pha
@@ -55,7 +55,7 @@ setdp           .macro
 
                 plp
                 pla
-                .endm
+                .endmacro
 
 setbank         .macro
                 pha
@@ -69,40 +69,86 @@ setbank         .macro
 
                 plp
                 pla
-                .endm
+                .endmacro
 
 mouse_off       .macro
+                stz MOUSE_PTR_CTRL_REG_L
+                .endmacro
+
+mouse_off_s     .macro
                 php
 
                 .m8
-                stz MOUSE_PTR_CTRL_REG_L
+                .mouse_off
 
                 plp
-                .endm
+                .endmacro
 
 mouse_on        .macro
-                pha
-                php
-
-                .m8
                 lda #1
                 sta MOUSE_PTR_CTRL_REG_L
+                .endmacro
 
-                plp
-                pla
-                .endm
-
-graphicMode320  .macro
+mouse_on_s      .macro
                 pha
                 php
 
                 .m8
-                lda #Mstr_Ctrl_Graph_Mode_En    ; + Mstr_Ctrl_TileMap_En + Mstr_Ctrl_Sprite_En
-                sta MASTER_CTRL_REG_L
-
-                lda #Mstr_Ctrl_Video_Mode1
-                sta MASTER_CTRL_REG_H
+                .mouse_on
 
                 plp
                 pla
-                .endm
+                .endmacro
+
+graphics        .macro
+                lda #\1
+                sta MASTER_CTRL_REG_L
+
+                lda #\2
+                sta MASTER_CTRL_REG_H
+                .endmacro
+
+graphics_s      .macro
+                pha
+                php
+
+                .m8
+                .graphics \@
+
+                plp
+                pla
+                .endmacro
+
+border_off      .macro
+                stz BORDER_CTRL_REG
+                stz BORDER_X_SIZE
+                stz BORDER_Y_SIZE
+                .endmacro
+
+border_off_s    .macro
+                php
+
+                .m8
+                .border_off
+
+                plp
+                .endmacro
+
+border_on       .macro color, xSize, ySize
+                php
+
+                lda #$01
+                sta BORDER_CTRL_REG
+
+                lda #\xSize
+                sta BORDER_X_SIZE
+
+                lda #\ySize
+                sta BORDER_Y_SIZE
+
+                .m16
+                lda #\color
+                sta BORDER_COLOR_B-1
+
+                plp
+                .endmacro
