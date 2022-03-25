@@ -108,28 +108,28 @@ POS_MASK1       .byte %10000000         ;R...
 ; CHR $0C
 FORT_EX1        .byte %00000000         ;....
                 .byte %00000000         ;....
-                .byte %00011000         ;.GR.
-                .byte %00011000         ;.GR.
+                .byte %00011000         ;.gR.
+                .byte %00011000         ;.gR.
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
 ; CHR $0D
 FORT_EX2        .byte %00000000         ;....
-                .byte %00011000         ;.GR.
-                .byte %00100100         ;.RG.
-                .byte %00100100         ;.RG.
-                .byte %00011000         ;.GR.
+                .byte %00011000         ;.gR.
+                .byte %00100100         ;.Rg.
+                .byte %00100100         ;.Rg.
+                .byte %00011000         ;.gR.
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
 ; CHR $0E
-FORT_EX3        .byte %00011000         ;.GR.
-                .byte %00100100         ;.RG.
-                .byte %01011010         ;GGRR
-                .byte %01011010         ;GGRR
-                .byte %00100100         ;.RG.
-                .byte %00011000         ;.GR.
+FORT_EX3        .byte %00011000         ;.gR.
+                .byte %00100100         ;.Rg.
+                .byte %01011010         ;ggRR
+                .byte %01011010         ;ggRR
+                .byte %00100100         ;.Rg.
+                .byte %00011000         ;.gR.
                 .byte %00000000         ;....
                 .byte %00000000         ;....
 ; CHR $0F
@@ -546,14 +546,14 @@ EXP_SHAPE       .byte %00111100         ;.##.       ; white marquee dot
                 .byte %00111100         ;.##.
                 .byte %00111100         ;.##.
 ; CHR $3D
-                .byte %00010100         ;.GG.       ; green marquee dot
-                .byte %00010100         ;.GG.
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %00010100         ;.GG.
-                .byte %00010100         ;.GG.
+                .byte %00010100         ;.gg.       ; green marquee dot
+                .byte %00010100         ;.gg.
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %00010100         ;.gg.
+                .byte %00010100         ;.gg.
 ; CHR $3E
                 .byte %00000000         ;........
                 .byte %00001000         ;....#...

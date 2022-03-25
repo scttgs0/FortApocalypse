@@ -248,8 +248,8 @@ FNT2
                 .byte %10101000         ;RRR.
                 .byte %00001000         ;..R.
                 .byte %00001000         ;..R.
-                .byte %00010100         ;.GG.
-                .byte %01010101         ;GGGG
+                .byte %00010100         ;.gg.
+                .byte %01010101         ;gggg
 ; CHR $3C
                 .byte %00101000         ;.RR.
                 .byte %00001000         ;..R.
@@ -257,8 +257,8 @@ FNT2
                 .byte %00100010         ;.R.R
                 .byte %10000010         ;R..R
                 .byte %00000010         ;...R
-                .byte %00010100         ;.GG.
-                .byte %01010101         ;GGGG
+                .byte %00010100         ;.gg.
+                .byte %01010101         ;gggg
 ; CHR $3D
                 .byte %00101000         ;.RR.
                 .byte %00100000         ;.R..
@@ -266,8 +266,8 @@ FNT2
                 .byte %10001000         ;R.R.
                 .byte %10000010         ;R..R
                 .byte %10000000         ;R...
-                .byte %00010100         ;.GG.
-                .byte %01010101         ;GGGG
+                .byte %00010100         ;.gg.
+                .byte %01010101         ;gggg
 ; CHR $3E
                 .byte %00101000         ;.RR.
                 .byte %00100000         ;.R..
@@ -275,8 +275,8 @@ FNT2
                 .byte %00101010         ;.RRR
                 .byte %00100000         ;.R..
                 .byte %00100000         ;.R..
-                .byte %00010100         ;.GG.
-                .byte %01010101         ;GGGG
+                .byte %00010100         ;.gg.
+                .byte %01010101         ;gggg
 ; CHR $3F
                 .byte %00000000         ;....
                 .byte %00000000         ;....
@@ -350,14 +350,14 @@ FNT2_40         .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
 ; CHR $47
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01011101         ;GG#G
-                .byte %01011101         ;GG#G
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01011101         ;gg#g
+                .byte %01011101         ;gg#g
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
 ; CHR $48
                 .byte %00000000         ;....       ; slave landing pad
                 .byte %00000000         ;....
@@ -365,8 +365,8 @@ FNT2_40         .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
-                .byte %00010100         ;.GG.
-                .byte %01010101         ;GGGG
+                .byte %00010100         ;.gg.
+                .byte %01010101         ;gggg
 ; CHR $49
                 .byte %00000000         ;....       ; slave head right-facing
                 .byte %00000000         ;....
@@ -386,14 +386,14 @@ FNT2_40         .byte %00000000         ;....
                 .byte %10101000         ;RRR.
                 .byte %00101000         ;.RR.
 ; CHR $4B
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
 ; CHR $4C
                 .byte %00111110         ;.##R
                 .byte %00111110         ;.##R
@@ -469,28 +469,28 @@ FNT2_40         .byte %00000000         ;....
 ; CHR $54
                 .byte %00101000         ;.RR.
                 .byte %00101000         ;.RR.
-                .byte %00010100         ;.GG.
+                .byte %00010100         ;.gg.
                 .byte %00101000         ;.RR.
                 .byte %00101000         ;.RR.
-                .byte %00010100         ;.GG.
+                .byte %00010100         ;.gg.
                 .byte %00101000         ;.RR.
                 .byte %00101000         ;.RR.
 ; CHR $55
                 .byte %00101000         ;.RR.
                 .byte %00101000         ;.RR.
-                .byte %00010100         ;.GG.
+                .byte %00010100         ;.gg.
                 .byte %00101010         ;.RRR
                 .byte %00101010         ;.RRR
-                .byte %00010100         ;.GG.
+                .byte %00010100         ;.gg.
                 .byte %00101000         ;.RR.
                 .byte %00101000         ;.RR.
 ; CHR $56
                 .byte %00101000         ;.RR.
                 .byte %00101000         ;.RR.
-                .byte %00010100         ;.GG.
+                .byte %00010100         ;.gg.
                 .byte %10101000         ;RRR.
                 .byte %10101000         ;RRR.
-                .byte %00010100         ;.GG.
+                .byte %00010100         ;.gg.
                 .byte %00101000         ;.RR.
                 .byte %00101000         ;.RR.
 ; CHR $57
@@ -576,118 +576,118 @@ FNT2_40         .byte %00000000         ;....
                 .byte %10001000         ;R.R.
 ; CHR $60
 FNT2_60         .byte %00000000         ;....
-                .byte %00011000         ;.GR.
+                .byte %00011000         ;.gR.
                 .byte %00111100         ;.##.
-                .byte %01111110         ;G##R
-                .byte %01111110         ;G##R
+                .byte %01111110         ;g##R
+                .byte %01111110         ;g##R
                 .byte %00111100         ;.##.
-                .byte %00011000         ;.GR.
+                .byte %00011000         ;.gR.
                 .byte %00000000         ;....
 ; CHR $61
-                .byte %01010101         ;GGGG       ; terrain
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
+                .byte %01010101         ;gggg       ; terrain
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
 ; CHR $62
                 .byte %00000000         ;....
-                .byte %00010000         ;.G..
-                .byte %01010001         ;GG.G
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
+                .byte %00010000         ;.g..
+                .byte %01010001         ;gg.g
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
 ; CHR $63
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
-                .byte %00010100         ;.GG.
-                .byte %01010100         ;GGG.
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
+                .byte %00010100         ;.gg.
+                .byte %01010100         ;ggg.
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
 ; CHR $64
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
-                .byte %00000100         ;..G.
-                .byte %01000101         ;G.GG
-                .byte %01010101         ;GGGG
+                .byte %00000100         ;..g.
+                .byte %01000101         ;g.gg
+                .byte %01010101         ;gggg
 ; CHR $65
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01000101         ;G.GG
-                .byte %00000100         ;..G.
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01000101         ;g.gg
+                .byte %00000100         ;..g.
                 .byte %00000000         ;....
 ; CHR $66
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010101         ;GGGG
-                .byte %01010001         ;GG.G
-                .byte %01000000         ;G...
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010101         ;gggg
+                .byte %01010001         ;gg.g
+                .byte %01000000         ;g...
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
 ; CHR $67
-                .byte %01010101         ;GGGG
-                .byte %01010001         ;GG.G
-                .byte %00010000         ;.G..
-                .byte %00010000         ;.G..
+                .byte %01010101         ;gggg
+                .byte %01010001         ;gg.g
+                .byte %00010000         ;.g..
+                .byte %00010000         ;.g..
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
 ; CHR $68
-                .byte %01000000         ;G...
-                .byte %01000000         ;G...
-                .byte %01010000         ;GG..
-                .byte %01010000         ;GG..
-                .byte %01000000         ;G...
-                .byte %01010000         ;GG..
-                .byte %01010000         ;GG..
-                .byte %01000000         ;G...
+                .byte %01000000         ;g...
+                .byte %01000000         ;g...
+                .byte %01010000         ;gg..
+                .byte %01010000         ;gg..
+                .byte %01000000         ;g...
+                .byte %01010000         ;gg..
+                .byte %01010000         ;gg..
+                .byte %01000000         ;g...
 ; CHR $69
-                .byte %01010100         ;GGG.
-                .byte %01010000         ;GG..
-                .byte %01010000         ;GG..
-                .byte %01010100         ;GGG.
-                .byte %01010000         ;GG..
-                .byte %01010100         ;GGG.
-                .byte %01010100         ;GGG.
-                .byte %01010000         ;GG..
+                .byte %01010100         ;ggg.
+                .byte %01010000         ;gg..
+                .byte %01010000         ;gg..
+                .byte %01010100         ;ggg.
+                .byte %01010000         ;gg..
+                .byte %01010100         ;ggg.
+                .byte %01010100         ;ggg.
+                .byte %01010000         ;gg..
 ; CHR $6A
-                .byte %00000101         ;..GG
-                .byte %00000001         ;...G
-                .byte %00000001         ;...G
-                .byte %00000101         ;..GG
-                .byte %00000101         ;..GG
-                .byte %00000001         ;...G
-                .byte %00000101         ;..GG
-                .byte %00000001         ;...G
+                .byte %00000101         ;..gg
+                .byte %00000001         ;...g
+                .byte %00000001         ;...g
+                .byte %00000101         ;..gg
+                .byte %00000101         ;..gg
+                .byte %00000001         ;...g
+                .byte %00000101         ;..gg
+                .byte %00000001         ;...g
 ; CHR $6B
-                .byte %00000101         ;..GG
-                .byte %00010101         ;.GGG
-                .byte %00010101         ;.GGG
-                .byte %00000101         ;..GG
-                .byte %00010101         ;.GGG
-                .byte %00010101         ;.GGG
-                .byte %00010101         ;.GGG
-                .byte %00000101         ;..GG
+                .byte %00000101         ;..gg
+                .byte %00010101         ;.ggg
+                .byte %00010101         ;.ggg
+                .byte %00000101         ;..gg
+                .byte %00010101         ;.ggg
+                .byte %00010101         ;.ggg
+                .byte %00010101         ;.ggg
+                .byte %00000101         ;..gg
 ; CHR $6C
                 .byte %00000000         ;....
                 .byte %11000000         ;#...
                 .byte %11110000         ;##..
                 .byte %11111111         ;####
-                .byte %01010101         ;GGGG
+                .byte %01010101         ;gggg
                 .byte %00100010         ;.R.R
                 .byte %00101010         ;.RRR
                 .byte %00001000         ;..R.
@@ -696,7 +696,7 @@ FNT2_60         .byte %00000000         ;....
                 .byte %11111111         ;####
                 .byte %11111111         ;####
                 .byte %11111111         ;####
-                .byte %01010101         ;GGGG
+                .byte %01010101         ;gggg
                 .byte %00100010         ;.R.R
                 .byte %10101010         ;RRRR
                 .byte %10001000         ;R.R.
@@ -705,7 +705,7 @@ FNT2_60         .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %11110000         ;##..
-                .byte %01010101         ;GGGG
+                .byte %01010101         ;gggg
                 .byte %00100010         ;.R.R
                 .byte %10101010         ;RRRR
                 .byte %10001000         ;R.R.
