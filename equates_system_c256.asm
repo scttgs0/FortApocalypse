@@ -37,3 +37,27 @@ mcVideoMode400      = $03                       ; 3 - 400x300 pixel-doubling (Cl
 
 C256F_MODEL_MAJOR       = $AF_070B
 C256F_MODEL_MINOR       = $AF_070C
+
+SID_FREQ1               = $AF_E400              ; [word]
+SID_PULSE1              = $AF_E402              ; [word]
+SID_CTRL1               = $AF_E404
+SID_ATDCY1              = $AF_E405
+SID_SUREL1              = $AF_E406
+
+SID_FREQ2               = $AF_E407              ; [word]
+SID_PULSE2              = $AF_E409              ; [word]
+SID_CTRL2               = $AF_E40B
+SID_ATDCY2              = $AF_E40C
+SID_SUREL2              = $AF_E40D
+
+SID_FREQ3               = $AF_E40E              ; [word]
+SID_PULSE3              = $AF_E410              ; [word]
+SID_CTRL3               = $AF_E412
+SID_ATDCY3              = $AF_E413
+SID_SUREL3              = $AF_E414
+
+SID_CUTOFF              = $AF_E415              ; [word]
+SID_RESON               = $AF_E417
+SID_SIGVOL              = $AF_E418
+SID_RANDOM              = $AF_E41B
+SID_ENV3                = $AF_E41C
