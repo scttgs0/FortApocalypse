@@ -23,7 +23,7 @@ CheckHyperchamber .proc
 
                 stz BAK2_COLOR
 
-                lda RANDOM
+                lda SID_RANDOM
                 and #3
 
                 tax

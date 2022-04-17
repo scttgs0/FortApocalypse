@@ -149,7 +149,7 @@ PodBegin        .proc
 ;v_???          .var ADR1
 ;---
 
-_next1          lda RANDOM
+_next1          lda SID_RANDOM
                 cmp #50
                 blt _next1
 
@@ -157,7 +157,7 @@ _next1          lda RANDOM
                 bge _next1
 
                 sta POD_X,x
-_next2          lda RANDOM
+_next2          lda SID_RANDOM
                 cmp #40
                 bge _next2
 

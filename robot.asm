@@ -32,11 +32,11 @@ RobotAI         .proc
 _1              dec TIM7_VAL
                 bne _XIT
 _2              lda #$88
-                sta PCOLR2
-                sta PCOLR3
+                ;!! sta PCOLR2
+                ;!! sta PCOLR3
                 lda #8
                 sta ROBOT_ANGLE
-                lda RANDOM
+                lda SID_RANDOM
                 and #7
                 ldx LEVEL
                 dex                     ; X=1?
@@ -567,10 +567,10 @@ _next2          ldy TEMP1_I
                 ldx ROBOT_Y
                 ldy #18
 _next3          lda PLAYER+PL2,x
-                and RANDOM
+                and SID_RANDOM
                 sta PLAYER+PL2,x
                 lda PLAYER+PL3,x
-                and RANDOM
+                and SID_RANDOM
                 sta PLAYER+PL3,x
                 inx
                 dey

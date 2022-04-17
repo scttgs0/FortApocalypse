@@ -70,7 +70,9 @@ _2              cmp #BEGIN
                 lda TANK_START_Y,x
                 sta TANK_Y,x
                 lda #-1
-                ;!! ldy RANDOM
+                .setbank $AF
+                ldy SID_RANDOM
+                .setbank $03
                 bpl _3
 
                 lda #1
