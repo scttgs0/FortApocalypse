@@ -1,12 +1,14 @@
                 .cpu "65816"
 
-                * = $3_0000
+                * = $03_0000
                 clc
                 xce
 
 ;=======================================
 
-RunTests        jsr TEST_joy            ; test_input.asm
+RunTests        jsr TEST_font           ; test_font.asm
+
+                jsr TEST_joy            ; test_input.asm
                 jsr TEST_trigger
                 jsr TEST_keybd
 
