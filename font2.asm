@@ -8,7 +8,7 @@ FNT2
 ; CHR $00-$1F BLANK
 ; CHR $20
 ; CHR $21
-                .byte %01010101         ;....       ; red letters on green background
+                .byte %01010101         ;....       red letters on green background
                 .byte %01100101         ;.R..
                 .byte %01100101         ;.R..
                 .byte %10011001         ;R.R.
@@ -116,7 +116,7 @@ FNT2
                 .byte %10101001         ;RRR.
                 .byte %01010101         ;....
 ; CHR $2D
-                .byte %01010101         ;...
+                .byte %01010101         ;....
                 .byte %10010110         ;R..R
                 .byte %10011010         ;R.RR
                 .byte %10101010         ;RRRR
@@ -241,8 +241,11 @@ FNT2
                 .byte %10010101         ;R...
                 .byte %10101001         ;RRR.
                 .byte %01010101         ;....
+
+;--------------------------------------
+
 ; CHR $3B
-                .byte %00101000         ;.RR.       ; slave legs
+                .byte %00101000         ;.RR.       slave legs
                 .byte %00001000         ;..R.
                 .byte %00001000         ;..R.
                 .byte %10101000         ;RRR.
@@ -359,7 +362,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %01010101         ;gggg
                 .byte %01010101         ;gggg
 ; CHR $48
-                .byte %00000000         ;....       ; slave landing pad
+                .byte %00000000         ;....       slave landing pad
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
@@ -368,7 +371,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %00010100         ;.gg.
                 .byte %01010101         ;gggg
 ; CHR $49
-                .byte %00000000         ;....       ; slave head right-facing
+                .byte %00000000         ;....       slave head right-facing
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
@@ -377,7 +380,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %00101010         ;.RRR
                 .byte %00101000         ;.RR.
 ; CHR $4A
-                .byte %00000000         ;....       ; slave head left-facing
+                .byte %00000000         ;....       slave head left-facing
                 .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
@@ -395,7 +398,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %01010101         ;gggg
                 .byte %01010101         ;gggg
 ; CHR $4C
-                .byte %00111110         ;.##R
+                .byte %00111110         ;.##R       zapper south-east
                 .byte %00111110         ;.##R
                 .byte %11111010         ;##RR
                 .byte %11111010         ;##RR
@@ -404,7 +407,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %10101010         ;RRRR
                 .byte %10101010         ;RRRR
 ; CHR $4D
-                .byte %10111100         ;R##.
+                .byte %10111100         ;R##.       zapper south-west
                 .byte %10111100         ;R##.
                 .byte %10101111         ;RR##
                 .byte %10101111         ;RR##
@@ -413,7 +416,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %10101010         ;RRRR
                 .byte %10101010         ;RRRR
 ; CHR $4E
-                .byte %10101010         ;RRRR
+                .byte %10101010         ;RRRR        zapper north-east
                 .byte %10101010         ;RRRR
                 .byte %11101010         ;#RRR
                 .byte %11101010         ;#RRR
@@ -422,7 +425,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %00111110         ;.##R
                 .byte %00111110         ;.##R
 ; CHR $4F
-                .byte %10101010         ;RRRR
+                .byte %10101010         ;RRRR       zapper north-west
                 .byte %10101010         ;RRRR
                 .byte %10101011         ;RRR#
                 .byte %10101011         ;RRR#
@@ -431,7 +434,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %10111100         ;R##.
                 .byte %10111100         ;R##.
 ; CHR $50
-                .byte %00000000         ;....
+                .byte %00000000         ;....       laser south
                 .byte %00111100         ;.##.
                 .byte %00111100         ;.##.
                 .byte %11111111         ;####
@@ -440,7 +443,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %10101010         ;RRRR
                 .byte %10101010         ;RRRR
 ; CHR $51
-                .byte %10101010         ;RRRR
+                .byte %10101010         ;RRRR       laser north
                 .byte %10101010         ;RRRR
                 .byte %10101010         ;RRRR
                 .byte %11101011         ;#RR#
@@ -467,7 +470,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %00111010         ;.#RR
                 .byte %00111010         ;.#RR
 ; CHR $54
-                .byte %00101000         ;.RR.
+                .byte %00101000         ;.RR.       fuel scaffolding
                 .byte %00101000         ;.RR.
                 .byte %00010100         ;.gg.
                 .byte %00101000         ;.RR.
@@ -512,7 +515,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %11111111         ;####
                 .byte %00111100         ;.##.
 ; CHR $59
-                .byte %10101010         ;####       ; num-1 on red background
+                .byte %10101010         ;####       num-1 on red background
                 .byte %10100010         ;##.#
                 .byte %10000010         ;#..#
                 .byte %10100010         ;##.#
@@ -521,7 +524,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %10101010         ;####
                 .byte %10101010         ;####
 ; CHR $5A
-                .byte %10101010         ;####       ; num-2 on red background
+                .byte %10101010         ;####       num-2 on red background
                 .byte %10000010         ;#..#
                 .byte %10100010         ;##.#
                 .byte %10000010         ;#..#
@@ -530,7 +533,7 @@ FNT2_40         .byte %00000000         ;....
                 .byte %10101010         ;####
                 .byte %10101010         ;####
 ; CHR $5B
-                .byte %00000000         ;....
+                .byte %00000000         ;....       pod
                 .byte %00000000         ;....
                 .byte %00000010         ;...R
                 .byte %00001010         ;..RR
@@ -584,7 +587,7 @@ FNT2_60         .byte %00000000         ;....
                 .byte %00011000         ;.gR.
                 .byte %00000000         ;....
 ; CHR $61
-                .byte %01010101         ;gggg       ; terrain
+                .byte %01010101         ;gggg       terrain
                 .byte %01010101         ;gggg
                 .byte %01010101         ;gggg
                 .byte %01010101         ;gggg
@@ -683,7 +686,7 @@ FNT2_60         .byte %00000000         ;....
                 .byte %00010101         ;.ggg
                 .byte %00000101         ;..gg
 ; CHR $6C
-                .byte %00000000         ;....
+                .byte %00000000         ;....       tank
                 .byte %11000000         ;#...
                 .byte %11110000         ;##..
                 .byte %11111111         ;####
@@ -728,7 +731,7 @@ FNT2_60         .byte %00000000         ;....
                 .byte %00111110         ;.##R
                 .byte %00111100         ;.##.
 ; CHR $71
-                .byte %00000000         ;....
+                .byte %00000000         ;....       missle left
                 .byte %00000000         ;....
                 .byte %00001010         ;..RR
                 .byte %10101111         ;RR##
@@ -737,7 +740,7 @@ FNT2_60         .byte %00000000         ;....
                 .byte %00000000         ;....
                 .byte %00000000         ;....
 ; CHR $72
-                .byte %00000000         ;....
+                .byte %00000000         ;....       missle right
                 .byte %00000000         ;....
                 .byte %10100000         ;RR..
                 .byte %11101010         ;#RRR
