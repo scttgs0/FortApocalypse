@@ -1,4 +1,6 @@
 .*
+ref/
+
 *.lbl
 *.lst
 *.rom
