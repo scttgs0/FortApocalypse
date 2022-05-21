@@ -80,9 +80,9 @@ _next2          lda v_marqueeGlyph
                 bpl _next2
 
                 lda #<T2                ; setup the deferred VBI (move the dots)
-                sta VVBLKD
+                ;!! sta VVBLKD
                 lda #>T2
-                sta VVBLKD+1
+                ;!! sta VVBLKD+1
 
                 ldx #5
                 stx v_posX
@@ -120,9 +120,9 @@ _next3          lda T_5,x
                 jsr Print               ; (4, 12) 'Synapse Software'
 
 ; change the text color for each scan line
-_endless1       lda VCOUNT              ; current scan line being draw on screen (divided by 2)
+_endless1       ;!! lda VCOUNT              ; current scan line being draw on screen (divided by 2)
                 asl                     ; double it to get the real scan line number
-                sta WSYNC               ; halt until next horz sync
+                ;!! sta WSYNC               ; halt until next horz sync
                 ;!! sta COLPF3              ; alter the playfield color
                 bra _endless1
 
@@ -187,7 +187,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 cmp #7
                 bne _3
 
-                jml VVBLKD_RET          ; exit VBI
+                ;!! jml VVBLKD_RET          ; exit VBI
 
 _3              stx MODE
                 ldx #0
@@ -238,17 +238,17 @@ T3              .proc
                 ;!! sta COLOR3
 
                 lda #<VERTBLKD          ; enable deferred VBI
-                sta VVBLKD
+                ;!! sta VVBLKD
                 lda #>VERTBLKD
-                sta VVBLKD+1
+                ;!! sta VVBLKD+1
 
                 jsr ScreenOff
 
-_wait1          lda VCOUNT              ; wait for next horz sync
+_wait1          ;!! lda VCOUNT              ; wait for next horz sync
                 bne _wait1
 
                 lda #$C0                ; enable VBI & DLI
-                sta NMIEN
+                ;!! sta NMIEN
 
                 cli
 

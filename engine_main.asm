@@ -64,20 +64,20 @@ _next1          lda Z2,x
                 bne _next1
 
                 lda #%00111110
-                sta SDMCTL
+                ;!! sta SDMCTL
                 lda #$14
-                sta PRIOR
+                ;!! sta PRIOR
                 lda #%00000011
-                sta GRACTL
-                sta SKCTL
+                ;!! sta GRACTL
+                ;!! sta SKCTL
 
                 lda #>PLAYER
-                sta PMBASE
+                ;!! sta PMBASE
                 lda #>CHR_SET1
-                sta CHBAS
+                ;!! sta CHBAS
 
                 ldx #0
-                stx AUDCTL
+                ;!! stx AUDCTL
                 ;!! stx COLOR4
                 stx TIM6_VAL
                 stx PILOT_SKILL
@@ -88,9 +88,9 @@ _next1          lda Z2,x
                 stx CHOPS
 
                 lda #<LINE1
-                sta VDSLST
+                ;!! sta VDSLST
                 lda #>LINE1
-                sta VDSLST+1
+                ;!! sta VDSLST+1
 
                 jsr M_START
 
@@ -123,7 +123,7 @@ _next2          lda Z1,x
                 bpl _next2
 
                 lda #$40
-                sta NMIEN
+                ;!! sta NMIEN
                 cli
 
                 brl Title
@@ -866,11 +866,15 @@ _next3          sta POD_STATUS,x
                 jsr Unpack
 
 MAKE_CONTURE    .block
-                lda #<MAP
+                .m16i16
+                lda #<>MAP
                 sta ADR1
-                lda #>MAP
-                sta ADR1+1
+                ;lda #<MAP
+                ;sta ADR1
+                ;lda #>MAP
+                ;sta ADR1+1
 
+                .m8i8
                 ldy #0
 _next1          lda (ADR1),y
                 cmp #$73                ; 's'
@@ -902,16 +906,22 @@ _2              sta (ADR1),y
                 cmp #>MAP+$2800
                 bne _next1
 
-                lda #<MAP
+                .m16i16
+                lda #<>MAP
                 sta ADR1
-                lda #>MAP
-                sta ADR1+1
+                ;lda #<MAP
+                ;sta ADR1
+                ;lda #>MAP
+                ;sta ADR1+1
 
-                lda #<MAP+255-40
+                lda #<>MAP+255-40
                 sta ADR2
-                lda #>MAP+255-40
-                sta ADR2+1
+                ;lda #<MAP+255-40
+                ;sta ADR2
+                ;lda #>MAP+255-40
+                ;sta ADR2+1
 
+                .m8i8
                 ldx #0
 _next4          ldy #0
 _next5          lda (ADR1),y
@@ -951,32 +961,45 @@ _3              lda LEVEL
                 asl
                 tax
 
+                .m16i16
                 lda SCAN_INFO,x
                 sta ADR1
-                lda SCAN_INFO+1,x
-                sta ADR1+1
+                ;lda SCAN_INFO+1,x
+                ;sta ADR1+1
 
-                lda #<SCANNER
+                lda #<>SCANNER
                 sta ADR2
-                lda #>SCANNER
-                sta ADR2+1
-                lda #<SCANNER+1600
-                sta TEMP2
-                lda #>SCANNER+1600
+                ;lda #<SCANNER
+                ;sta ADR2
+                ;lda #>SCANNER
+                ;sta ADR2+1
 
-                sta TEMP3
+                lda #<>SCANNER+1600
+                sta TEMP2
+                ;lda #<SCANNER+1600
+                ;sta TEMP2
+                ;lda #>SCANNER+1600
+                ;sta TEMP3
+
+                .m8i8
                 lda #1
                 sta TEMP4
                 jsr Unpack
 
-                lda #<SCANNER
+                .m16i16
+                lda #<>SCANNER
                 sta ADR1
-                lda #>SCANNER
-                sta ADR1+1
-                lda #<SCANNER+$1B
+                ;lda #<SCANNER
+                ;sta ADR1
+                ;lda #>SCANNER
+                ;sta ADR1+1
+
+                lda #<>SCANNER+$1B
                 sta ADR2
-                lda #>SCANNER+$1B
-                sta ADR2+1
+                ;lda #<SCANNER+$1B
+                ;sta ADR2
+                ;lda #>SCANNER+$1B
+                ;sta ADR2+1
 
                 ldx #39
 _next8          ldy #12
@@ -1025,11 +1048,15 @@ _next1          sta SLAVE_STATUS,x
                 beq _2
 
                 ldx #7
-_next2          lda #<MAP
+_next2          .m16i16
+                lda #<>MAP
                 sta ADR1
-                lda #>MAP
-                sta ADR1+1
+                ;lda #<MAP
+                ;sta ADR1
+                ;lda #>MAP
+                ;sta ADR1+1
 
+                .m8i8
                 ldy #0
 _next3          lda (ADR1),y
                 cmp #$48                ; '^H'
@@ -1216,11 +1243,15 @@ _6              lda #2
                 ldy #>txtHighScore
                 jsr Print
 
-                lda #<PLAY_SCRN+24
+                .m16i16
+                lda #<>PLAY_SCRN+24
                 sta SCRN_ADR
-                lda #>PLAY_SCRN+24
-                sta SCRN_ADR+1
+                ;lda #<PLAY_SCRN+24
+                ;sta SCRN_ADR
+                ;lda #>PLAY_SCRN+24
+                ;sta SCRN_ADR+1
 
+                .m8i8
                 ldx #5
                 lda HI3
                 jsr DoNumbers.DDIG
@@ -1360,11 +1391,15 @@ _XIT            rts
 
 ; SCORE
 DO_N            .block
-                lda #<SCORE_DIG
+                .m16i16
+                lda #<>SCORE_DIG
                 sta SCRN_ADR
-                lda #>SCORE_DIG
-                sta SCRN_ADR+1
+                ;lda #<SCORE_DIG
+                ;sta SCRN_ADR
+                ;lda #>SCORE_DIG
+                ;sta SCRN_ADR+1
 
+                .m8i8
                 lda #0
                 sta SCRN_FLG
                 ldx #5
@@ -1401,11 +1436,15 @@ DO_N            .block
                 cld
 
 ; BONUS
-_1              lda #<BONUS_DIG
+_1              .m16i16
+                lda #<>BONUS_DIG
                 sta SCRN_ADR
-                lda #>BONUS_DIG
-                sta SCRN_ADR+1
+                ;lda #<BONUS_DIG
+                ;sta SCRN_ADR
+                ;lda #>BONUS_DIG
+                ;sta SCRN_ADR+1
 
+                .m8i8
                 lda #0
                 sta SCRN_FLG
                 ldx #3

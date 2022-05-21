@@ -11,12 +11,12 @@
 INIT_OS         ;.proc
                 ldx #$25
 _next1          lda $E480,x             ; PUPDIV
-                sta VDSLST,x
+                ;!! sta VDSLST,x
                 dex
                 bpl _next1
 
                 lda #$40
-                sta NMIEN
+                ;!! sta NMIEN
 
                 ldx #$3B
                 ;!! stx PACTL

@@ -7,64 +7,64 @@
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 DSP_LST1        = RAM1_STUFF
-Z1              .byte AEMPTY8
-                .byte AEMPTY8
-                .byte ADLI
-                .byte AEMPTY8           ; color gradient
+Z1              ;!! .byte AEMPTY8
+                ;!! .byte AEMPTY8
+                ;!! .byte ADLI
+                ;!! .byte AEMPTY8           ; color gradient
 
-                .byte $04+ALMS          ; Score Panel
+                .byte $04;!! +ALMS          ; Score Panel
                     .addr PANEL
 
                 .byte $04,$04,$04,$04   ; 32 lines of 40 pixels (Navatron display)
 
-                .byte $04+ALMS          ; Navatron Panel
+                .byte $04;!! +ALMS          ; Navatron Panel
                     .addr NAVA_PANEL
 
-                .byte $04+ALMS+ADLI     ; Message Panel (low on fuel)
+                .byte $04;!! +ALMS+ADLI     ; Message Panel (low on fuel)
                     .addr PLAY_SCRN
 
-                .byte AEMPTY6           ; color gradient
-                .byte AEMPTY3
-                .byte ADLI
+                ;!! .byte AEMPTY6           ; color gradient
+                ;!! .byte AEMPTY3
+                ;!! .byte ADLI
 
 DSP_MAP         = *-Z1+RAM1_STUFF
 MAP_LINES       = 17
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000                     ; placeholder
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+AHSCR+AVSCR
+                .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04+ALMS+ADLI+AHSCR           ; no vertical scroll on bottom row
+                .byte $04;!! +ALMS+ADLI+AHSCR           ; no vertical scroll on bottom row
                     .word $0000
 
-                .byte AVB+AJMP          ; vblank jump
+                ;!! .byte AVB+AJMP          ; vblank jump
                     .addr DSP_LST1
 
 Z1_LEN          = *-Z1-1
@@ -144,56 +144,56 @@ Z2_LEN          = *-Z2-1
 ;---------------------------------------
 ; Options Screen
 ;---------------------------------------
-DSP_LST2        .byte AEMPTY8           ; 25 blank lines
-                .byte AEMPTY8
-                .byte ADLI
-                .byte AEMPTY8
+DSP_LST2        ;!! .byte AEMPTY8           ; 25 blank lines
+                ;!! .byte AEMPTY8
+                ;!! .byte ADLI
+                ;!! .byte AEMPTY8
 
-                .byte $04+ALMS          ; 40 lines of 40 pixels
+                .byte $04;!! +ALMS          ; 40 lines of 40 pixels
                     .addr PANEL
                 .byte $04,$04,$04,$04
 
-                .byte AEMPTY8           ; 26 blank lines
-                .byte AEMPTY8
-                .byte ADLI
-                .byte AEMPTY6
-                .byte AEMPTY3
+                ;!! .byte AEMPTY8           ; 26 blank lines
+                ;!! .byte AEMPTY8
+                ;!! .byte ADLI
+                ;!! .byte AEMPTY6
+                ;!! .byte AEMPTY3
 
-                .byte $04+ALMS          ; 120 lines of 40 pixels
+                .byte $04;!! +ALMS          ; 120 lines of 40 pixels
                     .addr PLAY_SCRN
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04
 
-                .byte ADLI              ; 10 blank lines
-                .byte AEMPTY8
-                .byte ADLI
+                ;!! .byte ADLI              ; 10 blank lines
+                ;!! .byte AEMPTY8
+                ;!! .byte ADLI
 
-                .byte AVB+AJMP          ; vblank jump
+                ;!! .byte AVB+AJMP          ; vblank jump
                     .addr DSP_LST2
 
 ;---------------------------------------
 ; Title Screen
 ;---------------------------------------
-DSP_LST3        .byte AEMPTY8           ; 48 blank lines
-                .byte AEMPTY8
-                .byte AEMPTY8
-                .byte AEMPTY8
-                .byte AEMPTY8
-                .byte AEMPTY8
+DSP_LST3        ;!! .byte AEMPTY8           ; 48 blank lines
+                ;!! .byte AEMPTY8
+                ;!! .byte AEMPTY8
+                ;!! .byte AEMPTY8
+                ;!! .byte AEMPTY8
+                ;!! .byte AEMPTY8
 
-                .byte $04+ALMS          ; 152 lines of 40 pixels
+                .byte $04;!! +ALMS          ; 152 lines of 40 pixels
                     .addr PLAY_SCRN
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04
-                .byte $04+ALMS
+                .byte $04;!! +ALMS
                     .addr PLAY_SCRN
 
-                .byte AVB+AJMP          ; vblank jump
+                ;!! .byte AVB+AJMP          ; vblank jump
                     .addr DSP_LST3
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

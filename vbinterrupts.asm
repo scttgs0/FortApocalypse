@@ -15,28 +15,27 @@ VERTBLKD        .proc
                 php
                 cld
                 lda #0
-                sta ATTRACT
-                lda M2PL
-                ora M3PL
+                ;!! lda M2PL
+                ;!! ora M3PL
                 and #%00000011
-                ora P0PL
-                ora P1PL
+                ;!! ora P0PL
+                ;!! ora P1PL
                 asl
                 asl
                 asl
                 asl
-                ora P0PF
-                ora P1PF
+                ;!! ora P0PF
+                ;!! ora P1PF
                 sta CHOPPER_COL
-                lda M0PL
-                ora M1PL
+                ;!! lda M0PL
+                ;!! ora M1PL
                 and #%00001100
-                ora P2PL
-                ora P2PF
-                ora P3PL
-                ora P3PF
+                ;!! ora P2PL
+                ;!! ora P2PF
+                ;!! ora P3PL
+                ;!! ora P3PF
                 sta ROBOT_COL
-                sta HITCLR
+                ;!! sta HITCLR
 
                 jsr DoNumbers
                 jsr DrawMap
@@ -61,7 +60,7 @@ VERTBLKD        .proc
 
 _1              plp
                 cli
-                jml VVBLKD_RET
+                ;!! jml VVBLKD_RET
 
                 .endproc
 

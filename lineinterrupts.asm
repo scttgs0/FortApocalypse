@@ -11,14 +11,19 @@ LINE1           .proc
                 pha
                 txa
                 pha
-                lda #<LINE2
-                sta VDSLST
-                lda #>LINE2
-                sta VDSLST+1
 
+                .m16i16
+                lda #<>LINE2
+                ;sta VDSLST
+                ;lda #<LINE2
+                ;!! sta VDSLST
+                ;lda #>LINE2
+                ;!! sta VDSLST+1
+
+                .m8i8
                 ldx #0
 _next1          txa
-                sta WSYNC
+                ;!! sta WSYNC
                 asl
                 ora #$E0
                 ;!! sta COLBK
@@ -39,9 +44,9 @@ LINE2           .proc
                 txa
                 pha
                 lda #<LINE3
-                sta VDSLST
+                ;!! sta VDSLST
                 lda #>LINE3
-                sta VDSLST+1
+                ;!! sta VDSLST+1
 
                 ldx #2
 _next1          lda ROCKET_X,x
@@ -51,7 +56,7 @@ _next1          lda ROCKET_X,x
 
                 ldx #7
 _next2          txa
-                sta WSYNC
+                ;!! sta WSYNC
                 asl
                 ora #$E0
                 ;!! sta COLBK
@@ -76,9 +81,9 @@ LINE3           .proc
                 cld
 
                 lda #<LINE4
-                sta VDSLST
+                ;!! sta VDSLST
                 lda #>LINE4
-                sta VDSLST+1
+                ;!! sta VDSLST+1
 
                 lda ROBOT_X
                 .sta_spr_xpos 2
@@ -86,8 +91,8 @@ LINE3           .proc
                 adc #8
                 .sta_spr_xpos 3
                 lda #>CHR_SET2
-                sta WSYNC
-                sta CHBASE
+                ;!! sta WSYNC
+                ;!! sta CHBASE
 
                 lda BAK_COLOR
                 ;!! sta COLPF0
@@ -120,9 +125,9 @@ LINE4           .proc
 
                 cld
                 lda #<LINE1
-                sta VDSLST
+                ;!! sta VDSLST
                 lda #>LINE1
-                sta VDSLST+1
+                ;!! sta VDSLST+1
 
                 ldx #7
                 lda #0
@@ -130,7 +135,7 @@ _next1          .sta_ix_spr_xpos
                 dex
                 bpl _next1
 
-                sta WSYNC
+                ;!! sta WSYNC
                 ;!! sta COLBK
 
                 lda MODE
