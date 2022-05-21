@@ -31,11 +31,7 @@ v_marqueeGlyph  .var TEMP3
 
                 jsr ScreenOff
 
-                .graphicMode320
-                ; lda #<DSP_LST3        ; title screen display list
-                ; sta SDLST
-                ; lda #>DSP_LST3
-                ; sta SDLST+1
+                .graphics mcGraphicsOn, mcVideoMode320
 
                 lda #$3B                ; start with red marquee dot
                 sta v_marqueeGlyph
