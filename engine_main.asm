@@ -18,9 +18,10 @@ CartridgeStart  .proc
                 txa
 _next1          sta $0000,x             ; zero-page
                 .sta_ix_spr_xpos
-                sta DMACLT,x
-                sta AUDF1,x
-                sta PORTA,x
+                ;!! sta DMACLT,x
+                sta SID_FREQ1,x
+                sta SID_FREQ1+1,x
+                ;!! sta PORTA,x
                 inx
                 bne _next1
 
@@ -594,7 +595,9 @@ _next1          sta WINDOW_1,x
 
                 ldx #7
                 lda #$55
-                ldy RANDOM
+                .setbank $AF
+                ldy SID_RANDOM
+                .setbank $03
                 bmi _next3
 
 _next2          sta WINDOW_1,x
@@ -873,7 +876,7 @@ _next1          lda (ADR1),y
                 cmp #$73                ; 's'
                 bne _1
 
-_next2          lda RANDOM
+_next2          lda SID_RANDOM
                 and #3
                 beq _next2
 
@@ -884,7 +887,7 @@ _next2          lda RANDOM
 _1              cmp #$74                ; 't'
                 bne _2
 
-_next3          lda RANDOM
+_next3          lda SID_RANDOM
                 and #3
                 beq _next3
 
@@ -1044,7 +1047,7 @@ _next3          lda (ADR1),y
                 cmp #$1F                ; '?'
                 bne _1
 
-                lda RANDOM
+                lda SID_RANDOM
                 cmp #10
                 blt _1
 
@@ -1314,14 +1317,14 @@ _8              iny
 DoExplode       .proc
                 ldx #7
 _next1          lda EXP_SHAPE,x
-                and RANDOM
+                and SID_RANDOM
                 sta EXPLOSION,x
                 sta EXPLOSION2,x
                 dex
                 bpl _next1
 
                 ldx #3
-_next2          lda RANDOM
+_next2          lda SID_RANDOM
                 and #$0F
                 ora #$A0
                 sta MISS_CHR_LEFT,x
@@ -1330,7 +1333,7 @@ _next2          lda RANDOM
                 bne _next2
 
                 ldx #3
-_next3          lda RANDOM
+_next3          lda SID_RANDOM
                 and #$E0
                 ora #$0A
                 sta MISS_CHR_RIGHT,x
