@@ -45,7 +45,7 @@ LINE2           .proc
 
                 ldx #2
 _next1          lda ROCKET_X,x
-                sta HPOSM0,x
+                .sta_ix_spr_xpos        ; missiles = sprint 5+
                 dex
                 bpl _next1
 
@@ -81,10 +81,10 @@ LINE3           .proc
                 sta VDSLST+1
 
                 lda ROBOT_X
-                sta HPOSP2
+                .sta_spr_xpos 2
                 clc
                 adc #8
-                sta HPOSP3
+                .sta_spr_xpos 3
                 lda #>CHR_SET2
                 sta WSYNC
                 sta CHBASE
@@ -126,7 +126,7 @@ LINE4           .proc
 
                 ldx #7
                 lda #0
-_next1          sta HPOSP0,x
+_next1          .sta_ix_spr_xpos
                 dex
                 bpl _next1
 

@@ -18,7 +18,6 @@ TEMP3           .byte ?
 TEMP4           .byte ?
 TEMP5           .byte ?
 TEMP6           .byte ?
-
 TEMP_MODE       .byte ?
 
 ADR1_I          .word ?

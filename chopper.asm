@@ -187,8 +187,8 @@ UpdateChopper   .proc
                 bne _2
 
                 lda #0
-                sta HPOSP0
-                sta HPOSP1
+                .sta_spr_xpos 0
+                .sta_spr_xpos 1
                 rts
 
 _1              lda #kFLY
@@ -205,10 +205,10 @@ _next1          sta PLAYER+PL0,y
                 bpl _next1
 
                 lda CHOPPER_X
-                sta HPOSP0
+                .sta_spr_xpos 0
                 clc
                 adc #8
-                sta HPOSP1
+                .sta_spr_xpos 1
 
                 lda CHOPPER_ANGLE
                 asl

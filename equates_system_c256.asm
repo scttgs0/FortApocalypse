@@ -61,3 +61,29 @@ SID_RESON               = $AF_E417
 SID_SIGVOL              = $AF_E418
 SID_RANDOM              = $AF_E41B
 SID_ENV3                = $AF_E41C
+
+;--------------------------------------
+
+SP_CONTROL_REG          = $AF_0C00
+scEnable            = $01
+
+scLUT0              = $00
+scLUT1              = $02
+scLUT2              = $04
+scLUT3              = $06
+scLUT4              = $08
+scLUT5              = $0A
+scLUT6              = $0C
+scLUT7              = $0E
+
+scDEPTH0            = $00
+scDEPTH1            = $10
+scDEPTH2            = $20
+scDEPTH3            = $30
+scDEPTH4            = $40
+scDEPTH5            = $50
+scDEPTH6            = $60
+
+;SP_ADDR                 = $AF_0C01      ; [long]
+;SP_X_POS                = $AF_0C04      ; [word]
+;SP_Y_POS                = $AF_0C06      ; [word]

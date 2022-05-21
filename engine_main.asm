@@ -17,7 +17,7 @@ CartridgeStart  .proc
                 ldx #$00
                 txa
 _next1          sta $0000,x             ; zero-page
-                sta HPOSP0,x
+                .sta_ix_spr_xpos
                 sta DMACLT,x
                 sta AUDF1,x
                 sta PORTA,x
