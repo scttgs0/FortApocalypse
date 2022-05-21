@@ -8,7 +8,7 @@
 ;=======================================
 ;
 ;=======================================
-INIT_OS         .proc
+INIT_OS         ;.proc
                 ldx #$25
 _next1          lda $E480,x             ; PUPDIV
                 sta VDSLST,x
@@ -31,7 +31,7 @@ _next1          lda $E480,x             ; PUPDIV
                 stx PBCTL
 
                 rts
-                .endproc
+                ;.endproc
 
 
 ;=======================================
@@ -63,12 +63,12 @@ v_roboExplodeTimer .var TIM7_VAL
                 ; lda #>DSP_LST2
                 ; sta SDLST+1
 
-                lda #OFF
+                lda #kOFF
                 sta CHOPPER_STATUS
                 sta ROBOT_STATUS
 
                 ldx R_STATUS
-                cpx #CRASH
+                cpx #kCRASH
                 bne _1
 
                 sta R_STATUS
@@ -98,10 +98,10 @@ _next2          sta CHR_SET1+$300,x
                 ldx #MAX_TANKS-1
                 stx v_roboExplodeTimer
 _next3          lda CM_STATUS,x
-                cmp #OFF
+                cmp #kOFF
                 beq _2
 
-                lda #OFF
+                lda #kOFF
                 sta CM_STATUS,x
                 jsr MissileErase
 _2              dex

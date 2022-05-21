@@ -19,16 +19,15 @@ MoveCruiseMissiles .proc
 
 M_ST            .block
                 lda CM_STATUS,x
-                cmp #OFF
+                cmp #kOFF
                 beq M_END
 
-                cmp #BEGIN
+                cmp #kBEGIN
                 bne _1
 
                 jmp MissileBegin
 
 _1              jsr MissileCollision
-
                 bcs M_END
 
                 jsr MissileErase
@@ -40,7 +39,7 @@ _1              jsr MissileCollision
 
 M_END           .block
                 lda TANK_STATUS,x
-                cmp #ON
+                cmp #kON
                 bne _2
 
                 lda TANK_Y,x
@@ -52,7 +51,7 @@ M_END           .block
                 bge _2
 
                 lda CM_STATUS,x
-                cmp #OFF
+                cmp #kOFF
                 bne _2
 
                 lda CHOP_X
@@ -65,7 +64,7 @@ M_END           .block
 _1              cmp #9
                 bge _2
 
-                lda #BEGIN
+                lda #kBEGIN
                 sta CM_STATUS,x
 _2              dex
                 bpl M_ST
@@ -76,7 +75,7 @@ _2              dex
 MCE             .block
                 ldx #MAX_TANKS-1
 _next1          lda CM_STATUS,x
-                cmp #OFF
+                cmp #kOFF
                 bne _XIT
 
                 dex
@@ -119,13 +118,13 @@ MissileBegin    .proc
                 sec
                 sbc #2
                 sta CM_Y,x
-                ldy #LEFT
+                ldy #kLEFT
                 lda CHOP_X
                 sec
                 sbc TANK_X,x
                 bmi _1
 
-                ldy #RIGHT
+                ldy #kRIGHT
 _1              tya
                 sta CM_STATUS,x
                 lda #0
@@ -134,6 +133,7 @@ _1              tya
                 sta CM_TIME,x
                 lda #1
                 sta SND6_VAL
+
                 jmp MoveCruiseMissiles.M_END
 
                 .endproc
@@ -161,7 +161,7 @@ M_COL2          jsr MissileErase
 
                 lda #1
                 sta SND3_VAL
-                lda #OFF
+                lda #kOFF
                 sta CM_STATUS,x
 
                 lda #-1
@@ -219,7 +219,7 @@ v_distance      .var TEMP1
 ;---
 
                 lda CM_STATUS,x
-                cmp #LEFT
+                cmp #kLEFT
                 beq _1
 
                 inc CM_X,x
@@ -238,7 +238,7 @@ _3              lda CHOP_X
                 sta v_distance
 
                 lda CM_STATUS,x
-                cmp #LEFT
+                cmp #kLEFT
                 bne _4
 
                 lda v_distance
@@ -297,9 +297,11 @@ MissileDraw     .proc
                 ldy #0
                 lda (ADR1),y
                 sta CM_TEMP,x
+
                 lda #MISS_LEFT
                 ldy CM_STATUS,x
-                cpy #LEFT
+
+                cpy #kLEFT
                 beq _1
 
                 lda #MISS_RIGHT
@@ -309,6 +311,7 @@ _1              ldy #0
                 jsr CheckChr
 
                 bcc _XIT
+
                 jmp MissileCollision.M_COL2
 
 _XIT            rts

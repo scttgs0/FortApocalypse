@@ -19,7 +19,7 @@ v_posY          .var TEMP2
                 jmp Refuel
 
 _1              lda CHOPPER_STATUS
-                cmp #LAND
+                cmp #kLAND
                 bne _4
 
                 lda CHOP_Y
@@ -148,7 +148,7 @@ _1              stx SND4_VAL
                 cmp #8+2
                 bge FE
 
-                lda #FULL
+                lda #kFULL
                 sta FUEL_STATUS
                 lda #4
                 sta FUEL_TEMP
@@ -167,6 +167,7 @@ DrawBase        .proc
 ;v_???          .var TEMP3
 ;v_???          .var TEMP4
 ;---
+
                 jsr ComputeMapAddr
 
                 lda #4

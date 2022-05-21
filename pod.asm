@@ -33,10 +33,10 @@ MovePods1       .proc
                 lda POD_STATUS,x
                 sta POD_COM
                 and #$0F
-                cmp #OFF
+                cmp #kOFF
                 beq PodsEnd
 
-                cmp #BEGIN
+                cmp #kBEGIN
                 bne _1
 
                 jmp PodBegin
@@ -82,6 +82,7 @@ GetPodAddr      .proc
                 jmp ComputeMapAddr
 
                 .endproc
+
 
 ;=======================================
 ;
@@ -170,7 +171,7 @@ _next2          lda SID_RANDOM
                 ora (ADR1),y
                 bne _next1
 
-                lda #ON
+                lda #kON
                 sta POD_STATUS,x
                 sta POD_COM
                 jsr PodDraw
@@ -191,6 +192,7 @@ PodCollision    .proc
 ;---
 
                 jsr GetPodValue
+
                 lda TEMP1
                 cmp #MISS_LEFT
                 beq _1
@@ -216,7 +218,7 @@ PodCollision    .proc
 
 _1              jsr PodErase
 
-                lda #OFF
+                lda #kOFF
                 sta POD_STATUS,x
                 ldx #$50
                 ldy #$00

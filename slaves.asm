@@ -10,10 +10,10 @@
 MoveSlaves      .proc
                 ldx SLAVE_NUM
                 lda SLAVE_STATUS,x
-                cmp #OFF
+                cmp #kOFF
                 beq _2
 
-                cmp #PICKUP
+                cmp #kPICKUP
                 bne _1
 
                 jsr S_COL2
@@ -54,6 +54,7 @@ _3              stx SLAVE_NUM
                 bne _XIT
 
                 jsr ClearInfo
+
 _XIT            rts
                 .endproc
 
@@ -124,7 +125,7 @@ S_COL2          .proc
 
                 jsr SlaveErase
 
-                lda #OFF
+                lda #kOFF
                 sta SLAVE_STATUS,x
                 dec SLAVES_LEFT
                 .endproc
@@ -207,6 +208,7 @@ _1              dec SLAVE_DX,x
                 ora #$F0
                 sta SLAVE_DX,x
                 dec SLAVE_X,x
+
 _2              jsr GetSlaveAddr
 
                 ldy #0
@@ -268,7 +270,7 @@ _next1          dex
                 rts
 
 _1              lda SLAVE_STATUS,x
-                cmp #OFF
+                cmp #kOFF
                 beq _next1
 
                 lda SLAVE_X,x
@@ -289,7 +291,7 @@ _2              cmp #4
 _3              cmp #4
                 bge _next1
 
-                lda #PICKUP
+                lda #kPICKUP
                 sta SLAVE_STATUS,x
                 lda #$A8
                 sta AUDC3
@@ -299,6 +301,7 @@ _3              cmp #4
                 sec
                 rts
                 .endproc
+
 
 ;---------------------------------------
 ;---------------------------------------

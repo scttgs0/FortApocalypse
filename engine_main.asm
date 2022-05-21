@@ -53,14 +53,14 @@ _next3          lda BOOT_STUFF,x
 ;=======================================
 ;
 ;=======================================
-START           .proc
+START           ;.proc
                 sei
                 cld
                 ldx #Z2_LEN
 _next1          lda Z2,x
                 sta RAM2_STUFF,x
                 dex
-                bne _1
+                bne _next1
 
                 lda #%00111110
                 sta SDMCTL
@@ -128,7 +128,7 @@ _next2          lda Z1,x
                 brl Title
 
                 .endblock
-                .endproc
+                ;.endproc
 
 
 ;=======================================
@@ -201,7 +201,6 @@ CheckLevel      .proc
                 bne _1
 
                 jmp DoLevel2
-
 _1              jmp DoLevel3
 
                 rts
@@ -220,7 +219,7 @@ DoLevel1        .proc
 ;---
 
                 lda CHOPPER_STATUS
-                cmp #LAND
+                cmp #kLAND
                 bne _XIT
 
                 lda CHOP_Y
@@ -329,7 +328,7 @@ _next2          lda (ADR2),y
 ;=======================================
 DoLevel2        .proc
                 lda FORT_STATUS
-                cmp #OFF
+                cmp #kOFF
                 bne _XIT
 
                 lda CHOP_Y
@@ -366,7 +365,7 @@ _XIT            rts
 ;=======================================
 DoLevel3        .proc
                 lda CHOPPER_STATUS
-                cmp #LAND
+                cmp #kLAND
                 bne _XIT
 
                 lda CHOP_Y
@@ -383,6 +382,7 @@ DoLevel3        .proc
                 jsr GiveBonus
 
                 inc LEVEL               ; =3
+
                 dec M_GameOver
                 lda #GAME_OVER_MODE
                 sta MODE
@@ -467,8 +467,8 @@ _XIT            rts
 ;---------------------------------------
 ;---------------------------------------
 
-CHR1            .byte $00,$61,$0E,$0F,$10,$11,$0A,$0B       ; ' a./01*+' atari-ascii
-                .byte $0C,$0D,$03,$07,$1F,$73,$74           ; ',-#'?st'
+CHR1            .byte $00,$61,$0E,$0F,$10,$11,$0A,$0B
+                .byte $0C,$0D,$03,$07,$1F,$73,$74
 
                 .byte $41,$44,$48,$58,$59,$5A,$D8
                 .byte $47+128
@@ -539,15 +539,16 @@ M_START         .proc
                 lda #128
                 sta TIM2_VAL
 
-                lda #ON
+                lda #kON
                 sta FORT_STATUS
                 sta LASER_STATUS
 
-                lda #EMPTY
+                lda #kEMPTY
                 sta FUEL_STATUS
 
-                lda #OFF
+                lda #kOFF
                 sta R_STATUS
+
                 ldx GRAV_SKILL
                 lda GRAV_TAB,x
                 sta GRAV_SKL
@@ -593,7 +594,7 @@ _next1          sta WINDOW_1,x
 
                 ldx #7
                 lda #$55
-                ;!! ldy RANDOM
+                ldy RANDOM
                 bmi _next3
 
 _next2          sta WINDOW_1,x
@@ -650,7 +651,7 @@ _1              lda #$1F                ; CHOPPER CLR
                 sta PCOLR0
                 sta PCOLR1
                 lda FUEL_STATUS
-                cmp #EMPTY
+                cmp #kEMPTY
                 bne _2
 
                 ;-----------------------
@@ -659,7 +660,7 @@ _1              lda #$1F                ; CHOPPER CLR
                 ; dec UpdateChopper
                 ;-----------------------
 
-                lda #FULL
+                lda #kFULL
                 sta FUEL_STATUS
                 ldx #0
                 stx FUEL1
@@ -694,6 +695,7 @@ _2              lda #4
                 jsr DoNumbers.DDIG
 
                 jsr DoChecksum2
+
                 ldx #75
                 jsr WaitFrame
 
@@ -717,7 +719,7 @@ _2              lda #4
 
                 jsr ScreenOn
 
-                lda #BEGIN
+                lda #kBEGIN
                 sta CHOPPER_STATUS
                 lda #GO_MODE
                 sta MODE
@@ -813,10 +815,13 @@ _4              lda TANK_START_X_L2,x
                 sta TANK_START_X,x
                 lda TANK_START_Y_L2,x
 _5              sta TANK_START_Y,x
-                lda #BEGIN
+
+                lda #kBEGIN
                 sta TANK_STATUS,x
-                lda #OFF
+
+                lda #kOFF
                 sta CM_STATUS,x
+
                 dex
                 bpl _next1
 
@@ -827,7 +832,7 @@ _next2          sta POD_STATUS,x
                 bpl _next2
 
                 ldx START_PODS
-                lda #BEGIN
+                lda #kBEGIN
 _next3          sta POD_STATUS,x
                 dex
                 bpl _next3
@@ -862,6 +867,7 @@ MAKE_CONTURE    .block
                 sta ADR1
                 lda #>MAP
                 sta ADR1+1
+
                 ldy #0
 _next1          lda (ADR1),y
                 cmp #$73                ; 's'
@@ -941,6 +947,7 @@ _next7          sta (ADR1),y
 _3              lda LEVEL
                 asl
                 tax
+
                 lda SCAN_INFO,x
                 sta ADR1
                 lda SCAN_INFO+1,x
@@ -1005,7 +1012,7 @@ S_BEGIN         .block
                 ldx #8
                 stx SLAVES_LEFT
                 dex                     ; X=7
-                lda #OFF
+                lda #kOFF
 _next1          sta SLAVE_STATUS,x
                 dex
                 bpl _next1
@@ -1056,7 +1063,7 @@ _next3          lda (ADR1),y
                 lda #1
                 sta (ADR1),y
 
-                lda #ON
+                lda #kON
                 sta SLAVE_STATUS,x
 
                 lda #$10
@@ -1114,6 +1121,7 @@ IncreaseGamePoints .proc
                 .endproc
 
 ;---------------------------------------
+;---------------------------------------
 
 M_TAB           .char -2,-1,0
 
@@ -1134,7 +1142,7 @@ M_GameOver      .proc
                 lsr
                 jsr IncreaseGamePoints
                 lda FORT_STATUS
-                cmp #OFF
+                cmp #kOFF
                 bne _1
 
                 lda #3
@@ -1353,6 +1361,7 @@ DO_N            .block
                 sta SCRN_ADR
                 lda #>SCORE_DIG
                 sta SCRN_ADR+1
+
                 lda #0
                 sta SCRN_FLG
                 ldx #5
@@ -1393,6 +1402,7 @@ _1              lda #<BONUS_DIG
                 sta SCRN_ADR
                 lda #>BONUS_DIG
                 sta SCRN_ADR+1
+
                 lda #0
                 sta SCRN_FLG
                 ldx #3
@@ -1408,7 +1418,7 @@ _1              lda #<BONUS_DIG
                 bne _3
 
                 lda FUEL_STATUS
-                cmp #FULL
+                cmp #kFULL
                 bne _3
 
                 lda FUEL1
@@ -1430,7 +1440,7 @@ _1              lda #<BONUS_DIG
                 cld
                 jmp _3
 
-_2              lda #EMPTY
+_2              lda #kEMPTY
                 sta FUEL_STATUS
 
 ; FUEL

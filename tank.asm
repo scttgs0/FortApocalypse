@@ -6,7 +6,7 @@
 
 MAX_TANKS       = 6
 
-TANK_SHAPE      .byte $EC,$ED,$EE,$EF,$F0       ; 'lmnop' atari-ascii
+TANK_SHAPE      .byte $EC,$ED,$EE,$EF,$F0
                 .byte MISS_LEFT,MISS_RIGHT
 
 
@@ -55,15 +55,15 @@ _1              lda TANK_SPEED
 _next1          lda TANK_Y,x
                 sta TEMP2
                 lda TANK_STATUS,x
-                cmp #OFF
+                cmp #kOFF
                 bne _2
 
                 jmp _9
 
-_2              cmp #BEGIN
+_2              cmp #kBEGIN
                 bne _4
 
-                lda #ON
+                lda #kON
                 sta TANK_STATUS,x
                 lda TANK_START_X,x
                 sta TANK_X,x
@@ -80,7 +80,7 @@ _3              sta TANK_DX,x
                 jsr PositionTank
                 bra _next4
 
-_4              cmp #CRASH
+_4              cmp #kCRASH
                 bne _5
                 jmp _9
 
@@ -106,7 +106,7 @@ _next2          lda (ADR1),y
                 bne _7
 
 _6              ldx TEMP1
-                lda #CRASH
+                lda #kCRASH
                 sta TANK_STATUS,x
                 ldy #2
                 lda #EXP
@@ -163,11 +163,10 @@ _next5          lda (ADR1),y
                 ldx TEMP1
                 ldy #0
                 jsr CheckTankCollision
-
                 bcs _next4
+
                 ldy #2
                 jsr CheckTankCollision
-
                 bcs _next4
 
 ; DRAW TANK
@@ -209,10 +208,10 @@ MT2             .block
 
                 ldx #MAX_TANKS-1
 _next1          lda TANK_STATUS,x
-                cmp #CRASH
+                cmp #kCRASH
                 bne _1
 
-                lda #OFF
+                lda #kOFF
                 sta TANK_STATUS,x
                 lda TANK_X,x
                 sta TEMP1
@@ -245,7 +244,7 @@ _next2          lda TANK_TEMP,x
                 jsr PositionTank
 
 _1              lda TANK_STATUS,x
-                cmp #OFF
+                cmp #kOFF
                 bne _2
 
                 lda CHOP_Y
@@ -272,7 +271,7 @@ _next3          lda (ADR1),y
                 dey
                 bpl _next3
 
-                lda #BEGIN
+                lda #kBEGIN
                 sta TANK_STATUS,x
 
 _2              dex

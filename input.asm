@@ -109,10 +109,10 @@ v_angleBit0     .var TEMP1_I
 ;---
 
                 lda CHOPPER_STATUS      ; skip joystick read when Off
-                cmp #OFF
+                cmp #kOFF
                 beq _XIT
 
-                cmp #CRASH              ; skip joystick read when Crashed
+                cmp #kCRASH              ; skip joystick read when Crashed
                 bne _doStick
 
 _XIT            rts
@@ -154,13 +154,13 @@ _2              lda JOYSTICK0
                 sta SND1_2_VAL
 
 _3              lda FUEL_STATUS
-                cmp #EMPTY
+                cmp #kEMPTY
                 bne _chk_right
 
                 lda #60
                 sta SND1_2_VAL
 _chk_right      txa
-                and #RIGHT
+                and #kRIGHT
                 beq _chk_left
 
                 lda #17
@@ -183,7 +183,7 @@ _5              lda FRAME
                 inc CHOPPER_ANGLE
                 inc CHOPPER_ANGLE
 _chk_left       txa
-                and #LEFT
+                and #kLEFT
                 beq _chk_up
 
                 lda #17
@@ -207,11 +207,11 @@ _7              lda FRAME
                 dec CHOPPER_ANGLE
 
 _chk_up         lda FUEL_STATUS
-                cmp #EMPTY
+                cmp #kEMPTY
                 beq _chk_down
 
                 txa
-                and #UP
+                and #kUP
                 bne _chk_down
 
                 lda #13
@@ -221,17 +221,17 @@ _chk_up         lda FUEL_STATUS
                 jsr Hover
 
 _chk_down       txa
-                and #DOWN
+                and #kDOWN
                 beq _8
 
                 lda #26
                 sta SND1_2_VAL
 
                 lda CHOPPER_STATUS
-                cmp #LAND
+                cmp #kLAND
                 beq _8
 
-                cmp #PICKUP
+                cmp #kPICKUP
                 beq _8
 
                 inc CHOPPER_Y
@@ -260,7 +260,7 @@ _10             lda CHOPPER_ANGLE
 ;=======================================
 ReadTrigger     .proc
                 lda CHOPPER_STATUS      ; skip trigger read when crashed
-                cmp #CRASH
+                cmp #kCRASH
                 beq _XIT
 
                 lda DEMO_STATUS

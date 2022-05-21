@@ -13,7 +13,7 @@ DoLaser1        .proc
                 bne _XIT
 
                 lda LASER_STATUS
-                cmp #OFF
+                cmp #kOFF
                 beq _1
 
                 lda TIM1_VAL
@@ -62,7 +62,7 @@ DoLaser2        .proc
                 bne _XIT
 
                 lda LASER_STATUS
-                cmp #OFF
+                cmp #kOFF
                 beq _1
 
                 lda TIM2_VAL

@@ -75,7 +75,7 @@ _3              clc
                 sty ROCKET_TEMP+0
                 sty ROCKET_TEMP+1
                 sty ROCKET_TEMP+2
-                lda #EXPLODE
+                lda #kEXPLODE
                 sta FORT_STATUS
                 bra _7
 
@@ -88,6 +88,7 @@ _4              cmp #EXP_WALL
                 ldx #$20
                 ldy #$00
                 jsr IncreaseScore
+
                 ldx TEMP1_I
                 lda #0
                 sta ROCKET_TEMP,x
@@ -117,7 +118,7 @@ MOVE_ROCKETS    .block
                 lda ROCKET_STATUS,x
                 beq _1
 
-                cmp #7                  ; EXP
+                cmp #STOP_MODE
                 beq _2
 
                 lda SSIZEM

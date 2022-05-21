@@ -267,7 +267,7 @@ CheckFort       .proc
 ;---
 
                 lda FORT_STATUS
-                cmp #EXPLODE
+                cmp #kEXPLODE
                 beq DoChecksum1
 
                 rts
@@ -407,7 +407,7 @@ _next6          ldx #2
 
                 lda #GO_MODE
                 sta MODE
-                lda #OFF
+                lda #kOFF
                 sta FORT_STATUS
                 sta LASER_STATUS
 

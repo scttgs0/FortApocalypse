@@ -38,6 +38,7 @@ CheckChrI       .proc
                 ldy #7
 _next1          lda (ADR2_I),y
                 bne _XIT
+
                 dey
                 bpl _next1
 
@@ -61,20 +62,20 @@ DoChopper       .proc
 ;---
 
                 lda CHOPPER_STATUS
-                cmp #OFF
+                cmp #kOFF
                 bne _1
 
 _XIT            rts
 
 _leap           jmp _8
 
-_1              cmp #CRASH
+_1              cmp #kCRASH
                 beq _XIT
 
-                cmp #LAND
+                cmp #kLAND
                 beq _2
 
-                cmp #PICKUP
+                cmp #kPICKUP
                 beq _2
 
                 lda FRAME
@@ -101,7 +102,7 @@ _2              lda CHOPPER_COL
                 lda #1
                 sta SND3_VAL
                 sta SND5_VAL
-_3              ldx #FLY
+_3              ldx #kFLY
                 bra _9
 
 _4              lda CHOP_X
@@ -132,7 +133,7 @@ _4              lda CHOP_X
                 jsr SlavePickUp
                 bcc _5
 
-                ldx #PICKUP
+                ldx #kPICKUP
                 jmp _9
 
 _5              lda TEMP3_I
@@ -145,7 +146,7 @@ _5              lda TEMP3_I
                 cmp #10+4
                 blt _6
 
-                cpx #EMPTY
+                cpx #kEMPTY
                 beq _8
 
 _6              cpx #kREFUEL
@@ -156,14 +157,14 @@ _6              cpx #kREFUEL
 
                 jsr RestorePoint
 
-_7              ldx #LAND
+_7              ldx #kLAND
                 bra _9
 
 _8              lda #20
                 sta TIM3_VAL
                 lda #1
                 sta SND3_VAL
-                ldx #CRASH
+                ldx #kCRASH
 _9              stx CHOPPER_STATUS
                 rts
                 .endproc
@@ -179,10 +180,10 @@ UpdateChopper   .proc
 ;---
 
                 lda CHOPPER_STATUS
-                cmp #BEGIN
+                cmp #kBEGIN
                 beq _1
 
-                cmp #OFF
+                cmp #kOFF
                 bne _2
 
                 lda #0
@@ -190,7 +191,7 @@ UpdateChopper   .proc
                 sta HPOSP1
                 rts
 
-_1              lda #FLY
+_1              lda #kFLY
                 sta CHOPPER_STATUS
                 jmp _CCXY
 
@@ -241,7 +242,7 @@ _next2          ldy TEMP1_I
                 bne _next2
 
                 lda CHOPPER_STATUS
-                cmp #CRASH
+                cmp #kCRASH
                 bne _5
 
                 ldx CHOPPER_Y
@@ -274,12 +275,12 @@ _3              dec TIM3_VAL
                 bne _5
 
                 lda R_STATUS
-                cmp #OFF
+                cmp #kOFF
                 beq _4
 
                 jsr PositionRobot
 
-                lda #OFF
+                lda #kOFF
                 sta R_STATUS
 _4              jsr PositionChopper
 

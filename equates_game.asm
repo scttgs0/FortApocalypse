@@ -5,28 +5,27 @@
 DPADDR          = $B000
 
 MIS             = $300
-
 PL0             = $400
 PL1             = $500
 PL2             = $600
 PL3             = $700
 
-UP              = $1
-DOWN            = $2
-LEFT            = $4
-RIGHT           = $8
+kUP             = $1
+kDOWN           = $2
+kLEFT           = $4
+kRIGHT          = $8
 
-OFF             = 1
-ON              = 2
-FLY             = 3
-CRASH           = 4
-EXPLODE         = 5
-LAND            = 6
-BEGIN           = 7
-FULL            = 8
-EMPTY           = 9
+kOFF            = 1
+kON             = 2
+kFLY            = 3
+kCRASH          = 4
+kEXPLODE        = 5
+kLAND           = 6
+kBEGIN          = 7
+kFULL           = 8
+kEMPTY          = 9
 kREFUEL         = 10
-PICKUP          = 11
+kPICKUP         = 11
 
 TITLE_MODE      = 1
 GO_MODE         = 2
@@ -65,8 +64,8 @@ S_LINE1         = CHR_SET1+736
 S_LINE2         = CHR_SET1+832
 S_LINE3         = CHR_SET1+928
 
-LASERS_1        = CHR_SET2+8
-LASERS_2        = CHR_SET2+40
+LASER_1         = CHR_SET2+8
+LASER_2         = CHR_SET2+40
 LASER_3         = CHR_SET2+72
 
 BLOCK_1         = CHR_SET2+80
@@ -116,9 +115,11 @@ SX              .byte ?
 SX_F            .byte ?
 SY              .byte ?
 SY_F            .byte ?
+
 CONSOL_FLAG     .byte ?
 TRIG_FLAG       .byte ?
 LEVEL           .byte ?
+
 LAND_X          .byte ?
 LAND_Y          .byte ?
 LAND_FX         .byte ?
@@ -128,7 +129,6 @@ LAND_CHOP_Y     .byte ?                 ; [$60]
 LAND_CHOP_ANGLE .byte ?
 
 CHOPPER_STATUS  .byte ?
-
 CHOPPER_X       .byte ?
 CHOPPER_Y       .byte ?
 OCHOPPER_Y      .byte ?
@@ -138,6 +138,7 @@ CHOP_X          .byte ?
 CHOP_Y          .byte ?
 CHOP_OX         .byte ?
 CHOP_OY         .byte ?
+
 ROBOT_STATUS    .byte ?
 R_STATUS        .byte ?
 ROBOT_X         .byte ?
@@ -150,6 +151,7 @@ R_FX            .byte ?
 R_FY            .byte ?
 R_X             .byte ?
 R_Y             .byte ?
+
 ROCKET_STATUS   .fill 3
 ROCKET_X        .fill 3
 ROCKET_Y        .fill 3
@@ -158,10 +160,12 @@ ROCKET_TEMPX    .fill 3
 ROCKET_TEMPY    .fill 3
 ROCKET_TIM      .fill 3
 OROCKET_Y       .fill 3
+
 ELEVATOR_NUM    .byte ?                 ; [$90]
 ELEVATOR_DX     .byte ?
 ELEVATOR_TIM    .byte ?
 ELEVATOR_SPD    .byte ?
+
 SCORE1          .byte ?
 SCORE2          .byte ?
 SCORE3          .byte ?
@@ -170,6 +174,7 @@ HI2             .byte ?
 HI3             .byte ?
 BONUS1          .byte ?
 BONUS2          .byte ?
+
 FUEL_STATUS     .byte ?
 FUEL_TEMP       .byte ?
 FUEL1           .byte ?

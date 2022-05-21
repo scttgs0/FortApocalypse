@@ -11,7 +11,7 @@ DoSounds        .proc
 
 S1              .block                  ; CHOPPER SOUND
                 lda CHOPPER_STATUS
-                cmp #OFF
+                cmp #kOFF
                 beq _XIT
 
                 lda FRAME

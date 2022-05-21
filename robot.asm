@@ -14,10 +14,10 @@ ROB_Y           .byte $00,$16,$16,$21,$21,$00,$00,$00
 ;=======================================
 RobotAI         .proc
                 lda R_STATUS
-                cmp #OFF
+                cmp #kOFF
                 beq _1
 
-                cmp #CRASH
+                cmp #kCRASH
                 beq _XIT
 
                 lda FRAME
@@ -67,7 +67,7 @@ _4              cmp #34
 _5              cmp #8
                 blt _XIT
 
-_6              lda #FLY
+_6              lda #kFLY
                 sta R_STATUS
                 ldx #0
                 stx R_FX
@@ -103,7 +103,7 @@ R_F             .block
                 lda #5
                 sta TIM8_VAL
                 lda ROBOT_STATUS
-                cmp #ON
+                cmp #kON
                 bne _XIT
 
                 lda ROCKET_STATUS+2
@@ -177,7 +177,7 @@ _2              cmp #8
 _3              dec ROBOT_ANGLE
                 dec ROBOT_ANGLE
 _4              lda ROBOT_STATUS
-                cmp #OFF
+                cmp #kOFF
                 bne _7
 
                 stx R_X
@@ -245,17 +245,14 @@ RobotLeft       .proc
                 lda R_Y
                 sta TEMP2_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 dec TEMP1_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 dec TEMP1_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 dec R_FX
@@ -287,17 +284,14 @@ RobotRight      .proc
                 lda R_Y
                 sta TEMP2_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 inc TEMP1_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 inc TEMP1_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 inc R_FX
@@ -329,17 +323,14 @@ RobotDown       .proc
                 lda R_Y
                 sta TEMP2_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 inc TEMP2_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 inc TEMP2_I
                 jsr CheckChrI
-
                 bcs _XIT
 
                 inc R_FY
@@ -401,7 +392,7 @@ _XIT            rts
 ;
 ;=======================================
 P1              .proc
-                ldx #OFF
+                ldx #kOFF
                 jmp DoRobotChopper.DRCE
 
                 .endproc
@@ -415,7 +406,7 @@ DoRobotChopper  .proc
 ;---
 
                 lda R_STATUS
-                cmp #OFF
+                cmp #kOFF
                 beq P1
 
                 lda R_X
@@ -482,25 +473,25 @@ _2              sty TEMP1_I
 _3              clc
                 adc R_FY
                 sta ROBOT_Y
-                ldx #FLY
+                ldx #kFLY
                 lda ROBOT_COL
                 beq _4
 
                 lda R_STATUS
-                cmp #CRASH
+                cmp #kCRASH
                 beq _4
 
-                ldx #CRASH
+                ldx #kCRASH
                 lda #20
                 sta TIM7_VAL
                 lda #1
                 sta SND3_VAL
 _4              lda R_STATUS
-                cmp #CRASH
+                cmp #kCRASH
                 beq _5
 
                 stx R_STATUS
-_5              ldx #ON
+_5              ldx #kON
 DRCE            stx ROBOT_STATUS
                 rts
                 .endproc
@@ -516,7 +507,7 @@ UpdateRobotChopper .proc
 ;---
 
                 lda ROBOT_STATUS
-                cmp #OFF
+                cmp #kOFF
                 bne _1
 
                 lda #0
@@ -561,7 +552,7 @@ _next2          ldy TEMP1_I
                 bne _next2
 
                 lda R_STATUS
-                cmp #CRASH
+                cmp #kCRASH
                 bne _2
 
                 ldx ROBOT_Y
@@ -581,7 +572,7 @@ _next3          lda PLAYER+PL2,x
                 dec TIM7_VAL
                 bne _2
 
-                lda #OFF
+                lda #kOFF
                 sta R_STATUS
                 jsr PositionRobot
 
