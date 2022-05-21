@@ -176,10 +176,10 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 beq _5
 
                 ldx #START_MODE         ; trigger causes game start
-                lda TRIG0
+                ;!! lda TRIG0
                 beq _3
 
-                lda CONSOL              ; START button causes game to start
+                ;!! lda CONSOL              ; START button causes game to start
                 cmp #6
                 beq _3
 

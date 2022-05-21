@@ -16,7 +16,7 @@ v_posY          .var TEMP2
 ;v_???          .var TEMP6
 ;---
 
-                lda CONSOL
+                ;!! lda CONSOL
                 cmp #3                  ; OPTION
                 bne _2
 

@@ -20,7 +20,7 @@ ReadKeyboard    .proc
 v_demoTimer     .var TIM6_VAL
 ;---
 
-                lda CONSOL              ; read the console keys
+                ;!! lda CONSOL              ; read the console keys
                 cmp CONSOL_FLAG         ; update consol_flag if it has changed
                 beq _doSelect
                 sta CONSOL_FLAG
@@ -58,11 +58,11 @@ _doOption       lda #OPTION_MODE        ; switch to Options screen
                 jsr CheckOptions        ; transfer to the Option handler
                 bra _XIT
 
-_doSelect       lda SKSTAT              ; is the key still pressed?
+_doSelect       ;!! lda SKSTAT              ; is the key still pressed?
                 and #%00000100
                 bne _XIT                ; still pressed then exit
 
-                lda KBCODE              ; was it the spacebar?
+                ;!! lda KBCODE              ; was it the spacebar?
                 cmp #$21
                 bne _XIT                ; ignore other keys... exit
 
@@ -72,26 +72,26 @@ _doSelect       lda SKSTAT              ; is the key still pressed?
                 sta MODE
                 jsr ClearSounds         ; stop sounds
 
-_wait1          lda SKSTAT              ; capture...
+_wait1          ;!! lda SKSTAT              ; capture...
                 and #%00000100
                 beq _wait1              ; don't leave until we exist Pause mode
 
-_next1          lda SKSTAT              ; is the key still pressed?
+_next1          ;!! lda SKSTAT              ; is the key still pressed?
                 and #%00000100
                 bne _debounce
 
-                lda KBCODE              ; was it the spacebar?
+                ;!! lda KBCODE              ; was it the spacebar?
                 cmp #$21
                 beq _wait2              ; exit once the key is released
 
-_debounce       lda CONSOL              ; debounce... ensure all three console keys are released
+_debounce       ;!! lda CONSOL              ; debounce... ensure all three console keys are released
                 cmp #7
                 bne _wait2
 
-                lda TRIG0               ; exit after debounce if trigger is pressed
+                ;!! lda TRIG0               ; exit after debounce if trigger is pressed
                 bne _next1
 
-_wait2          lda SKSTAT              ; debounce... wait for release
+_wait2          ;!! lda SKSTAT              ; debounce... wait for release
                 and #%00000100
                 beq _wait2
 

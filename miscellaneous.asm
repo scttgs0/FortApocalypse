@@ -19,16 +19,16 @@ _next1          lda $E480,x             ; PUPDIV
                 sta NMIEN
 
                 ldx #$3B
-                stx PACTL
-                stx PBCTL
+                ;!! stx PACTL
+                ;!! stx PBCTL
 
                 lda #$00
-                sta PORTA
-                sta PORTB
+                ;!! sta PORTA
+                ;!! sta PORTB
 
                 inx
-                stx PACTL
-                stx PBCTL
+                ;!! stx PACTL
+                ;!! stx PBCTL
 
                 rts
                 ;.endproc
