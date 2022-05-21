@@ -122,7 +122,7 @@ MOVE_ROCKETS    .block
                 beq _2
 
                 lda SSIZEM
-                sta SIZEM
+                ;!! sta SIZEM
                 lda ROCKET_X,x
                 cmp #0+4
                 blt _1
