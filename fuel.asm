@@ -78,8 +78,8 @@ _4              lda #0
                 sta v_posY
 
                 lda #$A4
-                sta AUDC2
-                sta AUDF2
+                sta SID_CTRL2
+                sta SID_FREQ2
 
                 ldx #<txtLowOnFuel
                 ldy #>txtLowOnFuel
@@ -88,9 +88,9 @@ _4              lda #0
                 jmp _XIT
 
 _5              lda #$A4
-_6              sta AUDC2
+_6              sta SID_CTRL2
                 lda #$88
-                sta AUDF2
+                sta SID_FREQ2
                 jsr ClearInfo
 
 _XIT            rts
@@ -142,7 +142,9 @@ F1              ldx #1
                 bge _1
 
                 ldx #0
-                ;!! stx AUDC2
+                .setbank $AF
+                stx SID_CTRL2
+                .setbank $03
 _1              stx SND4_VAL
                 lda CHOP_Y
                 cmp #8+2
