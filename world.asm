@@ -119,10 +119,10 @@ _5              dec SY_F
                 dec SY
 _6              lda SX_F
                 and #3
-                sta HSCROL
+                ;!! sta HSCROL
                 lda SY_F
                 and #7
-                sta VSCROL
+                ;!! sta VSCROL
                 lda SX
                 sta TEMP1_I
                 lda SY
