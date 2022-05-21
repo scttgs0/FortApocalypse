@@ -212,7 +212,7 @@ _next1          sta BLOCK_1,x
                 dex
                 bpl _next1
 
-                lda RANDOM
+                lda SID_RANDOM
                 bmi _1
 
                 ldx #7
@@ -221,7 +221,7 @@ _next2          sta BLOCK_1,x
                 dex
                 bpl _next2
 
-_1              lda RANDOM
+_1              lda SID_RANDOM
                 bmi _2
 
                 ldx #7
@@ -230,7 +230,7 @@ _next3          sta BLOCK_2,x
                 dex
                 bpl _next3
 
-_2              lda RANDOM
+_2              lda SID_RANDOM
                 bmi _3
 
                 ldx #7
@@ -239,7 +239,7 @@ _next4          sta BLOCK_3,x
                 dex
                 bpl _next4
 
-_3              lda RANDOM
+_3              lda SID_RANDOM
                 bmi _XIT
 
                 ldx #7
@@ -386,7 +386,7 @@ _next5          sta (ADR1),y
                 lda #$10
                 sta BAK2_COLOR
                 lda #$CF
-                sta AUDC4
+                sta SID_CTRL3
                 ldy #15
 _next6          ldx #2
                 jsr WaitFrame
@@ -394,8 +394,8 @@ _next6          ldx #2
                 inc BAK2_COLOR
                 lda #1
                 sta SND3_VAL
-                lda RANDOM
-                sta AUDF4
+                lda SID_RANDOM
+                sta SID_FREQ3
                 dey
                 bpl _next6
 

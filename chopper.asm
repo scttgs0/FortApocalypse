@@ -248,10 +248,10 @@ _next2          ldy TEMP1_I
                 ldx CHOPPER_Y
                 ldy #18
 _next3          lda PLAYER+PL0,x
-                and RANDOM
+                and SID_RANDOM
                 sta PLAYER+PL0,x
                 lda PLAYER+PL1,x
-                and RANDOM
+                and SID_RANDOM
                 sta PLAYER+PL1,x
                 inx
                 dey
@@ -259,7 +259,7 @@ _next3          lda PLAYER+PL0,x
 
                 ;!! inc PCOLR0
                 ;!! inc PCOLR1
-                lda RANDOM
+                lda SID_RANDOM
                 ora #$F
                 sta BAK2_COLOR
                 lda MODE

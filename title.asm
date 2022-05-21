@@ -158,16 +158,18 @@ _1              lda FRAME               ; increment v_audiofreq every 8th frame
                 inc v_audiofreq
 
 _2              lda #$AF                ; set audio channels to full-volume, pure tone
-                sta AUDC1
-                sta AUDC2
+                sta SID_CTRL1
+                sta SID_CTRL2
 
                 lda #$FF                ; audio freq increases as v_audiofreq is incremented
                 sec
                 sbc v_audiofreq
-                sta AUDF1               ; this is a divide-by-N circuit - larger numbers are lower freq
+                sta SID_FREQ1           ; this is a divide-by-N circuit - larger numbers are lower freq
                 tax
                 dex
-                ;!! stx AUDF2               ; audio channel 2 leads channel 1
+                .setbank $AF
+                stx SID_FREQ2           ; audio channel 2 leads channel 1
+                .setbank $03
 
                 lda v_audiofreq         ; launch demo near the end of the audio scale (avoid the highest notes)
                 cmp #$F3

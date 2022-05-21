@@ -19,7 +19,9 @@ MoveSlaves      .proc
                 jsr S_COL2
 
                 ldx #$00
-                ;!! stx AUDC3
+                .setbank $AF
+                stz SID_CTRL3
+                .setbank $03
                 ldy #$08
                 jsr IncreaseScore
 
@@ -294,9 +296,9 @@ _3              cmp #4
                 lda #kPICKUP
                 sta SLAVE_STATUS,x
                 lda #$A8
-                sta AUDC3
+                sta SID_CTRL3
                 lda #32
-                sta AUDF3
+                sta SID_FREQ3
 
                 sec
                 rts

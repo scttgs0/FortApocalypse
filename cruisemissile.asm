@@ -82,7 +82,7 @@ _next1          lda CM_STATUS,x
                 bpl _next1
 
                 lda #0
-                sta AUDC4
+                sta SID_CTRL3
                 sta SND6_VAL
 _XIT            rts
                 .endblock
