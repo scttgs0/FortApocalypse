@@ -23,14 +23,14 @@ DoLaser1        .proc
                 bne _1
 
                 ldx #0
-_next1          lda LASER_SHAPES,x
-                sta LASERS_1,x
+_next1          lda LASER_DIAG,x
+                sta LASER_1,x
                 inx
                 cpx #32
                 bne _next1
 
                 ldx #0
-_next2          lda LASER_SHAPES+24,x
+_next2          lda LASER_VERT,x
                 sta LASER_3,x
                 inx
                 cpx #8
@@ -40,7 +40,7 @@ _next2          lda LASER_SHAPES+24,x
 
 _1              ldx #32-1
                 lda #0
-_next3          sta LASERS_1,x
+_next3          sta LASER_1,x
                 dex
                 bpl _next3
 
@@ -72,14 +72,14 @@ DoLaser2        .proc
                 bne _1
 
                 ldx #0
-_next1          lda LASER_SHAPES,x
-                sta LASERS_2,x
+_next1          lda LASER_DIAG,x
+                sta LASER_2,x
                 inx
                 cpx #32
                 bne _next1
 
                 ldx #0
-_next2          lda LASER_SHAPES+16,x
+_next2          lda LASER_HORZ,x
                 sta LASER_3,x
                 inx
                 cpx #8
@@ -89,7 +89,7 @@ _next2          lda LASER_SHAPES+16,x
 
 _1              ldx #32-1
                 lda #0
-_next3          sta LASERS_2,x
+_next3          sta LASER_2,x
                 dex
                 bpl _next3
 
@@ -99,7 +99,7 @@ _XIT            rts
 ;---------------------------------------
 ;---------------------------------------
 
-LASER_SHAPES    .byte %11000000
+LASER_DIAG      .byte %11000000
                 .byte %11000000
                 .byte %00110000
                 .byte %00110000
@@ -117,7 +117,7 @@ LASER_SHAPES    .byte %11000000
                 .byte %11000000
                 .byte %11000000
 
-                .byte %00000000
+LASER_HORZ      .byte %00000000
                 .byte %00000000
                 .byte %00000000
                 .byte %11111111
@@ -126,7 +126,7 @@ LASER_SHAPES    .byte %11000000
                 .byte %00000000
                 .byte %00000000
 
-                .byte %00110000
+LASER_VERT      .byte %00110000
                 .byte %00110000
                 .byte %00110000
                 .byte %00110000
