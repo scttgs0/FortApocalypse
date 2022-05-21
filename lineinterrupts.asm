@@ -21,7 +21,7 @@ _next1          txa
                 sta WSYNC
                 asl
                 ora #$E0
-                sta COLBK
+                ;!! sta COLBK
                 inx
                 cpx #8
                 bne _next1
@@ -54,12 +54,12 @@ _next2          txa
                 sta WSYNC
                 asl
                 ora #$E0
-                sta COLBK
+                ;!! sta COLBK
                 dex
                 bpl _next2
 
 LINEC           lda #0
-                sta COLBK
+                ;!! sta COLBK
                 pla
                 tax
                 pla
@@ -90,17 +90,17 @@ LINE3           .proc
                 sta CHBASE
 
                 lda BAK_COLOR
-                sta COLPF0
+                ;!! sta COLPF0
                 lda #$0A
-                sta COLPF1
+                ;!! sta COLPF1
                 lda #$93
-                sta COLPF2
+                ;!! sta COLPF2
                 lda FRAME
-                sta COLPF3
+                ;!! sta COLPF3
 
-                sta WSYNC
+                ;!! sta WSYNC
                 lda BAK2_COLOR
-                sta COLBK
+                ;!! sta COLBK
 
                 plp
                 pla
@@ -131,7 +131,7 @@ _next1          .sta_ix_spr_xpos
                 bpl _next1
 
                 sta WSYNC
-                sta COLBK
+                ;!! sta COLBK
 
                 lda MODE
                 cmp #STOP_MODE

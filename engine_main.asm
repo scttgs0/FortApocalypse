@@ -78,7 +78,7 @@ _next1          lda Z2,x
 
                 ldx #0
                 stx AUDCTL
-                stx COLOR4
+                ;!! stx COLOR4
                 stx TIM6_VAL
                 stx PILOT_SKILL
                 stx GRAV_SKILL
@@ -651,8 +651,8 @@ M_NewPlayer     .proc
                 rts
 
 _1              lda #$1F                ; CHOPPER CLR
-                sta PCOLR0
-                sta PCOLR1
+                ;!! sta PCOLR0
+                ;!! sta PCOLR1
                 lda FUEL_STATUS
                 cmp #kEMPTY
                 bne _2
@@ -772,7 +772,7 @@ _1              ldx #<txtEnterL2
 _2              ldx LEVEL
                 lda LEVEL_COLOR,x
                 sta BAK_COLOR
-                sta COLOR0
+                ;!! sta COLOR0
                 txa
                 asl
                 tax

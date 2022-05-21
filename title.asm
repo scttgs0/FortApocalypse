@@ -21,13 +21,13 @@ v_marqueeGlyph  .var TEMP3
                 txs
 
                 lda #$43                ; reset colors
-                sta COLOR0
+                ;!! sta COLOR0
 
                 lda #$0F
-                sta COLOR1
+                ;!! sta COLOR1
 
                 lda #$83
-                sta COLOR2
+                ;!! sta COLOR2
 
                 jsr ScreenOff
 
@@ -123,7 +123,7 @@ _next3          lda T_5,x
 _endless1       lda VCOUNT              ; current scan line being draw on screen (divided by 2)
                 asl                     ; double it to get the real scan line number
                 sta WSYNC               ; halt until next horz sync
-                sta COLPF3              ; alter the playfield color
+                ;!! sta COLPF3              ; alter the playfield color
                 bra _endless1
 
                 .endproc
@@ -140,17 +140,17 @@ v_audiofreq     .var TEMP1_I
                 and #3
                 bne _1
 
-                lda COLOR2              ; color0 -> color1 -> color2 -> color0...
+                ;!! lda COLOR2              ; color0 -> color1 -> color2 -> color0...
                 pha
 
-                lda COLOR1
-                sta COLOR2
+                ;!! lda COLOR1
+                ;!! sta COLOR2
 
-                lda COLOR0
-                sta COLOR1
+                ;!! lda COLOR0
+                ;!! sta COLOR1
 
                 pla
-                sta COLOR0
+                ;!! sta COLOR0
 
 _1              lda FRAME               ; increment v_audiofreq every 8th frame
                 and #7
@@ -229,13 +229,13 @@ T3              .proc
                 sei
 
                 lda #$0A                ; LASER BLOCK
-                sta COLOR1
+                ;!! sta COLOR1
 
                 lda #$94                ; LASERS,HOUSE
-                sta COLOR2
+                ;!! sta COLOR2
 
                 lda #$9A                ; LETTERS
-                sta COLOR3
+                ;!! sta COLOR3
 
                 lda #<VERTBLKD          ; enable deferred VBI
                 sta VVBLKD
