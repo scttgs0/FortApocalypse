@@ -1,9 +1,9 @@
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE: input.asm
-;---------------------------------------
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; SPDX-FileName: input.asm
+; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
+; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-License-Identifier: CC-BY-NC-ND-2.5
+
 
 ;=======================================
 ; Space = toggle Pause Mode

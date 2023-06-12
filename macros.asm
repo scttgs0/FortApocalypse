@@ -1,3 +1,4 @@
+
 m8i8            .macro
                 sep #$30
                 .as

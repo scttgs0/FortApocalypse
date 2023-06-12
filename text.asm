@@ -1,8 +1,9 @@
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE: text.asm
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; SPDX-FileName: text.asm
+; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
+; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-License-Identifier: CC-BY-NC-ND-2.5
+
 
 txtTitle1       .byte $A6,$AF,$B2,$B4,$00,$00               ; 'FORT  ' inverse atari-ascii
                 .byte $A1,$B0,$AF,$A3,$A1,$AC,$B9,$B0       ; 'APOCALYPSE'

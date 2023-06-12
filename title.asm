@@ -1,8 +1,9 @@
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE: title.asm
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; SPDX-FileName: title.asm
+; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
+; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-License-Identifier: CC-BY-NC-ND-2.5
+
 
 ;=======================================
 ; Title Screen handler
@@ -31,7 +32,7 @@ v_marqueeGlyph  .var TEMP3
 
                 jsr ScreenOff
 
-                .graphics mcGraphicsOn, mcVideoMode320
+                .graphics mcGraphicsOn,mcVideoMode320
 
                 lda #$3B                ; start with red marquee dot
                 sta v_marqueeGlyph

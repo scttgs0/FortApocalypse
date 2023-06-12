@@ -1,3 +1,10 @@
+
+; SPDX-FileName: fort.asm
+; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
+; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-License-Identifier: CC-BY-NC-ND-2.5
+
+
 ;***************************
 ;*     Fort Apocalypse     *
 ;*                         *
@@ -36,20 +43,20 @@
 
                 .cpu "65816"
 
-                ;.include "equates_system_atari8.asm"
-                .include "equates_system_c256.asm"
-                .include "equates_directpage.asm"
-                .include "equates_game.asm"
+                ;.include "system_atari8.equ"
+                .include "system_c256.equ"
+                .include "directpage.equ"
+                .include "game.equ"
                 .include "macros.asm"
 
                 * = $03_8000
-                .include "level.asm"
+                .include "LEVEL.inc"
 
                 .align $100
-                .include "font1.asm"
+                .include "FONT1.inc"
 
                 .align $100
-                .include "font2.asm"
+                .include "FONT2.inc"
 
                 .align $1000
                 clc
@@ -62,7 +69,7 @@
 
                 ; Engine
                 .include "engine_main.asm"
-                .include "displaylist.asm"
+                .include "DISPLAYLIST.inc"
                 .include "input.asm"
                 .include "miscellaneous.asm"
                 .include "sound.asm"
