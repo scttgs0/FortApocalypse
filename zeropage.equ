@@ -1,18 +1,18 @@
 
-; SPDX-FileName: directpage.equ
+; SPDX-FileName: zeropage.equ
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
 ; SPDX-FileContributor: Modified by Scott Giese 2023
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
-;---------------------------------------
-; Direct-Page Equates
-;---------------------------------------
+;--------------------------------------
+; Zero-Page Equates
+;--------------------------------------
 
-;---------------------------------------
-;---------------------------------------
-
+;--------------------------------------
+;--------------------------------------
                 * = DPADDR
+;--------------------------------------
 
 FRAME           .byte ?
 
@@ -54,7 +54,7 @@ TIM9_VAL        .byte ?                 ; SLAVE MESS
 
 SSIZEM          .byte ?
 
-;---------------------------------------
+;--------------------------------------
 
 SND1_1_VAL      .byte ?
 SND1_2_VAL      .byte ?
