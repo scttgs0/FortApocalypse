@@ -1,10 +1,9 @@
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE: displaylist.asm
-;---------------------------------------
-; DISPLAY LIST RAM BASED STUFF
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; SPDX-FileName: DISPLAYLIST.inc
+; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
+; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-License-Identifier: CC-BY-NC-ND-2.5
+
 
 DSP_LST1        = RAM1_STUFF
 Z1              ;!! .byte AEMPTY8

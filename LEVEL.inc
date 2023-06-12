@@ -1,3 +1,10 @@
+
+; SPDX-FileName: LEVEL.inc
+; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
+; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-License-Identifier: CC-BY-NC-ND-2.5
+
+
             .byte $1F,$D7,$00,$28,$1F,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
             .byte $00,$00,$00,$00,$57,$57,$56,$00,$24,$55,$57,$57,$57,$56,$00,$A9
             .byte $55,$57,$00,$28,$57,$58,$02,$56,$73,$02,$00,$20,$73,$02,$55,$58

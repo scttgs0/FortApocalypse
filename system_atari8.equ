@@ -1,8 +1,10 @@
-;---------------------------------------
-; SYSTEM EQUATES
-;---------------------------------------
 
-; ANTIC instructions
+;--------------------------------------
+; System Equates
+;--------------------------------------
+
+;   ANTIC instructions
+
 AJMP            = $0001
 AVB             = $0040
 AHSCR           = $0010
@@ -13,28 +15,26 @@ AEMPTY3         = $0020
 AEMPTY6         = $0050
 AEMPTY8         = $0070
 
-;---------------------------------------
+;--------------------------------------
 
-ATTRACT         = $4D
+ATTRACT         = $004D
 
-
-VDSLST          = $200
-VVBLKD          = $224
-SDMCTL          = $22F
-SDLST           = $230
-PRIOR           = $26F
-STICK           = $278
-PCOLR0          = $2C0
-PCOLR1          = $2C1
-PCOLR2          = $2C2
-PCOLR3          = $2C3
-COLOR0          = $2C4
-COLOR1          = $2C5
-COLOR2          = $2C6
-COLOR3          = $2C7
-COLOR4          = $2C8
-CHBAS           = $2F4
-
+VDSLST          = $0200
+VVBLKD          = $0224
+SDMCTL          = $022F
+SDLST           = $0230
+PRIOR           = $026F
+STICK           = $0278
+PCOLR0          = $02C0
+PCOLR1          = $02C1
+PCOLR2          = $02C2
+PCOLR3          = $02C3
+COLOR0          = $02C4
+COLOR1          = $02C5
+COLOR2          = $02C6
+COLOR3          = $02C7
+COLOR4          = $02C8
+CHBAS           = $02F4
 
 HPOSP0          = $D000
 HPOSP1          = $D001
@@ -64,7 +64,6 @@ GRACTL          = $D01D
 HITCLR          = $D01E
 CONSOL          = $D01F
 
-
 AUDF1           = $D200
 AUDC1           = $D201
 AUDF2           = $D202
@@ -79,12 +78,10 @@ RANDOM          = $D20A
 SKCTL           = $D20F
 SKSTAT          = $D20F
 
-
 PORTA           = $D300
 PORTB           = $D301
 PACTL           = $D302
 PBCTL           = $D303
-
 
 DMACLT          = $D400
 HSCROL          = $D404
@@ -94,6 +91,5 @@ CHBASE          = $D409
 WSYNC           = $D40A
 VCOUNT          = $D40B
 NMIEN           = $D40E
-
 
 VVBLKD_RET      = $E462

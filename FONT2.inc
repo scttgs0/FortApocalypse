@@ -1,8 +1,9 @@
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE font2.asm
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; SPDX-FileName: FONT2.inc
+; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
+; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-License-Identifier: CC-BY-NC-ND-2.5
+
 
 FNT2
 ; CHR $00-$1F BLANK
