@@ -5,9 +5,9 @@
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
-;---------------------------------------
+;--------------------------------------
 ; CONSTANTS
-;---------------------------------------
+;--------------------------------------
 
 DPADDR          = $B000
 
@@ -45,24 +45,24 @@ PAUSE_MODE      = 8
 OPTION_MODE     = 9
 HYPERSPACE_MODE = 10
 
-;---------------------------------------
+;--------------------------------------
 ; CHANGE THESE CONSTANTS
 ; WHEN PROGRAM NEED TO GO MOBILE
-;---------------------------------------
+;--------------------------------------
 
 ;                START                  ; LEN
-PLAYER          = $03_0000              ; $800  R
-PLAY_SCRN       = $03_0300              ; $300  R
-CHR_SET1        = $03_0800              ; $400  R
-CHR_SET2        = $03_0C00              ; $400  R
-POD_1           = $03_0C00+920          ; $4E   R
-POD_2           = $03_3925              ; $9B   R
-MAP             = $03_1100+3            ; $2800 R
-SLAVES          = $03_3904              ; $20   R
-SCANNER         = $03_39C0              ; $640  R
-RAM1_STUFF      = $03_0C00+144          ; $48
-RAM2_STUFF      = $03_0100
-PL              = $03_8000
+PLAYER          = $0000                 ; $800  R
+PLAY_SCRN       = $0300                 ; $300  R
+CHR_SET1        = $0800                 ; $400  R
+CHR_SET2        = $0C00                 ; $400  R
+POD_1           = $0C00+920             ; $4E   R
+POD_2           = $3925                 ; $9B   R
+MAP             = $1100+3               ; $2800 R
+SLAVES          = $3904                 ; $20   R
+SCANNER         = $39C0                 ; $640  R
+RAM1_STUFF      = $0C00+144             ; $48
+RAM2_STUFF      = $0100
+PL              = $8000
 PACKED_MAP      = PL                    ; $D34
 PACKED_SCAN     = PL+$D34               ; $4ED
 PROGRAM         = $03_A000
@@ -112,7 +112,7 @@ MAX_FUEL        = $2000
 
 POD_SPEED       = 15
 
-;---------------------------------------
+;--------------------------------------
 
                 * = DPADDR+$50
 
@@ -225,13 +225,13 @@ CHOP_LEFT       .byte ?
 OPT_NUM         .byte ?
 START_PODS      .byte ?                 ; [$FE]
 
-;---------------------------------------
+;--------------------------------------
 
                 * = POD_1
 POD_STATUS      .fill MAX_PODS
 POD_DX          .fill MAX_PODS
 
-;---------------------------------------
+;--------------------------------------
 
                 * = POD_2
 POD_X           .fill MAX_PODS
@@ -239,7 +239,7 @@ POD_Y           .fill MAX_PODS
 POD_TEMP1       .fill MAX_PODS
 POD_TEMP2       .fill MAX_PODS
 
-;---------------------------------------
+;--------------------------------------
 
                 * = SLAVES
 SLAVE_STATUS    .fill 8

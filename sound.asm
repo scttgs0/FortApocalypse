@@ -5,9 +5,9 @@
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoSounds        .proc
 
 S1              .block                  ; CHOPPER SOUND
@@ -45,9 +45,9 @@ S2              .block                  ; MISSILE SOUND
                 bne _1
 
                 ldx #0
-_1              .setbank $AF
+_1              ;--.setbank $AF
                 stx SID_CTRL2
-                .setbank $03
+                ;--.setbank $03
                 dec SND2_VAL
 _XIT            .endblock
 
@@ -73,9 +73,9 @@ _1              ldx #$48
                 bne _2
 
                 tax                     ; X=0
-_2              .setbank $AF
+_2              ;--.setbank $AF
                 stx SID_CTRL3
-                .setbank $03
+                ;--.setbank $03
 _XIT            .endblock
 
 
@@ -106,10 +106,10 @@ _1              ldy #$00
                 adc #0
                 sta FUEL2
                 cld
-_2              .setbank $AF
+_2              ;--.setbank $AF
                 stx SID_FREQ2
                 sty SID_CTRL2
-                .setbank $03
+                ;--.setbank $03
 _XIT            .endblock
 
 
@@ -151,9 +151,9 @@ _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 ClearSounds     .proc
                 lda #0
                 sta SID_CTRL1
@@ -161,7 +161,3 @@ ClearSounds     .proc
                 sta SID_CTRL3
                 rts
                 .endproc
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; EOF
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

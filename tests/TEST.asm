@@ -4,7 +4,7 @@
                 clc
                 xce
 
-;=======================================
+;======================================
 
 RunTests        jsr TEST_font           ; test_font.asm
 
@@ -12,13 +12,13 @@ RunTests        jsr TEST_font           ; test_font.asm
                 jsr TEST_trigger
                 jsr TEST_keybd
 
-;---------------------------------------
+;--------------------------------------
 
                 jsr CheckForExit
 
                 bra RunTests
 
-;=======================================
+;======================================
 
 PRINT           .proc
 _XIT            rts

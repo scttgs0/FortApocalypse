@@ -5,9 +5,9 @@
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
-;=======================================
+;======================================
 ; Title Screen handler
-;=======================================
+;======================================
 Title           .proc
 c_horzCount     = 40
 c_vertCount     = 17
@@ -126,9 +126,9 @@ _endless1       ;!! lda VCOUNT              ; current scan line being draw on sc
                 .endproc
 
 
-;=======================================
+;======================================
 ; Deferred VBlank Interrupt
-;=======================================
+;======================================
 T2              .proc
 v_audiofreq     .var TEMP1_I
 ;---
@@ -164,9 +164,9 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 sta SID_FREQ1           ; this is a divide-by-N circuit - larger numbers are lower freq
                 tax
                 dex
-                .setbank $AF
+                ;--.setbank $AF
                 stx SID_FREQ2           ; audio channel 2 leads channel 1
-                .setbank $03
+                ;--.setbank $03
 
                 lda v_audiofreq         ; launch demo near the end of the audio scale (avoid the highest notes)
                 cmp #$F3
@@ -184,7 +184,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 cmp #7
                 bne _3
 
-                ;!! jml VVBLKD_RET          ; exit VBI
+                ;!! jmp VVBLKD_RET          ; exit VBI
 
 _3              stx MODE
                 ldx #0
@@ -199,11 +199,11 @@ _5              ldx #-1                 ; START DEMO
                 .endproc
 
 
-;=======================================
+;======================================
 ; Cycle through $3B -> $3D -> $3B...
-;---------------------------------------
+;--------------------------------------
 ; marquee dots order: red, white, green
-;=======================================
+;======================================
 CycleGlyph      .proc
 v_marqueeGlyph  .var TEMP3
 ;---
@@ -219,9 +219,9 @@ _1              sta v_marqueeGlyph
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 T3              .proc
                 sei
 
@@ -251,7 +251,3 @@ _wait1          ;!! lda VCOUNT              ; wait for next horz sync
 
                 brl MAIN
                 .endproc
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; EOF
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

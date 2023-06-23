@@ -5,17 +5,17 @@
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
-;=======================================
+;======================================
 ; Space = toggle Pause Mode
 ; Option (F2) = delegate to Opt handler
 ; Select (F3) = delegate to Opt handler
 ; Start (F4) = switch to Start Mode
-;---------------------------------------
+;--------------------------------------
 ; Any activity will cancel the Demo
 ; All keypresses are delegated to the
 ;   Option screen while in Option mode
 ; Capture (endless loop) while Pasused
-;=======================================
+;======================================
 ReadKeyboard    .proc
 v_demoTimer     .var TIM6_VAL
 ;---
@@ -101,9 +101,9 @@ _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 ReadJoystick    .proc
 v_angleBit0     .var TEMP1_I
 ;---
@@ -255,9 +255,9 @@ _10             lda CHOPPER_ANGLE
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 ReadTrigger     .proc
                 lda CHOPPER_STATUS      ; skip trigger read when crashed
                 cmp #kCRASH
@@ -347,7 +347,3 @@ _9              sta ROCKET_STATUS,x
 
                 rts
                 .endproc
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; EOF
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

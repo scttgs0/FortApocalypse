@@ -24,7 +24,7 @@ txtTitle4       .byte $B3,$B9,$AE,$A1,$B0,$B3,$A5           ; 'SYNAPSE' inverse 
                 .byte $B3,$AF,$A6,$B4,$B7,$A1,$B2,$A5       ; 'SOFTWARE'
                 .byte $FF
 
-;---------------------------------------
+;--------------------------------------
 
 txtPilot1       .byte $A7,$A5,$B4,$00,$00                   ; 'GET  ' atari-ascii
                 .byte $B2,$A5,$A1,$A4,$B9,$00,$00           ; 'READY  '
@@ -34,7 +34,7 @@ txtPilot2       .byte $B0,$A9,$AC,$AF,$B4,$B3,$00,$00       ; 'PILOTS  '
                 .byte $AC,$A5,$A6,$B4                       ; 'LEFT'
                 .byte $FF
 
-;---------------------------------------
+;--------------------------------------
 
 txtEnter        .byte $A5,$AE,$B4,$A5,$B2,$A9,$AE,$A7       ; 'ENTERING' atari-ascii
                 .byte $FF
@@ -47,7 +47,7 @@ txtEnterL2      .byte $A3,$B2,$B9,$B3,$B4,$A1,$AC,$AC       ; 'CRYSTALLINE  '
                 .byte $A3,$A1,$B6,$A5,$B3                   ; 'CAVES'
                 .byte $FF
 
-;---------------------------------------
+;--------------------------------------
 
 txtGmOvrMission .byte $2D,$29,$33,$33,$29,$2F,$2E           ; 'MISSION' atari-ascii
                 .byte $FF
@@ -79,7 +79,7 @@ txtHighScore    .byte $A8,$A9,$A7,$A8,$00,$00               ; 'HIGH  '
                 .byte $B3,$A3,$AF,$B2,$A5                   ; 'SCORE'
                 .byte $FF
 
-;---------------------------------------
+;--------------------------------------
 
 txtOptTitle1    .byte $2F,$30,$34,$29,$2F,$2E,$33           ; 'OPTIONS' atari-ascii
                 .byte $FF
@@ -129,7 +129,7 @@ OptRoboTable    .addr txtOptRobo1,txtOptRobo2,txtOptRobo3
 
 OptTable        .addr txtOptGravity,txtOptPilot,txtOptRobo
 
-;---------------------------------------
+;--------------------------------------
 
 txtMenRemain    .byte $AD,$A5,$AE,$00,$00                   ; 'MEN  ' atari-ascii
                 .byte $B4,$AF,$00,$00                       ; 'TO  '
@@ -140,7 +140,3 @@ txtLowOnFuel    .byte $AC,$AF,$B7,$00,$00                   ; 'LOW  ' atari-asci
                 .byte $AF,$AE,$00,$00                       ; 'ON  '
                 .byte $A6,$B5,$A5,$AC                       ; 'FUEL'
                 .byte $FF
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; EOF
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
