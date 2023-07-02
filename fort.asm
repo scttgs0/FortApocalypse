@@ -47,6 +47,20 @@
                 .include "equates/zeropage.equ"
                 .include "equates/game.equ"
 
+                .include "macros/frs_jr_graphic.mac"
+                .include "macros/frs_jr_mouse.mac"
+                .include "macros/frs_jr_random.mac"
+                .include "macros/frs_jr_sprite.mac"
+
+            .enc "atari-screen"
+                .cdef " Z",$00
+                .cdef "az",$61
+            .enc "atari-screen-inverse"
+                .cdef "  ",$00
+                .cdef "!Z",$81
+                .cdef "az",$E1
+            .enc "none"
+
 
 ;--------------------------------------
 ;--------------------------------------
@@ -84,7 +98,7 @@
                 .include "input.asm"
                 .include "miscellaneous.asm"
                 .include "sound.asm"
-                .include "text.asm"
+                .include "TEXT.inc"
 
                 ; Interrupts
                 .include "lineinterrupts.asm"
@@ -96,20 +110,24 @@
 
                 ; Protagonist
                 .include "chopper.asm"
+                .include "CHOPPER.inc"
 
                 ; Baddies
                 .include "cruisemissile.asm"
                 .include "pod.asm"
                 .include "robot.asm"
                 .include "rocket.asm"
+                .include "ROCKET.inc"
                 .include "tank.asm"
 
                 ; Environment
                 .include "elevator.asm"
                 .include "fuel.asm"
+                .include "FUEL.inc"
                 .include "hyperchamber.asm"
                 .include "landingpad.asm"
                 .include "laser.asm"
+                .include "LASER.inc"
                 .include "navatron.asm"
                 .include "slaves.asm"
                 .include "world.asm"
