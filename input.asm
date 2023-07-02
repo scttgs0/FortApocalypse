@@ -129,7 +129,7 @@ _doStick        lda CHOPPER_ANGLE
                 bne _2
 
                 ldx DEMO_COUNT
-                lda DEMO_STICK,x
+                lda DEMO_STICK,X
                 sta JOYSTICK0
 
                 lda FRAME
@@ -299,7 +299,7 @@ _4              lda ELEVATOR_DX
                 sta ELEVATOR_DX
 
                 ldx #1
-_next1          lda ROCKET_STATUS,x
+_next1          lda ROCKET_STATUS,X
                 beq _5
 
                 dex
@@ -328,19 +328,19 @@ _8              cmp #0
                 bne _9
 
                 lda #1
-_9              sta ROCKET_STATUS,x
+_9              sta ROCKET_STATUS,X
 
                 lda CHOPPER_X
                 and #3
                 clc
                 adc CHOPPER_X
                 adc #8
-                sta ROCKET_X,x
+                sta ROCKET_X,X
 
                 lda CHOPPER_Y
                 clc
                 adc #8
-                sta ROCKET_Y,x
+                sta ROCKET_Y,X
 
                 lda #$3F
                 sta SND2_VAL

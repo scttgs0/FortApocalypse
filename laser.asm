@@ -24,15 +24,15 @@ DoLaser1        .proc
                 bne _1
 
                 ldx #0
-_next1          lda LASER_DIAG,x
-                sta LASER_1,x
+_next1          lda LASER_DIAG,X
+                sta LASER_1,X
                 inx
                 cpx #32
                 bne _next1
 
                 ldx #0
-_next2          lda LASER_VERT,x
-                sta LASER_3,x
+_next2          lda LASER_VERT,X
+                sta LASER_3,X
                 inx
                 cpx #8
                 bne _next2
@@ -41,12 +41,12 @@ _next2          lda LASER_VERT,x
 
 _1              ldx #32-1
                 lda #0
-_next3          sta LASER_1,x
+_next3          sta LASER_1,X
                 dex
                 bpl _next3
 
                 ldx #8-1
-_next4          sta LASER_3,x
+_next4          sta LASER_3,X
                 dex
                 bpl _next4
 
@@ -73,15 +73,15 @@ DoLaser2        .proc
                 bne _1
 
                 ldx #0
-_next1          lda LASER_DIAG,x
-                sta LASER_2,x
+_next1          lda LASER_DIAG,X
+                sta LASER_2,X
                 inx
                 cpx #32
                 bne _next1
 
                 ldx #0
-_next2          lda LASER_HORZ,x
-                sta LASER_3,x
+_next2          lda LASER_HORZ,X
+                sta LASER_3,X
                 inx
                 cpx #8
                 bne _next2
@@ -90,48 +90,9 @@ _next2          lda LASER_HORZ,x
 
 _1              ldx #32-1
                 lda #0
-_next3          sta LASER_2,x
+_next3          sta LASER_2,X
                 dex
                 bpl _next3
 
 _XIT            rts
                 .endproc
-
-;--------------------------------------
-;--------------------------------------
-
-LASER_DIAG      .byte %11000000
-                .byte %11000000
-                .byte %00110000
-                .byte %00110000
-                .byte %00001100
-                .byte %00001100
-                .byte %00000011
-                .byte %00000011
-
-                .byte %00000011
-                .byte %00000011
-                .byte %00001100
-                .byte %00001100
-                .byte %00110000
-                .byte %00110000
-                .byte %11000000
-                .byte %11000000
-
-LASER_HORZ      .byte %00000000
-                .byte %00000000
-                .byte %00000000
-                .byte %11111111
-                .byte %11111111
-                .byte %00000000
-                .byte %00000000
-                .byte %00000000
-
-LASER_VERT      .byte %00110000
-                .byte %00110000
-                .byte %00110000
-                .byte %00110000
-                .byte %00110000
-                .byte %00110000
-                .byte %00110000
-                .byte %00110000

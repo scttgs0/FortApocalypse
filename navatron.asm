@@ -93,8 +93,8 @@ DO_LINE         .proc
                 sta TEMP1
 _next1          ldx #12
                 ldy #0
-_next2          lda (ADR1),y
-                sta (ADR2),y
+_next2          lda (ADR1),Y
+                sta (ADR2),Y
                 inc ADR1
                 bne _1
 

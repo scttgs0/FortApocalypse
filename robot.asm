@@ -46,9 +46,9 @@ _2              lda #$88
                 clc
                 adc #8
 _3              tax
-                lda ROB_X,x
+                lda ROB_X,X
                 sta R_X
-                lda ROB_Y,x
+                lda ROB_Y,X
                 sta R_Y
                 lda R_X
                 sec
@@ -518,8 +518,8 @@ UpdateRobotChopper .proc
 _1              ldy OROBOT_Y
                 ldx #17
                 lda #0
-_next1          sta PLAYER+PL2,y
-                sta PLAYER+PL3,y
+_next1          sta PLAYER+PL2,Y
+                sta PLAYER+PL3,Y
                 iny
                 dex
                 bpl _next1
@@ -527,9 +527,9 @@ _next1          sta PLAYER+PL2,y
                 lda ROBOT_ANGLE
                 asl
                 tax
-                lda CHOPPER_SHAPES,x
+                lda CHOPPER_SHAPES,X
                 sta ADR1_I
-                lda CHOPPER_SHAPES+1,x
+                lda CHOPPER_SHAPES+1,X
                 sta ADR1_I+1
 
                 lda #0
@@ -540,11 +540,11 @@ _next1          sta PLAYER+PL2,y
                 ldx ROBOT_Y
                 stx OROBOT_Y
 _next2          ldy TEMP1_I
-                lda (ADR1_I),y
-                sta PLAYER+PL2,x
+                lda (ADR1_I),Y
+                sta PLAYER+PL2,X
                 ldy TEMP2_I
-                lda (ADR1_I),y
-                sta PLAYER+PL3,x
+                lda (ADR1_I),Y
+                sta PLAYER+PL3,X
                 inc TEMP1_I
                 inc TEMP2_I
                 inx
@@ -558,12 +558,12 @@ _next2          ldy TEMP1_I
 
                 ldx ROBOT_Y
                 ldy #18
-_next3          lda PLAYER+PL2,x
+_next3          lda PLAYER+PL2,X
                 and frsRandomREG
-                sta PLAYER+PL2,x
-                lda PLAYER+PL3,x
+                sta PLAYER+PL2,X
+                lda PLAYER+PL3,X
                 and frsRandomREG
-                sta PLAYER+PL3,x
+                sta PLAYER+PL3,X
                 inx
                 dey
                 bne _next3
@@ -637,8 +637,8 @@ POS_IT_I        ldx TEMP1_I
                 and #7
                 tax
                 ldy #0
-                lda (ADR1_I),y
-                eor POS_MASK1,x
-                sta (ADR1_I),y
+                lda (ADR1_I),Y
+                eor POS_MASK1,X
+                sta (ADR1_I),Y
                 rts
                 .endproc

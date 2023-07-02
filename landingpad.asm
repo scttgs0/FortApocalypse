@@ -41,8 +41,8 @@ CheckLanding    .proc
 
                 ldy #0
                 ldx #LAND_LEN
-                lda (ADR1_I),y
-_next1          cmp LAND_CHR,x
+                lda (ADR1_I),Y
+_next1          cmp LAND_CHR,X
                 beq _XIT
 
                 cmp #$48

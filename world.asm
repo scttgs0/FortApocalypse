@@ -135,10 +135,10 @@ _6              lda SX_F
                 ldy #MAP_LINES
 _nextRow        inx
                 lda ADR1_I
-                sta DSP_MAP,x
+                sta DSP_MAP,X
                 inx
                 lda ADR1_I+1
-                sta DSP_MAP,x
+                sta DSP_MAP,X
 
                 inc ADR1_I+1
                 inx
@@ -209,7 +209,7 @@ DoBlocks        .proc
 
                 ldx #32-1
                 lda #0
-_next1          sta BLOCK_1,x
+_next1          sta BLOCK_1,X
                 dex
                 bpl _next1
 
@@ -218,7 +218,7 @@ _next1          sta BLOCK_1,x
 
                 ldx #7
                 lda #$55
-_next2          sta BLOCK_1,x
+_next2          sta BLOCK_1,X
                 dex
                 bpl _next2
 
@@ -227,7 +227,7 @@ _1              .frsRandomByte
 
                 ldx #7
                 lda #$55
-_next3          sta BLOCK_2,x
+_next3          sta BLOCK_2,X
                 dex
                 bpl _next3
 
@@ -236,7 +236,7 @@ _2              .frsRandomByte
 
                 ldx #7
                 lda #$55
-_next4          sta BLOCK_3,x
+_next4          sta BLOCK_3,X
                 dex
                 bpl _next4
 
@@ -245,7 +245,7 @@ _3              .frsRandomByte
 
                 ldx #7
                 lda #$55
-_next5          sta BLOCK_4,x
+_next5          sta BLOCK_4,X
                 dex
                 bpl _next5
 
@@ -280,7 +280,7 @@ DoChecksum1    .block
                 lda #$90
                 sta ADR1+1
                 clc
-_next1          adc (ADR1),y
+_next1          adc (ADR1),Y
                 bcc _1
 
                 inc TEMP1
@@ -333,7 +333,7 @@ NEXT_PART1      .block
                 lda #8
                 sta LAND_CHOP_ANGLE
                 ldx #16-1
-_next1          stz WINDOW_1,x
+_next1          stz WINDOW_1,X
                 dex
                 bpl _next1
 
@@ -349,12 +349,12 @@ _next2          lda #121
                 lda TEMP3
                 asl
                 tax
-                lda FORT_EXP,x
+                lda FORT_EXP,X
                 sta ADR2
-                lda FORT_EXP+1,x
+                lda FORT_EXP+1,X
                 sta ADR2+1
 _next3          ldy TEMP4
-                lda (ADR2),y
+                lda (ADR2),Y
                 sta TEMP5
                 ldy #7+8+8
 _next4          ldx #2
@@ -363,7 +363,7 @@ _next4          ldx #2
                 bcc _next5
 
                 lda #EXP
-_next5          sta (ADR1),y
+_next5          sta (ADR1),Y
                 dey
                 dex
                 bpl _next5
@@ -387,7 +387,7 @@ _next5          sta (ADR1),y
                 lda #$10
                 sta BAK2_COLOR
                 lda #$CF
-                sta SID_CTRL3
+                sta SID1_CTRL3
                 ldy #15
 _next6          ldx #2
                 jsr WaitFrame
@@ -396,7 +396,7 @@ _next6          ldx #2
                 lda #1
                 sta SND3_VAL
                 .frsRandomByte
-                sta SID_FREQ3
+                sta SID1_FREQ3
                 dey
                 bpl _next6
 

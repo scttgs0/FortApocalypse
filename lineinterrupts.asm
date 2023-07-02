@@ -46,8 +46,8 @@ LINE2           .proc
                 ;!! sta VDSLST+1
 
                 ldx #2
-_next1          lda ROCKET_X,x
-                .sta_ix_spr_xpos        ; missiles = sprint 5+
+_next1          lda ROCKET_X,X
+                .frsSpriteSetX_ix       ; missiles = sprint 5+
                 dex
                 bpl _next1
 
@@ -83,10 +83,10 @@ LINE3           .proc
                 ;!! sta VDSLST+1
 
                 lda ROBOT_X
-                .sta_spr_xpos 2
+                sta SPR(sprite_t.X, 2)
                 clc
                 adc #8
-                .sta_spr_xpos 3
+                sta SPR(sprite_t.X, 3)
                 lda #>CHR_SET2
                 ;!! sta WSYNC
                 ;!! sta CHBASE
@@ -128,7 +128,7 @@ LINE4           .proc
 
                 ldx #7
                 lda #0
-_next1          .sta_ix_spr_xpos
+_next1          .frsSpriteSetX_ix
                 dex
                 bpl _next1
 

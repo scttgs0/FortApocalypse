@@ -32,7 +32,7 @@ v_marqueeGlyph  .var TEMP3
 
                 jsr ScreenOff
 
-                .graphics mcGraphicsOn,mcVideoMode320
+                .frsGraphics mcGraphicsOn,mcVideoMode240
 
                 lda #$3B                ; start with red marquee dot
                 sta v_marqueeGlyph
@@ -40,7 +40,7 @@ v_marqueeGlyph  .var TEMP3
                 ldy #0                  ; start with low tones and increase to higher tones
                 sty v_audiofreq
 _next1          lda v_marqueeGlyph      ; place a dot
-                sta PLAY_SCRN,y
+                sta PLAY_SCRN,Y
                 jsr CycleGlyph          ; move to next dot
 
                 iny
@@ -58,11 +58,11 @@ _next1          lda v_marqueeGlyph      ; place a dot
                 ldx #c_vertCount
                 ldy #0
 _next2          lda v_marqueeGlyph
-                sta (ADR1),y            ; place a dot
+                sta (ADR1),Y            ; place a dot
                 iny
                 jsr CycleGlyph          ; change to the next dot color
 
-                sta (ADR1),y            ; place a horz adjacent dot
+                sta (ADR1),Y            ; place a horz adjacent dot
                 dey                     ; back up one position
 
                 lda ADR1                ; calculate the vert adjacent dot
@@ -103,8 +103,8 @@ _next2          lda v_marqueeGlyph
                 jsr Print               ; (6, 10) 'Copyright 1982'
 
                 ldx #7
-_next3          lda T_5,x
-                sta PLAY_SCRN+426,x     ; output the copyright date (1982)
+_next3          lda T_5,X
+                sta PLAY_SCRN+426,X     ; output the copyright date (1982)
                 dex
                 bpl _next3
 
@@ -155,17 +155,17 @@ _1              lda FRAME               ; increment v_audiofreq every 8th frame
                 inc v_audiofreq
 
 _2              lda #$AF                ; set audio channels to full-volume, pure tone
-                sta SID_CTRL1
-                sta SID_CTRL2
+                sta SID1_CTRL1
+                sta SID1_CTRL2
 
                 lda #$FF                ; audio freq increases as v_audiofreq is incremented
                 sec
                 sbc v_audiofreq
-                sta SID_FREQ1           ; this is a divide-by-N circuit - larger numbers are lower freq
+                sta SID1_FREQ1           ; this is a divide-by-N circuit - larger numbers are lower freq
                 tax
                 dex
                 ;--.setbank $AF
-                stx SID_FREQ2           ; audio channel 2 leads channel 1
+                stx SID1_FREQ2           ; audio channel 2 leads channel 1
                 ;--.setbank $03
 
                 lda v_audiofreq         ; launch demo near the end of the audio scale (avoid the highest notes)
@@ -249,5 +249,5 @@ _wait1          ;!! lda VCOUNT              ; wait for next horz sync
 
                 cli
 
-                brl MAIN
+                jmp MAIN
                 .endproc

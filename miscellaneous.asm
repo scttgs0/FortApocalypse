@@ -10,8 +10,8 @@
 ;======================================
 INIT_OS         ;.proc
                 ldx #$25
-_next1          lda $E480,x             ; PUPDIV
-                ;!! sta VDSLST,x
+_next1          lda $E480,X             ; PUPDIV
+                ;!! sta VDSLST,X
                 dex
                 bpl _next1
 
@@ -74,14 +74,14 @@ v_roboExplodeTimer .var TIM7_VAL
                 sta R_STATUS
 _1              ldx #$E0
                 lda #0
-_next1          sta CHR_SET1+$200,x
+_next1          sta CHR_SET1+$200,X
                 inx
                 bne _next1
 
-_next2          sta CHR_SET1+$300,x
-                sta PLAY_SCRN+$000,x
-                sta PLAY_SCRN+$100,x
-                sta PLAY_SCRN+$200,x
+_next2          sta CHR_SET1+$300,X
+                sta PLAY_SCRN+$000,X
+                sta PLAY_SCRN+$100,X
+                sta PLAY_SCRN+$200,X
                 inx
                 bne _next2
 
@@ -97,37 +97,37 @@ _next2          sta CHR_SET1+$300,x
                 sta SND1_2_VAL
                 ldx #MAX_TANKS-1
                 stx v_roboExplodeTimer
-_next3          lda CM_STATUS,x
+_next3          lda CM_STATUS,X
                 cmp #kOFF
                 beq _2
 
                 lda #kOFF
-                sta CM_STATUS,x
+                sta CM_STATUS,X
                 jsr MissileErase
 _2              dex
                 bpl _next3
 
                 ldx #2
-_next4          lda ROCKET_STATUS,x
+_next4          lda ROCKET_STATUS,X
                 cmp #7                  ; EXP
                 bne _3
 
-                lda ROCKET_TEMPX,x
+                lda ROCKET_TEMPX,X
                 sta TEMP1
-                lda ROCKET_TEMPY,x
+                lda ROCKET_TEMPY,X
                 sta TEMP2
                 jsr ComputeMapAddr
 
                 ldy #0
-                lda ROCKET_TEMP,x
-                sta (ADR1),y
+                lda ROCKET_TEMP,X
+                sta (ADR1),Y
 _3              lda #0
-                sta ROCKET_STATUS,x
-                sta ROCKET_X,x
+                sta ROCKET_STATUS,X
+                sta ROCKET_X,X
                 dex
                 bpl _next4
 
-                brl ClearSounds
+                jmp ClearSounds
                 .endproc
 
 
@@ -203,19 +203,19 @@ v_destIdx       .var TEMP6
                 sty v_destIdx
 
 _nextChar       ldy v_sourceIdx
-                lda (v_sourceAddr),y
+                lda (v_sourceAddr),Y
                 beq _isSpaceChar        ; blank space does not have 2-halves
 
                 cmp #$FF                ; check for termination character
                 beq _XIT
 
                 ldy v_destIdx           ; left-half of glyph
-                sta (v_destAddr),y
+                sta (v_destAddr),Y
                 inc v_destIdx
                 clc
                 adc #32
 _isSpaceChar    ldy v_destIdx           ; right-half of glyph
-                sta (v_destAddr),y
+                sta (v_destAddr),Y
                 inc v_destIdx
                 inc v_sourceIdx
                 bra _nextChar
@@ -280,7 +280,7 @@ _2              ldx #$FF
 ClearInfo       .proc
                 ldy #40-1
                 lda #0
-_next1          sta PLAY_SCRN,y
+_next1          sta PLAY_SCRN,Y
                 dey
                 bpl _next1
 
@@ -303,7 +303,7 @@ DoChecksum2    .proc
                 sta ADR1+1
                 clc
 
-_next1          adc (ADR1),y
+_next1          adc (ADR1),Y
                 bcc _1
                 inc TEMP1
 _1              iny
@@ -359,9 +359,9 @@ PositionIt      .proc
                 and #7
                 tax
                 ldy #0
-                lda (ADR2),y
-                eor POS_MASK1,x
-                sta (ADR2),y
+                lda (ADR2),Y
+                eor POS_MASK1,X
+                sta (ADR2),Y
                 ldx TEMP3
                 rts
                 .endproc
@@ -400,7 +400,7 @@ DoChecksum3     .proc
                 ldx #0
                 txa
                 clc
-_next1          adc $B980,x
+_next1          adc $B980,X
                 inx
                 bne _next1
 

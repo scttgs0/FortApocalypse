@@ -79,8 +79,8 @@ _4              lda #0
                 sta v_posY
 
                 lda #$A4
-                sta SID_CTRL2
-                sta SID_FREQ2
+                sta SID1_CTRL2
+                sta SID1_FREQ2
 
                 ldx #<txtLowOnFuel
                 ldy #>txtLowOnFuel
@@ -89,9 +89,9 @@ _4              lda #0
                 jmp _XIT
 
 _5              lda #$A4
-_6              sta SID_CTRL2
+_6              sta SID1_CTRL2
                 lda #$88
-                sta SID_FREQ2
+                sta SID1_FREQ2
                 jsr ClearInfo
 
 _XIT            rts
@@ -144,7 +144,7 @@ F1              ldx #1
 
                 ldx #0
                 ;--.setbank $AF
-                stx SID_CTRL2
+                stx SID1_CTRL2
                 ;--.setbank $03
 _1              stx SND4_VAL
                 lda CHOP_Y
@@ -184,8 +184,8 @@ DrawBase        .proc
 
                 tax
 _next1          ldy #0
-_next2          lda BASE_SHAPE,x
-                sta (ADR1),y
+_next2          lda BASE_SHAPE,X
+                sta (ADR1),Y
                 inx
                 iny
                 cpy #6
@@ -197,16 +197,3 @@ _next2          lda BASE_SHAPE,x
 
                 rts
                 .endproc
-
-;--------------------------------------
-;--------------------------------------
-
-BASE_SHAPE      .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
-                .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
-                .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
-                .byte $00,$00,$00,$00,$00,$00    ; .... .... .... .... .... ....
-                .byte $44,$44,$44,$44,$44,$44    ; G.G. G.G. G.G. G.G. G.G. G.G.
-                .byte $55,$58,$58,$58,$58,$56    ; GGGG GGR. GGR. GGR. GGR. GGGR
-                .byte $55,$26,$35,$25,$2C,$56    ; GGGG .RGR .#GG .RGG .R#. GGGR
-                .byte $55,$58,$58,$58,$58,$56    ; GGGG GGR. GGR. GGR. GGR. GGGR
-                .byte $54,$00,$00,$00,$00,$54    ; GGG. .... .... .... .... GGG.

@@ -112,9 +112,9 @@ PrintOptions      .block
                 lda OPT_NUM
                 asl
                 tax
-                lda OptTable,x
+                lda OptTable,X
                 sta ADR2
-                lda OptTable+1,x
+                lda OptTable+1,X
                 sta ADR2+1
                 jsr CalcCursorLoc
 
@@ -122,19 +122,19 @@ PrintOptions      .block
                 sty TEMP5
                 sty TEMP6
 _next1          ldy TEMP5
-                lda (ADR2),y
+                lda (ADR2),Y
                 beq _1
                 cmp #$FF
                 beq _2
 
                 ora #$80
                 ldy TEMP6
-                sta (ADR1),y
+                sta (ADR1),Y
                 inc TEMP6
                 clc
                 adc #32
 _1              ldy TEMP6
-                sta (ADR1),y
+                sta (ADR1),Y
                 inc TEMP6
                 inc TEMP5
                 bra _next1
@@ -146,8 +146,8 @@ _2              lda #28
                 lda GRAV_SKILL
                 asl
                 tay
-                ldx OptGravityTable,y
-                lda OptGravityTable+1,y
+                ldx OptGravityTable,Y
+                lda OptGravityTable+1,Y
                 tay
                 jsr Print               ; (28, 7) 'WEAK|NORMAL|STRONG'
 
@@ -156,8 +156,8 @@ _2              lda #28
                 lda PILOT_SKILL
                 asl
                 tay
-                ldx OptPilotTable,y
-                lda OptPilotTable+1,y
+                ldx OptPilotTable,Y
+                lda OptPilotTable+1,Y
                 tay
                 jsr Print               ; (28, 9) 'NOVICE|PRO|EXPERT'
 
@@ -166,8 +166,8 @@ _2              lda #28
                 lda CHOPS
                 asl
                 tay
-                ldx OptRoboTable,y
-                lda OptRoboTable+1,y
+                ldx OptRoboTable,Y
+                lda OptRoboTable+1,Y
                 tay
                 jmp Print               ; (28, 11) 'SEVEN|NINE|ELEVEN'
 

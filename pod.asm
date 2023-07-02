@@ -31,7 +31,7 @@ _next1          pha
 MovePods1       .proc
                 ldx POD_NUM
 
-                lda POD_STATUS,x
+                lda POD_STATUS,X
                 sta POD_COM
                 and #$0F
                 cmp #kOFF
@@ -76,9 +76,9 @@ GetPodAddr      .proc
 ;v_???          .var TEMP2
 ;---
 
-                lda POD_X,x
+                lda POD_X,X
                 sta TEMP1
-                lda POD_Y,x
+                lda POD_Y,X
                 sta TEMP2
                 jmp ComputeMapAddr
 
@@ -97,10 +97,10 @@ GetPodValue     .proc
                 jsr GetPodAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 sta TEMP1
                 iny
-                lda (ADR1),y
+                lda (ADR1),Y
                 sta TEMP2
                 rts
                 .endproc
@@ -119,10 +119,10 @@ PutPodValue     .proc
 
                 ldy #0
                 lda TEMP3
-                sta (ADR1),y
+                sta (ADR1),Y
                 iny
                 lda TEMP4
-                sta (ADR1),y
+                sta (ADR1),Y
                 rts
                 .endproc
 
@@ -135,9 +135,9 @@ PositionPod     .proc
 ;v_???          .var TEMP2
 ;---
 
-                lda POD_X,x
+                lda POD_X,X
                 sta TEMP1
-                lda POD_Y,x
+                lda POD_Y,X
                 sta TEMP2
                 jmp PositionIt
 
@@ -158,27 +158,27 @@ _next1          .frsRandomByte
                 cmp #256-50
                 bge _next1
 
-                sta POD_X,x
+                sta POD_X,X
 _next2          .frsRandomByte
                 cmp #40
                 bge _next2
 
-                sta POD_Y,x
+                sta POD_Y,X
                 jsr GetPodAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 iny
-                ora (ADR1),y
+                ora (ADR1),Y
                 bne _next1
 
                 lda #kON
-                sta POD_STATUS,x
+                sta POD_STATUS,X
                 sta POD_COM
                 jsr PodDraw
 
                 lda #$01
-                sta POD_DX,x
+                sta POD_DX,X
                 jmp PodsEnd
 
                 .endproc
@@ -220,7 +220,7 @@ PodCollision    .proc
 _1              jsr PodErase
 
                 lda #kOFF
-                sta POD_STATUS,x
+                sta POD_STATUS,X
                 ldx #$50
                 ldy #$00
                 jsr IncreaseScore
@@ -240,9 +240,9 @@ PodErase        .proc
 
                 jsr PositionPod
 
-                lda POD_TEMP1,x
+                lda POD_TEMP1,X
                 sta TEMP3
-                lda POD_TEMP2,x
+                lda POD_TEMP2,X
                 sta TEMP4
                 jmp PutPodValue
 
@@ -263,17 +263,17 @@ PodDraw         .proc
                 jsr GetPodValue
 
                 lda TEMP1
-                sta POD_TEMP1,x
+                sta POD_TEMP1,X
                 lda TEMP2
-                sta POD_TEMP2,x
+                sta POD_TEMP2,X
                 lda POD_COM
                 lsr
                 lsr
                 lsr
                 tay
-                lda POD_CHR,y
+                lda POD_CHR,Y
                 sta TEMP3
-                lda POD_CHR+1,y
+                lda POD_CHR+1,Y
                 sta TEMP4
                 jmp PutPodValue
 
@@ -289,7 +289,7 @@ PodMove         .proc
 ;v_???          .var TEMP2
 ;---
 
-_next1          lda POD_DX,x
+_next1          lda POD_DX,X
                 bpl _1
 
                 lda POD_COM
@@ -301,7 +301,7 @@ _next1          lda POD_DX,x
                 cmp #$30
                 bne _2
 
-                dec POD_X,x
+                dec POD_X,X
                 jmp _2
 
 _1              lda POD_COM
@@ -312,33 +312,33 @@ _1              lda POD_COM
                 and #$F0
                 bne _2
 
-                inc POD_X,x
-_2              lda POD_X,x
+                inc POD_X,X
+_2              lda POD_X,X
                 sta TEMP1
-                lda POD_Y,x
+                lda POD_Y,X
                 sta TEMP2
                 jsr ComputeMapAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 iny
-                ora (ADR1),y
+                ora (ADR1),Y
                 bne _3
 
-                lda POD_X,x
+                lda POD_X,X
                 cmp #50
                 blt _3
 
                 cmp #256-50
                 blt _4
 
-_3              lda POD_DX,x
+_3              lda POD_DX,X
                 eor #-2
-                sta POD_DX,x
+                sta POD_DX,X
                 bra _next1
 
 _4              lda POD_COM
-                sta POD_STATUS,x
+                sta POD_STATUS,X
                 rts
                 .endproc
 
