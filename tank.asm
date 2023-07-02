@@ -72,7 +72,7 @@ _2              cmp #kBEGIN
                 sta TANK_Y,x
                 lda #-1
                 ;--.setbank $AF
-                ldy SID_RANDOM
+                .frsRandomByteY
                 ;--.setbank $03
                 bpl _3
 

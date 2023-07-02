@@ -37,7 +37,7 @@ _2              lda #$88
                 ;!! sta PCOLR3
                 lda #8
                 sta ROBOT_ANGLE
-                lda SID_RANDOM
+                .frsRandomByte
                 and #7
                 ldx LEVEL
                 dex                     ; X=1?
@@ -559,10 +559,10 @@ _next2          ldy TEMP1_I
                 ldx ROBOT_Y
                 ldy #18
 _next3          lda PLAYER+PL2,x
-                and SID_RANDOM
+                and frsRandomREG
                 sta PLAYER+PL2,x
                 lda PLAYER+PL3,x
-                and SID_RANDOM
+                and frsRandomREG
                 sta PLAYER+PL3,x
                 inx
                 dey

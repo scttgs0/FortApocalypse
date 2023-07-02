@@ -597,7 +597,7 @@ _next1          sta WINDOW_1,x
                 ldx #7
                 lda #$55
                 ;--.setbank $AF
-                ldy SID_RANDOM
+                .frsRandomByteY
                 ;--.setbank $03
                 bmi _next3
 
@@ -877,7 +877,7 @@ _next1          lda (ADR1),y
                 cmp #$73                ; 's'
                 bne _1
 
-_next2          lda SID_RANDOM
+_next2          .frsRandomByte
                 and #3
                 beq _next2
 
@@ -888,7 +888,7 @@ _next2          lda SID_RANDOM
 _1              cmp #$74                ; 't'
                 bne _2
 
-_next3          lda SID_RANDOM
+_next3          .frsRandomByte
                 and #3
                 beq _next3
 
@@ -1050,7 +1050,7 @@ _next3          lda (ADR1),y
                 cmp #$1F                ; '?'
                 bne _1
 
-                lda SID_RANDOM
+                .frsRandomByte
                 cmp #10
                 blt _1
 
@@ -1320,14 +1320,14 @@ _8              iny
 DoExplode       .proc
                 ldx #7
 _next1          lda EXP_SHAPE,x
-                and SID_RANDOM
+                and frsRandomREG
                 sta EXPLOSION,x
                 sta EXPLOSION2,x
                 dex
                 bpl _next1
 
                 ldx #3
-_next2          lda SID_RANDOM
+_next2          .frsRandomByte
                 and #$0F
                 ora #$A0
                 sta MISS_CHR_LEFT,x
@@ -1336,7 +1336,7 @@ _next2          lda SID_RANDOM
                 bne _next2
 
                 ldx #3
-_next3          lda SID_RANDOM
+_next3          .frsRandomByte
                 and #$E0
                 ora #$0A
                 sta MISS_CHR_RIGHT,x

@@ -56,7 +56,7 @@ S3              .block                  ; EXPLOSION SOUND
                 lda SND3_VAL
                 beq _XIT
 
-                lda SID_RANDOM
+                .frsRandomByte
                 and #3
                 ora SND3_VAL
                 adc #$10

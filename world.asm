@@ -213,7 +213,7 @@ _next1          sta BLOCK_1,x
                 dex
                 bpl _next1
 
-                lda SID_RANDOM
+                .frsRandomByte
                 bmi _1
 
                 ldx #7
@@ -222,7 +222,7 @@ _next2          sta BLOCK_1,x
                 dex
                 bpl _next2
 
-_1              lda SID_RANDOM
+_1              .frsRandomByte
                 bmi _2
 
                 ldx #7
@@ -231,7 +231,7 @@ _next3          sta BLOCK_2,x
                 dex
                 bpl _next3
 
-_2              lda SID_RANDOM
+_2              .frsRandomByte
                 bmi _3
 
                 ldx #7
@@ -240,7 +240,7 @@ _next4          sta BLOCK_3,x
                 dex
                 bpl _next4
 
-_3              lda SID_RANDOM
+_3              .frsRandomByte
                 bmi _XIT
 
                 ldx #7
@@ -395,7 +395,7 @@ _next6          ldx #2
                 inc BAK2_COLOR
                 lda #1
                 sta SND3_VAL
-                lda SID_RANDOM
+                .frsRandomByte
                 sta SID_FREQ3
                 dey
                 bpl _next6
