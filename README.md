@@ -1,6 +1,6 @@
-# Fort Apocalypse - C256 Foenix Port
+# Fort Apocalypse - F256 Foenix Port
 
-This is a port targeting the [Foenix Retro Systems C256](https://c256foenix.com/) platform.
+This is a port targeting the [Foenix Retro Systems F256](https://c256foenix.com/) platform.
 
 This requires [64tass](https://sourceforge.net/projects/tass64/) to assemble from source.
 
