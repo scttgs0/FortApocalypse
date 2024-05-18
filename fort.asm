@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: fort.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023-2024
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -67,7 +67,7 @@
                 * = $2000
 ;--------------------------------------
 
-                .include "LEVEL.inc"
+                .include "data/LEVEL.inc"
 
 
 ;--------------------------------------
@@ -75,7 +75,7 @@
                 .align $100
 ;--------------------------------------
 
-                .include "FONT1.inc"
+                .include "data/FONT1.inc"
 
 
 ;--------------------------------------
@@ -83,7 +83,7 @@
                 .align $100
 ;--------------------------------------
 
-                .include "FONT2.inc"
+                .include "data/FONT2.inc"
 
 ;--------------------------------------
 ;--------------------------------------
@@ -94,11 +94,11 @@
 
                 ; Engine
                 .include "engine_main.asm"
-                .include "DISPLAYLIST.inc"
+                .include "data/DISPLAYLIST.inc"
                 .include "input.asm"
                 .include "miscellaneous.asm"
                 .include "sound.asm"
-                .include "TEXT.inc"
+                .include "data/TEXT.inc"
 
                 ; Interrupts
                 .include "lineinterrupts.asm"
@@ -110,24 +110,24 @@
 
                 ; Protagonist
                 .include "chopper.asm"
-                .include "CHOPPER.inc"
+                .include "data/CHOPPER.inc"
 
                 ; Baddies
                 .include "cruisemissile.asm"
                 .include "pod.asm"
                 .include "robot.asm"
                 .include "rocket.asm"
-                .include "ROCKET.inc"
+                .include "data/ROCKET.inc"
                 .include "tank.asm"
 
                 ; Environment
                 .include "elevator.asm"
                 .include "fuel.asm"
-                .include "FUEL.inc"
+                .include "data/FUEL.inc"
                 .include "hyperchamber.asm"
                 .include "landingpad.asm"
                 .include "laser.asm"
-                .include "LASER.inc"
+                .include "data/LASER.inc"
                 .include "navatron.asm"
                 .include "slaves.asm"
                 .include "world.asm"

@@ -1,8 +1,10 @@
 
+mkdir -p obj/
+
 64tass  --m65c02 \
         --flat \
         --nostart \
-        -o fortJR.bin \
-        --list=fortJR.lst \
-        --labels=fortJR.lbl \
+        -o obj/fortJR.bin \
+        --list=obj/fortJR.lst \
+        --labels=obj/fortJR.lbl \
         fort.asm
