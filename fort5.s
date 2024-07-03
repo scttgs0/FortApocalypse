@@ -1,3 +1,4 @@
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: FORT5.S
@@ -27,7 +28,7 @@ DoChecksum2    .proc
                 sta ADR1+1
                 clc
 
-_next1          adc (ADR1),y
+_next1          adc (ADR1),Y
                 bcc _1
                 inc TEMP1
 _1              iny
@@ -57,7 +58,7 @@ _XIT            rts
 ;=======================================
 MoveSlaves      .proc
                 ldx SLAVE_NUM
-                lda SLAVE_STATUS,x
+                lda SLAVE_STATUS,X
                 cmp #OFF
                 beq _2
 
@@ -114,9 +115,9 @@ GetSlaveAddr    .proc
 ;v_???          .var TEMP2
 ;---
 
-                lda SLAVE_X,x
+                lda SLAVE_X,X
                 sta TEMP1
-                lda SLAVE_Y,x
+                lda SLAVE_Y,X
                 sta TEMP2
                 jmp ComputeMapAddr
 
@@ -133,7 +134,7 @@ SlaveCollision  .proc
                 jsr GetSlaveAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 beq S_COL2
 
                 cmp #EXP
@@ -146,7 +147,7 @@ SlaveCollision  .proc
                 beq S_COL2
 
                 dec ADR1+1
-                lda (ADR1),y
+                lda (ADR1),Y
                 beq S_COL2
 
                 cmp #EXP
@@ -173,7 +174,7 @@ S_COL2          .proc
                 jsr SlaveErase
 
                 lda #OFF
-                sta SLAVE_STATUS,x
+                sta SLAVE_STATUS,X
                 dec SLAVES_LEFT
                 .endproc
 
@@ -223,10 +224,10 @@ SlaveErase      .proc
 
                 ldy #0
                 lda #$48                ; '^H'
-                sta (ADR1),y
+                sta (ADR1),Y
                 dec ADR1+1
                 lda #$1F                ; '?'
-                sta (ADR1),y
+                sta (ADR1),Y
                 rts
                 .endproc
 
@@ -238,32 +239,32 @@ SlaveMove       .proc
 ;v_???          .var ADR1
 ;---
 
-_next1          lda SLAVE_DX,x
+_next1          lda SLAVE_DX,X
                 bmi _1
 
-                inc SLAVE_DX,x
-                lda SLAVE_DX,x
+                inc SLAVE_DX,X
+                lda SLAVE_DX,X
                 and #$01
                 ora #$10
-                sta SLAVE_DX,x
-                inc SLAVE_X,x
+                sta SLAVE_DX,X
+                inc SLAVE_X,X
                 jmp _2
-_1              dec SLAVE_DX,x
-                lda SLAVE_DX,x
+_1              dec SLAVE_DX,X
+                lda SLAVE_DX,X
                 and #$01
                 ora #$F0
-                sta SLAVE_DX,x
-                dec SLAVE_X,x
+                sta SLAVE_DX,X
+                dec SLAVE_X,X
 _2              jsr GetSlaveAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 cmp #$48
                 beq _XIT
 
-                lda SLAVE_DX,x
+                lda SLAVE_DX,X
                 eor #$E0
-                sta SLAVE_DX,x
+                sta SLAVE_DX,X
                 jmp _next1
 
 _XIT            rts
@@ -280,25 +281,25 @@ SlaveDraw       .proc
                 jsr GetSlaveAddr
 
                 ldy #0
-                lda SLAVE_DX,x
+                lda SLAVE_DX,X
                 pha
                 and #$03
                 tax
                 pla
                 bpl _1
 
-                lda SLAVE_CHR_B_L,x
-                sta (ADR1),y
+                lda SLAVE_CHR_B_L,X
+                sta (ADR1),Y
                 dec ADR1+1
-                lda SLAVE_CHR_T_L,x
-                sta (ADR1),y
+                lda SLAVE_CHR_T_L,X
+                sta (ADR1),Y
                 rts
 
-_1              lda SLAVE_CHR_B_R,x
-                sta (ADR1),y
+_1              lda SLAVE_CHR_B_R,X
+                sta (ADR1),Y
                 dec ADR1+1
-                lda SLAVE_CHR_T_R,x
-                sta (ADR1),y
+                lda SLAVE_CHR_T_R,X
+                sta (ADR1),Y
                 rts
                 .endproc
 
@@ -314,11 +315,11 @@ _next1          dex
                 clc
                 rts
 
-_1              lda SLAVE_STATUS,x
+_1              lda SLAVE_STATUS,X
                 cmp #OFF
                 beq _next1
 
-                lda SLAVE_X,x
+                lda SLAVE_X,X
                 sec
                 sbc CHOP_X
                 bpl _2
@@ -327,7 +328,7 @@ _1              lda SLAVE_STATUS,x
 _2              cmp #4
                 bge _next1
 
-                lda SLAVE_Y,x
+                lda SLAVE_Y,X
                 sec
                 sbc CHOP_Y
                 bpl _3
@@ -337,7 +338,7 @@ _3              cmp #4
                 bge _next1
 
                 lda #PICKUP
-                sta SLAVE_STATUS,x
+                sta SLAVE_STATUS,X
                 lda #$A8
                 sta AUDC3
                 lda #32
@@ -496,7 +497,7 @@ DF1             lda #9+2
                 jsr DrawBase
 
                 lda #$EC+2
-                bne _2                  ; FORCED
+                bne _2                  ; [unc]
 
 _1              lda #$82
 _2              sta TEMP1
@@ -549,8 +550,8 @@ DrawBase        .proc
 
                 tax
 _next1          ldy #0
-_next2          lda BASE_SHAPE,x
-                sta (ADR1),y
+_next2          lda BASE_SHAPE,X
+                sta (ADR1),Y
                 inx
                 iny
                 cpy #6
@@ -682,9 +683,9 @@ PositionIt      .proc
                 and #7
                 tax
                 ldy #0
-                lda (ADR2),y
-                eor POS_MASK1,x
-                sta (ADR2),y
+                lda (ADR2),Y
+                eor POS_MASK1,X
+                sta (ADR2),Y
                 ldx TEMP3
                 rts
                 .endproc
@@ -729,8 +730,8 @@ DO_LINE         .proc
                 sta TEMP1
 _next1          ldx #12
                 ldy #0
-_next2          lda (ADR1),y
-                sta (ADR2),y
+_next2          lda (ADR1),Y
+                sta (ADR2),Y
                 inc ADR1
                 bne _1
 
@@ -796,7 +797,7 @@ DoChecksum1    .block
                 lda #$90
                 sta ADR1+1
                 clc
-_next1          adc (ADR1),y
+_next1          adc (ADR1),Y
                 bcc _1
 
                 inc TEMP1
@@ -850,7 +851,7 @@ NEXT_PART1      .block
                 sta LAND_CHOP_ANGLE
                 ldx #16-1
                 lda #0
-_next1          sta WINDOW_1,x
+_next1          sta WINDOW_1,X
                 dex
                 bpl _next1
 
@@ -867,12 +868,12 @@ _next2          lda #121
                 lda TEMP3
                 asl
                 tax
-                lda FORT_EXP,x
+                lda FORT_EXP,X
                 sta ADR2
-                lda FORT_EXP+1,x
+                lda FORT_EXP+1,X
                 sta ADR2+1
 _next3          ldy TEMP4
-                lda (ADR2),y
+                lda (ADR2),Y
                 sta TEMP5
                 ldy #7+8+8
 _next4          ldx #2
@@ -881,7 +882,7 @@ _next4          ldx #2
                 bcc _next5
 
                 lda #EXP
-_next5          sta (ADR1),y
+_next5          sta (ADR1),Y
                 dey
                 dex
                 bpl _next5
@@ -967,7 +968,7 @@ _next1          txa
                 cpx #8
                 bne _next1
 
-                beq LINE2.LINEC         ; FORCED
+                beq LINE2.LINEC         ; [unc]
 
                 .endproc
 
@@ -985,8 +986,8 @@ LINE2           .proc
                 sta VDSLST+1
 
                 ldx #2
-_next1          lda ROCKET_X,x
-                sta HPOSM0,x
+_next1          lda ROCKET_X,X
+                sta HPOSM0,X
                 dex
                 bpl _next1
 
@@ -1067,7 +1068,7 @@ LINE4           .proc
 
                 ldx #7
                 lda #0
-_next1          sta HPOSP0,x
+_next1          sta HPOSP0,X
                 dex
                 bpl _next1
 
@@ -1100,7 +1101,7 @@ DoChecksum3     .proc
                 ldx #0
                 txa
                 clc
-_next1          adc $B980,x
+_next1          adc $B980,X
                 inx
                 bne _next1
 

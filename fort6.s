@@ -1,3 +1,4 @@
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: FORT6.S
@@ -74,11 +75,11 @@ CartridgeStart  .proc
                 pha
                 ldx #$00
                 txa
-_next1          sta $0000,x             ; zero-page
-                sta HPOSP0,x
-                sta DMACLT,x
-                sta AUDF1,x
-                sta PORTA,x
+_next1          sta $0000,X             ; zero-page
+                sta HPOSP0,X
+                sta DMACLT,X
+                sta AUDF1,X
+                sta PORTA,X
                 inx
                 bne _next1
 
@@ -86,7 +87,7 @@ _next1          sta $0000,x             ; zero-page
                 sty ADR1+1
                 dey                     ; Y=0
                 sty ADR1
-_next2          sta (ADR1),y
+_next2          sta (ADR1),Y
                 iny
                 bne _next2
 
@@ -98,8 +99,8 @@ _next2          sta (ADR1),y
                 lda #$34
                 pha
                 ldx #$00
-_next3          lda BOOT_STUFF,x
-                sta $01C0,x             ; L01C0
+_next3          lda BOOT_STUFF,X
+                sta $01C0,X             ; L01C0
                 inx
                 bpl _next3
 
@@ -404,8 +405,8 @@ BOOT_STUFF      .byte $84,$C4,$76,$9E,$E6,$7C,$08,$88,$79,$06               ; #.
 ;=======================================
 INIT_OS         ;.proc                  ; never called
                 ldx #$25
-_next1          lda $E480,x             ; PUPDIV
-                sta VDSLST,x
+_next1          lda $E480,X             ; PUPDIV
+                sta VDSLST,X
                 dex
                 bpl _next1
 

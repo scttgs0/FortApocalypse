@@ -1,3 +1,4 @@
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: FORT2.S
@@ -213,9 +214,9 @@ PrintOptions      .block
                 lda OPT_NUM
                 asl
                 tax
-                lda OptTable,x
+                lda OptTable,X
                 sta ADR2
-                lda OptTable+1,x
+                lda OptTable+1,X
                 sta ADR2+1
                 jsr CalcCursorLoc
 
@@ -223,22 +224,22 @@ PrintOptions      .block
                 sty TEMP5
                 sty TEMP6
 _next1          ldy TEMP5
-                lda (ADR2),y
+                lda (ADR2),Y
                 beq _1
                 cmp #$FF
                 beq _2
 
                 ora #$80
                 ldy TEMP6
-                sta (ADR1),y
+                sta (ADR1),Y
                 inc TEMP6
                 clc
                 adc #32
 _1              ldy TEMP6
-                sta (ADR1),y
+                sta (ADR1),Y
                 inc TEMP6
                 inc TEMP5
-                bne _next1                  ; FORCED
+                bne _next1              ; [unc]
 
 _2              lda #28
                 sta v_posX
@@ -247,8 +248,8 @@ _2              lda #28
                 lda GRAV_SKILL
                 asl
                 tay
-                ldx OptGravityTable,y
-                lda OptGravityTable+1,y
+                ldx OptGravityTable,Y
+                lda OptGravityTable+1,Y
                 tay
                 jsr Print               ; (28, 7) 'WEAK|NORMAL|STRONG'
 
@@ -257,8 +258,8 @@ _2              lda #28
                 lda PILOT_SKILL
                 asl
                 tay
-                ldx OptPilotTable,y
-                lda OptPilotTable+1,y
+                ldx OptPilotTable,Y
+                lda OptPilotTable+1,Y
                 tay
                 jsr Print               ; (28, 9) 'NOVICE|PRO|EXPERT'
 
@@ -267,8 +268,8 @@ _2              lda #28
                 lda CHOPS
                 asl
                 tay
-                ldx OptRoboTable,y
-                lda OptRoboTable+1,y
+                ldx OptRoboTable,Y
+                lda OptRoboTable+1,Y
                 tay
                 jmp Print               ; (28, 11) 'SEVEN|NINE|ELEVEN'
 
@@ -347,7 +348,7 @@ _next1          pha
 MovePods1       .proc
                 ldx POD_NUM
 
-                lda POD_STATUS,x
+                lda POD_STATUS,X
                 sta POD_COM
                 and #$0F
                 cmp #OFF
@@ -392,9 +393,9 @@ GetPodAddr      .proc
 ;v_???          .var TEMP2
 ;---
 
-                lda POD_X,x
+                lda POD_X,X
                 sta TEMP1
-                lda POD_Y,x
+                lda POD_Y,X
                 sta TEMP2
                 jmp ComputeMapAddr
 
@@ -412,10 +413,10 @@ GetPodValue     .proc
                 jsr GetPodAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 sta TEMP1
                 iny
-                lda (ADR1),y
+                lda (ADR1),Y
                 sta TEMP2
                 rts
                 .endproc
@@ -434,10 +435,10 @@ PutPodValue     .proc
 
                 ldy #0
                 lda TEMP3
-                sta (ADR1),y
+                sta (ADR1),Y
                 iny
                 lda TEMP4
-                sta (ADR1),y
+                sta (ADR1),Y
                 rts
                 .endproc
 
@@ -450,9 +451,9 @@ PositionPod     .proc
 ;v_???          .var TEMP2
 ;---
 
-                lda POD_X,x
+                lda POD_X,X
                 sta TEMP1
-                lda POD_Y,x
+                lda POD_Y,X
                 sta TEMP2
                 jmp PositionIt
 
@@ -473,27 +474,27 @@ _next1          lda RANDOM
                 cmp #256-50
                 bge _next1
 
-                sta POD_X,x
+                sta POD_X,X
 _next2          lda RANDOM
                 cmp #40
                 bge _next2
 
-                sta POD_Y,x
+                sta POD_Y,X
                 jsr GetPodAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 iny
-                ora (ADR1),y
+                ora (ADR1),Y
                 bne _next1
 
                 lda #ON
-                sta POD_STATUS,x
+                sta POD_STATUS,X
                 sta POD_COM
                 jsr PodDraw
 
                 lda #$01
-                sta POD_DX,x
+                sta POD_DX,X
                 jmp PodsEnd
 
                 .endproc
@@ -534,7 +535,7 @@ PodCollision    .proc
 _1              jsr PodErase
 
                 lda #OFF
-                sta POD_STATUS,x
+                sta POD_STATUS,X
                 ldx #$50
                 ldy #$00
                 jsr IncreaseScore
@@ -554,9 +555,9 @@ PodErase        .proc
 
                 jsr PositionPod
 
-                lda POD_TEMP1,x
+                lda POD_TEMP1,X
                 sta TEMP3
-                lda POD_TEMP2,x
+                lda POD_TEMP2,X
                 sta TEMP4
                 jmp PutPodValue
 
@@ -577,17 +578,17 @@ PodDraw         .proc
                 jsr GetPodValue
 
                 lda TEMP1
-                sta POD_TEMP1,x
+                sta POD_TEMP1,X
                 lda TEMP2
-                sta POD_TEMP2,x
+                sta POD_TEMP2,X
                 lda POD_COM
                 lsr
                 lsr
                 lsr
                 tay
-                lda POD_CHR,y
+                lda POD_CHR,Y
                 sta TEMP3
-                lda POD_CHR+1,y
+                lda POD_CHR+1,Y
                 sta TEMP4
                 jmp PutPodValue
 
@@ -603,7 +604,7 @@ PodMove         .proc
 ;v_???          .var TEMP2
 ;---
 
-_next1          lda POD_DX,x
+_next1          lda POD_DX,X
                 bpl _1
 
                 lda POD_COM
@@ -615,7 +616,7 @@ _next1          lda POD_DX,x
                 cmp #$30
                 bne _2
 
-                dec POD_X,x
+                dec POD_X,X
                 jmp _2
 
 _1              lda POD_COM
@@ -626,33 +627,33 @@ _1              lda POD_COM
                 and #$F0
                 bne _2
 
-                inc POD_X,x
-_2              lda POD_X,x
+                inc POD_X,X
+_2              lda POD_X,X
                 sta TEMP1
-                lda POD_Y,x
+                lda POD_Y,X
                 sta TEMP2
                 jsr ComputeMapAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 iny
-                ora (ADR1),y
+                ora (ADR1),Y
                 bne _3
 
-                lda POD_X,x
+                lda POD_X,X
                 cmp #50
                 blt _3
 
                 cmp #256-50
                 blt _4
 
-_3              lda POD_DX,x
+_3              lda POD_DX,X
                 eor #-2
-                sta POD_DX,x
+                sta POD_DX,X
                 jmp _next1
 
 _4              lda POD_COM
-                sta POD_STATUS,x
+                sta POD_STATUS,X
                 rts
                 .endproc
 
@@ -679,7 +680,7 @@ MoveCruiseMissiles .proc
 
 
 M_ST            .block
-                lda CM_STATUS,x
+                lda CM_STATUS,X
                 cmp #OFF
                 beq M_END
 
@@ -700,11 +701,11 @@ _1              jsr MissileCollision
 
 
 M_END           .block
-                lda TANK_STATUS,x
+                lda TANK_STATUS,X
                 cmp #ON
                 bne _2
 
-                lda TANK_Y,x
+                lda TANK_Y,X
                 sec
                 sbc CHOP_Y
                 bmi _2
@@ -712,14 +713,14 @@ M_END           .block
                 cmp #14
                 bge _2
 
-                lda CM_STATUS,x
+                lda CM_STATUS,X
                 cmp #OFF
                 bne _2
 
                 lda CHOP_X
                 sec
                 sbc #2
-                sbc TANK_X,x
+                sbc TANK_X,X
                 bpl _1
 
                 eor #-2
@@ -727,7 +728,7 @@ _1              cmp #9
                 bge _2
 
                 lda #BEGIN
-                sta CM_STATUS,x
+                sta CM_STATUS,X
 _2              dex
                 bpl M_ST
 
@@ -736,7 +737,7 @@ _2              dex
 
 MCE             .block
                 ldx #MAX_TANKS-1
-_next1          lda CM_STATUS,x
+_next1          lda CM_STATUS,X
                 cmp #OFF
                 bne _XIT
 
@@ -759,9 +760,9 @@ v_posX          .var TEMP1
 v_posY          .var TEMP2
 ;---
 
-                lda CM_X,x
+                lda CM_X,X
                 sta v_posX
-                lda CM_Y,x
+                lda CM_Y,X
                 sta v_posY
                 jmp ComputeMapAddr
 
@@ -772,27 +773,27 @@ v_posY          .var TEMP2
 ;
 ;=======================================
 MissileBegin    .proc
-                ldy TANK_X,x
+                ldy TANK_X,X
                 iny
                 tya
-                sta CM_X,x
-                lda TANK_Y,x
+                sta CM_X,X
+                lda TANK_Y,X
                 sec
                 sbc #2
-                sta CM_Y,x
+                sta CM_Y,X
                 ldy #LEFT
                 lda CHOP_X
                 sec
-                sbc TANK_X,x
+                sbc TANK_X,X
                 bmi _1
 
                 ldy #RIGHT
 _1              tya
-                sta CM_STATUS,x
+                sta CM_STATUS,X
                 lda #0
-                sta CM_TEMP,x
+                sta CM_TEMP,X
                 lda #20
-                sta CM_TIME,x
+                sta CM_TIME,X
                 lda #1
                 sta SND6_VAL
                 jmp MoveCruiseMissiles.M_END
@@ -811,7 +812,7 @@ v_preserveX     .var TEMP1
                 jsr GetMissileAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 cmp #EXP
                 beq M_COL2
 
@@ -823,10 +824,10 @@ M_COL2          jsr MissileErase
                 lda #1
                 sta SND3_VAL
                 lda #OFF
-                sta CM_STATUS,x
+                sta CM_STATUS,X
 
                 lda #-1
-                sta CM_TIME,x
+                sta CM_TIME,X
 
                 stx v_preserveX
                 ldx #$10
@@ -849,7 +850,7 @@ MissileErase    .proc
 
                 jsr GetMissileAddr
 
-                lda CM_TEMP,x
+                lda CM_TEMP,X
                 cmp #EXP_WALL
                 beq _1
 
@@ -866,7 +867,7 @@ MissileErase    .proc
                 blt _XIT
 
 _1              ldy #0
-                sta (ADR1),y
+                sta (ADR1),Y
 _XIT            rts
                 .endproc
 
@@ -879,37 +880,37 @@ MissileMove     .proc
 v_distance      .var TEMP1
 ;---
 
-                lda CM_STATUS,x
+                lda CM_STATUS,X
                 cmp #LEFT
                 beq _1
 
-                inc CM_X,x
+                inc CM_X,X
                 jmp _2
 
-_1              dec CM_X,x
-_2              lda CM_TIME,x
+_1              dec CM_X,X
+_2              lda CM_TIME,X
                 bpl _3
 
-_next1          inc CM_Y,x
+_next1          inc CM_Y,X
                 jmp _6
 
 _3              lda CHOP_X
                 sec
-                sbc CM_X,x
+                sbc CM_X,X
                 sta v_distance
 
-                lda CM_STATUS,x
+                lda CM_STATUS,X
                 cmp #LEFT
                 bne _4
 
                 lda v_distance
                 bpl _next1
-                bmi _5                  ; FORCED
+                bmi _5                  ; [unc]
 
 _4              lda v_distance
                 bmi _next1
 
-_5              lda CM_X,x
+_5              lda CM_X,X
                 cmp #$D8
                 bge _next1
 
@@ -920,28 +921,28 @@ _5              lda CM_X,x
                 iny
                 tya
                 sec
-                sbc CM_Y,x
+                sbc CM_Y,X
                 beq _6
                 bpl _next2
 
-                dec CM_Y,x
+                dec CM_Y,X
                 jmp _6
 
-_next2          inc CM_Y,x
+_next2          inc CM_Y,X
 _6              jsr GetMissileAddr
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 cmp #MISS_LEFT
                 beq _next2
 
                 cmp #MISS_RIGHT
                 beq _next2
 
-                lda CM_TIME,x
+                lda CM_TIME,X
                 bmi _XIT
 
-                dec CM_TIME,x
+                dec CM_TIME,X
 _XIT             rts
                 .endproc
 
@@ -956,17 +957,17 @@ MissileDraw     .proc
                 jsr GetMissileAddr
 
                 ldy #0
-                lda (ADR1),y
-                sta CM_TEMP,x
+                lda (ADR1),Y
+                sta CM_TEMP,X
                 lda #MISS_LEFT
-                ldy CM_STATUS,x
+                ldy CM_STATUS,X
                 cpy #LEFT
                 beq _1
 
                 lda #MISS_RIGHT
 _1              ldy #0
-                sta (ADR1),y
-                lda CM_TEMP,x
+                sta (ADR1),Y
+                lda CM_TEMP,X
                 jsr CheckChr
 
                 bcc _XIT
@@ -1000,19 +1001,19 @@ CheckHyperchamber .proc
                 and #3
 
                 tax
-                lda H_XF,x
+                lda H_XF,X
                 sta SX_F
-                lda H_YF,x
+                lda H_YF,X
                 sta SY_F
 
-                lda H_X,x
+                lda H_X,X
                 sta SX
-                lda H_Y,x
+                lda H_Y,X
                 sta SY
 
-                lda H_CX,x
+                lda H_CX,X
                 sta CHOPPER_X
-                lda H_CY,x
+                lda H_CY,X
                 sta CHOPPER_Y
 
                 lda #8
@@ -1061,7 +1062,7 @@ CheckChr        .proc
                 adc ADR2+1
                 sta ADR2+1
                 ldy #7
-_next1          lda (ADR2),y
+_next1          lda (ADR2),Y
                 bne _XIT
 
                 dey
@@ -1083,16 +1084,16 @@ PositionTank    .proc
 ;v_???          .var TEMP2
 ;---
 
-                lda TANK_X,x
+                lda TANK_X,X
                 sta TEMP1
 
-                ldy TANK_Y,x
+                ldy TANK_Y,X
                 dey
                 sty TEMP2
 
                 jsr PositionIt
 
-                lda TANK_Y,x
+                lda TANK_Y,X
                 sta TEMP2
                 rts
                 .endproc
@@ -1117,9 +1118,9 @@ _1              lda TANK_SPEED
 
                 ldx #MAX_TANKS-1
 
-_next1          lda TANK_Y,x
+_next1          lda TANK_Y,X
                 sta TEMP2
-                lda TANK_STATUS,x
+                lda TANK_STATUS,X
                 cmp #OFF
                 bne _2
 
@@ -1129,17 +1130,17 @@ _2              cmp #BEGIN
                 bne _4
 
                 lda #ON
-                sta TANK_STATUS,x
-                lda TANK_START_X,x
-                sta TANK_X,x
-                lda TANK_START_Y,x
-                sta TANK_Y,x
+                sta TANK_STATUS,X
+                lda TANK_START_X,X
+                sta TANK_X,X
+                lda TANK_START_Y,X
+                sta TANK_Y,X
                 lda #-1
                 ldy RANDOM
                 bpl _3
 
                 lda #1
-_3              sta TANK_DX,x
+_3              sta TANK_DX,X
                 jsr PositionTank
                 jmp _next4
 
@@ -1148,7 +1149,7 @@ _4              cmp #CRASH
                 jmp _9
 
 ; RESTORE OLD POS
-_5              lda TANK_X,x
+_5              lda TANK_X,X
                 sta TEMP1
                 jsr ComputeMapAddr
 
@@ -1158,7 +1159,7 @@ _5              lda TANK_X,x
                 asl
                 adc TEMP1
                 tax
-_next2          lda (ADR1),y
+_next2          lda (ADR1),Y
                 cmp #EXP
                 beq _6
 
@@ -1170,10 +1171,10 @@ _next2          lda (ADR1),y
 
 _6              ldx TEMP1
                 lda #CRASH
-                sta TANK_STATUS,x
+                sta TANK_STATUS,X
                 ldy #2
                 lda #EXP
-_next3          sta (ADR1),y
+_next3          sta (ADR1),Y
                 dey
                 bpl _next3
 
@@ -1181,8 +1182,8 @@ _next3          sta (ADR1),y
                 sta TIM5_VAL
                 jmp _9
 
-_7              lda TANK_TEMP,x
-                sta (ADR1),y
+_7              lda TANK_TEMP,X
+                sta (ADR1),Y
                 inx
                 iny
                 cpy #3
@@ -1191,21 +1192,21 @@ _7              lda TANK_TEMP,x
                 ldy #1
                 dec ADR1+1
                 lda #0
-                sta (ADR1),y
+                sta (ADR1),Y
 
 ; MOVE X
                 ldx TEMP1
 _next4          jsr PositionTank
 
-                lda TANK_X,x
+                lda TANK_X,X
                 clc
-                adc TANK_DX,x
-                sta TANK_X,x
+                adc TANK_DX,X
+                sta TANK_X,X
 
 ; SAVE NEW POS
                 jsr PositionTank
 
-                lda TANK_X,x
+                lda TANK_X,X
                 sta TEMP1
                 jsr ComputeMapAddr
 
@@ -1215,8 +1216,8 @@ _next4          jsr PositionTank
                 asl
                 adc TEMP1
                 tax
-_next5          lda (ADR1),y
-                sta TANK_TEMP,x
+_next5          lda (ADR1),Y
+                sta TANK_TEMP,X
                 inx
                 iny
                 cpy #3
@@ -1235,8 +1236,8 @@ _next5          lda (ADR1),y
 
 ; DRAW TANK
                 ldy #2
-_next6          lda TANK_SHAPE,y
-                sta (ADR1),y
+_next6          lda TANK_SHAPE,Y
+                sta (ADR1),Y
                 dey
                 bpl _next6
 
@@ -1244,13 +1245,13 @@ _next6          lda TANK_SHAPE,y
                 ldy #$6F+128            ; 'o'
                 lda CHOP_X
                 sec
-                sbc TANK_X,x
+                sbc TANK_X,X
                 bpl _8
 
                 ldy #$70+128            ; 'p'
 _8              tya
                 ldy #1
-                sta (ADR1),y
+                sta (ADR1),Y
 
 _9              dex
                 bmi MT2
@@ -1267,15 +1268,15 @@ MT2             .block
                 sta TIM5_VAL
 
                 ldx #MAX_TANKS-1
-_next1          lda TANK_STATUS,x
+_next1          lda TANK_STATUS,X
                 cmp #CRASH
                 bne _1
 
                 lda #OFF
-                sta TANK_STATUS,x
-                lda TANK_X,x
+                sta TANK_STATUS,X
+                lda TANK_X,X
                 sta TEMP1
-                lda TANK_Y,x
+                lda TANK_Y,X
                 sta TEMP2
                 jsr ComputeMapAddr
 
@@ -1285,8 +1286,8 @@ _next1          lda TANK_STATUS,x
                 asl
                 adc TEMP1
                 tax
-_next2          lda TANK_TEMP,x
-                sta (ADR1),y
+_next2          lda TANK_TEMP,X
+                sta (ADR1),Y
                 inx
                 iny
                 cpy #3
@@ -1295,7 +1296,7 @@ _next2          lda TANK_TEMP,x
                 dec ADR1+1
                 ldy #1
                 lda #0
-                sta (ADR1),y
+                sta (ADR1),Y
                 ldx #$50
                 ldy #$2
                 jsr IncreaseScore
@@ -1303,7 +1304,7 @@ _next2          lda TANK_TEMP,x
                 ldx TEMP1
                 jsr PositionTank
 
-_1              lda TANK_STATUS,x
+_1              lda TANK_STATUS,X
                 cmp #OFF
                 bne _2
 
@@ -1313,26 +1314,26 @@ _1              lda TANK_STATUS,x
 
                 sec
                 sbc #3
-                cmp TANK_START_Y,x
+                cmp TANK_START_Y,X
                 blt _2
 
-                lda TANK_START_X,x
+                lda TANK_START_X,X
                 sec
                 sbc #5
                 sta TEMP1
-                lda TANK_START_Y,x
+                lda TANK_START_Y,X
                 sta TEMP2
                 jsr ComputeMapAddr
 
                 ldy #13-1
-_next3          lda (ADR1),y
+_next3          lda (ADR1),Y
                 bmi _2
 
                 dey
                 bpl _next3
 
                 lda #BEGIN
-                sta TANK_STATUS,x
+                sta TANK_STATUS,X
 
 _2              dex
                 bpl _next1
@@ -1351,8 +1352,8 @@ CheckTankCollision .proc
 ;---
 
                 ldx #HIT_LIST2_LEN
-_next1          lda (ADR1),y
-                cmp HIT_LIST,x
+_next1          lda (ADR1),Y
+                cmp HIT_LIST,X
                 beq _1
 
                 dex
@@ -1363,9 +1364,9 @@ _next1          lda (ADR1),y
                 rts
 
 _1              ldx TEMP1
-                lda TANK_DX,x
+                lda TANK_DX,X
                 eor #-2
-                sta TANK_DX,x
+                sta TANK_DX,X
                 sec
                 rts
                 .endproc
@@ -1411,14 +1412,14 @@ v_roboExplodeTimer .var TIM7_VAL
                 sta R_STATUS
 _1              ldx #$E0
                 lda #0
-_next1          sta CHR_SET1+$200,x
+_next1          sta CHR_SET1+$200,X
                 inx
                 bne _next1
 
-_next2          sta CHR_SET1+$300,x
-                sta PLAY_SCRN+$000,x
-                sta PLAY_SCRN+$100,x
-                sta PLAY_SCRN+$200,x
+_next2          sta CHR_SET1+$300,X
+                sta PLAY_SCRN+$000,X
+                sta PLAY_SCRN+$100,X
+                sta PLAY_SCRN+$200,X
                 inx
                 bne _next2
 
@@ -1434,33 +1435,33 @@ _next2          sta CHR_SET1+$300,x
                 sta SND1_2_VAL
                 ldx #MAX_TANKS-1
                 stx v_roboExplodeTimer
-_next3          lda CM_STATUS,x
+_next3          lda CM_STATUS,X
                 cmp #OFF
                 beq _2
 
                 lda #OFF
-                sta CM_STATUS,x
+                sta CM_STATUS,X
                 jsr MissileErase
 _2              dex
                 bpl _next3
 
                 ldx #2
-_next4          lda ROCKET_STATUS,x
+_next4          lda ROCKET_STATUS,X
                 cmp #7                  ; EXP
                 bne _3
 
-                lda ROCKET_TEMPX,x
+                lda ROCKET_TEMPX,X
                 sta TEMP1
-                lda ROCKET_TEMPY,x
+                lda ROCKET_TEMPY,X
                 sta TEMP2
                 jsr ComputeMapAddr
 
                 ldy #0
-                lda ROCKET_TEMP,x
-                sta (ADR1),y
+                lda ROCKET_TEMP,X
+                sta (ADR1),Y
 _3              lda #0
-                sta ROCKET_STATUS,x
-                sta ROCKET_X,x
+                sta ROCKET_STATUS,X
+                sta ROCKET_X,X
                 dex
                 bpl _next4
 
@@ -1540,22 +1541,22 @@ v_destIdx       .var TEMP6
                 sty v_destIdx
 
 _nextChar       ldy v_sourceIdx
-                lda (v_sourceAddr),y
+                lda (v_sourceAddr),Y
                 beq _isSpaceChar        ; blank space does not have 2-halves
 
                 cmp #$FF                ; check for termination character
                 beq _XIT
 
                 ldy v_destIdx           ; left-half of glyph
-                sta (v_destAddr),y
+                sta (v_destAddr),Y
                 inc v_destIdx
                 clc
                 adc #32
 _isSpaceChar    ldy v_destIdx           ; right-half of glyph
-                sta (v_destAddr),y
+                sta (v_destAddr),Y
                 inc v_destIdx
                 inc v_sourceIdx
-                bne _nextChar           ; FORCED
+                bne _nextChar           ; [unc]
 
 _XIT            rts
                 .endproc
@@ -1618,7 +1619,7 @@ _2              ldx #$FF
 ClearInfo       .proc
                 ldy #40-1
                 lda #0
-_next1          sta PLAY_SCRN,y
+_next1          sta PLAY_SCRN,Y
                 dey
                 bpl _next1
 

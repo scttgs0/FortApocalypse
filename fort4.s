@@ -1,3 +1,4 @@
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: FORT4.S
@@ -80,9 +81,9 @@ POS_IT_I        ldx TEMP1_I
                 and #7
                 tax
                 ldy #0
-                lda (ADR1_I),y
-                eor POS_MASK1,x
-                sta (ADR1_I),y
+                lda (ADR1_I),Y
+                eor POS_MASK1,X
+                sta (ADR1_I),Y
                 rts
                 .endproc
 
@@ -115,7 +116,7 @@ _doStick        lda CHOPPER_ANGLE
                 bne _2
 
                 ldx DEMO_COUNT
-                lda DEMO_STICK,x
+                lda DEMO_STICK,X
                 sta STICK
 
                 lda FRAME
@@ -283,7 +284,7 @@ _4              lda ELEVATOR_DX
                 sta ELEVATOR_DX
 
                 ldx #1
-_next1          lda ROCKET_STATUS,x
+_next1          lda ROCKET_STATUS,X
                 beq _5
 
                 dex
@@ -312,19 +313,19 @@ _8              cmp #0
                 bne _9
 
                 lda #1
-_9              sta ROCKET_STATUS,x
+_9              sta ROCKET_STATUS,X
 
                 lda CHOPPER_X
                 and #3
                 clc
                 adc CHOPPER_X
                 adc #8
-                sta ROCKET_X,x
+                sta ROCKET_X,X
 
                 lda CHOPPER_Y
                 clc
                 adc #8
-                sta ROCKET_Y,x
+                sta ROCKET_Y,X
 
                 lda #$3F
                 sta SND2_VAL
@@ -420,7 +421,7 @@ DO_Y            .block
 
                 ldx #MIN_DOWN
                 stx CHOPPER_Y
-                bne _2                  ; FORCED
+                bne _2                  ; [unc]
 
 _1              ldx CHOPPER_Y
                 cpx #MAX_DOWN+1
@@ -451,7 +452,7 @@ _3              lda SY
 
                 ldx #MIN_UP
                 stx CHOPPER_Y
-                bne _5                  ; FORCED
+                bne _5                  ; [unc]
 
 _4              cpx #MAX_UP
                 bge _6
@@ -491,10 +492,10 @@ _6              lda SX_F
                 ldy #MAP_LINES
 _nextRow        inx
                 lda ADR1_I
-                sta DSP_MAP,x
+                sta DSP_MAP,X
                 inx
                 lda ADR1_I+1
-                sta DSP_MAP,x
+                sta DSP_MAP,X
 
                 inc ADR1_I+1
                 inx
@@ -573,15 +574,15 @@ DoLaser1        .proc
                 bne _1
 
                 ldx #0
-_next1          lda LASER_SHAPES,x
-                sta LASERS_1,x
+_next1          lda LASER_SHAPES,X
+                sta LASERS_1,X
                 inx
                 cpx #32
                 bne _next1
 
                 ldx #0
-_next2          lda LASER_SHAPES+24,x
-                sta LASER_3,x
+_next2          lda LASER_SHAPES+24,X
+                sta LASER_3,X
                 inx
                 cpx #8
                 bne _next2
@@ -590,12 +591,12 @@ _next2          lda LASER_SHAPES+24,x
 
 _1              ldx #32-1
                 lda #0
-_next3          sta LASERS_1,x
+_next3          sta LASERS_1,X
                 dex
                 bpl _next3
 
                 ldx #8-1
-_next4          sta LASER_3,x
+_next4          sta LASER_3,X
                 dex
                 bpl _next4
 
@@ -622,15 +623,15 @@ DoLaser2        .proc
                 bne _1
 
                 ldx #0
-_next1          lda LASER_SHAPES,x
-                sta LASERS_2,x
+_next1          lda LASER_SHAPES,X
+                sta LASERS_2,X
                 inx
                 cpx #32
                 bne _next1
 
                 ldx #0
-_next2          lda LASER_SHAPES+16,x
-                sta LASER_3,x
+_next2          lda LASER_SHAPES+16,X
+                sta LASER_3,X
                 inx
                 cpx #8
                 bne _next2
@@ -639,7 +640,7 @@ _next2          lda LASER_SHAPES+16,x
 
 _1              ldx #32-1
                 lda #0
-_next3          sta LASERS_2,x
+_next3          sta LASERS_2,X
                 dex
                 bpl _next3
 
@@ -657,7 +658,7 @@ DoBlocks        .proc
 
                 ldx #32-1
                 lda #0
-_next1          sta BLOCK_1,x
+_next1          sta BLOCK_1,X
                 dex
                 bpl _next1
 
@@ -666,7 +667,7 @@ _next1          sta BLOCK_1,x
 
                 ldx #7
                 lda #$55
-_next2          sta BLOCK_1,x
+_next2          sta BLOCK_1,X
                 dex
                 bpl _next2
 
@@ -675,7 +676,7 @@ _1              lda RANDOM
 
                 ldx #7
                 lda #$55
-_next3          sta BLOCK_2,x
+_next3          sta BLOCK_2,X
                 dex
                 bpl _next3
 
@@ -684,7 +685,7 @@ _2              lda RANDOM
 
                 ldx #7
                 lda #$55
-_next4          sta BLOCK_3,x
+_next4          sta BLOCK_3,X
                 dex
                 bpl _next4
 
@@ -693,7 +694,7 @@ _3              lda RANDOM
 
                 ldx #7
                 lda #$55
-_next5          sta BLOCK_4,x
+_next5          sta BLOCK_4,X
                 dex
                 bpl _next5
 
@@ -716,7 +717,7 @@ DoElevator      .proc
 
                 ldx #32-1
                 lda #0
-_next1          sta BLOCK_5,x
+_next1          sta BLOCK_5,X
                 dex
                 bpl _next1
 
@@ -729,14 +730,14 @@ _next1          sta BLOCK_5,x
 
                 asl
                 tax
-                lda ELEVATORS,x
+                lda ELEVATORS,X
                 sta ADR1_I
-                lda ELEVATORS+1,x
+                lda ELEVATORS+1,X
                 sta ADR1_I+1
 
                 ldy #7
                 lda #$55
-_next2          sta (ADR1_I),y
+_next2          sta (ADR1_I),Y
                 dey
                 bpl _next2
 
@@ -755,10 +756,10 @@ ELEVATORS       .addr BLOCK_5,BLOCK_6
 ;=======================================
 DoExplode       .proc
                 ldx #7
-_next1          lda EXP_SHAPE,x
+_next1          lda EXP_SHAPE,X
                 and RANDOM
-                sta EXPLOSION,x
-                sta EXPLOSION2,x
+                sta EXPLOSION,X
+                sta EXPLOSION2,X
                 dex
                 bpl _next1
 
@@ -766,7 +767,7 @@ _next1          lda EXP_SHAPE,x
 _next2          lda RANDOM
                 and #$0F
                 ora #$A0
-                sta MISS_CHR_LEFT,x
+                sta MISS_CHR_LEFT,X
                 inx
                 cpx #5
                 bne _next2
@@ -775,7 +776,7 @@ _next2          lda RANDOM
 _next3          lda RANDOM
                 and #$E0
                 ora #$0A
-                sta MISS_CHR_RIGHT,x
+                sta MISS_CHR_RIGHT,X
                 inx
                 cpx #5
                 bne _next3
@@ -950,20 +951,20 @@ DRAW            .block
                 bne _1
 
                 lda #0
-                beq _2                  ; FORCED
+                beq _2                  ; [unc]
 
 _1              lda #<$F0+128           ; BLANK
 _2              clc
                 adc #$10+128            ; '0'
                 ldy #0
-                sta (SCRN_ADR),y
+                sta (SCRN_ADR),Y
                 cmp #$10+128
                 bne _3
 
                 lda #$A+128
 _3              iny
                 and #$8F
-                sta (SCRN_ADR),y
+                sta (SCRN_ADR),Y
                 lda SCRN_ADR
                 clc
                 adc #2

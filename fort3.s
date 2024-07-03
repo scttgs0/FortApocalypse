@@ -1,3 +1,4 @@
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: FORT3.S
@@ -108,9 +109,9 @@ _2              lda #$88
                 clc
                 adc #8
 _3              tax
-                lda ROB_X,x
+                lda ROB_X,X
                 sta R_X
-                lda ROB_Y,x
+                lda ROB_Y,X
                 sta R_Y
                 lda R_X
                 sec
@@ -191,7 +192,7 @@ R_F             .block
                 bge _1
 
                 lda #3
-                bne _2                  ; FORCED
+                bne _2                  ; [unc]
 
 _1              sec
                 sbc #2
@@ -244,7 +245,7 @@ _2              cmp #8
 
                 inc ROBOT_ANGLE
                 inc ROBOT_ANGLE
-                bne _4                  ; FORCED
+                bne _4                  ; [unc]
 
 _3              dec ROBOT_ANGLE
                 dec ROBOT_ANGLE
@@ -481,7 +482,7 @@ CheckChrI       .proc
                 jsr ComputeMapAddrI
 
                 ldy #0
-                lda (ADR1_I),y
+                lda (ADR1_I),Y
                 and #$7F
                 ldy #0
                 sty ADR2_I+1
@@ -500,7 +501,7 @@ CheckChrI       .proc
                 sta ADR2_I+1
 
                 ldy #7
-_next1          lda (ADR2_I),y
+_next1          lda (ADR2_I),Y
                 bne _XIT
                 dey
                 bpl _next1
@@ -566,7 +567,7 @@ _2              lda CHOPPER_COL
                 sta SND3_VAL
                 sta SND5_VAL
 _3              ldx #FLY
-                bne _9                  ; FORCED
+                bne _9                  ; [unc]
 
 _4              lda CHOP_X
                 sta TEMP1_I
@@ -621,7 +622,7 @@ _6              cpx #kREFUEL
                 jsr RestorePoint
 
 _7              ldx #LAND
-                bne _9                  ; FORCED
+                bne _9                  ; [unc]
 
 _8              lda #20
                 sta TIM3_VAL
@@ -666,8 +667,8 @@ CheckLanding    .proc
 
                 ldy #0
                 ldx #LAND_LEN
-                lda (ADR1_I),y
-_next1          cmp LAND_CHR,x
+                lda (ADR1_I),Y
+_next1          cmp LAND_CHR,X
                 beq _XIT
 
                 cmp #$48
@@ -821,8 +822,8 @@ _1              lda #FLY
 _2              ldy OCHOPPER_Y
                 ldx #17
                 lda #0
-_next1          sta PLAYER+PL0,y
-                sta PLAYER+PL1,y
+_next1          sta PLAYER+PL0,Y
+                sta PLAYER+PL1,Y
                 iny
                 dex
                 bpl _next1
@@ -836,9 +837,9 @@ _next1          sta PLAYER+PL0,y
                 lda CHOPPER_ANGLE
                 asl
                 tax
-                lda CHOPPER_SHAPES,x
+                lda CHOPPER_SHAPES,X
                 sta ADR1_I
-                lda CHOPPER_SHAPES+1,x
+                lda CHOPPER_SHAPES+1,X
                 sta ADR1_I+1
 
                 lda #0
@@ -850,11 +851,11 @@ _next1          sta PLAYER+PL0,y
                 stx OCHOPPER_Y
 
 _next2          ldy TEMP1_I
-                lda (ADR1_I),y
-                sta PLAYER+PL0,x
+                lda (ADR1_I),Y
+                sta PLAYER+PL0,X
                 ldy TEMP2_I
-                lda (ADR1_I),y
-                sta PLAYER+PL1,x
+                lda (ADR1_I),Y
+                sta PLAYER+PL1,X
 
                 inc TEMP1_I
                 inc TEMP2_I
@@ -870,12 +871,12 @@ _next2          ldy TEMP1_I
 
                 ldx CHOPPER_Y
                 ldy #18
-_next3          lda PLAYER+PL0,x
+_next3          lda PLAYER+PL0,X
                 and RANDOM
-                sta PLAYER+PL0,x
-                lda PLAYER+PL1,x
+                sta PLAYER+PL0,X
+                lda PLAYER+PL1,X
                 and RANDOM
-                sta PLAYER+PL1,x
+                sta PLAYER+PL1,X
                 inx
                 dey
                 bne _next3
@@ -972,8 +973,8 @@ UpdateRobotChopper .proc
 _1              ldy OROBOT_Y
                 ldx #17
                 lda #0
-_next1          sta PLAYER+PL2,y
-                sta PLAYER+PL3,y
+_next1          sta PLAYER+PL2,Y
+                sta PLAYER+PL3,Y
                 iny
                 dex
                 bpl _next1
@@ -981,9 +982,9 @@ _next1          sta PLAYER+PL2,y
                 lda ROBOT_ANGLE
                 asl
                 tax
-                lda CHOPPER_SHAPES,x
+                lda CHOPPER_SHAPES,X
                 sta ADR1_I
-                lda CHOPPER_SHAPES+1,x
+                lda CHOPPER_SHAPES+1,X
                 sta ADR1_I+1
 
                 lda #0
@@ -994,11 +995,11 @@ _next1          sta PLAYER+PL2,y
                 ldx ROBOT_Y
                 stx OROBOT_Y
 _next2          ldy TEMP1_I
-                lda (ADR1_I),y
-                sta PLAYER+PL2,x
+                lda (ADR1_I),Y
+                sta PLAYER+PL2,X
                 ldy TEMP2_I
-                lda (ADR1_I),y
-                sta PLAYER+PL3,x
+                lda (ADR1_I),Y
+                sta PLAYER+PL3,X
                 inc TEMP1_I
                 inc TEMP2_I
                 inx
@@ -1012,12 +1013,12 @@ _next2          ldy TEMP1_I
 
                 ldx ROBOT_Y
                 ldy #18
-_next3          lda PLAYER+PL2,x
+_next3          lda PLAYER+PL2,X
                 and RANDOM
-                sta PLAYER+PL2,x
-                lda PLAYER+PL3,x
+                sta PLAYER+PL2,X
+                lda PLAYER+PL3,X
                 and RANDOM
-                sta PLAYER+PL3,x
+                sta PLAYER+PL3,X
                 inx
                 dey
                 bne _next3
@@ -1058,7 +1059,7 @@ UpdateRockets   .proc
 
 
 NXT_RCK         .block
-                lda ROCKET_STATUS,x
+                lda ROCKET_STATUS,X
                 bne _1
 
 _next1          jmp _XIT
@@ -1066,7 +1067,7 @@ _next1          jmp _XIT
 _1              cmp #7
                 beq _next1
 
-                lda ROCKET_X,x
+                lda ROCKET_X,X
                 sec
                 sbc #32+1
                 lsr
@@ -1074,7 +1075,7 @@ _1              cmp #7
                 clc
                 adc SX
                 sta TEMP1_I
-                sta ROCKET_TEMPX,x
+                sta ROCKET_TEMPX,X
                 lda #0
                 ldy SY
                 bmi _2
@@ -1082,7 +1083,7 @@ _1              cmp #7
                 lda SY_F
                 and #7
 _2              clc
-                adc ROCKET_Y,x
+                adc ROCKET_Y,X
                 sec
                 sbc #82+12
                 lsr
@@ -1096,7 +1097,7 @@ _2              clc
 _3              clc
                 adc TEMP2_I
                 sta TEMP2_I
-                sta ROCKET_TEMPY,x
+                sta ROCKET_TEMPY,X
                 jsr CheckChrI
                 bcc _XIT
 
@@ -1104,8 +1105,8 @@ _3              clc
                 sty SND3_VAL
                 dey                     ; Y=0
                 sty SND2_VAL
-                lda (ADR1_I),y
-                sta ROCKET_TEMP,x
+                lda (ADR1_I),Y
+                sta ROCKET_TEMP,X
                 cmp #EXP2
                 bne _4
 
@@ -1118,7 +1119,7 @@ _3              clc
                 sty ROCKET_TEMP+2
                 lda #EXPLODE
                 sta FORT_STATUS
-                bne _7                  ; FORCED
+                bne _7                  ; [unc]
 
 _4              cmp #EXP_WALL
                 bne _5
@@ -1131,31 +1132,31 @@ _4              cmp #EXP_WALL
                 jsr IncreaseScore
                 ldx TEMP1_I
                 lda #0
-                sta ROCKET_TEMP,x
-                beq _6                  ; FORCED
+                sta ROCKET_TEMP,X
+                beq _6                  ; [unc]
 
 _5              ldy #HIT_LIST_LEN
-_next2          cmp HIT_LIST,y
+_next2          cmp HIT_LIST,Y
                 beq _7
 
                 dey
                 bpl _next2
 
 _6              lda #7
-                bne _8                  ; FORCED
+                bne _8                  ; [unc]
 
 _7              lda #0
-_8              sta ROCKET_STATUS,x
+_8              sta ROCKET_STATUS,X
                 ldy #0
                 lda #EXP
-                sta (ADR1_I),y
+                sta (ADR1_I),Y
                 lda #7
-                sta ROCKET_TIM,x
+                sta ROCKET_TIM,X
 _XIT            .endblock
 
 
 MOVE_ROCKETS    .block
-                lda ROCKET_STATUS,x
+                lda ROCKET_STATUS,X
                 beq _1
 
                 cmp #7                  ; EXP
@@ -1163,14 +1164,14 @@ MOVE_ROCKETS    .block
 
                 lda SSIZEM
                 sta SIZEM
-                lda ROCKET_X,x
+                lda ROCKET_X,X
                 cmp #0+4
                 blt _1
 
                 cmp #255-4
                 bge _1
 
-                lda ROCKET_Y,x
+                lda ROCKET_Y,X
                 cmp #MAX_DOWN+18
                 bge _1
 
@@ -1178,65 +1179,65 @@ MOVE_ROCKETS    .block
                 bge _3
 
 _1              lda #0                  ; OFF
-                sta ROCKET_STATUS,x
+                sta ROCKET_STATUS,X
 _2              lda #0
-                sta ROCKET_X,x
+                sta ROCKET_X,X
                 lda #$F0
-                sta ROCKET_Y,x
-_3              ldy OROCKET_Y,x
-                lda PLAYER+MIS+0,y
-                and ROCKET1_MASK,x
-                sta PLAYER+MIS+0,y
-                lda PLAYER+MIS+1,y
-                and ROCKET1_MASK,x
-                sta PLAYER+MIS+1,y
-                lda PLAYER+MIS+4,y
-                and ROCKET1_MASK,x
-                sta PLAYER+MIS+4,y
-                lda PLAYER+MIS+5,y
-                and ROCKET1_MASK,x
-                sta PLAYER+MIS+5,y
-                lda ROCKET_Y,x
-                sta OROCKET_Y,x
+                sta ROCKET_Y,X
+_3              ldy OROCKET_Y,X
+                lda PLAYER+MIS+0,Y
+                and ROCKET1_MASK,X
+                sta PLAYER+MIS+0,Y
+                lda PLAYER+MIS+1,Y
+                and ROCKET1_MASK,X
+                sta PLAYER+MIS+1,Y
+                lda PLAYER+MIS+4,Y
+                and ROCKET1_MASK,X
+                sta PLAYER+MIS+4,Y
+                lda PLAYER+MIS+5,Y
+                and ROCKET1_MASK,X
+                sta PLAYER+MIS+5,Y
+                lda ROCKET_Y,X
+                sta OROCKET_Y,X
                 tay
-                lda ROCKET2_MASK,x
+                lda ROCKET2_MASK,X
                 pha
-                ora PLAYER+MIS+0,y
-                sta PLAYER+MIS+0,y
+                ora PLAYER+MIS+0,Y
+                sta PLAYER+MIS+0,Y
                 pla
-                ora PLAYER+MIS+1,y
-                sta PLAYER+MIS+1,y
+                ora PLAYER+MIS+1,Y
+                sta PLAYER+MIS+1,Y
                 lda SSIZEM
-                and ROCKET1_MASK,x
+                and ROCKET1_MASK,X
                 sta SSIZEM
-                lda ROCKET_STATUS,x
+                lda ROCKET_STATUS,X
                 cmp #3
                 beq _4
 
                 lda SSIZEM
-                ora ROCKET3_MASK,x
+                ora ROCKET3_MASK,X
                 sta SSIZEM
-                lda ROCKET2_MASK,x
+                lda ROCKET2_MASK,X
                 pha
-                ora PLAYER+MIS+4,y
-                sta PLAYER+MIS+4,y
+                ora PLAYER+MIS+4,Y
+                sta PLAYER+MIS+4,Y
                 pla
-                ora PLAYER+MIS+5,y
-                sta PLAYER+MIS+5,y
-_4              ldy ROCKET_STATUS,x
+                ora PLAYER+MIS+5,Y
+                sta PLAYER+MIS+5,Y
+_4              ldy ROCKET_STATUS,X
                 beq _5
 
                 cpy #7                  ; EXP
                 beq _5
 
-                lda ROCKET_X,x
+                lda ROCKET_X,X
                 clc
-                adc ROCKET_DX-1,y
-                sta ROCKET_X,x
-                lda ROCKET_Y,x
+                adc ROCKET_DX-1,Y
+                sta ROCKET_X,X
+                lda ROCKET_Y,X
                 clc
-                adc ROCKET_DY-1,y
-                sta ROCKET_Y,x
+                adc ROCKET_DY-1,Y
+                sta ROCKET_Y,X
 _5              dex
                 bmi RocketExplode
 
@@ -1256,35 +1257,35 @@ RocketExplode   .proc
 ;---
 
                 ldx #2
-_next1          lda ROCKET_STATUS,x
+_next1          lda ROCKET_STATUS,X
                 cmp #7                  ; EXP
                 bne _2
 
-                dec ROCKET_TIM,x
+                dec ROCKET_TIM,X
                 bne _2
 
-                lda ROCKET_TEMPX,x
+                lda ROCKET_TEMPX,X
                 sta TEMP1_I
-                lda ROCKET_TEMPY,x
+                lda ROCKET_TEMPY,X
                 sta TEMP2_I
                 lda #0
                 sta BAK2_COLOR
                 jsr ComputeMapAddrI
 
-                lda ROCKET_TEMP,x
+                lda ROCKET_TEMP,X
                 cmp #EXP
                 beq _1
 
                 ldy #HIT_LIST_LEN
-_next2          cmp HIT_LIST,y
+_next2          cmp HIT_LIST,Y
                 beq _1
 
                 dey
                 bpl _next2
                 iny                     ; Y=0
-                sta (ADR1_I),y
+                sta (ADR1_I),Y
 _1              lda #0                  ; OFF
-                sta ROCKET_STATUS,x
+                sta ROCKET_STATUS,X
 _2              dex
                 bpl _next1
 

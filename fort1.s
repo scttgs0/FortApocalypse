@@ -1,3 +1,4 @@
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; FILE: FORT1.S
@@ -11,8 +12,8 @@ START           ;.proc                  ; never called
                 sei
                 cld
                 ldx #Z2_LEN
-_next1          lda Z2,x
-                sta RAM2_STUFF,x
+_next1          lda Z2,X
+                sta RAM2_STUFF,X
                 dex
                 bne _next1
 
@@ -52,26 +53,26 @@ _next1          lda Z2,x
 
 SET_FONTS       .block
                 ldx #0
-_next1          lda FNT1,x
-                sta CHR_SET1+15,x
-                lda FNT1+$100-15,x
-                sta CHR_SET1+$100,x
-                lda FNT1+$200-15,x
-                sta CHR_SET1+$200,x
+_next1          lda FNT1,X
+                sta CHR_SET1+15,X
+                lda FNT1+$100-15,X
+                sta CHR_SET1+$100,X
+                lda FNT1+$200-15,X
+                sta CHR_SET1+$200,X
 
-                lda FNT2,x
-                sta CHR_SET2+$100+8,x
-                lda FNT2+$100-8,x
-                sta CHR_SET2+$200,x
-                lda FNT2+$200-8,x
-                sta CHR_SET2+$300,x
+                lda FNT2,X
+                sta CHR_SET2+$100+8,X
+                lda FNT2+$100-8,X
+                sta CHR_SET2+$200,X
+                lda FNT2+$200-8,X
+                sta CHR_SET2+$300,X
                 inx
                 bne _next1
 
 ; relocate the display list into RAM
                 ldx #Z1_LEN
-_next2          lda Z1,x
-                sta RAM1_STUFF,x
+_next2          lda Z1,X
+                sta RAM1_STUFF,X
                 dex
                 bpl _next2
 
@@ -122,7 +123,7 @@ v_marqueeGlyph  .var TEMP3
                 ldy #0                  ; start with low tones and increase to higher tones
                 sty v_audiofreq
 _next1          lda v_marqueeGlyph      ; place a dot
-                sta PLAY_SCRN,y
+                sta PLAY_SCRN,Y
                 jsr CycleGlyph          ; move to next dot
 
                 iny
@@ -140,11 +141,11 @@ _next1          lda v_marqueeGlyph      ; place a dot
                 ldx #c_vertCount
                 ldy #0
 _next2          lda v_marqueeGlyph
-                sta (ADR1),y            ; place a dot
+                sta (ADR1),Y            ; place a dot
                 iny
                 jsr CycleGlyph          ; change to the next dot color
 
-                sta (ADR1),y            ; place a horz adjacent dot
+                sta (ADR1),Y            ; place a horz adjacent dot
                 dey                     ; back up one position
 
                 lda ADR1                ; calculate the vert adjacent dot
@@ -185,8 +186,8 @@ _next2          lda v_marqueeGlyph
                 jsr Print               ; (6, 10) 'Copyright 1982'
 
                 ldx #7
-_next3          lda T_5,x
-                sta PLAY_SCRN+426,x     ; output the copyright date (1982)
+_next3          lda T_5,X
+                sta PLAY_SCRN+426,X     ; output the copyright date (1982)
                 dex
                 bpl _next3
 
@@ -273,7 +274,7 @@ _4              stx DEMO_STATUS
                 jmp T3
 
 _5              ldx #-1                 ; START DEMO
-                bne _4                  ; FORCED
+                bne _4                  ; [unc]
 
                 .endproc
 
@@ -519,8 +520,8 @@ _next1          lda ADR1
                 dey
                 sty ADR2+1
                 ldy #5
-_next2          lda (ADR2),y
-                sta (ADR1),y
+_next2          lda (ADR2),Y
+                sta (ADR1),Y
                 dey
                 bpl _next2
 
@@ -614,7 +615,7 @@ _next1          jsr GetByte
                 ldx TEMP4
                 bne _next4
 
-_next2          cmp CHR1,y
+_next2          cmp CHR1,Y
                 beq _1
 
                 iny
@@ -622,15 +623,15 @@ _next2          cmp CHR1,y
                 bne _next2
 
 _next3          ldx #1
-                bne _next5              ; FORCED
+                bne _next5              ; [unc]
 
-_next4          cmp CHR2,y
+_next4          cmp CHR2,Y
                 beq _1
 
                 iny
                 cpy #CHR2_L
                 bne _next4
-                beq _next3              ; FORCED
+                beq _next3              ; [unc]
 
 _1              sta TEMP1
                 jsr GetByte
@@ -638,7 +639,7 @@ _1              sta TEMP1
                 tax
                 lda TEMP1
 _next5          ldy #0
-                sta (ADR2),y
+                sta (ADR2),Y
                 inc ADR2
                 bne _2
 
@@ -664,7 +665,7 @@ GetByte         .proc
 ;---
 
                 ldy #0
-                lda (ADR1),y
+                lda (ADR1),Y
                 inc ADR1
                 bne _XIT
 
@@ -757,10 +758,10 @@ M_START         .proc
                 lda #OFF
                 sta R_STATUS
                 ldx GRAV_SKILL
-                lda GRAV_TAB,x
+                lda GRAV_TAB,X
                 sta GRAV_SKL
                 ldx CHOPS
-                lda CHOP_TAB,x
+                lda CHOP_TAB,X
                 ldy DEMO_STATUS
                 bne _1
 
@@ -775,27 +776,27 @@ _1              sta MAIN
                 sta CHOP_LEFT
 
                 ldx PILOT_SKILL
-                lda LASER_TAB,x
+                lda LASER_TAB,X
                 sta LASER_SPD
-                lda POD_TAB,x
+                lda POD_TAB,X
                 sta START_PODS
 
-                lda ROBOT_TAB,x
+                lda ROBOT_TAB,X
                 sta ROBOT_SPD
 
-                lda TANK_TAB,x
+                lda TANK_TAB,X
                 sta TANK_SPEED
 
-                lda MISSILE_TAB,x
+                lda MISSILE_TAB,X
                 sta MISSILE_SPEED
 
-                lda ELEVATOR_TAB,x
+                lda ELEVATOR_TAB,X
                 sta ELEVATOR_SPD
 
                 ldx #7
                 lda #0
-_next1          sta WINDOW_1,x
-                sta WINDOW_2,x
+_next1          sta WINDOW_1,X
+                sta WINDOW_2,X
                 dex
                 bpl _next1
 
@@ -804,12 +805,12 @@ _next1          sta WINDOW_1,x
                 ldy RANDOM
                 bmi _next3
 
-_next2          sta WINDOW_1,x
+_next2          sta WINDOW_1,X
                 dex
                 bpl _next2
-                bmi _2                  ; FORCED
+                bmi _2                  ; [unc]
 
-_next3          sta WINDOW_2,x
+_next3          sta WINDOW_2,X
                 dex
                 bpl _next3
 
@@ -984,20 +985,20 @@ _1              ldx #<txtEnterL2
                 jsr Print
 
 _2              ldx LEVEL
-                lda LEVEL_COLOR,x
+                lda LEVEL_COLOR,X
                 sta BAK_COLOR
                 sta COLOR0
                 txa
                 asl
                 tax
-                lda LEVEL_START,x
+                lda LEVEL_START,X
                 sta SX
-                lda LEVEL_START+1,x
+                lda LEVEL_START+1,X
                 sta SY
 
-                lda LEVEL_CHOP_START,x
+                lda LEVEL_CHOP_START,X
                 sta CHOPPER_X
-                lda LEVEL_CHOP_START+1,x
+                lda LEVEL_CHOP_START+1,X
                 sta CHOPPER_Y
 
                 lda #0
@@ -1023,31 +1024,31 @@ _next1          ldy LEVEL
                 dey
                 beq _4
 
-                lda TANK_START_X_L1,x
-                sta TANK_START_X,x
-                lda TANK_START_Y_L1,x
-                bne _5                  ; FORCED
+                lda TANK_START_X_L1,X
+                sta TANK_START_X,X
+                lda TANK_START_Y_L1,X
+                bne _5                  ; [unc]
 
-_4              lda TANK_START_X_L2,x
-                sta TANK_START_X,x
-                lda TANK_START_Y_L2,x
-_5              sta TANK_START_Y,x
+_4              lda TANK_START_X_L2,X
+                sta TANK_START_X,X
+                lda TANK_START_Y_L2,X
+_5              sta TANK_START_Y,X
                 lda #BEGIN
-                sta TANK_STATUS,x
+                sta TANK_STATUS,X
                 lda #OFF
-                sta CM_STATUS,x
+                sta CM_STATUS,X
                 dex
                 bpl _next1
 
                 sta R_STATUS
                 ldx #MAX_PODS-1
-_next2          sta POD_STATUS,x
+_next2          sta POD_STATUS,X
                 dex
                 bpl _next2
 
                 ldx START_PODS
                 lda #BEGIN
-_next3          sta POD_STATUS,x
+_next3          sta POD_STATUS,X
                 dex
                 bpl _next3
 
@@ -1056,22 +1057,23 @@ _next3          sta POD_STATUS,x
                 sta SLAVE_NUM
 
                 lda LEVEL
-                asl
+                asl                     ; *2 (word)
                 tax
-                lda PACK_ADR,x
+                lda PACK_ADR,X
                 sta ADR1
-                lda PACK_ADR+1,x
+                lda PACK_ADR+1,X
                 sta ADR1+1
 
                 lda #<MAP
                 sta ADR2
                 lda #>MAP
                 sta ADR2+1
-                lda #<MAP+$2800
 
+                lda #<MAP+$2800
                 sta TEMP2
                 lda #>MAP+$2800
                 sta TEMP3
+
                 lda #0
                 sta TEMP4
                 jsr Unpack
@@ -1082,7 +1084,7 @@ MAKE_CONTURE    .block
                 lda #>MAP
                 sta ADR1+1
                 ldy #0
-_next1          lda (ADR1),y
+_next1          lda (ADR1),Y
                 cmp #$73                ; 's'
                 bne _1
 
@@ -1092,7 +1094,7 @@ _next2          lda RANDOM
 
                 clc
                 adc #$62-1
-                bne _2                  ; FORCED
+                bne _2                  ; [unc]
 
 _1              cmp #$74                ; 't'
                 bne _2
@@ -1103,7 +1105,7 @@ _next3          lda RANDOM
 
                 clc
                 adc #$65-1
-_2              sta (ADR1),y
+_2              sta (ADR1),Y
                 iny
                 bne _next1
 
@@ -1124,8 +1126,8 @@ _2              sta (ADR1),y
 
                 ldx #0
 _next4          ldy #0
-_next5          lda (ADR1),y
-                sta (ADR2),y
+_next5          lda (ADR1),Y
+                sta (ADR2),Y
                 iny
                 cpy #40
                 bne _next5
@@ -1149,7 +1151,7 @@ _next5          lda (ADR1),y
                 ldx #2
 _next6          ldy #$D
                 lda #0
-_next7          sta (ADR1),y
+_next7          sta (ADR1),Y
                 dey
                 bpl _next7
 
@@ -1160,9 +1162,9 @@ _next7          sta (ADR1),y
 _3              lda LEVEL
                 asl
                 tax
-                lda SCAN_INFO,x
+                lda SCAN_INFO,X
                 sta ADR1
-                lda SCAN_INFO+1,x
+                lda SCAN_INFO+1,X
                 sta ADR1+1
 
                 lda #<SCANNER
@@ -1189,8 +1191,8 @@ _3              lda LEVEL
 
                 ldx #39
 _next8          ldy #12
-_next9          lda (ADR1),y
-                sta (ADR2),y
+_next9          lda (ADR1),Y
+                sta (ADR2),Y
                 dey
                 bpl _next9
 
@@ -1225,7 +1227,7 @@ S_BEGIN         .block
                 stx SLAVES_LEFT
                 dex                     ; X=7
                 lda #OFF
-_next1          sta SLAVE_STATUS,x
+_next1          sta SLAVE_STATUS,X
                 dex
                 bpl _next1
 
@@ -1240,18 +1242,18 @@ _next2          lda #<MAP
                 sta ADR1+1
 
                 ldy #0
-_next3          lda (ADR1),y
+_next3          lda (ADR1),Y
                 cmp #$48                ; '^H'
                 bne _1
 
                 iny
-                lda (ADR1),y
+                lda (ADR1),Y
                 dey
                 cmp #$48
                 bne _1
 
                 dec ADR1+1
-                lda (ADR1),y
+                lda (ADR1),Y
                 inc ADR1+1
                 cmp #$1F                ; '?'
                 bne _1
@@ -1266,20 +1268,20 @@ _next3          lda (ADR1),y
                 tya
                 clc
                 adc #5
-                sta SLAVE_X,x
+                sta SLAVE_X,X
                 lda ADR1+1
                 sec
                 sbc #>MAP
-                sta SLAVE_Y,x
+                sta SLAVE_Y,X
 
                 lda #1
-                sta (ADR1),y
+                sta (ADR1),Y
 
                 lda #ON
-                sta SLAVE_STATUS,x
+                sta SLAVE_STATUS,X
 
                 lda #$10
-                sta SLAVE_DX,x
+                sta SLAVE_DX,X
                 dex
                 bmi _2
 
@@ -1381,7 +1383,7 @@ _2              jsr IncreaseGamePoints
                 jsr IncreaseGamePoints
 
                 ldx GRAV_SKILL
-                lda M_TAB,x
+                lda M_TAB,X
                 jsr IncreaseGamePoints
 
                 lda #2
@@ -1391,7 +1393,7 @@ _2              jsr IncreaseGamePoints
                 jsr IncreaseGamePoints
 
                 ldx PILOT_SKILL
-                lda M_TAB,x
+                lda M_TAB,X
                 jsr IncreaseGamePoints
 
                 lda GAME_POINTS
@@ -1493,14 +1495,14 @@ _7              jsr Print
                 adc #1
                 ldy #12
                 ora #$10+$80
-                sta (ADR1),y
+                sta (ADR1),Y
                 cmp #$10+128
                 bne _8
 
                 lda #$A+128
 _8              iny
                 and #$8F
-                sta (ADR1),y
+                sta (ADR1),Y
                 lda #3
                 sta TEMP1
                 lda GAME_POINTS
@@ -1509,8 +1511,8 @@ _8              iny
                 and #3
                 asl
                 tay
-                ldx txtGmOvrRating,y
-                lda txtGmOvrRating+1,y
+                ldx txtGmOvrRating,Y
+                lda txtGmOvrRating+1,Y
                 tay
                 jsr Print
 
