@@ -102,7 +102,7 @@ PrintOptions      .block
                 inc v_posY
                 ldx #<txtOptRobo        ; "ROBO PILOTS"
                 ldy #>txtOptRobo
-                jsr 
+                jsr Print
 
                 lda OPT_NUM
                 asl
