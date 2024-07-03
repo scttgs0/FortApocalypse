@@ -262,6 +262,7 @@ _next3          lda PLAYER+PL0,X
                 .frsRandomByte
                 ora #$F
                 sta BAK2_COLOR
+
                 lda MODE
                 cmp #GO_MODE
                 bne _5
