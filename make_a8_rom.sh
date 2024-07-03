@@ -1,8 +1,12 @@
 
+mkdir -p obj/
+
+# -------------------------------------
+
 64tass  --m65xx \
         --atari-xex \
         -b \
-        -o fortapocalypse.rom \
-        --list=fortapocalypse_a8_rom.lst \
-        --labels=fortapocalypse_a8_rom.lbl \
+        -o obj/fortapocalypse.rom \
+        --list=obj/fortapocalypse_a8_rom.lst \
+        --labels=obj/fortapocalypse_a8_rom.lbl \
         fort.s
