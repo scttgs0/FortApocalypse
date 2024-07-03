@@ -144,11 +144,11 @@ PrintSlavesLeft .proc
 ;v_???          .var TEMP1
 ;---
 
-                lda #9
+                lda #9                  ; (9,0)
                 sta TEMP1
                 lda #0
                 sta TEMP2
-                ldx #<txtMenRemain
+                ldx #<txtMenRemain      ; "MEN  TO  RESCUE"
                 ldy #>txtMenRemain
                 jsr Print
 

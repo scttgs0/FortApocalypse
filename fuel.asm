@@ -73,7 +73,7 @@ _4              lda #0
                 and #%00001000
                 bne _5
 
-                lda #9
+                lda #9                  ; (9,0)
                 sta v_posX
                 lda #0
                 sta v_posY
@@ -82,7 +82,7 @@ _4              lda #0
                 sta SID1_CTRL2
                 sta SID1_FREQ2
 
-                ldx #<txtLowOnFuel
+                ldx #<txtLowOnFuel      ; "LOW  ON  FUEL"
                 ldy #>txtLowOnFuel
                 jsr Print
 

@@ -150,7 +150,7 @@ v_posX          .var TEMP1
 v_posY          .var TEMP2
 ;---
 
-                lda v_posY
+                lda v_posY              ; preserve
                 pha
                 lda v_posX
                 pha
@@ -166,10 +166,10 @@ v_posY          .var TEMP2
                 adc #<PLAY_SCRN
                 sta ADR1
                 lda #>PLAY_SCRN
-                adc v_posY
+                adc v_posY              ; playfield is 256-bytes wide
                 sta ADR1+1
 
-                pla
+                pla                     ; restore
                 sta v_posX
                 pla
                 sta v_posY

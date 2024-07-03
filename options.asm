@@ -61,48 +61,48 @@ _6              cmp #2
                 ldx #0
 _7              stx CHOPS
 
-_8              lda #13
+_8              lda #13                 ; (13,1)
                 sta v_posX
                 lda #1
                 sta v_posY
-                ldx #<txtOptTitle1
+                ldx #<txtOptTitle1      ; "OPTIONS"
                 ldy #>txtOptTitle1
-                jsr Print               ; (13, 1) 'OPTIONS'
+                jsr Print
 
-                lda #0
+                lda #0                  ; (0,3)
                 sta v_posX
                 lda #3
                 sta v_posY
-                ldx #<txtOptTitle2
+                ldx #<txtOptTitle2      ; "OPTION"
                 ldy #>txtOptTitle2
-                jsr Print               ; (0, 3) 'OPTION'
+                jsr Print
 
-                lda #28
+                lda #28                 ; (28,3)
                 sta v_posX
-                ldx #<txtOptTitle3
+                ldx #<txtOptTitle3      ; "SELECT"
                 ldy #>txtOptTitle3
-                jsr Print               ; (28, 3) 'SELECT'
+                jsr Print
 
 PrintOptions      .block
-                lda #0
+                lda #0                  ; (0,7)
                 sta v_posX
                 lda #7
                 sta v_posY
-                ldx #<txtOptGravity
+                ldx #<txtOptGravity     ; "GRAVITY SKILL"
                 ldy #>txtOptGravity
-                jsr Print               ; (0, 7) 'GRAVITY SKILL'
+                jsr Print
 
+                inc v_posY              ; (0,9)
                 inc v_posY
-                inc v_posY
-                ldx #<txtOptPilot
+                ldx #<txtOptPilot       ; "PILOT SKILL"
                 ldy #>txtOptPilot
-                jsr Print               ; (0, 9) 'PILOT SKILL'
+                jsr Print
 
+                inc v_posY              ; (0,11)
                 inc v_posY
-                inc v_posY
-                ldx #<txtOptRobo
+                ldx #<txtOptRobo        ; "ROBO PILOTS"
                 ldy #>txtOptRobo
-                jsr Print               ; (0, 11) 'ROBO PILOTS'
+                jsr 
 
                 lda OPT_NUM
                 asl
@@ -139,37 +139,37 @@ _1              ldy TEMP6
                 inc TEMP5
                 bra _next1
 
-_2              lda #28
+_2              lda #28                 ; (28,7)
                 sta v_posX
                 lda #7
                 sta v_posY
                 lda GRAV_SKILL
                 asl
                 tay
-                ldx OptGravityTable,Y
+                ldx OptGravityTable,Y   ; "WEAK|NORMAL|STRONG"
                 lda OptGravityTable+1,Y
                 tay
-                jsr Print               ; (28, 7) 'WEAK|NORMAL|STRONG'
+                jsr Print
 
-                inc v_posY
+                inc v_posY              ; (28,9)
                 inc v_posY
                 lda PILOT_SKILL
                 asl
                 tay
-                ldx OptPilotTable,Y
+                ldx OptPilotTable,Y     ; "NOVICE|PRO|EXPERT"
                 lda OptPilotTable+1,Y
                 tay
-                jsr Print               ; (28, 9) 'NOVICE|PRO|EXPERT'
+                jsr Print
 
-                inc v_posY
+                inc v_posY              ; (28,11)
                 inc v_posY
                 lda CHOPS
                 asl
                 tay
-                ldx OptRoboTable,Y
+                ldx OptRoboTable,Y      ; "SEVEN|NINE|ELEVEN"
                 lda OptRoboTable+1,Y
                 tay
-                jmp Print               ; (28, 11) 'SEVEN|NINE|ELEVEN'
+                jmp Print
 
                 .endblock
                 .endproc

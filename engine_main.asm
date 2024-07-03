@@ -670,19 +670,20 @@ _1              lda #$1F                ; CHOPPER CLR
                 stx FUEL1
                 inx                     ; X=1
                 stx FUEL2
-_2              lda #4
+
+_2              lda #4                  ; (4,8)
                 sta TEMP1
                 lda #8
                 sta TEMP2
-                ldx #<txtPilot1
+                ldx #<txtPilot1         ; "GET  READY  PILOT"
                 ldy #>txtPilot1
                 jsr Print
 
-                lda #5
+                lda #5                  ; (5,10)
                 sta TEMP1
                 lda #10
                 sta TEMP2
-                ldx #<txtPilot2
+                ldx #<txtPilot2         ; "PILOTS  LEFT"
                 ldy #>txtPilot2
                 jsr Print
 
@@ -745,28 +746,29 @@ M_NewLevel      .proc
 
                 jsr ScreenOff
 
-                lda #12
+                lda #12                 ; (12,6)
                 sta TEMP1
                 lda #6
                 sta TEMP2
-                ldx #<txtEnter
+                ldx #<txtEnter          ; "ENTERING"
                 ldy #>txtEnter
                 jsr Print
 
-                lda #2
+                lda #2                  ; (2,8)
                 sta TEMP1
                 lda #8
                 sta TEMP2
-                ldy LEVEL
-                dey                     ; Y=0
+
+                ldy LEVEL               ; determine which level is being entered
+                dey                     ; Y-=1
                 beq _1
 
-                ldx #<txtEnterL1
+                ldx #<txtEnterL1        ; "VAULTS  OF  DRACONIS"
                 ldy #>txtEnterL1
                 jsr Print
                 jmp _2
 
-_1              ldx #<txtEnterL2
+_1              ldx #<txtEnterL2        ; "CRYSTALLINE  CAVES"
                 ldy #>txtEnterL2
                 jsr Print
 
@@ -774,6 +776,7 @@ _2              ldx LEVEL
                 lda LEVEL_COLOR,X
                 sta BAK_COLOR
                 ;!! sta COLOR0
+
                 txa
                 asl
                 tax
@@ -1210,12 +1213,12 @@ _next1          lda SCORE1
 
 _5              bge _next1
 
-_6              lda #2
+_6              lda #2                  ; (2,0)
                 sta TEMP1
                 lda #0
                 sta TEMP2
                 sta SCRN_FLG
-                ldx #<txtHighScore
+                ldx #<txtHighScore      ; "HIGH  SCORE"
                 ldy #>txtHighScore
                 jsr Print
 
@@ -1234,39 +1237,40 @@ _6              lda #2
                 lda HI1
                 jsr DoNumbers.DDIG
 
-                lda #3
+                lda #3                  ; (3,5)
                 sta TEMP1
                 lda #5
                 sta TEMP2
-                ldx #<txtGmOvrMission   ; YOUR
-                ldy #>txtGmOvrMission   ; MISSION
+                ldx #<txtGmOvrMission   ; "MISSION"
+                ldy #>txtGmOvrMission
                 jsr Print
 
-                lda #21
+                lda #21                 ; (21,5)
                 sta TEMP1
-                ldx #<txtGmOvrAbort     ; ABORTED
+                ldx #<txtGmOvrAbort     ; "ABORTED"
                 ldy #>txtGmOvrAbort
+
                 lda LEVEL
                 cmp #3
                 bne _7
 
-                ldx #<txtGmOvrComplete  ; COMPLETED
+                ldx #<txtGmOvrComplete  ; "COMPLETED"
                 ldy #>txtGmOvrComplete
 _7              jsr Print
 
-                ldx #7
+                ldx #7                  ; (7,8)
                 stx TEMP1
                 inx                     ; X=8
                 stx TEMP2
-                ldx #<txtGmOvrRank      ; YOUR
-                ldy #>txtGmOvrRank      ; RANK
+                ldx #<txtGmOvrRank      ; "YOUR RANK IS"
+                ldy #>txtGmOvrRank
                 jsr Print
 
-                lda #21
+                lda #21                 ; (21,10)
                 sta TEMP1
                 lda #10
                 sta TEMP2
-                ldx #<txtGmOvrClass     ; CLASS
+                ldx #<txtGmOvrClass     ; "CLASS"
                 ldy #>txtGmOvrClass
                 jsr Print
 
@@ -1285,7 +1289,7 @@ _7              jsr Print
 _8              iny
                 and #$8F
                 sta (ADR1),Y
-                lda #3
+                lda #3                  ; (3,10)
                 sta TEMP1
                 lda GAME_POINTS
                 lsr
@@ -1293,7 +1297,7 @@ _8              iny
                 and #3
                 asl
                 tay
-                ldx txtGmOvrRating,Y
+                ldx txtGmOvrRating,Y    ; "SPARROW|CONDOR|HAWK|EAGLE"
                 lda txtGmOvrRating+1,Y
                 tay
                 jsr Print

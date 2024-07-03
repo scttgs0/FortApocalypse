@@ -81,26 +81,26 @@ _next2          lda v_marqueeGlyph
                 lda #>T2
                 ;!! sta VVBLKD+1
 
-                ldx #5
+                ldx #5                  ; (5,4)
                 stx v_posX
                 dex
                 stx v_posY
                 ldx #<txtTitle1         ; output the first title
-                ldy #>txtTitle1
-                jsr Print               ; (5, 4) 'Fort Apocalypse'
+                ldy #>txtTitle1         ; "FORT  APOCALYPSE"
+                jsr Print
 
-                inc v_posX
+                inc v_posX              ; (6,6)
                 lda #6
                 sta v_posY
                 ldx #<txtTitle2         ; output the second title
-                ldy #>txtTitle2
-                jsr Print               ; (6, 6) 'By Steve Hales'
+                ldy #>txtTitle2         ; "BY  STEVE  HALES"
+                jsr Print
 
-                lda #10
+                lda #10                 ; (6,10)
                 sta v_posY
                 ldx #<txtTitle3         ; output the third title
-                ldy #>txtTitle3
-                jsr Print               ; (6, 10) 'Copyright 1982'
+                ldy #>txtTitle3         ; "COPYRIGHT"
+                jsr Print
 
                 ldx #7
 _next3          lda T_5,X
@@ -108,13 +108,13 @@ _next3          lda T_5,X
                 dex
                 bpl _next3
 
-                lda #4
+                lda #4                  ; (4,12)
                 sta v_posX
                 lda #12
                 sta v_posY
                 ldx #<txtTitle4         ; output the fourth title
-                ldy #>txtTitle4
-                jsr Print               ; (4, 12) 'Synapse Software'
+                ldy #>txtTitle4         ; "SYNAPSE  SOFTWARE"
+                jsr Print
 
 ; change the text color for each scan line
 _endless1       ;!! lda VCOUNT              ; current scan line being draw on screen (divided by 2)
