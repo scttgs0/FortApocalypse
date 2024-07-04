@@ -27,10 +27,10 @@ MoveSlaves      .proc
                 jsr IncreaseScore
 
                 inc SLAVES_SAVED
+
                 jmp _2
 
 _1              jsr SlaveCollision
-
                 bcs _2
 
                 jsr SlaveErase
@@ -50,6 +50,7 @@ _2              ldx SLAVE_NUM
 
                 ldx #0
 _3              stx SLAVE_NUM
+
                 lda PLAY_SCRN+5
                 beq _XIT
 
@@ -130,7 +131,9 @@ S_COL2          .proc
 
                 lda #kOFF
                 sta SLAVE_STATUS,X
+
                 dec SLAVES_LEFT
+
                 .endproc
 
                 ;[fall-through]
@@ -155,14 +158,17 @@ PrintSlavesLeft .proc
                 lda SLAVES_LEFT
                 ora #$10+128
                 sta PLAY_SCRN+5
+
                 cmp #$10+128
                 bne _1
 
                 lda #$A+128
 _1              and #$8F
                 sta PLAY_SCRN+6
+
                 lda #90
                 sta TIM9_VAL
+
                 sec
                 rts
                 .endproc
@@ -180,9 +186,11 @@ SlaveErase      .proc
                 ldy #0
                 lda #$48                ; '^H'
                 sta (ADR1),Y
+
                 dec ADR1+1
                 lda #$1F                ; '?'
                 sta (ADR1),Y
+
                 rts
                 .endproc
 
@@ -202,6 +210,7 @@ _next1          lda SLAVE_DX,X
                 and #$01
                 ora #$10
                 sta SLAVE_DX,X
+
                 inc SLAVE_X,X
                 bra _2
 
@@ -210,6 +219,7 @@ _1              dec SLAVE_DX,X
                 and #$01
                 ora #$F0
                 sta SLAVE_DX,X
+
                 dec SLAVE_X,X
 
 _2              jsr GetSlaveAddr
@@ -222,6 +232,7 @@ _2              jsr GetSlaveAddr
                 lda SLAVE_DX,X
                 eor #$E0
                 sta SLAVE_DX,X
+
                 jmp _next1
 
 _XIT            rts
@@ -248,15 +259,19 @@ SlaveDraw       .proc
                 lda SLAVE_CHR_B_L,X
                 sta (ADR1),Y
                 dec ADR1+1
+
                 lda SLAVE_CHR_T_L,X
                 sta (ADR1),Y
+
                 rts
 
 _1              lda SLAVE_CHR_B_R,X
                 sta (ADR1),Y
                 dec ADR1+1
+
                 lda SLAVE_CHR_T_R,X
                 sta (ADR1),Y
+
                 rts
                 .endproc
 
@@ -296,8 +311,10 @@ _3              cmp #4
 
                 lda #kPICKUP
                 sta SLAVE_STATUS,X
+
                 lda #$A8
                 sta SID1_CTRL3
+
                 lda #32
                 sta SID1_FREQ3
 

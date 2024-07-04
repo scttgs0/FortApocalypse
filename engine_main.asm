@@ -15,22 +15,27 @@ CartridgeStart  .proc
                 sei
                 lda #$B3
                 pha
+
                 ldx #$00
                 txa
 _next1          sta $0000,X             ; zero-page
+
                 .frsSpriteSetX_ix
                 ;!! sta DMACLT,X
                 sta SID1_FREQ1,X
                 sta SID1_FREQ1+1,X
                 ;!! sta PORTA,X
+
                 inx
                 bne _next1
 
                 ldy #$01
                 sty ADR1+1
+
                 dey                     ; Y=0
                 sty ADR1
 _next2          sta (ADR1),Y
+
                 iny
                 bne _next2
 
@@ -41,9 +46,11 @@ _next2          sta (ADR1),Y
 
                 lda #$34
                 pha
+
                 ldx #$00
 _next3          lda BOOT_STUFF,X
                 sta $01C0,X             ; L01C0
+
                 inx
                 bpl _next3
 
@@ -58,22 +65,27 @@ _next3          lda BOOT_STUFF,X
 START           ;.proc
                 sei
                 cld
+
                 ldx #Z2_LEN
 _next1          lda Z2,X
                 sta RAM2_STUFF,X
+
                 dex
                 bne _next1
 
                 lda #%00111110
                 ;!! sta SDMCTL
+
                 lda #$14
                 ;!! sta PRIOR
+
                 lda #%00000011
                 ;!! sta GRACTL
                 ;!! sta SKCTL
 
                 lda #>PLAYER
                 ;!! sta PMBASE
+
                 lda #>CHR_SET1
                 ;!! sta CHBAS
 
@@ -83,8 +95,10 @@ _next1          lda Z2,X
                 stx TIM6_VAL
                 stx PILOT_SKILL
                 stx GRAV_SKILL
+
                 inx                     ; X=1
                 stx ELEVATOR_DX
+
                 inx                     ; X=2
                 stx CHOPS
 
@@ -98,6 +112,7 @@ _next1          lda Z2,X
                 lda #TITLE_MODE
                 sta MODE
 
+; - - - - - - - - - - - - - - - - - - -
 SET_FONTS       .block
                 ldx #0
 _next1          lda FNT1,X
@@ -113,20 +128,22 @@ _next1          lda FNT1,X
                 sta CHR_SET2+$200,X
                 lda FNT2+$200-8,X
                 sta CHR_SET2+$300,X
+
                 inx
                 bne _next1
 
-; relocate the display list into RAM
+;   relocate the display list into RAM
                 ldx #Z1_LEN
 _next2          lda Z1,X
                 sta RAM1_STUFF,X
+
                 dex
                 bpl _next2
 
                 lda #$40
                 ;!! sta NMIEN
-                cli
 
+                cli
                 jmp Title
 
                 .endblock
@@ -184,7 +201,6 @@ _4              lda FRAME
 
                 dec TIM6_VAL
                 bne _5
-
                 jmp Title
 
 _5              jmp MAIN
@@ -203,9 +219,10 @@ CheckLevel      .proc
                 bne _1
 
                 jmp DoLevel2
+
 _1              jmp DoLevel3
 
-                rts
+                rts                     ; unreachable code
                 .endproc
 
 
@@ -239,12 +256,14 @@ DoLevel1        .proc
                 bne PSL
 
                 inc LEVEL               ; =1
+
                 jsr GiveBonus
                 jsr ClearInfo
                 jsr ClearSounds
 
                 lda #STOP_MODE
                 sta MODE
+
                 lda #130
                 sta TEMP1
                 lda #40
@@ -258,6 +277,7 @@ DoLevel1        .proc
 
                 lda #3
                 sta TEMP2
+
 _next1          jsr MoveRamp
 
                 ldy #5
@@ -266,6 +286,7 @@ _next2          ldx #5
                 jsr Hover
 
                 inc CHOPPER_Y
+
                 dey
                 bpl _next2
 
@@ -273,6 +294,7 @@ _next2          ldx #5
                 sta ADR1
                 lda TEMP4
                 sta ADR1+1
+
                 dec TEMP2
                 bne _next1
 
@@ -284,6 +306,7 @@ _next2          ldx #5
 
                 lda #NEW_LEVEL_MODE
                 sta MODE
+
 _XIT            rts
                 .endproc
 
@@ -311,9 +334,11 @@ _next1          lda ADR1
                 ldy ADR1+1
                 dey
                 sty ADR2+1
+
                 ldy #5
 _next2          lda (ADR2),Y
                 sta (ADR1),Y
+
                 dey
                 bpl _next2
 
@@ -358,6 +383,7 @@ DoLevel2        .proc
 
                 lda #NEW_LEVEL_MODE
                 sta MODE
+
 _XIT            rts
                 .endproc
 
@@ -388,6 +414,7 @@ DoLevel3        .proc
                 dec M_GameOver
                 lda #GAME_OVER_MODE
                 sta MODE
+
 _XIT            rts
                 .endproc
 
@@ -427,16 +454,20 @@ _next4          cmp CHR2,Y
                 bra _next3
 
 _1              sta TEMP1
+
                 jsr GetByte
 
                 tax
+
                 lda TEMP1
 _next5          ldy #0
                 sta (ADR2),Y
+
                 inc ADR2
                 bne _2
 
                 inc ADR2+1
+
 _2              dex
                 bne _next5
 
@@ -463,6 +494,7 @@ GetByte         .proc
                 bne _XIT
 
                 inc ADR1+1
+
 _XIT            rts
                 .endproc
 
@@ -520,6 +552,7 @@ _4              ; rol CheckModes
 ;======================================
 M_START         .proc
                 jsr ScreenOff
+
                 ldx #0
                 stx LEVEL
                 stx SCORE1
@@ -554,6 +587,7 @@ M_START         .proc
                 ldx GRAV_SKILL
                 lda GRAV_TAB,X
                 sta GRAV_SKL
+
                 ldx CHOPS
                 lda CHOP_TAB,X
                 ldy DEMO_STATUS
@@ -572,6 +606,7 @@ _1              ; sta MAIN
                 ldx PILOT_SKILL
                 lda LASER_TAB,X
                 sta LASER_SPD
+
                 lda POD_TAB,X
                 sta START_PODS
 
@@ -591,6 +626,7 @@ _1              ; sta MAIN
                 lda #0
 _next1          sta WINDOW_1,X
                 sta WINDOW_2,X
+
                 dex
                 bpl _next1
 
@@ -602,16 +638,19 @@ _next1          sta WINDOW_1,X
                 bmi _next3
 
 _next2          sta WINDOW_1,X
+
                 dex
                 bpl _next2
                 bra _2
 
 _next3          sta WINDOW_2,X
+
                 dex
                 bpl _next3
 
 _2              lda #NEW_LEVEL_MODE
                 sta MODE
+
                 rts
                 .endproc
 
@@ -643,17 +682,20 @@ M_NewPlayer     .proc
                 sec
                 sbc #1
                 sta CHOP_LEFT
+
                 cld
                 cmp #$99
                 bne _1
 
                 lda #GAME_OVER_MODE
                 sta MODE
+
                 rts
 
 _1              lda #$1F                ; CHOPPER CLR
                 ;!! sta PCOLR0
                 ;!! sta PCOLR1
+
                 lda FUEL_STATUS
                 cmp #kEMPTY
                 bne _2
@@ -666,6 +708,7 @@ _1              lda #$1F                ; CHOPPER CLR
 
                 lda #kFULL
                 sta FUEL_STATUS
+
                 ldx #0
                 stx FUEL1
                 inx                     ; X=1
@@ -695,6 +738,7 @@ _2              lda #4                  ; (4,8)
                 ldx #0
                 stx SCRN_FLG
                 stx DEMO_COUNT
+
                 inx                     ; X=1
                 lda CHOP_LEFT
                 jsr DoNumbers.DDIG
@@ -726,8 +770,10 @@ _2              lda #4                  ; (4,8)
 
                 lda #kBEGIN
                 sta CHOPPER_STATUS
+
                 lda #GO_MODE
                 sta MODE
+
                 rts
                 .endproc
 
@@ -792,12 +838,14 @@ _2              ldx LEVEL
 
                 lda #0
                 sta SX_F
+
                 ldy LEVEL
                 cpy #2
                 beq _3
 
                 lda #7
 _3              sta SY_F
+
                 lda #8
                 sta CHOPPER_ANGLE
 
@@ -820,6 +868,7 @@ _next1          ldy LEVEL
 
 _4              lda TANK_START_X_L2,X
                 sta TANK_START_X,X
+
                 lda TANK_START_Y_L2,X
 _5              sta TANK_START_Y,X
 
@@ -833,14 +882,17 @@ _5              sta TANK_START_Y,X
                 bpl _next1
 
                 sta R_STATUS
+
                 ldx #MAX_PODS-1
 _next2          sta POD_STATUS,X
+
                 dex
                 bpl _next2
 
                 ldx START_PODS
                 lda #kBEGIN
 _next3          sta POD_STATUS,X
+
                 dex
                 bpl _next3
 
@@ -865,10 +917,12 @@ _next3          sta POD_STATUS,X
                 sta TEMP2
                 lda #>MAP+$2800
                 sta TEMP3
+
                 lda #0
                 sta TEMP4
                 jsr Unpack
 
+; - - - - - - - - - - - - - - - - - - -
 MAKE_CONTURE    .block
                 lda #<MAP
                 sta ADR1
@@ -898,6 +952,7 @@ _next3          .frsRandomByte
                 clc
                 adc #$65-1
 _2              sta (ADR1),Y
+
                 iny
                 bne _next1
 
@@ -920,12 +975,14 @@ _2              sta (ADR1),Y
 _next4          ldy #0
 _next5          lda (ADR1),Y
                 sta (ADR2),Y
+
                 iny
                 cpy #40
                 bne _next5
 
                 inc ADR1+1
                 inc ADR2+1
+
                 inx
                 cpx #40
                 bne _next4
@@ -944,10 +1001,12 @@ _next5          lda (ADR1),Y
 _next6          ldy #$D
                 lda #0
 _next7          sta (ADR1),Y
+
                 dey
                 bpl _next7
 
                 inc ADR1+1
+
                 dex
                 bpl _next6
 
@@ -988,6 +1047,7 @@ _3              lda LEVEL
 _next8          ldy #12
 _next9          lda (ADR1),Y
                 sta (ADR2),Y
+
                 dey
                 bpl _next9
 
@@ -998,6 +1058,7 @@ _next9          lda (ADR1),Y
                 bcc _4
 
                 inc ADR1+1
+
 _4              lda ADR2
                 clc
                 adc #40
@@ -1005,6 +1066,7 @@ _4              lda ADR2
                 bcc _5
 
                 inc ADR2+1
+
 _5              dex
                 bpl _next8
 
@@ -1016,13 +1078,15 @@ _5              dex
 
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 S_BEGIN         .block
                 ldx #8
                 stx SLAVES_LEFT
+
                 dex                     ; X=7
                 lda #kOFF
 _next1          sta SLAVE_STATUS,X
+
                 dex
                 bpl _next1
 
@@ -1064,6 +1128,7 @@ _next3          lda (ADR1),Y
                 clc
                 adc #5
                 sta SLAVE_X,X
+
                 lda ADR1+1
                 sec
                 sbc #>MAP
@@ -1077,6 +1142,7 @@ _next3          lda (ADR1),Y
 
                 lda #$10
                 sta SLAVE_DX,X
+
                 dex
                 bmi _2
 
@@ -1093,6 +1159,7 @@ _1              iny
 
 _2              lda #NEW_PLAYER_MODE
                 sta MODE
+
                 rts
                 .endblock
                 .endproc
@@ -1126,6 +1193,7 @@ IncreaseGamePoints .proc
                 clc
                 adc GAME_POINTS
                 sta GAME_POINTS
+
                 rts
                 .endproc
 
@@ -1150,6 +1218,7 @@ M_GameOver      .proc
                 lsr
                 lsr
                 jsr IncreaseGamePoints
+
                 lda FORT_STATUS
                 cmp #kOFF
                 bne _1
@@ -1162,6 +1231,7 @@ _1              lda LEVEL
                 bne _2
 
                 inc GAME_POINTS
+
 _2              jsr IncreaseGamePoints
 
                 lda SCORE3
@@ -1209,6 +1279,7 @@ _next1          lda SCORE1
                 sta HI2
                 lda SCORE3
                 sta HI3
+
                 jmp _6
 
 _5              bge _next1
@@ -1282,6 +1353,7 @@ _7              jsr Print
                 ldy #12
                 ora #$10+$80
                 sta (ADR1),Y
+
                 cmp #$10+128
                 bne _8
 
@@ -1289,8 +1361,10 @@ _7              jsr Print
 _8              iny
                 and #$8F
                 sta (ADR1),Y
+
                 lda #3                  ; (3,10)
                 sta TEMP1
+
                 lda GAME_POINTS
                 lsr
                 lsr
@@ -1314,6 +1388,7 @@ _8              iny
                 lda #TITLE_MODE
                 sta MODE
                 sta DEMO_STATUS
+
                 rts
                 .endproc
 
@@ -1327,6 +1402,7 @@ _next1          lda EXP_SHAPE,X
                 and frsRandomREG
                 sta EXPLOSION,X
                 sta EXPLOSION2,X
+
                 dex
                 bpl _next1
 
@@ -1335,6 +1411,7 @@ _next2          .frsRandomByte
                 and #$0F
                 ora #$A0
                 sta MISS_CHR_LEFT,X
+
                 inx
                 cpx #5
                 bne _next2
@@ -1344,6 +1421,7 @@ _next3          .frsRandomByte
                 and #$E0
                 ora #$0A
                 sta MISS_CHR_RIGHT,X
+
                 inx
                 cpx #5
                 bne _next3
@@ -1365,6 +1443,7 @@ DoNumbers       .proc
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 ; SCORE
 DO_N            .block
                 lda #<SCORE_DIG
@@ -1374,6 +1453,7 @@ DO_N            .block
 
                 lda #0
                 sta SCRN_FLG
+
                 ldx #5
                 lda SCORE3
                 jsr DDIG
@@ -1415,6 +1495,7 @@ _1              lda #<BONUS_DIG
 
                 lda #0
                 sta SCRN_FLG
+
                 ldx #3
                 lda BONUS2
                 jsr DDIG
@@ -1448,6 +1529,7 @@ _1              lda #<BONUS_DIG
                 sbc #0
                 sta FUEL2
                 cld
+
                 jmp _3
 
 _2              lda #kEMPTY
@@ -1461,6 +1543,7 @@ _3              lda #<FUEL_DIG
 
                 lda #0
                 sta SCRN_FLG
+
                 ldx #3
                 lda FUEL2
                 jsr DDIG
@@ -1468,7 +1551,7 @@ _3              lda #<FUEL_DIG
                 lda FUEL1
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 DDIG            .block                  ; DRAW DIGIT
                 tay
                 lda SCRN_FLG
@@ -1499,8 +1582,10 @@ _2              lda SCRN_FLG
 
 _3              lda #1
                 sta SCRN_FLG
+
 _4              tya
                 sta SCRN_TEMP
+
                 lsr
                 lsr
                 lsr
@@ -1511,7 +1596,7 @@ _4              tya
                 and #$F
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 DRAW            .block
                 cmp #$A
                 bne _2
@@ -1527,6 +1612,7 @@ _2              clc
                 adc #$10+128            ; '0'
                 ldy #0
                 sta (SCRN_ADR),Y
+
                 cmp #$10+128
                 bne _3
 
@@ -1534,6 +1620,7 @@ _2              clc
 _3              iny
                 and #$8F
                 sta (SCRN_ADR),Y
+
                 lda SCRN_ADR
                 clc
                 adc #2
@@ -1541,6 +1628,7 @@ _3              iny
                 lda SCRN_ADR+1
                 adc #0
                 sta SCRN_ADR+1
+
                 dex
                 rts
                 .endblock
@@ -1568,6 +1656,7 @@ IncreaseScore   .proc
                 adc #0
                 sta SCORE3
                 cld
+
 _XIT            rts
                 .endproc
 

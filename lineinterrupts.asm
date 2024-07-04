@@ -24,6 +24,7 @@ _next1          txa
                 asl
                 ora #$E0
                 ;!! sta COLBK
+
                 inx
                 cpx #8
                 bne _next1
@@ -40,6 +41,7 @@ LINE2           .proc
                 pha
                 txa
                 pha
+
                 lda #<LINE3
                 ;!! sta VDSLST
                 lda #>LINE3
@@ -48,6 +50,7 @@ LINE2           .proc
                 ldx #2
 _next1          lda ROCKET_X,X
                 .frsSpriteSetX_ix       ; missiles = sprint 5+
+
                 dex
                 bpl _next1
 
@@ -57,11 +60,13 @@ _next2          txa
                 asl
                 ora #$E0
                 ;!! sta COLBK
+
                 dex
                 bpl _next2
 
 LINEC           lda #0
                 ;!! sta COLBK
+
                 pla
                 tax
                 pla
@@ -87,8 +92,10 @@ LINE3           .proc
                 clc
                 adc #8
                 sta SPR(sprite_t.X, 3)
+
                 lda #>CHR_SET2
                 ;!! sta WSYNC
+
                 ;!! sta CHBASE
 
                 lda BAK_COLOR
@@ -101,6 +108,7 @@ LINE3           .proc
                 ;!! sta COLPF3
 
                 ;!! sta WSYNC
+
                 lda BAK2_COLOR
                 ;!! sta COLBK
 
@@ -108,6 +116,7 @@ LINE3           .proc
                 pla
                 rti
                 .endproc
+
 
 ;======================================
 ;
@@ -129,6 +138,7 @@ LINE4           .proc
                 ldx #7
                 lda #0
 _next1          .frsSpriteSetX_ix
+
                 dex
                 bpl _next1
 

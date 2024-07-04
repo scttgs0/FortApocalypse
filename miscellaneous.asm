@@ -12,6 +12,7 @@ INIT_OS         ;.proc
                 ldx #$25
 _next1          lda $E480,X             ; PUPDIV
                 ;!! sta VDSLST,X
+
                 dex
                 bpl _next1
 
@@ -44,6 +45,7 @@ ScreenOn        .proc
                 ; sta SDLST
                 ; lda #>DSP_LST1
                 ; sta SDLST+1
+
                 rts
                 .endproc
 
@@ -72,9 +74,11 @@ v_roboExplodeTimer .var TIM7_VAL
                 bne _1
 
                 sta R_STATUS
+
 _1              ldx #$E0
                 lda #0
 _next1          sta CHR_SET1+$200,X
+
                 inx
                 bne _next1
 
@@ -82,6 +86,7 @@ _next2          sta CHR_SET1+$300,X
                 sta PLAY_SCRN+$000,X
                 sta PLAY_SCRN+$100,X
                 sta PLAY_SCRN+$200,X
+
                 inx
                 bne _next2
 
@@ -95,15 +100,19 @@ _next2          sta CHR_SET1+$300,X
 
                 lda #20
                 sta SND1_2_VAL
+
                 ldx #MAX_TANKS-1
                 stx v_roboExplodeTimer
+
 _next3          lda CM_STATUS,X
                 cmp #kOFF
                 beq _2
 
                 lda #kOFF
                 sta CM_STATUS,X
+
                 jsr MissileErase
+
 _2              dex
                 bpl _next3
 
@@ -116,18 +125,22 @@ _next4          lda ROCKET_STATUS,X
                 sta TEMP1
                 lda ROCKET_TEMPY,X
                 sta TEMP2
+
                 jsr ComputeMapAddr
 
                 ldy #0
                 lda ROCKET_TEMP,X
                 sta (ADR1),Y
+
 _3              lda #0
                 sta ROCKET_STATUS,X
                 sta ROCKET_X,X
+
                 dex
                 bpl _next4
 
                 jmp ClearSounds
+
                 .endproc
 
 
@@ -173,6 +186,7 @@ v_posY          .var TEMP2
                 sta v_posX
                 pla
                 sta v_posY
+
                 rts
                 .endproc
 
@@ -211,11 +225,14 @@ _nextChar       ldy v_sourceIdx
 
                 ldy v_destIdx           ; left-half of glyph
                 sta (v_destAddr),Y
+
                 inc v_destIdx
                 clc
                 adc #32
+
 _isSpaceChar    ldy v_destIdx           ; right-half of glyph
                 sta (v_destAddr),Y
+
                 inc v_destIdx
                 inc v_sourceIdx
                 bra _nextChar
@@ -235,11 +252,13 @@ GiveBonus       .proc
                 lda #0
                 sta BONUS1
                 sta BONUS2
+
                 sed
                 lda CHOP_LEFT
                 clc
                 adc #2
                 sta CHOP_LEFT
+
                 cld
                 ldx #2
                 .endproc
@@ -253,6 +272,7 @@ GiveBonus       .proc
 WaitFrame       .proc
                 lda MODE
                 sta TEMP_MODE
+
                 lda FRAME
 _1              cmp FRAME
                 beq _1
@@ -268,9 +288,11 @@ _1              cmp FRAME
 
                 rts
 
-_2              ldx #$FF
+_2              ldx #$FF                ; reset stack
                 txs
+
                 jmp MAIN
+
                 .endproc
 
 
@@ -281,6 +303,7 @@ ClearInfo       .proc
                 ldy #40-1
                 lda #0
 _next1          sta PLAY_SCRN,Y
+
                 dey
                 bpl _next1
 
@@ -305,7 +328,9 @@ DoChecksum2    .proc
 
 _next1          adc (ADR1),Y
                 bcc _1
+
                 inc TEMP1
+
 _1              iny
                 bne _next1
 
@@ -323,7 +348,9 @@ _1              iny
                 cmp #$f8
                 beq _XIT
 
+;--------------------------------------
 _2              .byte $12
+;--------------------------------------
 
 _XIT            rts
                 .endproc
@@ -340,6 +367,7 @@ PositionIt      .proc
 ;---
 
                 stx TEMP3
+
                 ldx TEMP1
                 lda TEMP2
                 jsr MULT_BY_40
@@ -352,16 +380,20 @@ PositionIt      .proc
                 adc #<SCANNER+3
                 adc TEMP1
                 sta ADR2
+
                 lda #>SCANNER
                 adc TEMP2
                 sta ADR2+1
+
                 txa
                 and #7
                 tax
+
                 ldy #0
                 lda (ADR2),Y
                 eor POS_MASK1,X
                 sta (ADR2),Y
+
                 ldx TEMP3
                 rts
                 .endproc
@@ -389,6 +421,7 @@ MULT_BY_40      .proc
                 asl
                 rol TEMP2
                 sta TEMP1
+
                 rts
                 .endproc
 
@@ -399,8 +432,10 @@ MULT_BY_40      .proc
 DoChecksum3     .proc
                 ldx #0
                 txa
+
                 clc
 _next1          adc $B980,X
+
                 inx
                 bne _next1
 
@@ -408,7 +443,9 @@ _next1          adc $B980,X
                 cmp #$90
                 beq _XIT
 
+;--------------------------------------
                 .byte $12
+;--------------------------------------
 
 _XIT            rts
                 .endproc

@@ -26,6 +26,7 @@ RestorePoint    .proc
 
                 lda CHOPPER_ANGLE
                 sta LAND_CHOP_ANGLE
+
                 rts
                 .endproc
 
@@ -52,8 +53,10 @@ _next1          cmp LAND_CHR,X
                 bpl _next1
 
                 inc TEMP3_I
+
 _XIT            rts
 
 _1              inc TEMP4_I
+
                 rts
                 .endproc

@@ -26,6 +26,7 @@ DoLaser1        .proc
                 ldx #0
 _next1          lda LASER_DIAG,X
                 sta LASER_1,X
+
                 inx
                 cpx #32
                 bne _next1
@@ -33,6 +34,7 @@ _next1          lda LASER_DIAG,X
                 ldx #0
 _next2          lda LASER_VERT,X
                 sta LASER_3,X
+
                 inx
                 cpx #8
                 bne _next2
@@ -42,11 +44,13 @@ _next2          lda LASER_VERT,X
 _1              ldx #32-1
                 lda #0
 _next3          sta LASER_1,X
+
                 dex
                 bpl _next3
 
                 ldx #8-1
 _next4          sta LASER_3,X
+
                 dex
                 bpl _next4
 
@@ -75,6 +79,7 @@ DoLaser2        .proc
                 ldx #0
 _next1          lda LASER_DIAG,X
                 sta LASER_2,X
+
                 inx
                 cpx #32
                 bne _next1
@@ -82,6 +87,7 @@ _next1          lda LASER_DIAG,X
                 ldx #0
 _next2          lda LASER_HORZ,X
                 sta LASER_3,X
+
                 inx
                 cpx #8
                 bne _next2
@@ -91,6 +97,7 @@ _next2          lda LASER_HORZ,X
 _1              ldx #32-1
                 lda #0
 _next3          sta LASER_2,X
+
                 dex
                 bpl _next3
 

@@ -12,6 +12,7 @@ VERTBLKD        .proc
                 sei
                 php
                 cld
+
                 lda #0
                 ;!! lda M2PL
                 ;!! ora M3PL
@@ -25,6 +26,7 @@ VERTBLKD        .proc
                 ;!! ora P0PF
                 ;!! ora P1PF
                 sta CHOPPER_COL
+
                 ;!! lda M0PL
                 ;!! ora M1PL
                 and #%00001100

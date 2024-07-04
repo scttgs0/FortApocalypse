@@ -23,6 +23,7 @@ v_demoTimer     .var TIM6_VAL
                 ;!! lda CONSOL              ; read the console keys
                 cmp CONSOL_FLAG         ; update consol_flag if it has changed
                 beq _doSelect
+
                 sta CONSOL_FLAG
 
                 ldx #0                  ; reset inactivity timer
@@ -34,6 +35,7 @@ v_demoTimer     .var TIM6_VAL
                 lda #START_MODE         ; MODE=START
                 sta MODE
                 sta DEMO_STATUS         ; disable Demo
+
                 bra _XIT
 
 _chk_mode       ldx MODE                ; Options Screen has its own handler
@@ -52,6 +54,7 @@ _determine_key  cmp #3                  ; OPTION pressed?
 _doOption       lda #OPTION_MODE        ; switch to Options screen
                 sta MODE
                 sta DEMO_STATUS         ; disable Demo
+
                 jsr ScreenOff           ; update display
 
                 stz OPT_NUM
@@ -68,8 +71,10 @@ _doSelect       ;!! lda SKSTAT              ; is the key still pressed?
 
                 lda MODE                ; enter Pause mode
                 pha
+
                 lda #PAUSE_MODE         ; MODE=PAUSE
                 sta MODE
+
                 jsr ClearSounds         ; stop sounds
 
 _wait1          ;!! lda SKSTAT              ; capture...
@@ -97,6 +102,7 @@ _wait2          ;!! lda SKSTAT              ; debounce... wait for release
 
                 pla
                 sta MODE
+
 _XIT            rts
                 .endproc
 
@@ -150,6 +156,7 @@ _2              lda JOYSTICK0
                 bne _3
 
                 jsr Hover
+
                 lda #20
                 sta SND1_2_VAL
 
@@ -159,6 +166,7 @@ _3              lda FUEL_STATUS
 
                 lda #60
                 sta SND1_2_VAL
+
 _chk_right      txa
                 and #kRIGHT
                 beq _chk_left
@@ -182,6 +190,7 @@ _5              lda FRAME
 
                 inc CHOPPER_ANGLE
                 inc CHOPPER_ANGLE
+
 _chk_left       txa
                 and #kLEFT
                 beq _chk_up
@@ -242,6 +251,7 @@ _8              lda CHOPPER_ANGLE
 
                 lda #0
                 sta CHOPPER_ANGLE
+
 _9              cmp #18
                 blt _10
 
@@ -276,6 +286,7 @@ _1              ;!! ldx TRIG0
                 beq _2
 
                 stx TRIG_FLAG
+
                 rts
 
 _2              lda TRIG_FLAG

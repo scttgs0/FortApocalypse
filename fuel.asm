@@ -16,7 +16,6 @@ v_posY          .var TEMP2
                 lda FUEL_STATUS
                 cmp #kREFUEL
                 bne _1
-
                 jmp Refuel
 
 _1              lda CHOPPER_STATUS
@@ -39,7 +38,6 @@ _1              lda CHOPPER_STATUS
 
                 cpx #$EC+2+6
                 bge _4
-
                 jmp _3
 
 _2              cpx #$82
@@ -59,8 +57,10 @@ _3              lda #kREFUEL
 
                 lda #1
                 sta TIM4_VAL
+
                 lda #4
                 sta FUEL_TEMP
+
 _4              lda #0
                 ldx FUEL_STATUS
                 cpx #kREFUEL
@@ -92,6 +92,7 @@ _5              lda #$A4
 _6              sta SID1_CTRL2
                 lda #$88
                 sta SID1_FREQ2
+
                 jsr ClearInfo
 
 _XIT            rts
@@ -112,6 +113,7 @@ Refuel          .proc
 
                 lda #1
                 sta TIM4_VAL
+
                 lda FUEL_TEMP
                 bmi F1
 
@@ -119,6 +121,7 @@ DF1             lda #9+2
                 sta TEMP2
                 lda FUEL_TEMP
                 sta TEMP3
+
                 ldx LEVEL
                 dex                     ; X=1?
                 beq _1
@@ -135,6 +138,7 @@ _2              sta TEMP1
                 jsr DrawBase
 
                 dec FUEL_TEMP
+
 FE              rts
 
 F1              ldx #1
@@ -147,14 +151,17 @@ F1              ldx #1
                 stx SID1_CTRL2
                 ;--.setbank $03
 _1              stx SND4_VAL
+
                 lda CHOP_Y
                 cmp #8+2
                 bge FE
 
                 lda #kFULL
                 sta FUEL_STATUS
+
                 lda #4
                 sta FUEL_TEMP
+
                 jsr DF1
 
                 jmp RestorePoint
@@ -186,6 +193,7 @@ DrawBase        .proc
 _next1          ldy #0
 _next2          lda BASE_SHAPE,X
                 sta (ADR1),Y
+
                 inx
                 iny
                 cpy #6

@@ -30,6 +30,7 @@ PositionTank    .proc
 
                 lda TANK_Y,X
                 sta TEMP2
+
                 rts
                 .endproc
 
@@ -52,13 +53,12 @@ _1              lda TANK_SPEED
                 sta TANK_SPD
 
                 ldx #MAX_TANKS-1
-
 _next1          lda TANK_Y,X
                 sta TEMP2
+
                 lda TANK_STATUS,X
                 cmp #kOFF
                 bne _2
-
                 jmp _9
 
 _2              cmp #kBEGIN
@@ -66,10 +66,12 @@ _2              cmp #kBEGIN
 
                 lda #kON
                 sta TANK_STATUS,X
+
                 lda TANK_START_X,X
                 sta TANK_X,X
                 lda TANK_START_Y,X
                 sta TANK_Y,X
+
                 lda #-1
                 ;--.setbank $AF
                 .frsRandomByteY
@@ -78,6 +80,7 @@ _2              cmp #kBEGIN
 
                 lda #1
 _3              sta TANK_DX,X
+
                 jsr PositionTank
                 bra _next4
 
@@ -91,6 +94,7 @@ _5              lda TANK_X,X
                 jsr ComputeMapAddr
 
                 stx TEMP1
+
                 ldy #0
                 txa
                 asl
@@ -109,18 +113,22 @@ _next2          lda (ADR1),Y
 _6              ldx TEMP1
                 lda #kCRASH
                 sta TANK_STATUS,X
+
                 ldy #2
                 lda #EXP
 _next3          sta (ADR1),Y
+
                 dey
                 bpl _next3
 
                 lda #10
                 sta TIM5_VAL
+
                 jmp _9
 
 _7              lda TANK_TEMP,X
                 sta (ADR1),Y
+
                 inx
                 iny
                 cpy #3
@@ -148,6 +156,7 @@ _next4          jsr PositionTank
                 jsr ComputeMapAddr
 
                 stx TEMP1
+
                 ldy #0
                 txa
                 asl
@@ -155,6 +164,7 @@ _next4          jsr PositionTank
                 tax
 _next5          lda (ADR1),Y
                 sta TANK_TEMP,X
+
                 inx
                 iny
                 cpy #3
@@ -174,10 +184,12 @@ _next5          lda (ADR1),Y
                 ldy #2
 _next6          lda TANK_SHAPE,Y
                 sta (ADR1),Y
+
                 dey
                 bpl _next6
 
                 dec ADR1+1
+
                 ldy #$6F+128            ; 'o'
                 lda CHOP_X
                 sec
@@ -191,15 +203,14 @@ _8              tya
 
 _9              dex
                 bmi MT2
-
                 jmp _next1
 
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
 
-
+; - - - - - - - - - - - - - - - - - - -
 MT2             .block
                 dec TIM5_VAL
                 bne MoveTanks._XIT
@@ -214,6 +225,7 @@ _next1          lda TANK_STATUS,X
 
                 lda #kOFF
                 sta TANK_STATUS,X
+
                 lda TANK_X,X
                 sta TEMP1
                 lda TANK_Y,X
@@ -221,22 +233,27 @@ _next1          lda TANK_STATUS,X
                 jsr ComputeMapAddr
 
                 stx TEMP1
+
                 ldy #0
                 txa
                 asl
                 adc TEMP1
                 tax
+
 _next2          lda TANK_TEMP,X
                 sta (ADR1),Y
+
                 inx
                 iny
                 cpy #3
                 bne _next2
 
                 dec ADR1+1
+
                 ldy #1
                 lda #0
                 sta (ADR1),Y
+
                 ldx #$50
                 ldy #$2
                 jsr IncreaseScore
@@ -307,6 +324,7 @@ _1              ldx TEMP1
                 lda TANK_DX,X
                 eor #-2
                 sta TANK_DX,X
+
                 sec
                 rts
                 .endproc

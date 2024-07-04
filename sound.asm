@@ -21,6 +21,7 @@ S1              .block                  ; CHOPPER SOUND
 
                 lda #$83
                 sta SID1_CTRL1
+
                 lda SND1_1_VAL
                 bpl _1
 
@@ -31,7 +32,7 @@ _1              sec
                 sta SID1_FREQ1
 _XIT            .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 S2              .block                  ; MISSILE SOUND
                 lda SND2_VAL
                 bmi _XIT
@@ -40,6 +41,7 @@ S2              .block                  ; MISSILE SOUND
                 clc
                 adc #16
                 sta SID1_FREQ2
+
                 ldx #$86
                 cmp #$3F+16
                 bne _1
@@ -48,10 +50,11 @@ S2              .block                  ; MISSILE SOUND
 _1              ;--.setbank $AF
                 stx SID1_CTRL2
                 ;--.setbank $03
+
                 dec SND2_VAL
 _XIT            .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 S3              .block                  ; EXPLOSION SOUND
                 lda SND3_VAL
                 beq _XIT
@@ -61,6 +64,7 @@ S3              .block                  ; EXPLOSION SOUND
                 ora SND3_VAL
                 adc #$10
                 sta SID1_FREQ3
+
                 inc SND3_VAL
                 lda SND3_VAL
                 cmp #$31
@@ -68,6 +72,7 @@ S3              .block                  ; EXPLOSION SOUND
 
                 lda #0
                 sta SND3_VAL
+
 _1              ldx #$48
                 cmp #0
                 bne _2
@@ -78,7 +83,7 @@ _2              ;--.setbank $AF
                 ;--.setbank $03
 _XIT            .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 S4              .block                  ; RE-FUEL SOUND
                 lda SND4_VAL
                 beq _XIT
@@ -105,6 +110,7 @@ _1              ldy #$00
                 lda FUEL2
                 adc #0
                 sta FUEL2
+
                 cld
 _2              ;--.setbank $AF
                 stx SID1_FREQ2
@@ -112,7 +118,7 @@ _2              ;--.setbank $AF
                 ;--.setbank $03
 _XIT            .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 S5              .block                  ; HYPER CHAMBER SOUND
                 lda SND5_VAL
                 beq _XIT
@@ -123,12 +129,13 @@ S5              .block                  ; HYPER CHAMBER SOUND
 
                 lda #0
                 sta SND5_VAL
+
 _1              sta SID1_FREQ2
                 lda #$A8
                 sta SID1_CTRL2
 _XIT            .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 S6              .block                  ; CRUISE MISSILE SOUND
                 lda FRAME
                 and #1
@@ -143,9 +150,12 @@ S6              .block                  ; CRUISE MISSILE SOUND
 
                 ldx #0
                 stx SND6_VAL
+
 _1              sta SID1_FREQ3
+
                 lda #$07
                 sta SID1_CTRL3
+
 _XIT            rts
                 .endblock
                 .endproc
@@ -159,5 +169,6 @@ ClearSounds     .proc
                 sta SID1_CTRL1
                 sta SID1_CTRL2
                 sta SID1_CTRL3
+
                 rts
                 .endproc

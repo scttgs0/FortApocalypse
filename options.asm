@@ -28,11 +28,13 @@ v_posY          .var TEMP2
 
                 ldx #0
 _1              stx OPT_NUM
+
 _2              cmp #5                  ; SELECT
                 bne _8
 
                 lda OPT_NUM
                 bne _4
+
                 ldx GRAV_SKILL
                 inx
                 cpx #3
@@ -40,6 +42,7 @@ _2              cmp #5                  ; SELECT
 
                 ldx #0
 _3              stx GRAV_SKILL
+
 _4              cmp #1
                 bne _6
 
@@ -50,6 +53,7 @@ _4              cmp #1
 
                 ldx #0
 _5              stx PILOT_SKILL
+
 _6              cmp #2
                 bne _8
 
@@ -83,7 +87,8 @@ _8              lda #13                 ; (13,1)
                 ldy #>txtOptTitle3
                 jsr Print
 
-PrintOptions      .block
+; - - - - - - - - - - - - - - - - - - -
+PrintOptions    .block
                 lda #0                  ; (0,7)
                 sta v_posX
                 lda #7
@@ -109,9 +114,11 @@ PrintOptions      .block
                 clc
                 adc #7                  ; OPTION
                 sta v_posY
+
                 lda OPT_NUM
                 asl
                 tax
+
                 lda OptTable,X
                 sta ADR2
                 lda OptTable+1,X
@@ -121,20 +128,25 @@ PrintOptions      .block
                 ldy #0
                 sty TEMP5
                 sty TEMP6
+
 _next1          ldy TEMP5
                 lda (ADR2),Y
                 beq _1
+
                 cmp #$FF
                 beq _2
 
                 ora #$80
                 ldy TEMP6
                 sta (ADR1),Y
+
                 inc TEMP6
                 clc
                 adc #32
+
 _1              ldy TEMP6
                 sta (ADR1),Y
+
                 inc TEMP6
                 inc TEMP5
                 bra _next1

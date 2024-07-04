@@ -33,6 +33,7 @@ MovePods1       .proc
 
                 lda POD_STATUS,X
                 sta POD_COM
+
                 and #$0F
                 cmp #kOFF
                 beq PodsEnd
@@ -48,6 +49,7 @@ _1              jsr PodCollision
                 jsr PodErase
                 jsr PodMove
                 jsr PodDraw
+
                 .endproc
 
                 ;[fall-through]
@@ -64,6 +66,7 @@ PodsEnd         .proc
 
                 ldx #0
 _1              stx POD_NUM
+
                 rts
                 .endproc
 
@@ -102,6 +105,7 @@ GetPodValue     .proc
                 iny
                 lda (ADR1),Y
                 sta TEMP2
+
                 rts
                 .endproc
 
@@ -123,6 +127,7 @@ PutPodValue     .proc
                 iny
                 lda TEMP4
                 sta (ADR1),Y
+
                 rts
                 .endproc
 
@@ -159,11 +164,13 @@ _next1          .frsRandomByte
                 bge _next1
 
                 sta POD_X,X
+
 _next2          .frsRandomByte
                 cmp #40
                 bge _next2
 
                 sta POD_Y,X
+
                 jsr GetPodAddr
 
                 ldy #0
@@ -179,6 +186,7 @@ _next2          .frsRandomByte
 
                 lda #$01
                 sta POD_DX,X
+
                 jmp PodsEnd
 
                 .endproc
@@ -221,6 +229,7 @@ _1              jsr PodErase
 
                 lda #kOFF
                 sta POD_STATUS,X
+
                 ldx #$50
                 ldy #$00
                 jsr IncreaseScore
@@ -244,6 +253,7 @@ PodErase        .proc
                 sta TEMP3
                 lda POD_TEMP2,X
                 sta TEMP4
+
                 jmp PutPodValue
 
                 .endproc
@@ -266,15 +276,18 @@ PodDraw         .proc
                 sta POD_TEMP1,X
                 lda TEMP2
                 sta POD_TEMP2,X
+
                 lda POD_COM
                 lsr
                 lsr
                 lsr
                 tay
+
                 lda POD_CHR,Y
                 sta TEMP3
                 lda POD_CHR+1,Y
                 sta TEMP4
+
                 jmp PutPodValue
 
                 .endproc
@@ -297,6 +310,7 @@ _next1          lda POD_DX,X
                 sbc #$10
                 and #$3F
                 sta POD_COM
+
                 and #$F0
                 cmp #$30
                 bne _2
@@ -309,6 +323,7 @@ _1              lda POD_COM
                 adc #$10
                 and #$3F
                 sta POD_COM
+
                 and #$F0
                 bne _2
 
@@ -335,12 +350,15 @@ _2              lda POD_X,X
 _3              lda POD_DX,X
                 eor #-2
                 sta POD_DX,X
+
                 bra _next1
 
 _4              lda POD_COM
                 sta POD_STATUS,X
+
                 rts
                 .endproc
+
 
 ;--------------------------------------
 ;--------------------------------------

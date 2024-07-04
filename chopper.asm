@@ -96,12 +96,14 @@ _2              lda CHOPPER_COL
                 bne _leap
 
                 sta CHOPPER_COL
+
                 lda #HYPERSPACE_MODE
                 sta MODE
 
                 lda #1
                 sta SND3_VAL
                 sta SND5_VAL
+
 _3              ldx #kFLY
                 bra _9
 
@@ -134,7 +136,7 @@ _4              lda CHOP_X
                 bcc _5
 
                 ldx #kPICKUP
-                jmp _9
+                bra _9
 
 _5              lda TEMP3_I
                 cmp #3
@@ -164,8 +166,10 @@ _8              lda #20
                 sta TIM3_VAL
                 lda #1
                 sta SND3_VAL
+
                 ldx #kCRASH
 _9              stx CHOPPER_STATUS
+
                 rts
                 .endproc
 
@@ -189,10 +193,12 @@ UpdateChopper   .proc
                 lda #0
                 sta SPR(sprite_t.X, 0)
                 sta SPR(sprite_t.X, 1)
+
                 rts
 
 _1              lda #kFLY
                 sta CHOPPER_STATUS
+
                 jmp _CCXY
 
 _2              ldy OCHOPPER_Y
@@ -200,12 +206,14 @@ _2              ldy OCHOPPER_Y
                 lda #0
 _next1          sta PLAYER+PL0,Y
                 sta PLAYER+PL1,Y
+
                 iny
                 dex
                 bpl _next1
 
                 lda CHOPPER_X
                 sta SPR(sprite_t.X, 0)
+
                 clc
                 adc #8
                 sta SPR(sprite_t.X, 1)
@@ -213,6 +221,7 @@ _next1          sta PLAYER+PL0,Y
                 lda CHOPPER_ANGLE
                 asl
                 tax
+
                 lda CHOPPER_SHAPES,X
                 sta ADR1_I
                 lda CHOPPER_SHAPES+1,X
@@ -253,6 +262,7 @@ _next3          lda PLAYER+PL0,X
                 lda PLAYER+PL1,X
                 and frsRandomREG
                 sta PLAYER+PL1,X
+
                 inx
                 dey
                 bne _next3
@@ -272,6 +282,7 @@ _next3          lda PLAYER+PL0,X
                 bne _3
 
                 inc CHOPPER_Y
+
 _3              dec TIM3_VAL
                 bne _5
 
@@ -283,6 +294,7 @@ _3              dec TIM3_VAL
 
                 lda #kOFF
                 sta R_STATUS
+
 _4              jsr PositionChopper
 
                 lda #NEW_PLAYER_MODE
@@ -317,6 +329,7 @@ _CCXY           lda CHOPPER_X
                 lsr
                 lsr
                 sta TEMP1_I
+
                 lda SY
                 bpl _7
 
@@ -367,9 +380,11 @@ _1              cmp #8
 
                 inc CHOPPER_ANGLE
                 inc CHOPPER_ANGLE
+
                 rts
 
 _2              dec CHOPPER_ANGLE
                 dec CHOPPER_ANGLE
+
 _XIT            rts
                 .endproc

@@ -17,7 +17,7 @@ MoveCruiseMissiles .proc
 
                 ldx #MAX_TANKS-1
 
-
+; - - - - - - - - - - - - - - - - - - -
 M_ST            .block
                 lda CM_STATUS,X
                 cmp #kOFF
@@ -37,7 +37,7 @@ _1              jsr MissileCollision
 
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 M_END           .block
                 lda TANK_STATUS,X
                 cmp #kON
@@ -67,12 +67,13 @@ _1              cmp #9
 
                 lda #kBEGIN
                 sta CM_STATUS,X
+
 _2              dex
                 bpl M_ST
 
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 MCE             .block
                 ldx #MAX_TANKS-1
 _next1          lda CM_STATUS,X
@@ -85,6 +86,7 @@ _next1          lda CM_STATUS,X
                 lda #0
                 sta SID1_CTRL3
                 sta SND6_VAL
+
 _XIT            rts
                 .endblock
                 .endproc
@@ -115,10 +117,12 @@ MissileBegin    .proc
                 iny
                 tya
                 sta CM_X,X
+
                 lda TANK_Y,X
                 sec
                 sbc #2
                 sta CM_Y,X
+
                 ldy #kLEFT
                 lda CHOP_X
                 sec
@@ -128,10 +132,13 @@ MissileBegin    .proc
                 ldy #kRIGHT
 _1              tya
                 sta CM_STATUS,X
+
                 lda #0
                 sta CM_TEMP,X
+
                 lda #20
                 sta CM_TIME,X
+
                 lda #1
                 sta SND6_VAL
 
@@ -162,6 +169,7 @@ M_COL2          jsr MissileErase
 
                 lda #1
                 sta SND3_VAL
+
                 lda #kOFF
                 sta CM_STATUS,X
 
@@ -169,6 +177,7 @@ M_COL2          jsr MissileErase
                 sta CM_TIME,X
 
                 stx v_preserveX
+
                 ldx #$10
                 ldy #$00
                 jsr IncreaseScore
@@ -207,6 +216,7 @@ MissileErase    .proc
 
 _1              ldy #0
                 sta (ADR1),Y
+
 _XIT            rts
                 .endproc
 
@@ -227,6 +237,7 @@ v_distance      .var TEMP1
                 bra _2
 
 _1              dec CM_X,X
+
 _2              lda CM_TIME,X
                 bpl _3
 
@@ -259,15 +270,17 @@ _5              lda CM_X,X
                 ldy CHOP_Y
                 iny
                 tya
+
                 sec
                 sbc CM_Y,X
                 beq _6
                 bpl _next2
 
                 dec CM_Y,X
-                jmp _6
+                bra _6
 
 _next2          inc CM_Y,X
+
 _6              jsr GetMissileAddr
 
                 ldy #0
@@ -282,7 +295,8 @@ _6              jsr GetMissileAddr
                 bmi _XIT
 
                 dec CM_TIME,X
-_XIT             rts
+
+_XIT            rts
                 .endproc
 
 
@@ -308,11 +322,11 @@ MissileDraw     .proc
                 lda #MISS_RIGHT
 _1              ldy #0
                 sta (ADR1),Y
+
                 lda CM_TEMP,X
                 jsr CheckChr
 
                 bcc _XIT
-
                 jmp MissileCollision.M_COL2
 
 _XIT            rts
@@ -342,6 +356,7 @@ CheckChr        .proc
                 lda #>CHR_SET2
                 adc ADR2+1
                 sta ADR2+1
+
                 ldy #7
 _next1          lda (ADR2),Y
                 bne _XIT

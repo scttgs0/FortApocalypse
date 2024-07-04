@@ -39,6 +39,7 @@ v_marqueeGlyph  .var TEMP3
 
                 ldy #0                  ; start with low tones and increase to higher tones
                 sty v_audiofreq
+
 _next1          lda v_marqueeGlyph      ; place a dot
                 sta PLAY_SCRN,Y
                 jsr CycleGlyph          ; move to next dot
@@ -59,6 +60,7 @@ _next1          lda v_marqueeGlyph      ; place a dot
                 ldy #0
 _next2          lda v_marqueeGlyph
                 sta (ADR1),Y            ; place a dot
+
                 iny
                 jsr CycleGlyph          ; change to the next dot color
 
@@ -69,10 +71,10 @@ _next2          lda v_marqueeGlyph
                 clc
                 adc #c_horzCount
                 sta ADR1
-
                 lda ADR1+1
                 adc #0
                 sta ADR1+1
+
                 dex
                 bpl _next2
 
@@ -105,6 +107,7 @@ _next2          lda v_marqueeGlyph
                 ldx #7
 _next3          lda T_5,X
                 sta PLAY_SCRN+426,X     ; output the copyright date (1982)
+
                 dex
                 bpl _next3
 
@@ -116,7 +119,7 @@ _next3          lda T_5,X
                 ldy #>txtTitle4         ; "SYNAPSE  SOFTWARE"
                 jsr Print
 
-; change the text color for each scan line
+;   change the text color for each scan line
 _endless1       ;!! lda VCOUNT              ; current scan line being draw on screen (divided by 2)
                 asl                     ; double it to get the real scan line number
                 ;!! sta WSYNC               ; halt until next horz sync
@@ -152,6 +155,7 @@ v_audiofreq     .var TEMP1_I
 _1              lda FRAME               ; increment v_audiofreq every 8th frame
                 and #7
                 bne _2
+
                 inc v_audiofreq
 
 _2              lda #$AF                ; set audio channels to full-volume, pure tone
@@ -162,6 +166,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 sec
                 sbc v_audiofreq
                 sta SID1_FREQ1           ; this is a divide-by-N circuit - larger numbers are lower freq
+
                 tax
                 dex
                 ;--.setbank $AF
@@ -187,10 +192,13 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 ;!! jmp VVBLKD_RET          ; exit VBI
 
 _3              stx MODE
+
                 ldx #0
                 stx OPT_NUM
+
                 inx                     ; X=1
 _4              stx DEMO_STATUS
+
                 jmp T3
 
 _5              ldx #-1                 ; START DEMO
@@ -215,6 +223,7 @@ v_marqueeGlyph  .var TEMP3
 
                 lda #$3B
 _1              sta v_marqueeGlyph
+
                 rts
                 .endproc
 
@@ -250,4 +259,5 @@ _wait1          ;!! lda VCOUNT              ; wait for next horz sync
                 cli
 
                 jmp MAIN
+
                 .endproc

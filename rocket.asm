@@ -16,7 +16,7 @@ UpdateRockets   .proc
 
                 ldx #2
 
-
+; - - - - - - - - - - - - - - - - - - -
 NXT_RCK         .block
                 lda ROCKET_STATUS,X
                 bne _1
@@ -35,6 +35,7 @@ _1              cmp #7
                 adc SX
                 sta TEMP1_I
                 sta ROCKET_TEMPX,X
+
                 lda #0
                 ldy SY
                 bmi _2
@@ -49,6 +50,7 @@ _2              clc
                 lsr
                 lsr
                 sta TEMP2_I
+
                 lda SY
                 bpl _3
 
@@ -64,6 +66,7 @@ _3              clc
                 sty SND3_VAL
                 dey                     ; Y=0
                 sty SND2_VAL
+
                 lda (ADR1_I),Y
                 sta ROCKET_TEMP,X
                 cmp #EXP2
@@ -76,16 +79,20 @@ _3              clc
                 sty ROCKET_TEMP+0
                 sty ROCKET_TEMP+1
                 sty ROCKET_TEMP+2
+
                 lda #kEXPLODE
                 sta FORT_STATUS
+
                 bra _7
 
 _4              cmp #EXP_WALL
                 bne _5
 
                 stx TEMP1_I
+
                 lda #$10
                 sta BAK2_COLOR
+
                 ldx #$20
                 ldy #$00
                 jsr IncreaseScore
@@ -93,6 +100,7 @@ _4              cmp #EXP_WALL
                 ldx TEMP1_I
                 lda #0
                 sta ROCKET_TEMP,X
+
                 bra _6
 
 _5              ldy #HIT_LIST_LEN
@@ -107,14 +115,16 @@ _6              lda #7
 
 _7              lda #0
 _8              sta ROCKET_STATUS,X
+
                 ldy #0
                 lda #EXP
                 sta (ADR1_I),Y
+
                 lda #7
                 sta ROCKET_TIM,X
 _XIT            .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 MOVE_ROCKETS    .block
                 lda ROCKET_STATUS,X
                 beq _1
@@ -124,6 +134,7 @@ MOVE_ROCKETS    .block
 
                 lda SSIZEM
                 ;!! sta SIZEM
+
                 lda ROCKET_X,X
                 cmp #0+4
                 blt _1
@@ -140,25 +151,32 @@ MOVE_ROCKETS    .block
 
 _1              lda #0                  ; OFF
                 sta ROCKET_STATUS,X
+
 _2              lda #0
                 sta ROCKET_X,X
                 lda #$F0
                 sta ROCKET_Y,X
+
 _3              ldy OROCKET_Y,X
                 lda PLAYER+MIS+0,Y
                 and ROCKET1_MASK,X
                 sta PLAYER+MIS+0,Y
+
                 lda PLAYER+MIS+1,Y
                 and ROCKET1_MASK,X
                 sta PLAYER+MIS+1,Y
+
                 lda PLAYER+MIS+4,Y
                 and ROCKET1_MASK,X
                 sta PLAYER+MIS+4,Y
+
                 lda PLAYER+MIS+5,Y
                 and ROCKET1_MASK,X
                 sta PLAYER+MIS+5,Y
+
                 lda ROCKET_Y,X
                 sta OROCKET_Y,X
+
                 tay
                 lda ROCKET2_MASK,X
                 pha
@@ -167,9 +185,11 @@ _3              ldy OROCKET_Y,X
                 pla
                 ora PLAYER+MIS+1,Y
                 sta PLAYER+MIS+1,Y
+
                 lda SSIZEM
                 and ROCKET1_MASK,X
                 sta SSIZEM
+
                 lda ROCKET_STATUS,X
                 cmp #3
                 beq _4
@@ -177,13 +197,16 @@ _3              ldy OROCKET_Y,X
                 lda SSIZEM
                 ora ROCKET3_MASK,X
                 sta SSIZEM
+
                 lda ROCKET2_MASK,X
                 pha
                 ora PLAYER+MIS+4,Y
                 sta PLAYER+MIS+4,Y
                 pla
+
                 ora PLAYER+MIS+5,Y
                 sta PLAYER+MIS+5,Y
+
 _4              ldy ROCKET_STATUS,X
                 beq _5
 
@@ -194,13 +217,14 @@ _4              ldy ROCKET_STATUS,X
                 clc
                 adc ROCKET_DX-1,Y
                 sta ROCKET_X,X
+
                 lda ROCKET_Y,X
                 clc
                 adc ROCKET_DY-1,Y
                 sta ROCKET_Y,X
+
 _5              dex
                 bmi RocketExplode
-
                 jmp NXT_RCK
 
                 .endblock
@@ -228,6 +252,7 @@ _next1          lda ROCKET_STATUS,X
                 sta TEMP1_I
                 lda ROCKET_TEMPY,X
                 sta TEMP2_I
+
                 lda #0
                 sta BAK2_COLOR
                 jsr ComputeMapAddrI
@@ -242,10 +267,13 @@ _next2          cmp HIT_LIST,Y
 
                 dey
                 bpl _next2
+
                 iny                     ; Y=0
                 sta (ADR1_I),Y
+
 _1              lda #0                  ; OFF
                 sta ROCKET_STATUS,X
+
 _2              dex
                 bpl _next1
 
