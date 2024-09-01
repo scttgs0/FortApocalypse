@@ -246,3 +246,8 @@ SLAVE_STATUS    .fill 8
 SLAVE_X         .fill 8
 SLAVE_Y         .fill 8
 SLAVE_DX        .fill 8
+
+;--------------------------------------
+
+FALSE           = 0
+TRUE            = 1

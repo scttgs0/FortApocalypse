@@ -41,16 +41,14 @@
 ; Code              $03:a000 - $03:c810
 ;======================================
 
-                .cpu "65c02"
-
-                .include "equates/system_f256jr.equ"
+                .include "equates/system_f256.equ"
                 .include "equates/zeropage.equ"
                 .include "equates/game.equ"
 
-                .include "macros/frs_jr_graphic.mac"
-                .include "macros/frs_jr_mouse.mac"
-                .include "macros/frs_jr_random.mac"
-                .include "macros/frs_jr_sprite.mac"
+                .include "macros/f256_graphic.mac"
+                .include "macros/f256_mouse.mac"
+                .include "macros/f256_random.mac"
+                .include "macros/f256_sprite.mac"
 
             .enc "atari-screen"
                 .cdef " Z",$00

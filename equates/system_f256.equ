@@ -1,5 +1,5 @@
 
-; SPDX-FileName: system_f256jr.equ
+; SPDX-FileName: system_f256.equ
 ; SPDX-FileCopyrightText: Copyright 2023, Scott Giese
 ; SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -106,6 +106,7 @@ locLayer0_BM2       = $02
 locLayer0_TL0       = $04
 locLayer0_TL1       = $05
 locLayer0_TL2       = $06
+
 locLayer1_BM0       = $00
 locLayer1_BM1       = $10
 locLayer1_BM2       = $20
@@ -185,7 +186,7 @@ BITMAP2_ADDR            = $D111         ; [long] Bits[18:0]
 
 TILE0_CTRL              = $D200
 tcEnable            = $01
-tcSmallTiles        = $08
+tcSmallTiles        = $10
 TILE0_ADDR              = $D201         ; [long] Bits[18:0]
 TILE0_SIZE_X            = $D204         ; [word]
 TILE0_SIZE_Y            = $D206         ; [word]
@@ -252,12 +253,56 @@ XY_ADDR                 = $D30B         ; [long] [R] Bits[17:0]
 
 ;--------------------------------------
 
+sidAttack2ms        = 0
+sidAttack8ms        = 1
+sidAttack16ms       = 2
+sidAttack24ms       = 3
+sidAttack38ms       = 4
+sidAttack56ms       = 5
+sidAttack68ms       = 6
+sidAttack80ms       = 7
+sidAttack100ms      = 8
+sidAttack250ms      = 9
+sidAttack500ms      = 10
+sidAttack800ms      = 11
+sidAttack1s         = 12
+sidAttack3s         = 13
+sidAttack5s         = 14
+sidAttack8s         = 15
+
+sidDecay6ms         = 0
+sidDecay24ms        = 1
+sidDecay48ms        = 2
+sidDecay72ms        = 3
+sidDecay114ms       = 4
+sidDecay168ms       = 5
+sidDecay204ms       = 6
+sidDecay240ms       = 7
+sidDecay300ms       = 8
+sidDecay750ms       = 9
+sidDecay1500ms      = 10
+sidDecay2400ms      = 11
+sidDecay3s          = 12
+sidDecay9s          = 13
+sidDecay14s         = 14
+sidDecay24s         = 15
+
+; - - - - - - - - - - - - - - - - - - -
+
 SID1_BASE               = $D400
-SID1_FREQ1              = $D400         ; [word]
-SID1_PULSE1             = $D402         ; [word]
+SID1_FREQ1              = $D400         ; [word] range[$0000:FFFF] (0-8192Hz)  F=(W/8) Hz
+SID1_PULSE1             = $D402         ; [word; 12-bits]
 SID1_CTRL1              = $D404
-SID1_ATDCY1             = $D405
-SID1_SUREL1             = $D406
+sidcGate           = $01                ; [when=1,ADS begins][when=0,Release begins]
+sidcSync           = $02                ; tie with Voice 3
+sidcRing           = $04                ; tie with Voice 3
+sidcTest           = $08                ; [when=1,locked]
+sidcTri            = $10
+sidcSaw            = $20
+sidcPulse          = $40
+sidcNoise          = $80
+SID1_ATDCY1             = $D405         ; bits [4:7]=Attack (range[2ms:8s]); bits [0:3]=Decay (range[6ms:24s])
+SID1_SUREL1             = $D406         ; bits [4:7]=Sustain (range[0:15]=[0:100%]); bits [0:3]=Release (range[6ms:24s])
 
 SID1_FREQ2              = $D407         ; [word]
 SID1_PULSE2             = $D409         ; [word]
@@ -271,11 +316,23 @@ SID1_CTRL3              = $D412
 SID1_ATDCY3             = $D413
 SID1_SUREL3             = $D414
 
-SID1_CUTOFF             = $D415         ; [word]
+SID1_CUTOFF             = $D415         ; [word; 11-bits]  F=(30+W*5.8) Hz
 SID1_RESON              = $D417
+sidrFilterV1        = $01
+sidrFilterV2        = $02
+sidrFilterV3        = $04
+sidrFilterExt       = $08
+sidrFreq            = $F0               ; bits [4-7]=range[0:15]
 SID1_SIGVOL             = $D418
-SID1_RANDOM             = $D41B
-SID1_ENV3               = $D41C
+sidvVolume          = $0F               ; bits [0:3]=range[0:15]
+sidvLowpass         = $10
+sidvBandpass        = $20
+sidvHighpass        = $40
+sidvV3              = $80               ; [when=0,Voice 3 is OFF]
+SID1_NOISE              = $D41B         ; [read-only]
+SID1_ENV3               = $D41C         ; [read-only]
+
+; - - - - - - - - - - - - - - - - - - -
 
 SID2_BASE               = $D500
 SID2_FREQ1              = $D500         ; [word]
@@ -299,8 +356,8 @@ SID2_SUREL3             = $D514
 SID2_CUTOFF             = $D515         ; [word]
 SID2_RESON              = $D517
 SID2_SIGVOL             = $D518
-SID2_RANDOM             = $D51B
-SID2_ENV3               = $D51C
+SID2_NOISE              = $D51B         ; [read-only]
+SID2_ENV3               = $D51C         ; [read-only]
 
 ;--------------------------------------
 
