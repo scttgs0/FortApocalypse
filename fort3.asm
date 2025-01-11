@@ -135,7 +135,7 @@ _3              tax
 
                 eor #-2
 _4              cmp #34
-                bge _6
+                bcs _6
 
                 lda R_Y
                 sec
@@ -144,7 +144,7 @@ _4              cmp #34
 
                 eor #-2
 _5              cmp #8
-                blt _XIT
+                bcc _XIT
 
 _6              lda #FLY
                 sta R_STATUS
@@ -209,10 +209,10 @@ R_F             .block
                 and #%00011110
                 lsr
                 cmp #4
-                blt _2
+                bcc _2
 
                 cmp #6
-                bge _1
+                bcs _1
 
                 lda #3
                 bne _2                  ; [unc]
@@ -220,7 +220,7 @@ R_F             .block
 _1              sec
                 sbc #2
 _2              cmp #6
-                blt _3
+                bcc _3
 
                 lda #5
 _3              cmp #0
@@ -262,13 +262,13 @@ _1              lda FRAME
 
                 lda ROBOT_ANGLE
                 cmp #4
-                blt _2
+                bcc _2
 
                 cmp #14
-                blt _4
+                bcc _4
 
 _2              cmp #8
-                bge _3
+                bcs _3
 
                 inc ROBOT_ANGLE
                 inc ROBOT_ANGLE
@@ -317,7 +317,7 @@ R_END           .block
                 lda #0
                 sta ROBOT_ANGLE
 _1              cmp #18
-                blt _2
+                bcc _2
 
                 lda #16
                 sta ROBOT_ANGLE
@@ -476,7 +476,7 @@ RobotUp         .proc
 
                 lda R_Y
                 cmp #3
-                blt _1
+                bcc _1
 
                 sta TEMP2_I
 
@@ -655,7 +655,7 @@ _5              lda TEMP3_I
                 ldx FUEL_STATUS
                 lda CHOP_Y
                 cmp #10+4
-                blt _6
+                bcc _6
 
                 cpx #EMPTY
                 beq _8
@@ -763,12 +763,12 @@ DoRobotChopper  .proc
 
                 lda R_X
                 cmp SX
-                blt P1
+                bcc P1
 
                 sec
                 sbc SX
                 cmp #48
-                bge P1
+                bcs P1
 
                 ldy SY
                 bpl _1
@@ -778,12 +778,12 @@ _1              sty TEMP1_I
 
                 lda R_Y
                 cmp TEMP1_I
-                blt P1
+                bcc P1
 
                 sec
                 sbc SY
                 cmp #19
-                bge P1
+                bcs P1
 
                 lda R_X
                 sec
@@ -1269,17 +1269,17 @@ MOVE_ROCKETS    .block
 
                 lda ROCKET_X,X
                 cmp #0+4
-                blt _1
+                bcc _1
 
                 cmp #255-4
-                bge _1
+                bcs _1
 
                 lda ROCKET_Y,X
                 cmp #MAX_DOWN+18
-                bge _1
+                bcs _1
 
                 cmp #MAX_UP
-                bge _3
+                bcs _3
 
 _1              lda #0                  ; OFF
                 sta ROCKET_STATUS,X

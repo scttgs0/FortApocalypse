@@ -97,7 +97,7 @@ _1              jsr SlaveCollision
 _2              ldx SLAVE_NUM
                 inx
                 cpx #8
-                blt _3
+                bcc _3
 
                 ldx #0
 _3              stx SLAVE_NUM
@@ -359,7 +359,7 @@ _1              lda SLAVE_STATUS,X
                 eor #-2
 
 _2              cmp #4
-                bge _next1
+                bcs _next1
 
                 lda SLAVE_Y,X
                 sec
@@ -369,7 +369,7 @@ _2              cmp #4
                 eor #-2
 
 _3              cmp #4
-                bge _next1
+                bcs _next1
 
                 lda #PICKUP
                 sta SLAVE_STATUS,X
@@ -426,27 +426,27 @@ _1              lda CHOPPER_STATUS
 
                 lda CHOP_Y
                 cmp #7+2
-                blt _4
+                bcc _4
 
                 cmp #11+2
-                bge _4
+                bcs _4
 
                 ldx CHOP_X
                 lda LEVEL
                 bne _2
 
                 cpx #$15+2
-                blt _4
+                bcc _4
 
                 cpx #$EC+2+6
-                bge _4
+                bcs _4
                 jmp _3
 
 _2              cpx #$82
-                blt _4
+                bcc _4
 
                 cpx #$82+6
-                bge _4
+                bcs _4
 
 _3              lda #kREFUEL
                 sta FUEL_STATUS
@@ -557,7 +557,7 @@ FE              rts
 F1              ldx #1
                 lda CHOP_Y
                 cmp #11+2
-                bge _1
+                bcs _1
 
                 ldx #0
                 stx AUDC2
@@ -565,7 +565,7 @@ _1              stx SND4_VAL
 
                 lda CHOP_Y
                 cmp #8+2
-                bge FE
+                bcs FE
 
                 lda #FULL
                 sta FUEL_STATUS
@@ -656,7 +656,7 @@ SetScanner      .proc
                 bmi _2
 
                 cmp #17
-                blt _1
+                bcc _1
 
                 lda #16
 _1              jsr MULT_BY_40
@@ -1362,7 +1362,7 @@ S6              .block                  ; CRUISE MISSILE SOUND
                 inc SND6_VAL
 
                 cmp #$20
-                blt _1
+                bcc _1
 
                 ldx #0
                 stx SND6_VAL

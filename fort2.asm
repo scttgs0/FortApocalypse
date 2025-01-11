@@ -134,7 +134,7 @@ v_posY          .var TEMP2
                 ldx OPT_NUM
                 inx
                 cpx #3
-                blt _1
+                bcc _1
 
                 ldx #0
 _1              stx OPT_NUM
@@ -147,7 +147,7 @@ _2              cmp #5                  ; SELECT
                 ldx GRAV_SKILL
                 inx
                 cpx #3
-                blt _3
+                bcc _3
 
                 ldx #0
 _3              stx GRAV_SKILL
@@ -157,7 +157,7 @@ _4              cmp #1
                 ldx PILOT_SKILL
                 inx
                 cpx #3
-                blt _5
+                bcc _5
 
                 ldx #0
 _5              stx PILOT_SKILL
@@ -167,7 +167,7 @@ _6              cmp #2
                 ldx CHOPS
                 inx
                 cpx #3
-                blt _7
+                bcc _7
 
                 ldx #0
 _7              stx CHOPS
@@ -409,7 +409,7 @@ PodsEnd         .proc
                 ldx POD_NUM
                 inx
                 cpx #MAX_PODS
-                blt _1
+                bcc _1
 
                 ldx #0
 _1              stx POD_NUM
@@ -506,16 +506,16 @@ PodBegin        .proc
 
 _next1          lda RANDOM
                 cmp #50
-                blt _next1
+                bcc _next1
 
                 cmp #256-50
-                bge _next1
+                bcs _next1
 
                 sta POD_X,X
 
 _next2          lda RANDOM
                 cmp #40
-                bge _next2
+                bcs _next2
 
                 sta POD_Y,X
 
@@ -694,10 +694,10 @@ _2              lda POD_X,X
 
                 lda POD_X,X
                 cmp #50
-                blt _3
+                bcc _3
 
                 cmp #256-50
-                blt _4
+                bcc _4
 
 _3              lda POD_DX,X
                 eor #-2
@@ -765,7 +765,7 @@ M_END           .block
                 bmi _2
 
                 cmp #14
-                bge _2
+                bcs _2
 
                 lda CM_STATUS,X
                 cmp #OFF
@@ -779,7 +779,7 @@ M_END           .block
 
                 eor #-2
 _1              cmp #9
-                bge _2
+                bcs _2
 
                 lda #BEGIN
                 sta CM_STATUS,X
@@ -919,16 +919,16 @@ MissileErase    .proc
                 beq _1
 
                 cmp #$60+128
-                bge _XIT
+                bcs _XIT
 
                 cmp #$40
                 beq _XIT
 
                 cmp #$5B
-                blt _1
+                bcc _1
 
                 cmp #$5F+1
-                blt _XIT
+                bcc _XIT
 
 _1              ldy #0
                 sta (ADR1),Y
@@ -980,10 +980,10 @@ _4              lda v_distance
 
 _5              lda CM_X,X
                 cmp #$D8
-                bge _next1
+                bcs _next1
 
                 cmp #$2D
-                blt _next1
+                bcc _next1
 
                 ldy CHOP_Y
                 iny
@@ -1408,12 +1408,12 @@ _1              lda TANK_STATUS,X
 
                 lda CHOP_Y
                 cmp #3
-                blt _2
+                bcc _2
 
                 sec
                 sbc #3
                 cmp TANK_START_Y,X
-                blt _2
+                bcc _2
 
                 lda TANK_START_X,X
                 sec

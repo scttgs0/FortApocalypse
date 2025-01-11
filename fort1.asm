@@ -466,14 +466,14 @@ DoLevel1        .proc
 
                 lda CHOP_Y
                 cmp #35
-                blt _XIT
+                bcc _XIT
 
                 lda CHOP_X
                 cmp #130
-                blt _XIT
+                bcc _XIT
 
                 cmp #130+6+1
-                bge _XIT
+                bcs _XIT
 
                 lda SLAVES_LEFT
                 bne PSL
@@ -583,14 +583,14 @@ DoLevel2        .proc
 
                 lda CHOP_Y
                 cmp #2
-                bge _XIT
+                bcs _XIT
 
                 lda CHOP_X
                 cmp #130
-                blt _XIT
+                bcc _XIT
 
                 cmp #130+4+1
-                bge _XIT
+                bcs _XIT
 
                 lda SLAVES_LEFT
                 bne PSL
@@ -622,14 +622,14 @@ DoLevel3        .proc
 
                 lda CHOP_Y
                 cmp #13
-                bge _XIT
+                bcs _XIT
 
                 lda CHOP_X
                 cmp #$17
-                blt _XIT
+                bcc _XIT
 
                 cmp #$F4
-                bge _XIT
+                bcs _XIT
 
                 jsr GiveBonus
 
@@ -1373,10 +1373,10 @@ _next3          lda (ADR1),Y
 
                 lda RANDOM
                 cmp #10
-                blt _1
+                bcc _1
 
                 cmp #50
-                bge _1
+                bcs _1
 
                 tya
                 clc
@@ -1523,7 +1523,7 @@ _2              jsr IncreaseGamePoints
 
                 lda #0
 _3              cmp #16
-                blt _4
+                bcc _4
 
                 lda #15
 _4              sta GAME_POINTS
@@ -1538,7 +1538,7 @@ _4              sta GAME_POINTS
 
                 lda SCORE1
                 cmp HI1
-                blt _6
+                bcc _6
 
 _next1          lda SCORE1
                 sta HI1
@@ -1549,7 +1549,7 @@ _next1          lda SCORE1
 
                 jmp _6
 
-_5              bge _next1
+_5              bcs _next1
 
 _6              lda #2
                 sta TEMP1
