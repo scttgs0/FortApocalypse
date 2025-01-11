@@ -9,4 +9,4 @@ mkdir -p obj/
         -o obj/fortapocalypse.rom \
         --list=obj/fortapocalypse_a8_rom.lst \
         --labels=obj/fortapocalypse_a8_rom.lbl \
-        fort.s
+        fort.asm

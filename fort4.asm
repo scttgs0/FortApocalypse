@@ -1,9 +1,9 @@
 
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE: FORT4.S
-;---------------------------------------
-; MAIN INTERUPT DRIVER
+;--------------------------------------
+;--------------------------------------
+; FILE: FORT4.ASM
+;--------------------------------------
+; MAIN INTERRUPT DRIVER
 ;       PART (II)
 ; POSITION THINGS
 ; ReadJoystick
@@ -15,12 +15,13 @@
 ; DoExplode
 ; DoNumbers
 ; DrawMap
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;--------------------------------------
+;--------------------------------------
 
-;=======================================
+
+;======================================
 ;
-;=======================================
+;======================================
 PositionChopper .proc
 v_posX          .var TEMP1_I
 v_posY          .var TEMP2_I
@@ -30,14 +31,15 @@ v_posY          .var TEMP2_I
                 sta v_posX
                 lda CHOP_Y
                 sta v_posY
+
                 jmp PositionRobot.POS_IT_I
 
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 PositionRobot   .proc
 ;v_???          .var ADR1_I
 ;v_???          .var TEMP1_I
@@ -56,8 +58,10 @@ POS_IT_I        ldx TEMP1_I
                 asl
                 asl
                 adc TEMP2_I
+
                 ldy #0
                 sty TEMP3_I
+
                 asl
                 rol TEMP3_I
                 asl
@@ -70,6 +74,7 @@ POS_IT_I        ldx TEMP1_I
                 lsr
                 lsr
                 lsr
+
                 clc
                 adc #<SCANNER+3
                 adc TEMP2_I
@@ -77,6 +82,7 @@ POS_IT_I        ldx TEMP1_I
                 lda #>SCANNER
                 adc TEMP3_I
                 sta ADR1_I+1
+
                 txa
                 and #7
                 tax
@@ -84,13 +90,14 @@ POS_IT_I        ldx TEMP1_I
                 lda (ADR1_I),Y
                 eor POS_MASK1,X
                 sta (ADR1_I),Y
+
                 rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 ReadJoystick    .proc
 v_angleBit0     .var TEMP1_I
 ;---
@@ -135,6 +142,7 @@ _2              ldx STICK
                 bne _3
 
                 jsr Hover
+
                 lda #20
                 sta SND1_2_VAL
 
@@ -144,6 +152,7 @@ _3              lda FUEL_STATUS
 
                 lda #60
                 sta SND1_2_VAL
+
 _chk_right      txa
                 and #RIGHT
                 bne _chk_left
@@ -167,6 +176,7 @@ _5              lda FRAME
 
                 inc CHOPPER_ANGLE
                 inc CHOPPER_ANGLE
+
 _chk_left       txa
                 and #LEFT
                 bne _chk_up
@@ -203,6 +213,7 @@ _chk_up         lda FUEL_STATUS
                 sta SND1_2_VAL
 
                 dec CHOPPER_Y
+
                 jsr Hover
 
 _chk_down       txa
@@ -220,6 +231,7 @@ _chk_down       txa
                 beq _8
 
                 inc CHOPPER_Y
+
                 jsr Hover
 
 _8              lda CHOPPER_ANGLE
@@ -227,11 +239,13 @@ _8              lda CHOPPER_ANGLE
 
                 lda #0
                 sta CHOPPER_ANGLE
+
 _9              cmp #18
                 blt _10
 
                 lda #16
                 sta CHOPPER_ANGLE
+
 _10             lda CHOPPER_ANGLE
                 ora v_angleBit0
                 sta CHOPPER_ANGLE
@@ -240,9 +254,9 @@ _10             lda CHOPPER_ANGLE
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 ReadTrigger     .proc
                 lda CHOPPER_STATUS      ; skip trigger read when crashed
                 cmp #CRASH
@@ -261,6 +275,7 @@ _1              ldx TRIG0
                 beq _2
 
                 stx TRIG_FLAG
+
                 rts
 
 _2              lda TRIG_FLAG
@@ -289,6 +304,7 @@ _next1          lda ROCKET_STATUS,X
 
                 dex
                 bpl _next1
+
 _XIT            rts
 
 _5              lda CHOPPER_ANGLE
@@ -334,9 +350,9 @@ _9              sta ROCKET_STATUS,X
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 Hover           .proc
                 lda FRAME
                 and #7
@@ -354,17 +370,19 @@ _1              cmp #8
 
                 inc CHOPPER_ANGLE
                 inc CHOPPER_ANGLE
+
                 rts
 
 _2              dec CHOPPER_ANGLE
                 dec CHOPPER_ANGLE
+
 _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DrawMap         .proc
 ;v_???          .var ADR1_I
 ;v_???          .var TEMP1_I
@@ -378,12 +396,14 @@ DO_X            .block
 
                 ldx #MIN_RIGHT
                 stx CHOPPER_X
+
                 lda SX
                 cmp #$D8+1
                 blt _1
 
                 lda #1+1
                 sta SX
+
 _1              dec SX_F
                 lda SX_F
                 and #3
@@ -391,17 +411,20 @@ _1              dec SX_F
                 bne _2
 
                 inc SX
+
 _2              cpx #MIN_LEFT
                 bge _XIT
 
                 ldx #MIN_LEFT
                 stx CHOPPER_X
+
                 lda SX
                 cmp #1+1+1
                 bge _3
 
                 lda #$D8+1
                 sta SX
+
 _3              inc SX_F
                 lda SX_F
                 and #3
@@ -410,6 +433,7 @@ _3              inc SX_F
                 dec SX
 _XIT            .endblock
 
+; - - - - - - - - - - - - - - - - - - -
 DO_Y            .block
                 lda SY
                 cmp #24
@@ -429,6 +453,7 @@ _1              ldx CHOPPER_Y
 
                 lda #MAX_DOWN
                 sta CHOPPER_Y
+
                 lda SY_F
                 and #7
                 bne _2
@@ -459,6 +484,7 @@ _4              cpx #MAX_UP
 
                 lda #MAX_UP
                 sta CHOPPER_Y
+
                 lda SY_F
                 and #7
                 eor #7
@@ -475,22 +501,26 @@ _5              dec SY_F
                 bne _6
 
                 dec SY
+
 _6              lda SX_F
                 and #3
                 sta HSCROL
                 lda SY_F
                 and #7
                 sta VSCROL
+
                 lda SX
                 sta TEMP1_I
                 lda SY
                 sta TEMP2_I
+
                 jsr ComputeMapAddrI
 
 ; for each map row, recalculate the display list LMS address
                 ldx #0
                 ldy #MAP_LINES
 _nextRow        inx
+
                 lda ADR1_I
                 sta DSP_MAP,X
                 inx
@@ -498,6 +528,7 @@ _nextRow        inx
                 sta DSP_MAP,X
 
                 inc ADR1_I+1
+
                 inx
                 dey
                 bne _nextRow
@@ -507,9 +538,9 @@ _nextRow        inx
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 ComputeMapAddrI .proc
 ;v_???          .var ADR1_I
 ;v_???          .var TEMP1_I
@@ -523,17 +554,19 @@ ComputeMapAddrI .proc
                 lda #>MAP-5
                 adc #0
                 sta ADR1_I+1
+
                 lda TEMP2_I
                 clc
                 adc ADR1_I+1
                 sta ADR1_I+1
+
                 rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 ComputeMapAddr  .proc
 ;v_???          .var ADR1
 v_posX          .var TEMP1
@@ -552,17 +585,19 @@ v_posY          .var TEMP2
                 clc
                 adc ADR1+1
                 sta ADR1+1
+
                 rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoLaser1        .proc
                 lda FRAME
                 and #7
                 bne _XIT
+
                 lda LASER_STATUS
                 cmp #OFF
                 beq _1
@@ -576,6 +611,7 @@ DoLaser1        .proc
                 ldx #0
 _next1          lda LASER_SHAPES,X
                 sta LASERS_1,X
+
                 inx
                 cpx #32
                 bne _next1
@@ -583,6 +619,7 @@ _next1          lda LASER_SHAPES,X
                 ldx #0
 _next2          lda LASER_SHAPES+24,X
                 sta LASER_3,X
+
                 inx
                 cpx #8
                 bne _next2
@@ -592,11 +629,13 @@ _next2          lda LASER_SHAPES+24,X
 _1              ldx #32-1
                 lda #0
 _next3          sta LASERS_1,X
+
                 dex
                 bpl _next3
 
                 ldx #8-1
 _next4          sta LASER_3,X
+
                 dex
                 bpl _next4
 
@@ -604,9 +643,9 @@ _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoLaser2        .proc
                 lda FRAME
                 and #7
@@ -625,6 +664,7 @@ DoLaser2        .proc
                 ldx #0
 _next1          lda LASER_SHAPES,X
                 sta LASERS_2,X
+
                 inx
                 cpx #32
                 bne _next1
@@ -632,6 +672,7 @@ _next1          lda LASER_SHAPES,X
                 ldx #0
 _next2          lda LASER_SHAPES+16,X
                 sta LASER_3,X
+
                 inx
                 cpx #8
                 bne _next2
@@ -641,6 +682,7 @@ _next2          lda LASER_SHAPES+16,X
 _1              ldx #32-1
                 lda #0
 _next3          sta LASERS_2,X
+
                 dex
                 bpl _next3
 
@@ -648,9 +690,9 @@ _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoBlocks        .proc
                 lda FRAME
                 and #$7F
@@ -659,6 +701,7 @@ DoBlocks        .proc
                 ldx #32-1
                 lda #0
 _next1          sta BLOCK_1,X
+
                 dex
                 bpl _next1
 
@@ -668,6 +711,7 @@ _next1          sta BLOCK_1,X
                 ldx #7
                 lda #$55
 _next2          sta BLOCK_1,X
+
                 dex
                 bpl _next2
 
@@ -677,6 +721,7 @@ _1              lda RANDOM
                 ldx #7
                 lda #$55
 _next3          sta BLOCK_2,X
+
                 dex
                 bpl _next3
 
@@ -686,6 +731,7 @@ _2              lda RANDOM
                 ldx #7
                 lda #$55
 _next4          sta BLOCK_3,X
+
                 dex
                 bpl _next4
 
@@ -695,6 +741,7 @@ _3              lda RANDOM
                 ldx #7
                 lda #$55
 _next5          sta BLOCK_4,X
+
                 dex
                 bpl _next5
 
@@ -702,9 +749,9 @@ _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoElevator      .proc
 ;v_???          .var ADR1_I
 ;---
@@ -718,6 +765,7 @@ DoElevator      .proc
                 ldx #32-1
                 lda #0
 _next1          sta BLOCK_5,X
+
                 dex
                 bpl _next1
 
@@ -738,28 +786,31 @@ _next1          sta BLOCK_5,X
                 ldy #7
                 lda #$55
 _next2          sta (ADR1_I),Y
+
                 dey
                 bpl _next2
 
 _XIT            rts
                 .endproc
 
-;---------------------------------------
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 ELEVATORS       .addr BLOCK_5,BLOCK_6
                 .addr BLOCK_7,BLOCK_8
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoExplode       .proc
                 ldx #7
 _next1          lda EXP_SHAPE,X
                 and RANDOM
                 sta EXPLOSION,X
                 sta EXPLOSION2,X
+
                 dex
                 bpl _next1
 
@@ -768,6 +819,7 @@ _next2          lda RANDOM
                 and #$0F
                 ora #$A0
                 sta MISS_CHR_LEFT,X
+
                 inx
                 cpx #5
                 bne _next2
@@ -777,6 +829,7 @@ _next3          lda RANDOM
                 and #$E0
                 ora #$0A
                 sta MISS_CHR_RIGHT,X
+
                 inx
                 cpx #5
                 bne _next3
@@ -785,9 +838,9 @@ _next3          lda RANDOM
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoNumbers       .proc
                 lda MODE
                 cmp #NEW_PLAYER_MODE
@@ -798,14 +851,17 @@ DoNumbers       .proc
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 ; SCORE
 DO_N            .block
                 lda #<SCORE_DIG
                 sta SCRN_ADR
                 lda #>SCORE_DIG
                 sta SCRN_ADR+1
+
                 lda #0
                 sta SCRN_FLG
+
                 ldx #5
                 lda SCORE3
                 jsr DDIG
@@ -844,8 +900,10 @@ _1              lda #<BONUS_DIG
                 sta SCRN_ADR
                 lda #>BONUS_DIG
                 sta SCRN_ADR+1
+
                 lda #0
                 sta SCRN_FLG
+
                 ldx #3
                 lda BONUS2
                 jsr DDIG
@@ -879,6 +937,7 @@ _1              lda #<BONUS_DIG
                 sbc #0
                 sta FUEL2
                 cld
+
                 jmp _3
 
 _2              lda #EMPTY
@@ -892,6 +951,7 @@ _3              lda #<FUEL_DIG
 
                 lda #0
                 sta SCRN_FLG
+
                 ldx #3
                 lda FUEL2
                 jsr DDIG
@@ -899,7 +959,7 @@ _3              lda #<FUEL_DIG
                 lda FUEL1
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 DDIG            .block                  ; DRAW DIGIT
                 tay
                 lda SCRN_FLG
@@ -930,8 +990,10 @@ _2              lda SCRN_FLG
 
 _3              lda #1
                 sta SCRN_FLG
+
 _4              tya
                 sta SCRN_TEMP
+
                 lsr
                 lsr
                 lsr
@@ -942,7 +1004,7 @@ _4              tya
                 and #$F
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 DRAW            .block
                 cmp #$A
                 bne _2
@@ -958,13 +1020,16 @@ _2              clc
                 adc #$10+128            ; '0'
                 ldy #0
                 sta (SCRN_ADR),Y
+
                 cmp #$10+128
                 bne _3
 
                 lda #$A+128
+
 _3              iny
                 and #$8F
                 sta (SCRN_ADR),Y
+
                 lda SCRN_ADR
                 clc
                 adc #2
@@ -972,15 +1037,16 @@ _3              iny
                 lda SCRN_ADR+1
                 adc #0
                 sta SCRN_ADR+1
+
                 dex
                 rts
                 .endblock
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 IncreaseScore   .proc
                 lda DEMO_STATUS
                 beq _XIT
@@ -999,11 +1065,13 @@ IncreaseScore   .proc
                 adc #0
                 sta SCORE3
                 cld
+
 _XIT            rts
                 .endproc
 
-;---------------------------------------
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 DEMO_STICK
                 .byte $0B,$0B,$0B,$0B,$09,$09,$09,$09
@@ -1020,7 +1088,3 @@ DEMO_STICK
                 .byte $07,$06,$06,$07,$05,$05,$06,$06
                 .byte $06,$06,$07,$05,$05,$07,$06,$06
                 .byte $07,$06,$09,$09
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; EOF
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

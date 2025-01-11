@@ -1,32 +1,37 @@
 
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; FILE: FORT1.S
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;--------------------------------------
+;--------------------------------------
+; FILE: FORT1.ASM
+;--------------------------------------
+;--------------------------------------
 
-;=======================================
+;======================================
 ;
-;=======================================
-START           ;.proc                  ; never called
+;======================================
+START           ;.proc
                 sei
                 cld
+
                 ldx #Z2_LEN
 _next1          lda Z2,X
                 sta RAM2_STUFF,X
+
                 dex
                 bne _next1
 
                 lda #%00111110
                 sta SDMCTL
+
                 lda #$14
                 sta PRIOR
+
                 lda #%00000011
                 sta GRACTL
                 sta SKCTL
 
                 lda #>PLAYER
                 sta PMBASE
+
                 lda #>CHR_SET1
                 sta CHBAS
 
@@ -36,14 +41,16 @@ _next1          lda Z2,X
                 stx TIM6_VAL
                 stx PILOT_SKILL
                 stx GRAV_SKILL
+
                 inx                     ; X=1
                 stx ELEVATOR_DX
+
                 inx                     ; X=2
                 stx CHOPS
 
-                lda #<LINE1
+                lda #<dliLINE1
                 sta VDSLST
-                lda #>LINE1
+                lda #>dliLINE1
                 sta VDSLST+1
 
                 jsr M_START
@@ -66,18 +73,21 @@ _next1          lda FNT1,X
                 sta CHR_SET2+$200,X
                 lda FNT2+$200-8,X
                 sta CHR_SET2+$300,X
+
                 inx
                 bne _next1
 
-; relocate the display list into RAM
+;   relocate the display list into RAM
                 ldx #Z1_LEN
 _next2          lda Z1,X
                 sta RAM1_STUFF,X
+
                 dex
                 bpl _next2
 
                 lda #$40
                 sta NMIEN
+
                 cli
                 .endblock
                 ;.endproc
@@ -85,9 +95,9 @@ _next2          lda Z1,X
                 ;[fall-through]
 
 
-;=======================================
+;======================================
 ; Title Screen handler
-;=======================================
+;======================================
 Title           .proc
 c_horzCount     = 40
 c_vertCount     = 17
@@ -103,10 +113,8 @@ v_marqueeGlyph  .var TEMP3
 
                 lda #$43                ; reset colors
                 sta COLOR0
-
                 lda #$0F
                 sta COLOR1
-
                 lda #$83
                 sta COLOR2
 
@@ -122,8 +130,10 @@ v_marqueeGlyph  .var TEMP3
 
                 ldy #0                  ; start with low tones and increase to higher tones
                 sty v_audiofreq
+
 _next1          lda v_marqueeGlyph      ; place a dot
                 sta PLAY_SCRN,Y
+
                 jsr CycleGlyph          ; move to next dot
 
                 iny
@@ -143,8 +153,8 @@ _next1          lda v_marqueeGlyph      ; place a dot
 _next2          lda v_marqueeGlyph
                 sta (ADR1),Y            ; place a dot
                 iny
-                jsr CycleGlyph          ; change to the next dot color
 
+                jsr CycleGlyph          ; change to the next dot color
                 sta (ADR1),Y            ; place a horz adjacent dot
                 dey                     ; back up one position
 
@@ -152,22 +162,23 @@ _next2          lda v_marqueeGlyph
                 clc
                 adc #c_horzCount
                 sta ADR1
-
                 lda ADR1+1
                 adc #0
                 sta ADR1+1
+
                 dex
                 bpl _next2
 
-                lda #<T2                ; setup the deferred VBI (move the dots)
+                lda #<irqT2                ; setup the deferred VBI (move the dots)
                 sta VVBLKD
-                lda #>T2
+                lda #>irqT2
                 sta VVBLKD+1
 
                 ldx #5
                 stx v_posX
                 dex
                 stx v_posY
+
                 ldx #<txtTitle1         ; output the first title
                 ldy #>txtTitle1
                 jsr Print               ; (5, 4) 'Fort Apocalypse'
@@ -175,12 +186,14 @@ _next2          lda v_marqueeGlyph
                 inc v_posX
                 lda #6
                 sta v_posY
+
                 ldx #<txtTitle2         ; output the second title
                 ldy #>txtTitle2
                 jsr Print               ; (6, 6) 'By Steve Hales'
 
                 lda #10
                 sta v_posY
+
                 ldx #<txtTitle3         ; output the third title
                 ldy #>txtTitle3
                 jsr Print               ; (6, 10) 'Copyright 1982'
@@ -188,6 +201,7 @@ _next2          lda v_marqueeGlyph
                 ldx #7
 _next3          lda T_5,X
                 sta PLAY_SCRN+426,X     ; output the copyright date (1982)
+
                 dex
                 bpl _next3
 
@@ -195,24 +209,28 @@ _next3          lda T_5,X
                 sta v_posX
                 lda #12
                 sta v_posY
+
                 ldx #<txtTitle4         ; output the fourth title
                 ldy #>txtTitle4
                 jsr Print               ; (4, 12) 'Synapse Software'
 
-; change the text color for each scan line
+;   change the text color for each scan line
 _endless1       lda VCOUNT              ; current scan line being draw on screen (divided by 2)
                 asl                     ; double it to get the real scan line number
                 sta WSYNC               ; halt until next horz sync
                 sta COLPF3              ; alter the playfield color
+
                 jmp _endless1
 
                 .endproc
 
 
-;=======================================
-; Deferred VBlank Interrupt
-;=======================================
-T2              .proc
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; VBlank Deferred Handler
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+irqT2           .proc
 v_audiofreq     .var TEMP1_I
 ;---
 
@@ -225,7 +243,6 @@ v_audiofreq     .var TEMP1_I
 
                 lda COLOR1
                 sta COLOR2
-
                 lda COLOR0
                 sta COLOR1
 
@@ -245,6 +262,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 sec
                 sbc v_audiofreq
                 sta AUDF1               ; this is a divide-by-N circuit - larger numbers are lower freq
+
                 tax
                 dex
                 stx AUDF2               ; audio channel 2 leads channel 1
@@ -266,11 +284,15 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 bne _3
 
                 jmp VVBLKD_RET          ; exit VBI
+
 _3              stx MODE
+
                 ldx #0
                 stx OPT_NUM
+
                 inx                     ; X=1
 _4              stx DEMO_STATUS
+
                 jmp T3
 
 _5              ldx #-1                 ; START DEMO
@@ -279,11 +301,11 @@ _5              ldx #-1                 ; START DEMO
                 .endproc
 
 
-;=======================================
+;======================================
 ; Cycle through $3B -> $3D -> $3B...
-;---------------------------------------
+;--------------------------------------
 ; marquee dots order: red, white, green
-;=======================================
+;======================================
 CycleGlyph      .proc
 v_marqueeGlyph  .var TEMP3
 ;---
@@ -295,11 +317,13 @@ v_marqueeGlyph  .var TEMP3
 
                 lda #$3B
 _1              sta v_marqueeGlyph
+
                 rts
                 .endproc
 
-;---------------------------------------
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 txtTitle1       .byte $A6,$AF,$B2,$B4,$00,$00               ; 'FORT  ' inverse atari-ascii
                 .byte $A1,$B0,$AF,$A3,$A1,$AC,$B9,$B0       ; 'APOCALYPSE'
@@ -320,24 +344,23 @@ txtTitle4       .byte $B3,$B9,$AE,$A1,$B0,$B3,$A5           ; 'SYNAPSE' inverse 
                 .byte $B3,$AF,$A6,$B4,$B7,$A1,$B2,$A5       ; 'SOFTWARE'
                 .byte $FF
 
-;=======================================
+
+;======================================
 ;
-;=======================================
+;======================================
 T3              .proc
                 sei
 
                 lda #$0A                ; LASER BLOCK
                 sta COLOR1
-
                 lda #$94                ; LASERS,HOUSE
                 sta COLOR2
-
                 lda #$9A                ; LETTERS
                 sta COLOR3
 
-                lda #<VERTBLKD          ; enable deferred VBI
+                lda #<irqVERTBLKD          ; enable deferred VBI
                 sta VVBLKD
-                lda #>VERTBLKD
+                lda #>irqVERTBLKD
                 sta VVBLKD+1
 
                 jsr ScreenOff
@@ -349,22 +372,27 @@ _wait1          lda VCOUNT              ; wait for next horz sync
                 sta NMIEN
 
                 cli
+
                 .endproc
+
                 ;[fall-through]
 
 
-MAIN
-                lda MODE
+;======================================
+;
+;======================================
+MAIN            lda MODE
                 cmp #GO_MODE
                 beq _2
+
                 lda FRAME
 _1              cmp FRAME
                 beq _1
-_2
 
-                lda MODE
+_2              lda MODE
                 cmp #GO_MODE
                 bne _6
+
                 jsr MovePods
                 jsr MoveTanks
                 jsr MoveCruiseMissiles
@@ -380,18 +408,23 @@ _6              jsr CheckHyperchamber
 
                 lda DEMO_STATUS
                 bpl _3
+
                 inc DEMO_STATUS         ; =0
+
                 lda #START_MODE
                 sta MODE
 
 _3              lda MODE
                 cmp #TITLE_MODE
                 beq _5
+
                 cmp #OPTION_MODE
                 bne _4
+
 _5              lda FRAME
                 and #%00000100
                 beq _4
+
                 dec TIM6_VAL
                 bne _4
                 jmp TITLE
@@ -399,27 +432,26 @@ _5              lda FRAME
 _4              JMP MAIN
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 CheckLevel      .proc
                 lda LEVEL
                 beq DoLevel1
 
                 cmp #1
                 bne _1
-
                 jmp DoLevel2
 
 _1              jmp DoLevel3
 
-                rts
+                rts                     ; unreachable code
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoLevel1        .proc
 ;v_???          .var ADR1
 ;v_???          .var TEMP1
@@ -447,16 +479,19 @@ DoLevel1        .proc
                 bne PSL
 
                 inc LEVEL               ; =1
+
                 jsr GiveBonus
                 jsr ClearInfo
                 jsr ClearSounds
 
                 lda #STOP_MODE
                 sta MODE
+
                 lda #130
                 sta TEMP1
                 lda #40
                 sta TEMP2
+
                 jsr ComputeMapAddr
 
                 lda ADR1
@@ -466,6 +501,7 @@ DoLevel1        .proc
 
                 lda #3
                 sta TEMP2
+
 _next1          jsr MoveRamp
 
                 ldy #5
@@ -474,6 +510,7 @@ _next2          ldx #5
                 jsr Hover
 
                 inc CHOPPER_Y
+
                 dey
                 bpl _next2
 
@@ -481,33 +518,32 @@ _next2          ldx #5
                 sta ADR1
                 lda TEMP4
                 sta ADR1+1
+
                 dec TEMP2
                 bne _next1
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 dec MAIN+32
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #NEW_LEVEL_MODE
                 sta MODE
+
 _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
-PSL             .proc
-                jmp PrintSlavesLeft
-
-                .endproc
+;======================================
+PSL             jmp PrintSlavesLeft
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 MoveRamp        .proc
 ;v_???          .var ADR1
 ;v_???          .var ADR2
@@ -516,16 +552,20 @@ MoveRamp        .proc
                 ldx #4
 _next1          lda ADR1
                 sta ADR2
+
                 ldy ADR1+1
                 dey
                 sty ADR2+1
+
                 ldy #5
 _next2          lda (ADR2),Y
                 sta (ADR1),Y
+
                 dey
                 bpl _next2
 
                 dec ADR1+1
+
                 dex
                 bpl _next1
 
@@ -533,9 +573,9 @@ _next2          lda (ADR2),Y
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoLevel2        .proc
                 lda FORT_STATUS
                 cmp #OFF
@@ -556,23 +596,25 @@ DoLevel2        .proc
                 bne PSL
 
                 inc LEVEL               ; =2
+
                 jsr GiveBonus
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 asl M_NewPlayer
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #NEW_LEVEL_MODE
                 sta MODE
+
 _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 DoLevel3        .proc
                 lda CHOPPER_STATUS
                 cmp #LAND
@@ -593,15 +635,17 @@ DoLevel3        .proc
 
                 inc LEVEL               ; =3
                 dec M_GameOver
+
                 lda #GAME_OVER_MODE
                 sta MODE
+
 _XIT            rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 Unpack          .proc
 ;v_???          .var ADR2
 ;v_???          .var TEMP2
@@ -634,16 +678,19 @@ _next4          cmp CHR2,Y
                 beq _next3              ; [unc]
 
 _1              sta TEMP1
+
                 jsr GetByte
 
                 tax
                 lda TEMP1
 _next5          ldy #0
                 sta (ADR2),Y
+
                 inc ADR2
                 bne _2
 
                 inc ADR2+1
+
 _2              dex
                 bne _next5
 
@@ -657,9 +704,9 @@ _2              dex
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 GetByte         .proc
 ;v_???          .var ADR1
 ;---
@@ -670,30 +717,42 @@ GetByte         .proc
                 bne _XIT
 
                 inc ADR1+1
+
 _XIT            rts
                 .endproc
 
-;---------------------------------------
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 CHR1            .byte $00,$61,$0E,$0F,$10,$11,$0A,$0B       ; ' a./01*+' atari-ascii
                 .byte $0C,$0D,$03,$07,$1F,$73,$74           ; ',-#'?st'
 
                 .byte $41,$44,$48,$58,$59,$5A,$D8
                 .byte $47+128
+
+
+;--------------------------------------
+;--------------------------------------
 CHR1_L          = *-CHR1
+;--------------------------------------
 
 CHR2            .byte $00,$55,$AA,$FF
+
+
+;--------------------------------------
+;--------------------------------------
 CHR2_L          = *-CHR2
+;--------------------------------------
 
 PACK_ADR        .addr PACKED_MAP+$000   ; LEVEL_1
                 .addr PACKED_MAP+$62B   ; LEVEL_2
                 .addr PACKED_MAP+$000   ; LEVEL_1
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 CheckModes      .proc
                 lda MODE
                 cmp #START_MODE
@@ -712,21 +771,22 @@ _3              cmp #NEW_PLAYER_MODE
                 bne _4
                 jmp M_NewPlayer
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
 _4              rol CheckModes
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 rts
                 .endproc
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 M_START         .proc
                 jsr ScreenOff
+
                 ldx #0
                 stx LEVEL
                 stx SCORE1
@@ -757,9 +817,11 @@ M_START         .proc
 
                 lda #OFF
                 sta R_STATUS
+
                 ldx GRAV_SKILL
                 lda GRAV_TAB,X
                 sta GRAV_SKL
+
                 ldx CHOPS
                 lda CHOP_TAB,X
                 ldy DEMO_STATUS
@@ -767,17 +829,18 @@ M_START         .proc
 
                 lda #2
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
 _1              sta MAIN
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 sta CHOP_LEFT
 
                 ldx PILOT_SKILL
                 lda LASER_TAB,X
                 sta LASER_SPD
+
                 lda POD_TAB,X
                 sta START_PODS
 
@@ -797,6 +860,7 @@ _1              sta MAIN
                 lda #0
 _next1          sta WINDOW_1,X
                 sta WINDOW_2,X
+
                 dex
                 bpl _next1
 
@@ -806,21 +870,25 @@ _next1          sta WINDOW_1,X
                 bmi _next3
 
 _next2          sta WINDOW_1,X
+
                 dex
                 bpl _next2
                 bmi _2                  ; [unc]
 
 _next3          sta WINDOW_2,X
+
                 dex
                 bpl _next3
 
 _2              lda #NEW_LEVEL_MODE
                 sta MODE
+
                 rts
                 .endproc
 
-;---------------------------------------
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 GRAV_TAB        .byte $F,7
 ROBOT_TAB       .byte 3,1,0
@@ -832,9 +900,9 @@ MISSILE_TAB     .byte 3,2,1
 ELEVATOR_TAB    .byte 37+25,37+10,37+0
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 M_NewPlayer     .proc
 ;v_???          .var TEMP1
 ;v_???          .var TEMP2
@@ -847,37 +915,43 @@ M_NewPlayer     .proc
                 sec
                 sbc #1
                 sta CHOP_LEFT
+
                 cld
                 cmp #$99
                 bne _1
 
                 lda #GAME_OVER_MODE
                 sta MODE
+
                 rts
 
 _1              lda #$1F                ; CHOPPER CLR
                 sta PCOLR0
                 sta PCOLR1
+
                 lda FUEL_STATUS
                 cmp #EMPTY
                 bne _2
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 dec UpdateChopper
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #FULL
                 sta FUEL_STATUS
+
                 ldx #0
                 stx FUEL1
                 inx                     ; X=1
                 stx FUEL2
+
 _2              lda #4
                 sta TEMP1
                 lda #8
                 sta TEMP2
+
                 ldx #<txtPilot1
                 ldy #>txtPilot1
                 jsr Print
@@ -886,6 +960,7 @@ _2              lda #4
                 sta TEMP1
                 lda #10
                 sta TEMP2
+
                 ldx #<txtPilot2
                 ldy #>txtPilot2
                 jsr Print
@@ -899,10 +974,11 @@ _2              lda #4
                 stx SCRN_FLG
                 stx DEMO_COUNT
                 inx                     ; X=1
+
                 lda CHOP_LEFT
                 jsr DoNumbers.DDIG
-
                 jsr DoChecksum2
+
                 ldx #75
                 jsr WaitFrame
 
@@ -910,6 +986,7 @@ _2              lda #4
                 sta SX
                 lda LAND_Y
                 sta SY
+
                 lda LAND_FX
                 sta SX_F
                 lda LAND_FY
@@ -919,8 +996,10 @@ _2              lda #4
                 sta CHOPPER_X
                 lda LAND_CHOP_Y
                 sta CHOPPER_Y
+
                 lda LAND_CHOP_ANGLE
                 sta CHOPPER_ANGLE
+
                 lda #0
                 sta CHOPPER_COL
 
@@ -928,13 +1007,16 @@ _2              lda #4
 
                 lda #BEGIN
                 sta CHOPPER_STATUS
+
                 lda #GO_MODE
                 sta MODE
+
                 rts
                 .endproc
 
-;---------------------------------------
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 txtPilot1       .byte $A7,$A5,$B4,$00,$00                   ; 'GET  ' atari-ascii
                 .byte $B2,$A5,$A1,$A4,$B9,$00,$00           ; 'READY  '
@@ -945,9 +1027,9 @@ txtPilot2       .byte $B0,$A9,$AC,$AF,$B4,$B3,$00,$00       ; 'PILOTS  '
                 .byte $FF
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 M_NewLevel      .proc
 ;v_???          .var ADR1
 ;v_???          .var ADR2
@@ -963,6 +1045,7 @@ M_NewLevel      .proc
                 sta TEMP1
                 lda #6
                 sta TEMP2
+
                 ldx #<txtEnter
                 ldy #>txtEnter
                 jsr Print
@@ -971,6 +1054,7 @@ M_NewLevel      .proc
                 sta TEMP1
                 lda #8
                 sta TEMP2
+
                 ldy LEVEL
                 dey                     ; Y=0
                 beq _1
@@ -988,9 +1072,11 @@ _2              ldx LEVEL
                 lda LEVEL_COLOR,X
                 sta BAK_COLOR
                 sta COLOR0
+
                 txa
                 asl
                 tax
+
                 lda LEVEL_START,X
                 sta SX
                 lda LEVEL_START+1,X
@@ -1003,12 +1089,14 @@ _2              ldx LEVEL
 
                 lda #0
                 sta SX_F
+
                 ldy LEVEL
                 cpy #2
                 beq _3
 
                 lda #7
 _3              sta SY_F
+
                 lda #8
                 sta CHOPPER_ANGLE
 
@@ -1021,6 +1109,7 @@ _3              sta SY_F
 
                 ldx #MAX_TANKS-1
 _next1          ldy LEVEL
+
                 dey
                 beq _4
 
@@ -1033,22 +1122,28 @@ _4              lda TANK_START_X_L2,X
                 sta TANK_START_X,X
                 lda TANK_START_Y_L2,X
 _5              sta TANK_START_Y,X
+
                 lda #BEGIN
                 sta TANK_STATUS,X
+
                 lda #OFF
                 sta CM_STATUS,X
+
                 dex
                 bpl _next1
 
                 sta R_STATUS
+
                 ldx #MAX_PODS-1
 _next2          sta POD_STATUS,X
+
                 dex
                 bpl _next2
 
                 ldx START_PODS
                 lda #BEGIN
 _next3          sta POD_STATUS,X
+
                 dex
                 bpl _next3
 
@@ -1059,6 +1154,7 @@ _next3          sta POD_STATUS,X
                 lda LEVEL
                 asl                     ; *2 (word)
                 tax
+
                 lda PACK_ADR,X
                 sta ADR1
                 lda PACK_ADR+1,X
@@ -1076,6 +1172,7 @@ _next3          sta POD_STATUS,X
 
                 lda #0
                 sta TEMP4
+
                 jsr Unpack
 
 MAKE_CONTURE    .block
@@ -1083,6 +1180,7 @@ MAKE_CONTURE    .block
                 sta ADR1
                 lda #>MAP
                 sta ADR1+1
+
                 ldy #0
 _next1          lda (ADR1),Y
                 cmp #$73                ; 's'
@@ -1106,6 +1204,7 @@ _next3          lda RANDOM
                 clc
                 adc #$65-1
 _2              sta (ADR1),Y
+
                 iny
                 bne _next1
 
@@ -1128,6 +1227,7 @@ _2              sta (ADR1),Y
 _next4          ldy #0
 _next5          lda (ADR1),Y
                 sta (ADR2),Y
+
                 iny
                 cpy #40
                 bne _next5
@@ -1146,22 +1246,26 @@ _next5          lda (ADR1),Y
                 sta TEMP1
                 lda #$13
                 sta TEMP2
+
                 jsr ComputeMapAddr
 
                 ldx #2
 _next6          ldy #$D
                 lda #0
 _next7          sta (ADR1),Y
+
                 dey
                 bpl _next7
 
                 inc ADR1+1
+
                 dex
                 bpl _next6
 
 _3              lda LEVEL
                 asl
                 tax
+
                 lda SCAN_INFO,X
                 sta ADR1
                 lda SCAN_INFO+1,X
@@ -1171,19 +1275,22 @@ _3              lda LEVEL
                 sta ADR2
                 lda #>SCANNER
                 sta ADR2+1
+
                 lda #<SCANNER+1600
                 sta TEMP2
                 lda #>SCANNER+1600
-
                 sta TEMP3
+
                 lda #1
                 sta TEMP4
+
                 jsr Unpack
 
                 lda #<SCANNER
                 sta ADR1
                 lda #>SCANNER
                 sta ADR1+1
+
                 lda #<SCANNER+$1B
                 sta ADR2
                 lda #>SCANNER+$1B
@@ -1193,6 +1300,7 @@ _3              lda LEVEL
 _next8          ldy #12
 _next9          lda (ADR1),Y
                 sta (ADR2),Y
+
                 dey
                 bpl _next9
 
@@ -1203,6 +1311,7 @@ _next9          lda (ADR1),Y
                 bcc _4
 
                 inc ADR1+1
+
 _4              lda ADR2
                 clc
                 adc #40
@@ -1210,14 +1319,15 @@ _4              lda ADR2
                 bcc _5
 
                 inc ADR2+1
+
 _5              dex
                 bpl _next8
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 inc MAIN
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 .endblock
 
@@ -1226,8 +1336,10 @@ S_BEGIN         .block
                 ldx #8
                 stx SLAVES_LEFT
                 dex                     ; X=7
+
                 lda #OFF
 _next1          sta SLAVE_STATUS,X
+
                 dex
                 bpl _next1
 
@@ -1253,6 +1365,7 @@ _next3          lda (ADR1),Y
                 bne _1
 
                 dec ADR1+1
+
                 lda (ADR1),Y
                 inc ADR1+1
                 cmp #$1F                ; '?'
@@ -1269,6 +1382,7 @@ _next3          lda (ADR1),Y
                 clc
                 adc #5
                 sta SLAVE_X,X
+
                 lda ADR1+1
                 sec
                 sbc #>MAP
@@ -1282,6 +1396,7 @@ _next3          lda (ADR1),Y
 
                 lda #$10
                 sta SLAVE_DX,X
+
                 dex
                 bmi _2
 
@@ -1298,12 +1413,14 @@ _1              iny
 
 _2              lda #NEW_PLAYER_MODE
                 sta MODE
+
                 rts
                 .endblock
                 .endproc
 
-;---------------------------------------
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 LEVEL_COLOR     .byte $42
                 .byte $C2
@@ -1335,24 +1452,27 @@ txtEnterL2      .byte $A3,$B2,$B9,$B3,$B4,$A1,$AC,$AC       ; 'CRYSTALLINE  '
                 .byte $FF
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 IncreaseGamePoints .proc
                 clc
                 adc GAME_POINTS
                 sta GAME_POINTS
+
                 rts
                 .endproc
 
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 M_TAB           .char -2,-1,0
 
 
-;=======================================
+;======================================
 ;
-;=======================================
+;======================================
 M_GameOver      .proc
 ;v_???          .var ADR1
 ;v_???          .var TEMP1
@@ -1365,6 +1485,7 @@ M_GameOver      .proc
                 lsr
                 lsr
                 jsr IncreaseGamePoints
+
                 lda FORT_STATUS
                 cmp #OFF
                 bne _1
@@ -1377,6 +1498,7 @@ _1              lda LEVEL
                 bne _2
 
                 inc GAME_POINTS
+
 _2              jsr IncreaseGamePoints
 
                 lda SCORE3
@@ -1424,6 +1546,7 @@ _next1          lda SCORE1
                 sta HI2
                 lda SCORE3
                 sta HI3
+
                 jmp _6
 
 _5              bge _next1
@@ -1433,6 +1556,7 @@ _6              lda #2
                 lda #0
                 sta TEMP2
                 sta SCRN_FLG
+
                 ldx #<txtHighScore
                 ldy #>txtHighScore
                 jsr Print
@@ -1456,12 +1580,14 @@ _6              lda #2
                 sta TEMP1
                 lda #5
                 sta TEMP2
+
                 ldx #<txtGmOvrMission   ; YOUR
                 ldy #>txtGmOvrMission   ; MISSION
                 jsr Print
 
                 lda #21
                 sta TEMP1
+
                 ldx #<txtGmOvrAbort     ; ABORTED
                 ldy #>txtGmOvrAbort
                 lda LEVEL
@@ -1476,6 +1602,7 @@ _7              jsr Print
                 stx TEMP1
                 inx                     ; X=8
                 stx TEMP2
+
                 ldx #<txtGmOvrRank      ; YOUR
                 ldy #>txtGmOvrRank      ; RANK
                 jsr Print
@@ -1484,6 +1611,7 @@ _7              jsr Print
                 sta TEMP1
                 lda #10
                 sta TEMP2
+
                 ldx #<txtGmOvrClass     ; CLASS
                 ldy #>txtGmOvrClass
                 jsr Print
@@ -1493,9 +1621,11 @@ _7              jsr Print
                 eor #3
                 clc
                 adc #1
+
                 ldy #12
                 ora #$10+$80
                 sta (ADR1),Y
+
                 cmp #$10+128
                 bne _8
 
@@ -1503,14 +1633,17 @@ _7              jsr Print
 _8              iny
                 and #$8F
                 sta (ADR1),Y
+
                 lda #3
                 sta TEMP1
+
                 lda GAME_POINTS
                 lsr
                 lsr
                 and #3
                 asl
                 tay
+
                 ldx txtGmOvrRating,Y
                 lda txtGmOvrRating+1,Y
                 tay
@@ -1519,20 +1652,22 @@ _8              iny
                 lda #-1
                 sta TIM6_VAL
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ror ScreenOff
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #TITLE_MODE
                 sta MODE
                 sta DEMO_STATUS
+
                 rts
                 .endproc
 
-;---------------------------------------
-;---------------------------------------
+
+;--------------------------------------
+;--------------------------------------
 
 txtGmOvrMission .byte $2D,$29,$33,$33,$29,$2F,$2E           ; 'MISSION' atari-ascii
                 .byte $FF
@@ -1563,7 +1698,3 @@ txtGmOvrRating4 .byte $A5,$A1,$A7,$AC,$A5                   ; 'EAGLE'
 txtHighScore    .byte $A8,$A9,$A7,$A8,$00,$00               ; 'HIGH  '
                 .byte $B3,$A3,$AF,$B2,$A5                   ; 'SCORE'
                 .byte $FF
-
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; EOF
-;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
