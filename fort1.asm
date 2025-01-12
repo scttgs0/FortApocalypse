@@ -35,7 +35,7 @@ _next1          lda Z2,X
                 lda #>CHR_SET1
                 sta CHBAS
 
-                ldx #0
+                ldx #$00
                 stx AUDCTL
                 stx COLOR4
                 stx TIM6_VAL
@@ -58,8 +58,9 @@ _next1          lda Z2,X
                 lda #TITLE_MODE
                 sta MODE
 
+; - - - - - - - - - - - - - - - - - - -
 SET_FONTS       .block
-                ldx #0
+                ldx #$00
 _next1          lda FNT1,X
                 sta CHR_SET1+15,X
                 lda FNT1+$100-15,X
@@ -128,7 +129,7 @@ v_marqueeGlyph  .var TEMP3
                 lda #$3B                ; start with red marquee dot
                 sta v_marqueeGlyph
 
-                ldy #0                  ; start with low tones and increase to higher tones
+                ldy #$00                ; start with low tones and increase to higher tones
                 sty v_audiofreq
 
 _next1          lda v_marqueeGlyph      ; place a dot
@@ -137,7 +138,7 @@ _next1          lda v_marqueeGlyph      ; place a dot
                 jsr CycleGlyph          ; move to next dot
 
                 iny
-                cpy #40
+                cpy #$28
                 bne _next1              ; loop until end of line
 
                 lda #<PLAY_SCRN+39      ; move to right edge
@@ -149,7 +150,7 @@ _next1          lda v_marqueeGlyph      ; place a dot
                 sta v_marqueeGlyph
 
                 ldx #c_vertCount
-                ldy #0
+                ldy #$00
 _next2          lda v_marqueeGlyph
                 sta (ADR1),Y            ; place a dot
                 iny
@@ -163,7 +164,7 @@ _next2          lda v_marqueeGlyph
                 adc #c_horzCount
                 sta ADR1
                 lda ADR1+1
-                adc #0
+                adc #$00
                 sta ADR1+1
 
                 dex
@@ -174,45 +175,45 @@ _next2          lda v_marqueeGlyph
                 lda #>irqT2
                 sta VVBLKD+1
 
-                ldx #5
+                ldx #$05                ; (5,4)
                 stx v_posX
                 dex
                 stx v_posY
 
                 ldx #<txtTitle1         ; output the first title
-                ldy #>txtTitle1
-                jsr Print               ; (5, 4) 'Fort Apocalypse'
+                ldy #>txtTitle1         ; "FORT  APOCALYPSE"
+                jsr Print
 
-                inc v_posX
-                lda #6
+                inc v_posX              ; (6,6)
+                lda #$06
                 sta v_posY
 
                 ldx #<txtTitle2         ; output the second title
-                ldy #>txtTitle2
-                jsr Print               ; (6, 6) 'By Steve Hales'
+                ldy #>txtTitle2         ; "BY  STEVE  HALES"
+                jsr Print
 
-                lda #10
+                lda #$0A                ; (6,10)
                 sta v_posY
 
                 ldx #<txtTitle3         ; output the third title
-                ldy #>txtTitle3
-                jsr Print               ; (6, 10) 'Copyright 1982'
+                ldy #>txtTitle3         ; "COPYRIGHT"
+                jsr Print
 
-                ldx #7
+                ldx #$07
 _next3          lda T_5,X
                 sta PLAY_SCRN+426,X     ; output the copyright date (1982)
 
                 dex
                 bpl _next3
 
-                lda #4
+                lda #$04                ; (4,12)
                 sta v_posX
-                lda #12
+                lda #$0C
                 sta v_posY
 
                 ldx #<txtTitle4         ; output the fourth title
-                ldy #>txtTitle4
-                jsr Print               ; (4, 12) 'Synapse Software'
+                ldy #>txtTitle4         ; "SYNAPSE  SOFTWARE"
+                jsr Print
 
 ;   change the text color for each scan line
 _endless1       lda VCOUNT              ; current scan line being draw on screen (divided by 2)
@@ -235,7 +236,7 @@ v_audiofreq     .var TEMP1_I
 ;---
 
                 lda FRAME               ; rotate the marquee dots every 4th frame
-                and #3
+                and #$03
                 bne _1
 
                 lda COLOR2              ; color0 -> color1 -> color2 -> color0...
@@ -250,8 +251,9 @@ v_audiofreq     .var TEMP1_I
                 sta COLOR0
 
 _1              lda FRAME               ; increment v_audiofreq every 8th frame
-                and #7
+                and #$07
                 bne _2
+
                 inc v_audiofreq
 
 _2              lda #$AF                ; set audio channels to full-volume, pure tone
@@ -276,18 +278,18 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 beq _3
 
                 lda CONSOL              ; START button causes game to start
-                cmp #6
+                cmp #$06
                 beq _3
 
                 ldx #OPTION_MODE        ; switch to Option screen when SELECT or OPTION is pressed
-                cmp #7
+                cmp #$07
                 bne _3
 
                 jmp VVBLKD_RET          ; exit VBI
 
 _3              stx MODE
 
-                ldx #0
+                ldx #$00
                 stx OPT_NUM
 
                 inx                     ; X=1
@@ -358,9 +360,9 @@ T3              .proc
                 lda #$9A                ; LETTERS
                 sta COLOR3
 
-                lda #<irqVERTBLKD          ; enable deferred VBI
+                lda #<irqVBlankD        ; enable deferred VBI
                 sta VVBLKD
-                lda #>irqVERTBLKD
+                lda #>irqVBlankD
                 sta VVBLKD+1
 
                 jsr ScreenOff
@@ -397,6 +399,7 @@ _2              lda MODE
                 jsr MoveTanks
                 jsr MoveCruiseMissiles
                 jsr MoveSlaves
+
                 jsr SetScanner
                 jsr CheckFuelBase
                 jsr CheckFort
@@ -439,7 +442,7 @@ CheckLevel      .proc
                 lda LEVEL
                 beq DoLevel1
 
-                cmp #1
+                cmp #$01
                 bne _1
                 jmp DoLevel2
 
@@ -465,14 +468,14 @@ DoLevel1        .proc
                 bne _XIT
 
                 lda CHOP_Y
-                cmp #35
+                cmp #$23
                 bcc _XIT
 
                 lda CHOP_X
-                cmp #130
+                cmp #$82
                 bcc _XIT
 
-                cmp #130+6+1
+                cmp #$82+6+1
                 bcs _XIT
 
                 lda SLAVES_LEFT
@@ -487,9 +490,9 @@ DoLevel1        .proc
                 lda #STOP_MODE
                 sta MODE
 
-                lda #130
+                lda #$82
                 sta TEMP1
-                lda #40
+                lda #$28
                 sta TEMP2
 
                 jsr ComputeMapAddr
@@ -499,13 +502,13 @@ DoLevel1        .proc
                 lda ADR1+1
                 sta TEMP4
 
-                lda #3
+                lda #$03
                 sta TEMP2
 
 _next1          jsr MoveRamp
 
-                ldy #5
-_next2          ldx #5
+                ldy #$05
+_next2          ldx #$05
                 jsr WaitFrame
                 jsr Hover
 
@@ -549,7 +552,7 @@ MoveRamp        .proc
 ;v_???          .var ADR2
 ;---
 
-                ldx #4
+                ldx #$04
 _next1          lda ADR1
                 sta ADR2
 
@@ -557,7 +560,7 @@ _next1          lda ADR1
                 dey
                 sty ADR2+1
 
-                ldy #5
+                ldy #$05
 _next2          lda (ADR2),Y
                 sta (ADR1),Y
 
@@ -582,14 +585,14 @@ DoLevel2        .proc
                 bne _XIT
 
                 lda CHOP_Y
-                cmp #2
+                cmp #$02
                 bcs _XIT
 
                 lda CHOP_X
-                cmp #130
+                cmp #$82
                 bcc _XIT
 
-                cmp #130+4+1
+                cmp #$82+4+1
                 bcs _XIT
 
                 lda SLAVES_LEFT
@@ -621,7 +624,7 @@ DoLevel3        .proc
                 bne _XIT
 
                 lda CHOP_Y
-                cmp #13
+                cmp #$0D
                 bcs _XIT
 
                 lda CHOP_X
@@ -655,7 +658,7 @@ Unpack          .proc
 
 _next1          jsr GetByte
 
-                ldy #0
+                ldy #$00
                 ldx TEMP4
                 bne _next4
 
@@ -666,7 +669,7 @@ _next2          cmp CHR1,Y
                 cpy #CHR1_L
                 bne _next2
 
-_next3          ldx #1
+_next3          ldx #$01
                 bne _next5              ; [unc]
 
 _next4          cmp CHR2,Y
@@ -683,7 +686,7 @@ _1              sta TEMP1
 
                 tax
                 lda TEMP1
-_next5          ldy #0
+_next5          ldy #$00
                 sta (ADR2),Y
 
                 inc ADR2
@@ -711,7 +714,7 @@ GetByte         .proc
 ;v_???          .var ADR1
 ;---
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 inc ADR1
                 bne _XIT
@@ -787,7 +790,7 @@ _4              rol CheckModes
 M_START         .proc
                 jsr ScreenOff
 
-                ldx #0
+                ldx #$00
                 stx LEVEL
                 stx SCORE1
                 stx SCORE2
@@ -805,7 +808,7 @@ M_START         .proc
                 stx TANK_SPD
                 stx MISSILE_SPD
 
-                lda #128
+                lda #$80
                 sta TIM2_VAL
 
                 lda #ON
@@ -827,7 +830,7 @@ M_START         .proc
                 ldy DEMO_STATUS
                 bne _1
 
-                lda #2
+                lda #$02
 
 ; - - - - - - - - - - - - - - - - - - -
 ;   Copy Protection
@@ -856,15 +859,15 @@ _1              sta MAIN
                 lda ELEVATOR_TAB,X
                 sta ELEVATOR_SPD
 
-                ldx #7
-                lda #0
+                ldx #$07
+                lda #$00
 _next1          sta WINDOW_1,X
                 sta WINDOW_2,X
 
                 dex
                 bpl _next1
 
-                ldx #7
+                ldx #$07
                 lda #$55
                 ldy RANDOM
                 bmi _next3
@@ -913,7 +916,7 @@ M_NewPlayer     .proc
                 sed
                 lda CHOP_LEFT
                 sec
-                sbc #1
+                sbc #$01
                 sta CHOP_LEFT
 
                 cld
@@ -942,26 +945,26 @@ _1              lda #$1F                ; CHOPPER CLR
                 lda #FULL
                 sta FUEL_STATUS
 
-                ldx #0
+                ldx #$00
                 stx FUEL1
                 inx                     ; X=1
                 stx FUEL2
 
-_2              lda #4
+_2              lda #$04                ; (4,8)
                 sta TEMP1
-                lda #8
+                lda #$08
                 sta TEMP2
 
-                ldx #<txtPilot1
+                ldx #<txtPilot1         ; "GET  READY  PILOT"
                 ldy #>txtPilot1
                 jsr Print
 
-                lda #5
+                lda #$05                ; (5,10)
                 sta TEMP1
-                lda #10
+                lda #$0A
                 sta TEMP2
 
-                ldx #<txtPilot2
+                ldx #<txtPilot2         ; "PILOTS  LEFT"
                 ldy #>txtPilot2
                 jsr Print
 
@@ -970,7 +973,7 @@ _2              lda #4
                 lda #>PLAY_SCRN+428
                 sta SCRN_ADR+1
 
-                ldx #0
+                ldx #$00
                 stx SCRN_FLG
                 stx DEMO_COUNT
                 inx                     ; X=1
@@ -979,7 +982,7 @@ _2              lda #4
                 jsr DoNumbers.DDIG
                 jsr DoChecksum2
 
-                ldx #75
+                ldx #$4B
                 jsr WaitFrame
 
                 lda LAND_X
@@ -999,8 +1002,7 @@ _2              lda #4
 
                 lda LAND_CHOP_ANGLE
                 sta CHOPPER_ANGLE
-
-                lda #0
+                lda #$00
                 sta CHOPPER_COL
 
                 jsr ScreenOn
@@ -1041,30 +1043,30 @@ M_NewLevel      .proc
 
                 jsr ScreenOff
 
-                lda #12
+                lda #$0C                ; (12,6)
                 sta TEMP1
-                lda #6
+                lda #$06
                 sta TEMP2
 
-                ldx #<txtEnter
+                ldx #<txtEnter          ; "ENTERING"
                 ldy #>txtEnter
                 jsr Print
 
-                lda #2
+                lda #$02                ; (2,8)
                 sta TEMP1
-                lda #8
+                lda #$08
                 sta TEMP2
 
-                ldy LEVEL
-                dey                     ; Y=0
+                ldy LEVEL               ; determine which level is being entered
+                dey                     ; Y-=1
                 beq _1
 
-                ldx #<txtEnterL1
+                ldx #<txtEnterL1        ; "VAULTS  OF  DRACONIS"
                 ldy #>txtEnterL1
                 jsr Print
                 jmp _2
 
-_1              ldx #<txtEnterL2
+_1              ldx #<txtEnterL2        ; "CRYSTALLINE  CAVES"
                 ldy #>txtEnterL2
                 jsr Print
 
@@ -1087,17 +1089,17 @@ _2              ldx LEVEL
                 lda LEVEL_CHOP_START+1,X
                 sta CHOPPER_Y
 
-                lda #0
+                lda #$00
                 sta SX_F
 
                 ldy LEVEL
-                cpy #2
+                cpy #$02
                 beq _3
 
-                lda #7
+                lda #$07
 _3              sta SY_F
 
-                lda #8
+                lda #$08
                 sta CHOPPER_ANGLE
 
                 jsr RestorePoint
@@ -1147,7 +1149,7 @@ _next3          sta POD_STATUS,X
                 dex
                 bpl _next3
 
-                lda #0
+                lda #$00
                 sta POD_NUM
                 sta SLAVE_NUM
 
@@ -1170,24 +1172,25 @@ _next3          sta POD_STATUS,X
                 lda #>MAP+$2800
                 sta TEMP3
 
-                lda #0
+                lda #$00
                 sta TEMP4
 
                 jsr Unpack
 
+; - - - - - - - - - - - - - - - - - - -
 MAKE_CONTURE    .block
                 lda #<MAP
                 sta ADR1
                 lda #>MAP
                 sta ADR1+1
 
-                ldy #0
+                ldy #$00
 _next1          lda (ADR1),Y
                 cmp #$73                ; 's'
                 bne _1
 
 _next2          lda RANDOM
-                and #3
+                and #$03
                 beq _next2
 
                 clc
@@ -1198,7 +1201,7 @@ _1              cmp #$74                ; 't'
                 bne _2
 
 _next3          lda RANDOM
-                and #3
+                and #$03
                 beq _next3
 
                 clc
@@ -1223,23 +1226,24 @@ _2              sta (ADR1),Y
                 lda #>MAP+255-40
                 sta ADR2+1
 
-                ldx #0
-_next4          ldy #0
+                ldx #$00
+_next4          ldy #$00
 _next5          lda (ADR1),Y
                 sta (ADR2),Y
 
                 iny
-                cpy #40
+                cpy #$28
                 bne _next5
 
                 inc ADR1+1
                 inc ADR2+1
+
                 inx
-                cpx #40
+                cpx #$28
                 bne _next4
 
                 ldy LEVEL
-                cpy #2
+                cpy #$02
                 bne _3
 
                 lda #$7E
@@ -1249,9 +1253,9 @@ _next5          lda (ADR1),Y
 
                 jsr ComputeMapAddr
 
-                ldx #2
-_next6          ldy #$D
-                lda #0
+                ldx #$02
+_next6          ldy #$0D
+                lda #$00
 _next7          sta (ADR1),Y
 
                 dey
@@ -1281,7 +1285,7 @@ _3              lda LEVEL
                 lda #>SCANNER+1600
                 sta TEMP3
 
-                lda #1
+                lda #$01
                 sta TEMP4
 
                 jsr Unpack
@@ -1296,8 +1300,8 @@ _3              lda LEVEL
                 lda #>SCANNER+$1B
                 sta ADR2+1
 
-                ldx #39
-_next8          ldy #12
+                ldx #$27
+_next8          ldy #$0C
 _next9          lda (ADR1),Y
                 sta (ADR2),Y
 
@@ -1306,7 +1310,7 @@ _next9          lda (ADR1),Y
 
                 lda ADR1
                 clc
-                adc #40
+                adc #$28
                 sta ADR1
                 bcc _4
 
@@ -1314,7 +1318,7 @@ _next9          lda (ADR1),Y
 
 _4              lda ADR2
                 clc
-                adc #40
+                adc #$28
                 sta ADR2
                 bcc _5
 
@@ -1331,9 +1335,9 @@ _5              dex
 
                 .endblock
 
-
+; - - - - - - - - - - - - - - - - - - -
 S_BEGIN         .block
-                ldx #8
+                ldx #$08
                 stx SLAVES_LEFT
                 dex                     ; X=7
 
@@ -1344,16 +1348,16 @@ _next1          sta SLAVE_STATUS,X
                 bpl _next1
 
                 lda LEVEL
-                cmp #2
+                cmp #$02
                 beq _2
 
-                ldx #7
+                ldx #$07
 _next2          lda #<MAP
                 sta ADR1
                 lda #>MAP
                 sta ADR1+1
 
-                ldy #0
+                ldy #$00
 _next3          lda (ADR1),Y
                 cmp #$48                ; '^H'
                 bne _1
@@ -1372,15 +1376,15 @@ _next3          lda (ADR1),Y
                 bne _1
 
                 lda RANDOM
-                cmp #10
+                cmp #$0A
                 bcc _1
 
-                cmp #50
+                cmp #$32
                 bcs _1
 
                 tya
                 clc
-                adc #5
+                adc #$05
                 sta SLAVE_X,X
 
                 lda ADR1+1
@@ -1388,7 +1392,7 @@ _next3          lda (ADR1),Y
                 sbc #>MAP
                 sta SLAVE_Y,X
 
-                lda #1
+                lda #$01
                 sta (ADR1),Y
 
                 lda #ON
@@ -1490,11 +1494,11 @@ M_GameOver      .proc
                 cmp #OFF
                 bne _1
 
-                lda #3
+                lda #$03
                 jsr IncreaseGamePoints
 
 _1              lda LEVEL
-                cmp #3
+                cmp #$03
                 bne _2
 
                 inc GAME_POINTS
@@ -1508,7 +1512,7 @@ _2              jsr IncreaseGamePoints
                 lda M_TAB,X
                 jsr IncreaseGamePoints
 
-                lda #2
+                lda #$02
                 clc
                 sbc CHOPS
                 eor #-1
@@ -1521,11 +1525,11 @@ _2              jsr IncreaseGamePoints
                 lda GAME_POINTS
                 bpl _3
 
-                lda #0
-_3              cmp #16
+                lda #$00
+_3              cmp #$10
                 bcc _4
 
-                lda #15
+                lda #$0F
 _4              sta GAME_POINTS
 
                 lda SCORE3
@@ -1551,13 +1555,13 @@ _next1          lda SCORE1
 
 _5              bcs _next1
 
-_6              lda #2
+_6              lda #$02                ; (2,0)
                 sta TEMP1
-                lda #0
+                lda #$00
                 sta TEMP2
                 sta SCRN_FLG
 
-                ldx #<txtHighScore
+                ldx #<txtHighScore      ; "HIGH  SCORE"
                 ldy #>txtHighScore
                 jsr Print
 
@@ -1566,7 +1570,7 @@ _6              lda #2
                 lda #>PLAY_SCRN+24
                 sta SCRN_ADR+1
 
-                ldx #5
+                ldx #$05
                 lda HI3
                 jsr DoNumbers.DDIG
 
@@ -1576,75 +1580,76 @@ _6              lda #2
                 lda HI1
                 jsr DoNumbers.DDIG
 
-                lda #3
+                lda #$03                ; (3,5)
                 sta TEMP1
-                lda #5
+                lda #$05
                 sta TEMP2
 
-                ldx #<txtGmOvrMission   ; YOUR
-                ldy #>txtGmOvrMission   ; MISSION
+                ldx #<txtGmOvrMission   ; "MISSION"
+                ldy #>txtGmOvrMission
                 jsr Print
 
-                lda #21
+                lda #$15                ; (21,5)
                 sta TEMP1
 
-                ldx #<txtGmOvrAbort     ; ABORTED
+                ldx #<txtGmOvrAbort     ; "ABORTED"
                 ldy #>txtGmOvrAbort
+
                 lda LEVEL
-                cmp #3
+                cmp #$03
                 bne _7
 
-                ldx #<txtGmOvrComplete  ; COMPLETED
+                ldx #<txtGmOvrComplete  ; "COMPLETED"
                 ldy #>txtGmOvrComplete
 _7              jsr Print
 
-                ldx #7
+                ldx #$07                ; (7,8)
                 stx TEMP1
                 inx                     ; X=8
                 stx TEMP2
 
-                ldx #<txtGmOvrRank      ; YOUR
-                ldy #>txtGmOvrRank      ; RANK
+                ldx #<txtGmOvrRank      ; "YOUR RANK IS"
+                ldy #>txtGmOvrRank
                 jsr Print
 
-                lda #21
+                lda #$15                ; (21,10)
                 sta TEMP1
-                lda #10
+                lda #$0A
                 sta TEMP2
 
-                ldx #<txtGmOvrClass     ; CLASS
+                ldx #<txtGmOvrClass     ; "CLASS"
                 ldy #>txtGmOvrClass
                 jsr Print
 
                 lda GAME_POINTS
-                and #3
-                eor #3
+                and #$03
+                eor #$03
                 clc
-                adc #1
+                adc #$01
 
-                ldy #12
+                ldy #$0C
                 ora #$10+$80
                 sta (ADR1),Y
 
                 cmp #$10+128
                 bne _8
 
-                lda #$A+128
+                lda #$0A+128
 _8              iny
                 and #$8F
                 sta (ADR1),Y
 
-                lda #3
+                lda #$03                ; (3,10)
                 sta TEMP1
 
                 lda GAME_POINTS
                 lsr
                 lsr
-                and #3
+                and #$03
                 asl
                 tay
 
-                ldx txtGmOvrRating,Y
+                ldx txtGmOvrRating,Y    ; "SPARROW|CONDOR|HAWK|EAGLE"
                 lda txtGmOvrRating+1,Y
                 tay
                 jsr Print

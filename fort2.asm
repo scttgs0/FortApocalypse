@@ -32,10 +32,10 @@ v_demoTimer     .var TIM6_VAL
 
                 sta CONSOL_FLAG
 
-                ldx #0                  ; reset inactivity timer
+                ldx #$00                ; reset inactivity timer
                 stx v_demoTimer
 
-                cmp #6                  ; START pressed? (0=pressed)
+                cmp #$06                ; START pressed? (0=pressed)
                 bne _chk_mode
 
                 lda #START_MODE         ; MODE=START
@@ -48,13 +48,13 @@ _chk_mode       ldx MODE                ; Options Screen has its own handler
                 cpx #OPTION_MODE        ; continue if not on the Options screen
                 bne _determine_key
 
-                jsr CheckOptions       ; transfer to the Option handler
+                jsr CheckOptions        ; transfer to the Option handler
                 jmp _XIT
 
-_determine_key  cmp #3                  ; OPTION pressed?
+_determine_key  cmp #$03                ; OPTION pressed?
                 beq _doOption
 
-                cmp #5                  ; SELECT pressed?
+                cmp #$05                ; SELECT pressed?
                 bne _doSelect
 
 _doOption       lda #OPTION_MODE        ; switch to Options screen
@@ -63,9 +63,8 @@ _doOption       lda #OPTION_MODE        ; switch to Options screen
 
                 jsr ScreenOff           ; update display
 
-                lda #0
+                lda #$00
                 sta OPT_NUM
-
                 jsr CheckOptions        ; transfer to the Option handler
                 jmp _XIT
 
@@ -98,7 +97,7 @@ _next1          lda SKSTAT              ; is the key still pressed?
                 beq _wait2              ; exit once the key is released
 
 _debounce       lda CONSOL              ; debounce... ensure all three console keys are released
-                cmp #7
+                cmp #$07
                 bne _wait2
 
                 lda TRIG0               ; exit after debounce if trigger is pressed
@@ -128,17 +127,18 @@ v_posY          .var TEMP2
 ;---
 
                 lda CONSOL
-                cmp #3                  ; OPTION
+                cmp #$03                ; OPTION
                 bne _2
 
                 ldx OPT_NUM
                 inx
-                cpx #3
+                cpx #$03
                 bcc _1
 
-                ldx #0
+                ldx #$00
 _1              stx OPT_NUM
-_2              cmp #5                  ; SELECT
+
+_2              cmp #$05                ; SELECT
                 bne _8
 
                 lda OPT_NUM
@@ -146,85 +146,88 @@ _2              cmp #5                  ; SELECT
 
                 ldx GRAV_SKILL
                 inx
-                cpx #3
+                cpx #$03
                 bcc _3
 
-                ldx #0
+                ldx #$00
 _3              stx GRAV_SKILL
-_4              cmp #1
+
+_4              cmp #$01
                 bne _6
 
                 ldx PILOT_SKILL
                 inx
-                cpx #3
+                cpx #$03
                 bcc _5
 
-                ldx #0
+                ldx #$00
 _5              stx PILOT_SKILL
-_6              cmp #2
+
+_6              cmp #$02
                 bne _8
 
                 ldx CHOPS
                 inx
-                cpx #3
+                cpx #$03
                 bcc _7
 
-                ldx #0
+                ldx #$00
 _7              stx CHOPS
 
-_8              lda #13
+_8              lda #$0D                ; (13,1)
                 sta v_posX
-                lda #1
+                lda #$01
                 sta v_posY
 
-                ldx #<txtOptTitle1
+                ldx #<txtOptTitle1      ; "OPTIONS"
                 ldy #>txtOptTitle1
-                jsr Print               ; (13, 1) 'OPTIONS'
+                jsr Print
 
-                lda #0
+                lda #$00                ; (0,3)
                 sta v_posX
-                lda #3
+                lda #$03
                 sta v_posY
 
-                ldx #<txtOptTitle2
+                ldx #<txtOptTitle2      ; "OPTION"
                 ldy #>txtOptTitle2
-                jsr Print               ; (0, 3) 'OPTION'
+                jsr Print
 
-                lda #28
+                lda #$1C                ; (28,3)
                 sta v_posX
 
-                ldx #<txtOptTitle3
+                ldx #<txtOptTitle3      ; "SELECT"
                 ldy #>txtOptTitle3
-                jsr Print               ; (28, 3) 'SELECT'
+                jsr Print
 
+; - - - - - - - - - - - - - - - - - - -
 PrintOptions    .block
-                lda #0
+                lda #$00                ; (0,7)
                 sta v_posX
-                lda #7
+                lda #$07
                 sta v_posY
 
-                ldx #<txtOptGravity
+                ldx #<txtOptGravity     ; "GRAVITY SKILL"
                 ldy #>txtOptGravity
-                jsr Print               ; (0, 7) 'GRAVITY SKILL'
+                jsr Print
 
-                inc v_posY
+                inc v_posY              ; (0,9)
                 inc v_posY
 
-                ldx #<txtOptPilot
+                ldx #<txtOptPilot       ; "PILOT SKILL"
                 ldy #>txtOptPilot
-                jsr Print               ; (0, 9) 'PILOT SKILL'
+                jsr Print
 
-                inc v_posY
+                inc v_posY              ; (0,11)
                 inc v_posY
 
-                ldx #<txtOptRobo
+                ldx #<txtOptRobo        ; "ROBO PILOTS"
                 ldy #>txtOptRobo
-                jsr Print               ; (0, 11) 'ROBO PILOTS'
+                jsr Print
 
                 lda OPT_NUM
                 asl
                 clc
-                adc #7                  ; OPTION
+                adc #$07                ; OPTION
                 sta v_posY
 
                 lda OPT_NUM
@@ -238,13 +241,14 @@ PrintOptions    .block
 
                 jsr CalcCursorLoc
 
-                ldy #0
+                ldy #$00
                 sty TEMP5
                 sty TEMP6
 
 _next1          ldy TEMP5
                 lda (ADR2),Y
                 beq _1
+
                 cmp #$FF
                 beq _2
 
@@ -254,7 +258,7 @@ _next1          ldy TEMP5
 
                 inc TEMP6
                 clc
-                adc #32
+                adc #$20
 
 _1              ldy TEMP6
                 sta (ADR1),Y
@@ -263,44 +267,41 @@ _1              ldy TEMP6
                 inc TEMP5
                 bne _next1              ; [unc]
 
-_2              lda #28
+_2              lda #$1C                ; (28,7)
                 sta v_posX
-                lda #7
+                lda #$07
                 sta v_posY
 
                 lda GRAV_SKILL
                 asl
                 tay
 
-                ldx OptGravityTable,Y
+                ldx OptGravityTable,Y   ; "WEAK|NORMAL|STRONG"
                 lda OptGravityTable+1,Y
                 tay
+                jsr Print
 
-                jsr Print               ; (28, 7) 'WEAK|NORMAL|STRONG'
-
-                inc v_posY
+                inc v_posY              ; (28,9)
                 inc v_posY
 
                 lda PILOT_SKILL
                 asl
                 tay
-                ldx OptPilotTable,Y
+                ldx OptPilotTable,Y     ; "NOVICE|PRO|EXPERT"
                 lda OptPilotTable+1,Y
                 tay
+                jsr Print
 
-                jsr Print               ; (28, 9) 'NOVICE|PRO|EXPERT'
-
-                inc v_posY
+                inc v_posY              ; (28,11)
                 inc v_posY
 
                 lda CHOPS
                 asl
                 tay
-                ldx OptRoboTable,Y
+                ldx OptRoboTable,Y      ; "SEVEN|NINE|ELEVEN"
                 lda OptRoboTable+1,Y
                 tay
-
-                jmp Print               ; (28, 11) 'SEVEN|NINE|ELEVEN'
+                jmp Print
 
                 .endblock
                 .endproc
@@ -366,7 +367,7 @@ _next1          pha
 
                 pla
                 sec
-                sbc #1
+                sbc #$01
                 bne _next1
 
                 rts
@@ -411,7 +412,7 @@ PodsEnd         .proc
                 cpx #MAX_PODS
                 bcc _1
 
-                ldx #0
+                ldx #$00
 _1              stx POD_NUM
 
                 rts
@@ -435,6 +436,7 @@ GetPodAddr      .proc
 
                 .endproc
 
+
 ;======================================
 ;
 ;======================================
@@ -446,7 +448,7 @@ GetPodValue     .proc
 
                 jsr GetPodAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 sta TEMP1
                 iny
@@ -468,7 +470,7 @@ PutPodValue     .proc
 
                 jsr GetPodAddr
 
-                ldy #0
+                ldy #$00
                 lda TEMP3
                 sta (ADR1),Y
                 iny
@@ -505,23 +507,23 @@ PodBegin        .proc
 ;---
 
 _next1          lda RANDOM
-                cmp #50
+                cmp #$32
                 bcc _next1
 
-                cmp #256-50
+                cmp #$100-50
                 bcs _next1
 
                 sta POD_X,X
 
 _next2          lda RANDOM
-                cmp #40
+                cmp #$28
                 bcs _next2
 
                 sta POD_Y,X
 
                 jsr GetPodAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 iny
                 ora (ADR1),Y
@@ -678,7 +680,6 @@ _1              lda POD_COM
                 bne _2
 
                 inc POD_X,X
-
 _2              lda POD_X,X
                 sta TEMP1
                 lda POD_Y,X
@@ -686,17 +687,17 @@ _2              lda POD_X,X
 
                 jsr ComputeMapAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 iny
                 ora (ADR1),Y
                 bne _3
 
                 lda POD_X,X
-                cmp #50
+                cmp #$32
                 bcc _3
 
-                cmp #256-50
+                cmp #$100-50
                 bcc _4
 
 _3              lda POD_DX,X
@@ -744,7 +745,6 @@ M_ST            .block
                 jmp MissileBegin
 
 _1              jsr MissileCollision
-
                 bcs M_END
 
                 jsr MissileErase
@@ -764,7 +764,7 @@ M_END           .block
                 sbc CHOP_Y
                 bmi _2
 
-                cmp #14
+                cmp #$0E
                 bcs _2
 
                 lda CM_STATUS,X
@@ -773,12 +773,12 @@ M_END           .block
 
                 lda CHOP_X
                 sec
-                sbc #2
+                sbc #$02
                 sbc TANK_X,X
                 bpl _1
 
                 eor #-2
-_1              cmp #9
+_1              cmp #$09
                 bcs _2
 
                 lda #BEGIN
@@ -799,7 +799,7 @@ _next1          lda CM_STATUS,X
                 dex
                 bpl _next1
 
-                lda #0
+                lda #$00
                 sta AUDC4
                 sta SND6_VAL
 
@@ -837,7 +837,7 @@ MissileBegin    .proc
 
                 lda TANK_Y,X
                 sec
-                sbc #2
+                sbc #$02
                 sta CM_Y,X
 
                 ldy #LEFT
@@ -850,13 +850,13 @@ MissileBegin    .proc
 _1              tya
                 sta CM_STATUS,X
 
-                lda #0
+                lda #$00
                 sta CM_TEMP,X
 
-                lda #20
+                lda #$14
                 sta CM_TIME,X
 
-                lda #1
+                lda #$01
                 sta SND6_VAL
 
                 jmp MoveCruiseMissiles.M_END
@@ -874,7 +874,7 @@ v_preserveX     .var TEMP1
 
                 jsr GetMissileAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 cmp #EXP
                 beq M_COL2
@@ -884,7 +884,7 @@ v_preserveX     .var TEMP1
 
 M_COL2          jsr MissileErase
 
-                lda #1
+                lda #$01
                 sta SND3_VAL
 
                 lda #OFF
@@ -930,7 +930,7 @@ MissileErase    .proc
                 cmp #$5F+1
                 bcc _XIT
 
-_1              ldy #0
+_1              ldy #$00
                 sta (ADR1),Y
 
 _XIT            rts
@@ -1002,7 +1002,7 @@ _next2          inc CM_Y,X
 
 _6              jsr GetMissileAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 cmp #MISS_LEFT
                 beq _next2
@@ -1028,7 +1028,7 @@ MissileDraw     .proc
 
                 jsr GetMissileAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 sta CM_TEMP,X
 
@@ -1038,7 +1038,7 @@ MissileDraw     .proc
                 beq _1
 
                 lda #MISS_RIGHT
-_1              ldy #0
+_1              ldy #$00
                 sta (ADR1),Y
 
                 lda CM_TEMP,X
@@ -1062,55 +1062,55 @@ CheckHyperchamber .proc
                 lda #STOP_MODE
                 sta MODE
 
-                lda #$F
+                lda #$0F
                 sta BAK2_COLOR
 
-                ldx #2
+                ldx #$02
                 jsr WaitFrame
 
-                lda #$0
+                lda #$00
                 sta BAK2_COLOR
 
                 lda RANDOM
-                and #3
+                and #$03
 
                 tax
-                lda H_XF,X
+                lda _H_XF,X
                 sta SX_F
-                lda H_YF,X
+                lda _H_YF,X
                 sta SY_F
 
-                lda H_X,X
+                lda _H_X,X
                 sta SX
-                lda H_Y,X
+                lda _H_Y,X
                 sta SY
 
-                lda H_CX,X
+                lda _H_CX,X
                 sta CHOPPER_X
-                lda H_CY,X
+                lda _H_CY,X
                 sta CHOPPER_Y
 
-                lda #8
+                lda #$08
                 sta CHOPPER_ANGLE
 
-                lda #0
+                lda #$00
                 sta CHOPPER_COL
 
                 lda #GO_MODE
                 sta MODE
 
 _XIT            rts
+
+;--------------------------------------
+
+_H_XF           .byte $DD,$76,$10,$4B
+_H_YF           .byte $7A,$7B,$B8,$B8
+_H_X            .byte $22,$BC,$55,$87
+_H_Y            .byte $0F,$0F,$18,$18
+_H_CX           .byte $73,$78,$76,$75
+_H_CY           .byte $8C,$89,$AF,$AF
+
                 .endproc
-
-;--------------------------------------
-;--------------------------------------
-
-H_XF            .byte $DD,$76,$10,$4B
-H_YF            .byte $7A,$7B,$B8,$B8
-H_X             .byte $22,$BC,$55,$87
-H_Y             .byte $0F,$0F,$18,$18
-H_CX            .byte $73,$78,$76,$75
-H_CY            .byte $8C,$89,$AF,$AF
 
 
 ;======================================
@@ -1120,7 +1120,7 @@ CheckChr        .proc
 ;v_???          .var ADR2
 ;---
 
-                ldy #0
+                ldy #$00
                 sty ADR2+1
                 and #$7F
                 asl
@@ -1137,7 +1137,7 @@ CheckChr        .proc
                 adc ADR2+1
                 sta ADR2+1
 
-                ldy #7
+                ldy #$07
 _next1          lda (ADR2),Y
                 bne _XIT
 
@@ -1194,7 +1194,6 @@ _1              lda TANK_SPEED
                 sta TANK_SPD
 
                 ldx #MAX_TANKS-1
-
 _next1          lda TANK_Y,X
                 sta TEMP2
 
@@ -1218,7 +1217,7 @@ _2              cmp #BEGIN
                 ldy RANDOM
                 bpl _3
 
-                lda #1
+                lda #$01
 _3              sta TANK_DX,X
 
                 jsr PositionTank
@@ -1235,7 +1234,7 @@ _5              lda TANK_X,X
                 jsr ComputeMapAddr
                 stx TEMP1
 
-                ldy #0
+                ldy #$00
                 txa
                 asl
                 adc TEMP1
@@ -1255,35 +1254,34 @@ _6              ldx TEMP1
                 lda #CRASH
                 sta TANK_STATUS,X
 
-                ldy #2
+                ldy #$02
                 lda #EXP
 _next3          sta (ADR1),Y
 
                 dey
                 bpl _next3
 
-                lda #10
+                lda #$0A
                 sta TIM5_VAL
 
                 jmp _9
 
 _7              lda TANK_TEMP,X
                 sta (ADR1),Y
-                inx
 
+                inx
                 iny
-                cpy #3
+                cpy #$03
                 bne _next2
 
-                ldy #1
+                ldy #$01
                 dec ADR1+1
 
-                lda #0
+                lda #$00
                 sta (ADR1),Y
 
 ;   MOVE X
                 ldx TEMP1
-
 _next4          jsr PositionTank
 
                 lda TANK_X,X
@@ -1300,7 +1298,7 @@ _next4          jsr PositionTank
                 jsr ComputeMapAddr
                 stx TEMP1
 
-                ldy #0
+                ldy #$00
                 txa
                 asl
                 adc TEMP1
@@ -1311,21 +1309,21 @@ _next5          lda (ADR1),Y
                 inx
 
                 iny
-                cpy #3
+                cpy #$03
                 bne _next5
 
 ; check for collision
                 ldx TEMP1
-                ldy #0
+                ldy #$00
                 jsr CheckTankCollision
                 bcs _next4
 
-                ldy #2
+                ldy #$02
                 jsr CheckTankCollision
                 bcs _next4
 
 ; DRAW TANK
-                ldy #2
+                ldy #$02
 _next6          lda TANK_SHAPE,Y
                 sta (ADR1),Y
 
@@ -1342,7 +1340,7 @@ _next6          lda TANK_SHAPE,Y
 
                 ldy #$70+128            ; 'p'
 _8              tya
-                ldy #1
+                ldy #$01
                 sta (ADR1),Y
 
 _9              dex
@@ -1356,7 +1354,7 @@ MT2             .block
                 dec TIM5_VAL
                 bne _XIT
 
-                lda #10
+                lda #$0A
                 sta TIM5_VAL
 
                 ldx #MAX_TANKS-1
@@ -1375,7 +1373,7 @@ _next1          lda TANK_STATUS,X
                 jsr ComputeMapAddr
                 stx TEMP1
 
-                ldy #0
+                ldy #$00
                 txa
                 asl
                 adc TEMP1
@@ -1386,17 +1384,17 @@ _next2          lda TANK_TEMP,X
                 inx
 
                 iny
-                cpy #3
+                cpy #$03
                 bne _next2
 
                 dec ADR1+1
 
-                ldy #1
-                lda #0
+                ldy #$01
+                lda #$00
                 sta (ADR1),Y
 
                 ldx #$50
-                ldy #$2
+                ldy #$02
                 jsr IncreaseScore
 
                 ldx TEMP1
@@ -1407,24 +1405,24 @@ _1              lda TANK_STATUS,X
                 bne _2
 
                 lda CHOP_Y
-                cmp #3
+                cmp #$03
                 bcc _2
 
                 sec
-                sbc #3
+                sbc #$03
                 cmp TANK_START_Y,X
                 bcc _2
 
                 lda TANK_START_X,X
                 sec
-                sbc #5
+                sbc #$05
                 sta TEMP1
                 lda TANK_START_Y,X
                 sta TEMP2
 
                 jsr ComputeMapAddr
 
-                ldy #13-1
+                ldy #$0D-1
 _next3          lda (ADR1),Y
                 bmi _2
 
@@ -1514,7 +1512,7 @@ v_roboExplodeTimer .var TIM7_VAL
                 sta R_STATUS
 
 _1              ldx #$E0
-                lda #0
+                lda #$00
 _next1          sta CHR_SET1+$200,X
 
                 inx
@@ -1528,7 +1526,7 @@ _next2          sta CHR_SET1+$300,X
                 inx
                 bne _next2
 
-;               lda #0
+;               lda #$00
                 sta SND1_1_VAL
                 sta SND2_VAL
                 sta SND3_VAL
@@ -1537,7 +1535,7 @@ _next2          sta CHR_SET1+$300,X
                 sta SND6_VAL
                 sta BAK2_COLOR
 
-                lda #20
+                lda #$14
                 sta SND1_2_VAL
 
                 ldx #MAX_TANKS-1
@@ -1555,9 +1553,9 @@ _next3          lda CM_STATUS,X
 _2              dex
                 bpl _next3
 
-                ldx #2
+                ldx #$02
 _next4          lda ROCKET_STATUS,X
-                cmp #7                  ; EXP
+                cmp #$07                ; EXP
                 bne _3
 
                 lda ROCKET_TEMPX,X
@@ -1567,11 +1565,11 @@ _next4          lda ROCKET_STATUS,X
 
                 jsr ComputeMapAddr
 
-                ldy #0
+                ldy #$00
                 lda ROCKET_TEMP,X
                 sta (ADR1),Y
 
-_3              lda #0
+_3              lda #$00
                 sta ROCKET_STATUS,X
                 sta ROCKET_X,X
 
@@ -1586,7 +1584,7 @@ _3              lda #0
 ;
 ;======================================
 ClearSounds     .proc
-                lda #0
+                lda #$00
                 sta AUDC1
                 sta AUDC2
                 sta AUDC3
@@ -1595,6 +1593,19 @@ ClearSounds     .proc
                 rts
                 .endproc
 
+
+;======================================
+; Calculates the cursor address within
+; PLAY_SCRN based on the provided
+; (x, y) coordinates
+;--------------------------------------
+; on entry:
+;   TEMP1       x coordinate
+;   TEMP2       y coordinate
+; at exit:
+;   ADR1        address of (x, y)
+; preserved:
+;   TEMP1 TEMP2
 ;======================================
 CalcCursorLoc   .proc
 ;v_???          .var ADR1
@@ -1602,7 +1613,7 @@ v_posX          .var TEMP1
 v_posY          .var TEMP2
 ;---
 
-                lda v_posY
+                lda v_posY              ; preserve
                 pha
                 lda v_posX
                 pha
@@ -1617,12 +1628,11 @@ v_posY          .var TEMP2
                 adc v_posX
                 adc #<PLAY_SCRN
                 sta ADR1
-
                 lda #>PLAY_SCRN
-                adc v_posY
+                adc v_posY              ; playfield is 256-bytes wide
                 sta ADR1+1
 
-                pla
+                pla                     ; restore
                 sta v_posX
                 pla
                 sta v_posY
@@ -1653,7 +1663,7 @@ v_destIdx       .var TEMP6
 
                 jsr CalcCursorLoc
 
-                ldy #0
+                ldy #$00
                 sty v_sourceIdx
                 sty v_destIdx
 
@@ -1669,7 +1679,7 @@ _nextChar       ldy v_sourceIdx
 
                 inc v_destIdx
                 clc
-                adc #32
+                adc #$20
 
 _isSpaceChar    ldy v_destIdx           ; right-half of glyph
                 sta (v_destAddr),Y
@@ -1690,18 +1700,19 @@ GiveBonus       .proc
                 ldy BONUS2
                 jsr IncreaseScore
 
-                lda #0
+                lda #$00
                 sta BONUS1
                 sta BONUS2
 
                 sed
                 lda CHOP_LEFT
                 clc
-                adc #2
+                adc #$02
                 sta CHOP_LEFT
                 cld
 
-                ldx #2
+                ldx #$02
+
                 .endproc
 
                 ;[fall-through]
@@ -1729,7 +1740,7 @@ _1              cmp FRAME
 
                 rts
 
-_2              ldx #$FF
+_2              ldx #$FF                ; reset stack
                 txs
 
                 jmp MAIN
@@ -1741,8 +1752,8 @@ _2              ldx #$FF
 ;
 ;======================================
 ClearInfo       .proc
-                ldy #40-1
-                lda #0
+                ldy #$28-1
+                lda #$00
 _next1          sta PLAY_SCRN,Y
 
                 dey

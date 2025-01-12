@@ -59,7 +59,7 @@ POS_IT_I        ldx TEMP1_I
                 asl
                 adc TEMP2_I
 
-                ldy #0
+                ldy #$00
                 sty TEMP3_I
 
                 asl
@@ -84,8 +84,9 @@ POS_IT_I        ldx TEMP1_I
                 sta ADR1_I+1
 
                 txa
-                and #7
+                and #$07
                 tax
+
                 ldy #0
                 lda (ADR1_I),Y
                 eor POS_MASK1,X
@@ -112,7 +113,7 @@ v_angleBit0     .var TEMP1_I
 _XIT            rts
 
 _doStick        lda CHOPPER_ANGLE
-                and #1
+                and #$01
                 sta v_angleBit0
 
                 lda CHOPPER_ANGLE
@@ -127,51 +128,51 @@ _doStick        lda CHOPPER_ANGLE
                 sta STICK
 
                 lda FRAME
-                and #$F
+                and #$0F
                 bne _2
 
                 inx
                 cpx #$6C
                 bcc _1
 
-                ldx #0
+                ldx #$00
 _1              stx DEMO_COUNT
 
 _2              ldx STICK
-                cpx #$F
+                cpx #$0F
                 bne _3
 
                 jsr Hover
 
-                lda #20
+                lda #$14
                 sta SND1_2_VAL
 
 _3              lda FUEL_STATUS
                 cmp #EMPTY
                 bne _chk_right
 
-                lda #60
+                lda #$3C
                 sta SND1_2_VAL
 
 _chk_right      txa
                 and #RIGHT
                 bne _chk_left
 
-                lda #17
+                lda #$11
                 sta SND1_2_VAL
 
                 lda CHOPPER_ANGLE
-                cmp #14
+                cmp #$0E
                 bcs _4
 
                 lda FRAME
-                and #1
+                and #$01
                 bne _5
 
 _4              inc CHOPPER_X
 
 _5              lda FRAME
-                and #3
+                and #$03
                 bne _chk_left
 
                 inc CHOPPER_ANGLE
@@ -181,21 +182,21 @@ _chk_left       txa
                 and #LEFT
                 bne _chk_up
 
-                lda #17
+                lda #$11
                 sta SND1_2_VAL
 
                 lda CHOPPER_ANGLE
-                cmp #4
+                cmp #$04
                 bcc _6
 
                 lda FRAME
-                and #1
+                and #$01
                 bne _7
 
 _6              dec CHOPPER_X
 
 _7              lda FRAME
-                and #3
+                and #$03
                 bne _chk_up
 
                 dec CHOPPER_ANGLE
@@ -209,7 +210,7 @@ _chk_up         lda FUEL_STATUS
                 and #UP
                 bne _chk_down
 
-                lda #13
+                lda #$0D
                 sta SND1_2_VAL
 
                 dec CHOPPER_Y
@@ -220,7 +221,7 @@ _chk_down       txa
                 and #DOWN
                 bne _8
 
-                lda #26
+                lda #$1A
                 sta SND1_2_VAL
 
                 lda CHOPPER_STATUS
@@ -237,13 +238,13 @@ _chk_down       txa
 _8              lda CHOPPER_ANGLE
                 bpl _9
 
-                lda #0
+                lda #$00
                 sta CHOPPER_ANGLE
 
-_9              cmp #18
+_9              cmp #$12
                 bcc _10
 
-                lda #16
+                lda #$10
                 sta CHOPPER_ANGLE
 
 _10             lda CHOPPER_ANGLE
@@ -266,7 +267,7 @@ ReadTrigger     .proc
                 bne _1
 
                 lda FRAME
-                and #$F
+                and #$0F
                 beq _4
 
                 rts
@@ -298,7 +299,7 @@ _4              lda ELEVATOR_DX
                 eor #-2
                 sta ELEVATOR_DX
 
-                ldx #1
+                ldx #$01
 _next1          lda ROCKET_STATUS,X
                 beq _5
 
@@ -310,37 +311,37 @@ _XIT            rts
 _5              lda CHOPPER_ANGLE
                 and #%00011110
                 lsr
-                cmp #4
+                cmp #$04
                 bcc _7
 
-                cmp #6
+                cmp #$06
                 bcs _6
 
-                lda #3
+                lda #$03
                 bne _7
 
 _6              sec
-                sbc #2
-_7              cmp #6
+                sbc #$02
+_7              cmp #$06
                 bcc _8
 
-                lda #5
-_8              cmp #0
+                lda #$05
+_8              cmp #$00
                 bne _9
 
-                lda #1
+                lda #$01
 _9              sta ROCKET_STATUS,X
 
                 lda CHOPPER_X
-                and #3
+                and #$03
                 clc
                 adc CHOPPER_X
-                adc #8
+                adc #$08
                 sta ROCKET_X,X
 
                 lda CHOPPER_Y
                 clc
-                adc #8
+                adc #$08
                 sta ROCKET_Y,X
 
                 lda #$3F
@@ -355,17 +356,17 @@ _9              sta ROCKET_STATUS,X
 ;======================================
 Hover           .proc
                 lda FRAME
-                and #7
+                and #$07
                 bne _XIT
 
                 lda CHOPPER_ANGLE
-                cmp #4
+                cmp #$04
                 bcc _1
 
-                cmp #14
+                cmp #$0E
                 bcc _XIT
 
-_1              cmp #8
+_1              cmp #$08
                 bcs _2
 
                 inc CHOPPER_ANGLE
@@ -401,13 +402,13 @@ DO_X            .block
                 cmp #$D8+1
                 bcc _1
 
-                lda #1+1
+                lda #$01+1
                 sta SX
 
 _1              dec SX_F
                 lda SX_F
-                and #3
-                eor #3
+                and #$03
+                eor #$03
                 bne _2
 
                 inc SX
@@ -419,7 +420,7 @@ _2              cpx #MIN_LEFT
                 stx CHOPPER_X
 
                 lda SX
-                cmp #1+1+1
+                cmp #$01+1+1
                 bcs _3
 
                 lda #$D8+1
@@ -427,7 +428,7 @@ _2              cpx #MIN_LEFT
 
 _3              inc SX_F
                 lda SX_F
-                and #3
+                and #$03
                 bne _XIT
 
                 dec SX
@@ -436,7 +437,7 @@ _XIT            .endblock
 ; - - - - - - - - - - - - - - - - - - -
 DO_Y            .block
                 lda SY
-                cmp #24
+                cmp #$18
                 beq _1
 
                 ldx CHOPPER_Y
@@ -445,6 +446,7 @@ DO_Y            .block
 
                 ldx #MIN_DOWN
                 stx CHOPPER_Y
+
                 bne _2                  ; [unc]
 
 _1              ldx CHOPPER_Y
@@ -455,16 +457,16 @@ _1              ldx CHOPPER_Y
                 sta CHOPPER_Y
 
                 lda SY_F
-                and #7
+                and #$07
                 bne _2
 
                 lda SY
-                cmp #24
+                cmp #$18
                 beq _3
 
 _2              inc SY_F
                 lda SY_F
-                and #7
+                and #$07
                 bne _3
 
                 inc SY
@@ -477,6 +479,7 @@ _3              lda SY
 
                 ldx #MIN_UP
                 stx CHOPPER_Y
+
                 bne _5                  ; [unc]
 
 _4              cpx #MAX_UP
@@ -486,8 +489,8 @@ _4              cpx #MAX_UP
                 sta CHOPPER_Y
 
                 lda SY_F
-                and #7
-                eor #7
+                and #$07
+                eor #$07
                 bne _5
 
                 lda SY
@@ -496,17 +499,18 @@ _4              cpx #MAX_UP
 
 _5              dec SY_F
                 lda SY_F
-                and #7
-                eor #7
+                and #$07
+                eor #$07
                 bne _6
 
                 dec SY
 
 _6              lda SX_F
-                and #3
+                and #$03
                 sta HSCROL
+
                 lda SY_F
-                and #7
+                and #$07
                 sta VSCROL
 
                 lda SX
@@ -516,8 +520,8 @@ _6              lda SX_F
 
                 jsr ComputeMapAddrI
 
-; for each map row, recalculate the display list LMS address
-                ldx #0
+;   for each map row, recalculate the display list LMS address
+                ldx #$00
                 ldy #MAP_LINES
 _nextRow        inx
 
@@ -552,7 +556,7 @@ ComputeMapAddrI .proc
                 adc TEMP1_I
                 sta ADR1_I
                 lda #>MAP-5
-                adc #0
+                adc #$00
                 sta ADR1_I+1
 
                 lda TEMP2_I
@@ -578,7 +582,7 @@ v_posY          .var TEMP2
                 adc v_posX
                 sta ADR1
                 lda #>MAP-5
-                adc #0
+                adc #$00
                 sta ADR1+1
 
                 lda v_posY
@@ -595,7 +599,7 @@ v_posY          .var TEMP2
 ;======================================
 DoLaser1        .proc
                 lda FRAME
-                and #7
+                and #$07
                 bne _XIT
 
                 lda LASER_STATUS
@@ -608,12 +612,12 @@ DoLaser1        .proc
                 sta TIM1_VAL
                 bne _1
 
-                ldx #0
+                ldx #$00
 _next1          lda LASER_SHAPES,X
                 sta LASERS_1,X
 
                 inx
-                cpx #32
+                cpx #$20
                 bne _next1
 
                 ldx #0
@@ -621,19 +625,19 @@ _next2          lda LASER_SHAPES+24,X
                 sta LASER_3,X
 
                 inx
-                cpx #8
+                cpx #$08
                 bne _next2
 
                 rts
 
-_1              ldx #32-1
-                lda #0
+_1              ldx #$20-1
+                lda #$00
 _next3          sta LASERS_1,X
 
                 dex
                 bpl _next3
 
-                ldx #8-1
+                ldx #$08-1
 _next4          sta LASER_3,X
 
                 dex
@@ -648,7 +652,7 @@ _XIT            rts
 ;======================================
 DoLaser2        .proc
                 lda FRAME
-                and #7
+                and #$07
                 bne _XIT
 
                 lda LASER_STATUS
@@ -661,26 +665,26 @@ DoLaser2        .proc
                 sta TIM2_VAL
                 bne _1
 
-                ldx #0
+                ldx #$00
 _next1          lda LASER_SHAPES,X
                 sta LASERS_2,X
 
                 inx
-                cpx #32
+                cpx #$20
                 bne _next1
 
-                ldx #0
+                ldx #$00
 _next2          lda LASER_SHAPES+16,X
                 sta LASER_3,X
 
                 inx
-                cpx #8
+                cpx #$08
                 bne _next2
 
                 rts
 
-_1              ldx #32-1
-                lda #0
+_1              ldx #$20-1
+                lda #$00
 _next3          sta LASERS_2,X
 
                 dex
@@ -698,8 +702,8 @@ DoBlocks        .proc
                 and #$7F
                 bne _XIT
 
-                ldx #32-1
-                lda #0
+                ldx #$20-1
+                lda #$00
 _next1          sta BLOCK_1,X
 
                 dex
@@ -708,7 +712,7 @@ _next1          sta BLOCK_1,X
                 lda RANDOM
                 bmi _1
 
-                ldx #7
+                ldx #$07
                 lda #$55
 _next2          sta BLOCK_1,X
 
@@ -718,7 +722,7 @@ _next2          sta BLOCK_1,X
 _1              lda RANDOM
                 bmi _2
 
-                ldx #7
+                ldx #$07
                 lda #$55
 _next3          sta BLOCK_2,X
 
@@ -728,7 +732,7 @@ _next3          sta BLOCK_2,X
 _2              lda RANDOM
                 bmi _3
 
-                ldx #7
+                ldx #$07
                 lda #$55
 _next4          sta BLOCK_3,X
 
@@ -738,7 +742,7 @@ _next4          sta BLOCK_3,X
 _3              lda RANDOM
                 bmi _XIT
 
-                ldx #7
+                ldx #$07
                 lda #$55
 _next5          sta BLOCK_4,X
 
@@ -762,8 +766,8 @@ DoElevator      .proc
                 lda ELEVATOR_SPD
                 sta ELEVATOR_TIM
 
-                ldx #32-1
-                lda #0
+                ldx #$20-1
+                lda #$00
 _next1          sta BLOCK_5,X
 
                 dex
@@ -773,17 +777,17 @@ _next1          sta BLOCK_5,X
                 clc
                 adc ELEVATOR_DX
                 sta ELEVATOR_NUM        ; redundant
-                and #3
+                and #$03
                 sta ELEVATOR_NUM
 
                 asl
                 tax
-                lda ELEVATORS,X
+                lda _ELEVATORS,X
                 sta ADR1_I
-                lda ELEVATORS+1,X
+                lda _ELEVATORS+1,X
                 sta ADR1_I+1
 
-                ldy #7
+                ldy #$07
                 lda #$55
 _next2          sta (ADR1_I),Y
 
@@ -791,21 +795,20 @@ _next2          sta (ADR1_I),Y
                 bpl _next2
 
 _XIT            rts
-                .endproc
-
 
 ;--------------------------------------
-;--------------------------------------
 
-ELEVATORS       .addr BLOCK_5,BLOCK_6
+_ELEVATORS      .addr BLOCK_5,BLOCK_6
                 .addr BLOCK_7,BLOCK_8
+
+                .endproc
 
 
 ;======================================
 ;
 ;======================================
 DoExplode       .proc
-                ldx #7
+                ldx #$07
 _next1          lda EXP_SHAPE,X
                 and RANDOM
                 sta EXPLOSION,X
@@ -814,24 +817,24 @@ _next1          lda EXP_SHAPE,X
                 dex
                 bpl _next1
 
-                ldx #3
+                ldx #$03
 _next2          lda RANDOM
                 and #$0F
                 ora #$A0
                 sta MISS_CHR_LEFT,X
 
                 inx
-                cpx #5
+                cpx #$05
                 bne _next2
 
-                ldx #3
+                ldx #$03
 _next3          lda RANDOM
                 and #$E0
                 ora #$0A
                 sta MISS_CHR_RIGHT,X
 
                 inx
-                cpx #5
+                cpx #$05
                 bne _next3
 
                 rts
@@ -859,10 +862,10 @@ DO_N            .block
                 lda #>SCORE_DIG
                 sta SCRN_ADR+1
 
-                lda #0
+                lda #$00
                 sta SCRN_FLG
 
-                ldx #5
+                ldx #$05
                 lda SCORE3
                 jsr DDIG
 
@@ -882,16 +885,16 @@ DO_N            .block
                 beq _1
 
                 lda FRAME
-                and #7
+                and #$07
                 bne _1
 
                 sed
                 lda BONUS1
                 sec
-                sbc #1
+                sbc #$01
                 sta BONUS1
                 lda BONUS2
-                sbc #0
+                sbc #$00
                 sta BONUS2
                 cld
 
@@ -901,10 +904,10 @@ _1              lda #<BONUS_DIG
                 lda #>BONUS_DIG
                 sta SCRN_ADR+1
 
-                lda #0
+                lda #$00
                 sta SCRN_FLG
 
-                ldx #3
+                ldx #$03
                 lda BONUS2
                 jsr DDIG
 
@@ -925,16 +928,16 @@ _1              lda #<BONUS_DIG
                 beq _2
 
                 lda FRAME
-                and #15
+                and #$0F
                 bne _3
 
                 sed
                 lda FUEL1
                 sec
-                sbc #1
+                sbc #$01
                 sta FUEL1
                 lda FUEL2
-                sbc #0
+                sbc #$00
                 sta FUEL2
                 cld
 
@@ -949,10 +952,10 @@ _3              lda #<FUEL_DIG
                 lda #>FUEL_DIG
                 sta SCRN_ADR+1
 
-                lda #0
+                lda #$00
                 sta SCRN_FLG
 
-                ldx #3
+                ldx #$03
                 lda FUEL2
                 jsr DDIG
 
@@ -974,21 +977,21 @@ DDIG            .block                  ; DRAW DIGIT
                 tay
                 bne _2
 
-_1              lda #1
+_1              lda #$01
                 sta SCRN_FLG
 _2              lda SCRN_FLG
                 bne _3
 
                 tya
-                and #$F
+                and #$0F
                 bne _3
 
                 tya
-                ora #$A
+                ora #$0A
                 tay
                 bne _4
 
-_3              lda #1
+_3              lda #$01
                 sta SCRN_FLG
 
 _4              tya
@@ -1001,41 +1004,40 @@ _4              tya
                 jsr DRAW
 
                 lda SCRN_TEMP
-                and #$F
+                and #$0F
                 .endblock
 
 ; - - - - - - - - - - - - - - - - - - -
 DRAW            .block
-                cmp #$A
+                cmp #$0A
                 bne _2
 
-                cpx #0
+                cpx #$00
                 bne _1
 
-                lda #0
+                lda #$00
                 beq _2                  ; [unc]
 
 _1              lda #<$F0+128           ; BLANK
 _2              clc
                 adc #$10+128            ; '0'
-                ldy #0
+                ldy #$00
                 sta (SCRN_ADR),Y
 
                 cmp #$10+128
                 bne _3
 
-                lda #$A+128
-
+                lda #$0A+128
 _3              iny
                 and #$8F
                 sta (SCRN_ADR),Y
 
                 lda SCRN_ADR
                 clc
-                adc #2
+                adc #$02
                 sta SCRN_ADR
                 lda SCRN_ADR+1
-                adc #0
+                adc #$00
                 sta SCRN_ADR+1
 
                 dex
@@ -1062,7 +1064,7 @@ IncreaseScore   .proc
                 sta SCORE2
 
                 lda SCORE3
-                adc #0
+                adc #$00
                 sta SCORE3
                 cld
 

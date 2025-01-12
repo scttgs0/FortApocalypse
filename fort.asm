@@ -22,6 +22,16 @@
                 .include "equates/zeropage.equ"
 
 
+            .enc "atari-screen"
+                .cdef " Z",$00
+                .cdef "az",$61
+            .enc "atari-screen-inverse"
+                .cdef "  ",$00
+                .cdef "!Z",$81
+                .cdef "az",$E1
+            .enc "none"
+
+
 ;--------------------------------------
 ;--------------------------------------
                 * = POD_1
