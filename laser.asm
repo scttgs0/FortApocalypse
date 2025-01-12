@@ -10,7 +10,7 @@
 ;======================================
 DoLaser1        .proc
                 lda FRAME
-                and #7
+                and #$07
                 bne _XIT
 
                 lda LASER_STATUS
@@ -23,32 +23,32 @@ DoLaser1        .proc
                 sta TIM1_VAL
                 bne _1
 
-                ldx #0
+                ldx #$00
 _next1          lda LASER_DIAG,X
                 sta LASER_1,X
 
                 inx
-                cpx #32
+                cpx #$20
                 bne _next1
 
-                ldx #0
+                ldx #$00
 _next2          lda LASER_VERT,X
                 sta LASER_3,X
 
                 inx
-                cpx #8
+                cpx #$08
                 bne _next2
 
                 rts
 
-_1              ldx #32-1
-                lda #0
+_1              ldx #$20-1
+                lda #$00
 _next3          sta LASER_1,X
 
                 dex
                 bpl _next3
 
-                ldx #8-1
+                ldx #$08-1
 _next4          sta LASER_3,X
 
                 dex
@@ -63,7 +63,7 @@ _XIT            rts
 ;======================================
 DoLaser2        .proc
                 lda FRAME
-                and #7
+                and #$07
                 bne _XIT
 
                 lda LASER_STATUS
@@ -76,26 +76,26 @@ DoLaser2        .proc
                 sta TIM2_VAL
                 bne _1
 
-                ldx #0
+                ldx #$00
 _next1          lda LASER_DIAG,X
                 sta LASER_2,X
 
                 inx
-                cpx #32
+                cpx #$20
                 bne _next1
 
-                ldx #0
+                ldx #$00
 _next2          lda LASER_HORZ,X
                 sta LASER_3,X
 
                 inx
-                cpx #8
+                cpx #$08
                 bne _next2
 
                 rts
 
-_1              ldx #32-1
-                lda #0
+_1              ldx #$20-1
+                lda #$00
 _next3          sta LASER_2,X
 
                 dex

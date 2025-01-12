@@ -26,13 +26,13 @@ DO_X            .block
                 cmp #$D8+1
                 bcc _1
 
-                lda #1+1
+                lda #$01+1
                 sta SX
 
 _1              dec SX_F
                 lda SX_F
-                and #3
-                eor #3
+                and #$03
+                eor #$03
                 bne _2
 
                 inc SX
@@ -44,7 +44,7 @@ _2              cpx #MIN_LEFT
                 stx CHOPPER_X
 
                 lda SX
-                cmp #1+1+1
+                cmp #$01+1+1
                 bcs _3
 
                 lda #$D8+1
@@ -52,7 +52,7 @@ _2              cpx #MIN_LEFT
 
 _3              inc SX_F
                 lda SX_F
-                and #3
+                and #$03
                 bne _XIT
 
                 dec SX
@@ -61,7 +61,7 @@ _XIT            .endblock
 ; - - - - - - - - - - - - - - - - - - -
 DO_Y            .block
                 lda SY
-                cmp #24
+                cmp #$18
                 beq _1
 
                 ldx CHOPPER_Y
@@ -81,20 +81,19 @@ _1              ldx CHOPPER_Y
                 sta CHOPPER_Y
 
                 lda SY_F
-                and #7
+                and #$07
                 bne _2
 
                 lda SY
-                cmp #24
+                cmp #$18
                 beq _3
 
 _2              inc SY_F
                 lda SY_F
-                and #7
+                and #$07
                 bne _3
 
                 inc SY
-
 _3              lda SY
                 cmp #-1
                 beq _4
@@ -114,8 +113,8 @@ _4              cpx #MAX_UP
                 sta CHOPPER_Y
 
                 lda SY_F
-                and #7
-                eor #7
+                and #$07
+                eor #$07
                 bne _5
 
                 lda SY
@@ -124,30 +123,32 @@ _4              cpx #MAX_UP
 
 _5              dec SY_F
                 lda SY_F
-                and #7
-                eor #7
+                and #$07
+                eor #$07
                 bne _6
 
                 dec SY
 
 _6              lda SX_F
-                and #3
+                and #$03
                 ;!! sta HSCROL
 
                 lda SY_F
-                and #7
+                and #$07
                 ;!! sta VSCROL
 
                 lda SX
                 sta TEMP1_I
                 lda SY
                 sta TEMP2_I
+
                 jsr ComputeMapAddrI
 
 ;   for each map row, recalculate the display list LMS address
-                ldx #0
+                ldx #$00
                 ldy #MAP_LINES
 _nextRow        inx
+
                 lda ADR1_I
                 sta DSP_MAP,X
                 inx
@@ -179,7 +180,7 @@ ComputeMapAddrI .proc
                 adc TEMP1_I
                 sta ADR1_I
                 lda #>MAP-5
-                adc #0
+                adc #$00
                 sta ADR1_I+1
 
                 lda TEMP2_I
@@ -205,7 +206,7 @@ v_posY          .var TEMP2
                 adc v_posX
                 sta ADR1
                 lda #>MAP-5
-                adc #0
+                adc #$00
                 sta ADR1+1
 
                 lda v_posY
@@ -225,8 +226,8 @@ DoBlocks        .proc
                 and #$7F
                 bne _XIT
 
-                ldx #32-1
-                lda #0
+                ldx #$20-1
+                lda #$00
 _next1          sta BLOCK_1,X
 
                 dex
@@ -235,7 +236,7 @@ _next1          sta BLOCK_1,X
                 .frsRandomByte
                 bmi _1
 
-                ldx #7
+                ldx #$07
                 lda #$55
 _next2          sta BLOCK_1,X
 
@@ -245,7 +246,7 @@ _next2          sta BLOCK_1,X
 _1              .frsRandomByte
                 bmi _2
 
-                ldx #7
+                ldx #$07
                 lda #$55
 _next3          sta BLOCK_2,X
 
@@ -265,7 +266,7 @@ _next4          sta BLOCK_3,X
 _3              .frsRandomByte
                 bmi _XIT
 
-                ldx #7
+                ldx #$07
                 lda #$55
 _next5          sta BLOCK_4,X
 
@@ -296,8 +297,9 @@ CheckFort       .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 DoChecksum1     .block
-                ldy #0
+                ldy #$00
                 sty TEMP1
                 sty ADR1
 
@@ -318,12 +320,12 @@ _1              iny
                 cpx #$B0
                 bne _next1
 
-                ;cmp #0
+                ;cmp #$00
                 cmp #$C7
                 bne _2
 
                 lda TEMP1
-                ;cmp #0
+                ;cmp #$00
                 cmp #$F8
                 beq _XIT
 
@@ -362,10 +364,10 @@ NEXT_PART1      .block
                 lda #$96
                 sta LAND_FY
 
-                lda #8
+                lda #$08
                 sta LAND_CHOP_ANGLE
 
-                ldx #16-1
+                ldx #$10-1
 _next1          stz WINDOW_1,X
 
                 dex
@@ -375,10 +377,11 @@ _next1          stz WINDOW_1,X
                 stz TEMP4
                 stz TEMP6
 
-_next2          lda #121
+_next2          lda #$79
                 sta TEMP1
-                lda #20
+                lda #$14
                 sta TEMP2
+
                 jsr ComputeMapAddr
 
                 lda TEMP3
@@ -394,9 +397,9 @@ _next3          ldy TEMP4
                 lda (ADR2),Y
                 sta TEMP5
 
-                ldy #7+8+8
-_next4          ldx #2
-                lda #0
+                ldy #$07+8+8
+_next4          ldx #$02
+                lda #$00
                 ror TEMP5
                 bcc _next5
 
@@ -414,13 +417,14 @@ _next5          sta (ADR1),Y
 
                 inc TEMP6
                 lda TEMP6
-                cmp #3
+                cmp #$03
                 bne _next3
 
                 stz TEMP6
+
                 inc TEMP4
                 lda TEMP4
-                cmp #6
+                cmp #$06
                 bne _next3
 
                 stz TEMP4
@@ -431,13 +435,13 @@ _next5          sta (ADR1),Y
                 lda #$CF
                 sta SID1_CTRL3
 
-                ldy #15
-_next6          ldx #2
+                ldy #$0F
+_next6          ldx #$02
                 jsr WaitFrame
 
                 inc BAK2_COLOR
 
-                lda #1
+                lda #$01
                 sta SND3_VAL
 
                 .frsRandomByte
@@ -450,7 +454,7 @@ _next6          ldx #2
 
                 inc TEMP3
                 lda TEMP3
-                cmp #4
+                cmp #$04
                 bne _next2
 
                 lda #GO_MODE
@@ -464,6 +468,7 @@ _next6          ldx #2
 
                 .endblock
                 .endproc
+
 
 ;--------------------------------------
 ;--------------------------------------

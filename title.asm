@@ -23,10 +23,8 @@ v_marqueeGlyph  .var TEMP3
 
                 lda #$43                ; reset colors
                 ;!! sta COLOR0
-
                 lda #$0F
                 ;!! sta COLOR1
-
                 lda #$83
                 ;!! sta COLOR2
 
@@ -37,15 +35,16 @@ v_marqueeGlyph  .var TEMP3
                 lda #$3B                ; start with red marquee dot
                 sta v_marqueeGlyph
 
-                ldy #0                  ; start with low tones and increase to higher tones
+                ldy #$00                ; start with low tones and increase to higher tones
                 sty v_audiofreq
 
 _next1          lda v_marqueeGlyph      ; place a dot
                 sta PLAY_SCRN,Y
+
                 jsr CycleGlyph          ; move to next dot
 
                 iny
-                cpy #40
+                cpy #$28
                 bne _next1              ; loop until end of line
 
                 lda #<PLAY_SCRN+39      ; move to right edge
@@ -57,13 +56,12 @@ _next1          lda v_marqueeGlyph      ; place a dot
                 sta v_marqueeGlyph
 
                 ldx #c_vertCount
-                ldy #0
+                ldy #$00
 _next2          lda v_marqueeGlyph
                 sta (ADR1),Y            ; place a dot
-
                 iny
-                jsr CycleGlyph          ; change to the next dot color
 
+                jsr CycleGlyph          ; change to the next dot color
                 sta (ADR1),Y            ; place a horz adjacent dot
                 dey                     ; back up one position
 
@@ -72,49 +70,53 @@ _next2          lda v_marqueeGlyph
                 adc #c_horzCount
                 sta ADR1
                 lda ADR1+1
-                adc #0
+                adc #$00
                 sta ADR1+1
 
                 dex
                 bpl _next2
 
-                lda #<T2                ; setup the deferred VBI (move the dots)
+                lda #<irqT2                ; setup the deferred VBI (move the dots)
                 ;!! sta VVBLKD
-                lda #>T2
+                lda #>irqT2
                 ;!! sta VVBLKD+1
 
-                ldx #5                  ; (5,4)
+                ldx #$05                ; (5,4)
                 stx v_posX
                 dex
                 stx v_posY
+
                 ldx #<txtTitle1         ; output the first title
                 ldy #>txtTitle1         ; "FORT  APOCALYPSE"
                 jsr Print
 
                 inc v_posX              ; (6,6)
-                lda #6
+                lda #$06
                 sta v_posY
+
                 ldx #<txtTitle2         ; output the second title
                 ldy #>txtTitle2         ; "BY  STEVE  HALES"
                 jsr Print
 
-                lda #10                 ; (6,10)
+                lda #$0A                ; (6,10)
                 sta v_posY
+
                 ldx #<txtTitle3         ; output the third title
                 ldy #>txtTitle3         ; "COPYRIGHT"
                 jsr Print
 
-                ldx #7
+                ldx #$07
 _next3          lda T_5,X
                 sta PLAY_SCRN+426,X     ; output the copyright date (1982)
 
                 dex
                 bpl _next3
 
-                lda #4                  ; (4,12)
+                lda #$04                ; (4,12)
                 sta v_posX
-                lda #12
+                lda #$0C
                 sta v_posY
+
                 ldx #<txtTitle4         ; output the fourth title
                 ldy #>txtTitle4         ; "SYNAPSE  SOFTWARE"
                 jsr Print
@@ -124,20 +126,23 @@ _endless1       ;!! lda VCOUNT              ; current scan line being draw on sc
                 asl                     ; double it to get the real scan line number
                 ;!! sta WSYNC               ; halt until next horz sync
                 ;!! sta COLPF3              ; alter the playfield color
+
                 bra _endless1
 
                 .endproc
 
 
-;======================================
-; Deferred VBlank Interrupt
-;======================================
-T2              .proc
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; VBlank Deferred Handler
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+irqT2           .proc
 v_audiofreq     .var TEMP1_I
 ;---
 
                 lda FRAME               ; rotate the marquee dots every 4th frame
-                and #3
+                and #$03
                 bne _1
 
                 ;!! lda COLOR2              ; color0 -> color1 -> color2 -> color0...
@@ -145,7 +150,6 @@ v_audiofreq     .var TEMP1_I
 
                 ;!! lda COLOR1
                 ;!! sta COLOR2
-
                 ;!! lda COLOR0
                 ;!! sta COLOR1
 
@@ -153,7 +157,7 @@ v_audiofreq     .var TEMP1_I
                 ;!! sta COLOR0
 
 _1              lda FRAME               ; increment v_audiofreq every 8th frame
-                and #7
+                and #$07
                 bne _2
 
                 inc v_audiofreq
@@ -182,18 +186,18 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 beq _3
 
                 ;!! lda CONSOL              ; START button causes game to start
-                cmp #6
+                cmp #$06
                 beq _3
 
                 ldx #OPTION_MODE        ; switch to Option screen when SELECT or OPTION is pressed
-                cmp #7
+                cmp #$07
                 bne _3
 
                 ;!! jmp VVBLKD_RET          ; exit VBI
 
 _3              stx MODE
 
-                ldx #0
+                ldx #$00
                 stx OPT_NUM
 
                 inx                     ; X=1
@@ -236,14 +240,12 @@ T3              .proc
 
                 lda #$0A                ; LASER BLOCK
                 ;!! sta COLOR1
-
                 lda #$94                ; LASERS,HOUSE
                 ;!! sta COLOR2
-
                 lda #$9A                ; LETTERS
                 ;!! sta COLOR3
 
-                lda #<irqVBlankD          ; enable deferred VBI
+                lda #<irqVBlankD        ; enable deferred VBI
                 ;!! sta VVBLKD
                 lda #>irqVBlankD
                 ;!! sta VVBLKD+1

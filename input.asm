@@ -9,7 +9,7 @@
 ; Space = toggle Pause Mode
 ; Option (F2) = delegate to Opt handler
 ; Select (F3) = delegate to Opt handler
-; Start (F4) = switch to Start Mode
+; Start  (F4) = switch to Start Mode
 ;--------------------------------------
 ; Any activity will cancel the Demo
 ; All key-presses are delegated to the
@@ -26,10 +26,10 @@ v_demoTimer     .var TIM6_VAL
 
                 sta CONSOL_FLAG
 
-                ldx #0                  ; reset inactivity timer
+                ldx #$00                ; reset inactivity timer
                 stx v_demoTimer
 
-                cmp #6                  ; START pressed? (0=pressed)
+                cmp #$06                ; START pressed? (0=pressed)
                 bne _chk_mode
 
                 lda #START_MODE         ; MODE=START
@@ -45,10 +45,10 @@ _chk_mode       ldx MODE                ; Options Screen has its own handler
                 jsr CheckOptions        ; transfer to the Option handler
                 bra _XIT
 
-_determine_key  cmp #3                  ; OPTION pressed?
+_determine_key  cmp #$03                ; OPTION pressed?
                 beq _doOption
 
-                cmp #5                  ; SELECT pressed?
+                cmp #$05                ; SELECT pressed?
                 bne _doSelect
 
 _doOption       lda #OPTION_MODE        ; switch to Options screen
@@ -90,7 +90,7 @@ _next1          ;!! lda SKSTAT              ; is the key still pressed?
                 beq _wait2              ; exit once the key is released
 
 _debounce       ;!! lda CONSOL              ; debounce... ensure all three console keys are released
-                cmp #7
+                cmp #$07
                 bne _wait2
 
                 ;!! lda TRIG0               ; exit after debounce if trigger is pressed
@@ -124,7 +124,7 @@ v_angleBit0     .var TEMP1_I
 _XIT            rts
 
 _doStick        lda CHOPPER_ANGLE
-                and #1
+                and #$01
                 sta v_angleBit0
 
                 lda CHOPPER_ANGLE
@@ -139,14 +139,14 @@ _doStick        lda CHOPPER_ANGLE
                 sta JOYSTICK0
 
                 lda FRAME
-                and #$F
+                and #$0F
                 bne _2
 
                 inx
                 cpx #$6C
                 bcc _1
 
-                ldx #0
+                ldx #$00
 _1              stx DEMO_COUNT
 
 _2              lda JOYSTICK0
@@ -157,35 +157,35 @@ _2              lda JOYSTICK0
 
                 jsr Hover
 
-                lda #20
+                lda #$14
                 sta SND1_2_VAL
 
 _3              lda FUEL_STATUS
                 cmp #kEMPTY
                 bne _chk_right
 
-                lda #60
+                lda #$3C
                 sta SND1_2_VAL
 
 _chk_right      txa
                 and #kRIGHT
                 beq _chk_left
 
-                lda #17
+                lda #$11
                 sta SND1_2_VAL
 
                 lda CHOPPER_ANGLE
-                cmp #14
+                cmp #$0E
                 bcs _4
 
                 lda FRAME
-                and #1
+                and #$01
                 bne _5
 
 _4              inc CHOPPER_X
 
 _5              lda FRAME
-                and #3
+                and #$03
                 bne _chk_left
 
                 inc CHOPPER_ANGLE
@@ -195,21 +195,21 @@ _chk_left       txa
                 and #kLEFT
                 beq _chk_up
 
-                lda #17
+                lda #$11
                 sta SND1_2_VAL
 
                 lda CHOPPER_ANGLE
-                cmp #4
+                cmp #$04
                 bcc _6
 
                 lda FRAME
-                and #1
+                and #$01
                 bne _7
 
 _6              dec CHOPPER_X
 
 _7              lda FRAME
-                and #3
+                and #$03
                 bne _chk_up
 
                 dec CHOPPER_ANGLE
@@ -223,17 +223,18 @@ _chk_up         lda FUEL_STATUS
                 and #kUP
                 bne _chk_down
 
-                lda #13
+                lda #$0D
                 sta SND1_2_VAL
 
                 dec CHOPPER_Y
+
                 jsr Hover
 
 _chk_down       txa
                 and #kDOWN
                 beq _8
 
-                lda #26
+                lda #$1A
                 sta SND1_2_VAL
 
                 lda CHOPPER_STATUS
@@ -244,19 +245,21 @@ _chk_down       txa
                 beq _8
 
                 inc CHOPPER_Y
+
                 jsr Hover
 
 _8              lda CHOPPER_ANGLE
                 bpl _9
 
-                lda #0
+                lda #$00
                 sta CHOPPER_ANGLE
 
-_9              cmp #18
+_9              cmp #$12
                 bcc _10
 
-                lda #16
+                lda #$10
                 sta CHOPPER_ANGLE
+
 _10             lda CHOPPER_ANGLE
                 ora v_angleBit0
                 sta CHOPPER_ANGLE
@@ -277,7 +280,7 @@ ReadTrigger     .proc
                 bne _1
 
                 lda FRAME
-                and #$F
+                and #$0F
                 beq _4
 
                 rts
@@ -309,48 +312,49 @@ _4              lda ELEVATOR_DX
                 eor #-2
                 sta ELEVATOR_DX
 
-                ldx #1
+                ldx #$01
 _next1          lda ROCKET_STATUS,X
                 beq _5
 
                 dex
                 bpl _next1
+
 _XIT            rts
 
 _5              lda CHOPPER_ANGLE
                 and #%00011110
                 lsr
-                cmp #4
+                cmp #$04
                 bcc _7
 
-                cmp #6
+                cmp #$06
                 bcs _6
 
-                lda #3
+                lda #$03
                 bne _7
 
 _6              sec
-                sbc #2
-_7              cmp #6
+                sbc #$02
+_7              cmp #$06
                 bcc _8
 
-                lda #5
-_8              cmp #0
+                lda #$05
+_8              cmp #$00
                 bne _9
 
-                lda #1
+                lda #$01
 _9              sta ROCKET_STATUS,X
 
                 lda CHOPPER_X
-                and #3
+                and #$03
                 clc
                 adc CHOPPER_X
-                adc #8
+                adc #$08
                 sta ROCKET_X,X
 
                 lda CHOPPER_Y
                 clc
-                adc #8
+                adc #$08
                 sta ROCKET_Y,X
 
                 lda #$3F

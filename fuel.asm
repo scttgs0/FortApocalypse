@@ -23,10 +23,10 @@ _1              lda CHOPPER_STATUS
                 bne _4
 
                 lda CHOP_Y
-                cmp #7+2
+                cmp #$07+2
                 bcc _4
 
-                cmp #11+2
+                cmp #$0B+2
                 bcs _4
 
                 ldx CHOP_X
@@ -55,13 +55,13 @@ _3              lda #kREFUEL
                 ; asl ComputeMapAddr
 ; - - - - - - - - - - - - - - - - - - -
 
-                lda #1
+                lda #$01
                 sta TIM4_VAL
 
-                lda #4
+                lda #$04
                 sta FUEL_TEMP
 
-_4              lda #0
+_4              lda #$00
                 ldx FUEL_STATUS
                 cpx #kREFUEL
                 beq _6
@@ -73,9 +73,9 @@ _4              lda #0
                 and #%00001000
                 bne _5
 
-                lda #9                  ; (9,0)
+                lda #$09                ; (9,0)
                 sta v_posX
-                lda #0
+                lda #$00
                 sta v_posY
 
                 lda #$A4
@@ -110,13 +110,13 @@ Refuel          .proc
                 dec TIM4_VAL
                 bne FE
 
-                lda #1
+                lda #$01
                 sta TIM4_VAL
 
                 lda FUEL_TEMP
                 bmi F1
 
-DF1             lda #9+2
+DF1             lda #$09+2
                 sta TEMP2
                 lda FUEL_TEMP
                 sta TEMP3
@@ -127,6 +127,7 @@ DF1             lda #9+2
 
                 lda #$15+2
                 sta TEMP1
+
                 jsr DrawBase
 
                 lda #$EC+2
@@ -134,31 +135,32 @@ DF1             lda #9+2
 
 _1              lda #$82
 _2              sta TEMP1
+
                 jsr DrawBase
 
                 dec FUEL_TEMP
 
 FE              rts
 
-F1              ldx #1
+F1              ldx #$01
                 lda CHOP_Y
-                cmp #11+2
+                cmp #$0B+2
                 bcs _1
 
-                ldx #0
+                ldx #$00
                 ;--.setbank $AF
                 stx SID1_CTRL2
                 ;--.setbank $03
 _1              stx SND4_VAL
 
                 lda CHOP_Y
-                cmp #8+2
+                cmp #$08+2
                 bcs FE
 
                 lda #kFULL
                 sta FUEL_STATUS
 
-                lda #4
+                lda #$04
                 sta FUEL_TEMP
 
                 jsr DF1
@@ -178,7 +180,7 @@ DrawBase        .proc
 
                 jsr ComputeMapAddr
 
-                lda #4
+                lda #$04
                 sta TEMP4
 
                 lda TEMP3               ; x6
@@ -188,16 +190,17 @@ DrawBase        .proc
                 asl
 
                 tax
-_next1          ldy #0
+_next1          ldy #$00
 _next2          lda BASE_SHAPE,X
                 sta (ADR1),Y
 
                 inx
                 iny
-                cpy #6
+                cpy #$06
                 bne _next2
 
                 inc ADR1+1
+
                 dec TEMP4
                 bpl _next1
 

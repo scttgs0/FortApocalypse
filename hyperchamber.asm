@@ -16,16 +16,16 @@ CheckHyperchamber .proc
                 lda #STOP_MODE
                 sta MODE
 
-                lda #$F
+                lda #$0F
                 sta BAK2_COLOR
 
-                ldx #2
+                ldx #$02
                 jsr WaitFrame
 
                 stz BAK2_COLOR
 
                 .frsRandomByte
-                and #3
+                and #$03
 
                 tax
                 lda _H_XF,X
@@ -43,7 +43,7 @@ CheckHyperchamber .proc
                 lda _H_CY,X
                 sta CHOPPER_Y
 
-                lda #8
+                lda #$08
                 sta CHOPPER_ANGLE
 
                 stz CHOPPER_COL

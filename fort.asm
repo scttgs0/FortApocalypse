@@ -50,6 +50,7 @@
                 .include "macros/f256_random.mac"
                 .include "macros/f256_sprite.mac"
 
+
             .enc "atari-screen"
                 .cdef " Z",$00
                 .cdef "az",$61
@@ -58,6 +59,31 @@
                 .cdef "!Z",$81
                 .cdef "az",$E1
             .enc "none"
+
+
+;--------------------------------------
+;--------------------------------------
+                * = $2000
+;--------------------------------------
+
+.if PGZ=0
+                .byte $F2,$56           ; signature
+                .byte $01               ; slot count
+                .byte $01               ; start slot
+                .addr BOOT              ; execute address
+                .word $0001             ; version
+                .word $0000             ; kernel
+                .null 'Fort Apocalypse' ; binary name
+.endif
+
+;--------------------------------------
+
+BOOT            cld
+
+                ldx #$FF                ; initialize the stack
+                txs
+
+                jmp START
 
 
 ;--------------------------------------

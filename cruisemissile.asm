@@ -47,7 +47,7 @@ M_END           .block
                 sbc CHOP_Y
                 bmi _2
 
-                cmp #14
+                cmp #$0E
                 bcs _2
 
                 lda CM_STATUS,X
@@ -56,12 +56,12 @@ M_END           .block
 
                 lda CHOP_X
                 sec
-                sbc #2
+                sbc #$02
                 sbc TANK_X,X
                 bpl _1
 
                 eor #-2
-_1              cmp #9
+_1              cmp #$09
                 bcs _2
 
                 lda #kBEGIN
@@ -82,7 +82,7 @@ _next1          lda CM_STATUS,X
                 dex
                 bpl _next1
 
-                lda #0
+                lda #$00
                 sta SID1_CTRL3
                 sta SND6_VAL
 
@@ -120,7 +120,7 @@ MissileBegin    .proc
 
                 lda TANK_Y,X
                 sec
-                sbc #2
+                sbc #$02
                 sta CM_Y,X
 
                 ldy #kLEFT
@@ -133,13 +133,13 @@ MissileBegin    .proc
 _1              tya
                 sta CM_STATUS,X
 
-                lda #0
+                lda #$00
                 sta CM_TEMP,X
 
-                lda #20
+                lda #$14
                 sta CM_TIME,X
 
-                lda #1
+                lda #$01
                 sta SND6_VAL
 
                 jmp MoveCruiseMissiles.M_END
@@ -157,7 +157,7 @@ v_preserveX     .var TEMP1
 
                 jsr GetMissileAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 cmp #EXP
                 beq M_COL2
@@ -167,7 +167,7 @@ v_preserveX     .var TEMP1
 
 M_COL2          jsr MissileErase
 
-                lda #1
+                lda #$01
                 sta SND3_VAL
 
                 lda #kOFF
@@ -175,7 +175,6 @@ M_COL2          jsr MissileErase
 
                 lda #-1
                 sta CM_TIME,X
-
                 stx v_preserveX
 
                 ldx #$10
@@ -214,7 +213,7 @@ MissileErase    .proc
                 cmp #$5F+1
                 bcc _XIT
 
-_1              ldy #0
+_1              ldy #$00
                 sta (ADR1),Y
 
 _XIT            rts
@@ -234,6 +233,7 @@ v_distance      .var TEMP1
                 beq _1
 
                 inc CM_X,X
+
                 bra _2
 
 _1              dec CM_X,X
@@ -278,13 +278,14 @@ _5              lda CM_X,X
                 bpl _next2
 
                 dec CM_Y,X
+
                 bra _6
 
 _next2          inc CM_Y,X
 
 _6              jsr GetMissileAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 cmp #MISS_LEFT
                 beq _next2
@@ -310,18 +311,17 @@ MissileDraw     .proc
 
                 jsr GetMissileAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 sta CM_TEMP,X
 
                 lda #MISS_LEFT
                 ldy CM_STATUS,X
-
                 cpy #kLEFT
                 beq _1
 
                 lda #MISS_RIGHT
-_1              ldy #0
+_1              ldy #$00
                 sta (ADR1),Y
 
                 lda CM_TEMP,X
@@ -341,7 +341,7 @@ CheckChr        .proc
 ;v_???          .var ADR2
 ;---
 
-                ldy #0
+                ldy #$00
                 sty ADR2+1
                 and #$7F
                 asl
@@ -358,7 +358,7 @@ CheckChr        .proc
                 adc ADR2+1
                 sta ADR2+1
 
-                ldy #7
+                ldy #$07
 _next1          lda (ADR2),Y
                 bne _XIT
 

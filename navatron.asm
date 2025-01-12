@@ -15,7 +15,7 @@ SetScanner      .proc
 ;v_???          .var TEMP2
 ;---
 
-                lda #0
+                lda #$00
                 sta TEMP1
                 sta TEMP2
 
@@ -29,10 +29,10 @@ SetScanner      .proc
                 beq _2
                 bmi _2
 
-                cmp #17
+                cmp #$11
                 bcc _1
 
-                lda #16
+                lda #$10
 _1              jsr MULT_BY_40
 
 _2              lda SX
@@ -58,6 +58,7 @@ _2              lda SX
                 lda #>S_LINE1
                 sta SCAN_ADR2+1
                 sta ADR2+1
+
                 jsr DO_LINE
 
                 lda #<S_LINE2
@@ -66,6 +67,7 @@ _2              lda SX
                 lda #>S_LINE2
                 sta SCAN_ADR2+1
                 sta ADR2+1
+
                 jsr DO_LINE
 
                 lda #<S_LINE3
@@ -90,11 +92,11 @@ DO_LINE         .proc
 ;v_???          .var TEMP1
 ;---
 
-                lda #7
+                lda #$07
                 sta TEMP1
 
-_next1          ldx #12
-                ldy #0
+_next1          ldx #$0C
+                ldy #$00
 _next2          lda (ADR1),Y
                 sta (ADR2),Y
 
@@ -105,10 +107,10 @@ _next2          lda (ADR1),Y
 
 _1              lda ADR2
                 clc
-                adc #8
+                adc #$08
                 sta ADR2
                 lda ADR2+1
-                adc #0
+                adc #$00
                 sta ADR2+1
 
                 dex
@@ -116,11 +118,11 @@ _1              lda ADR2
 
                 lda SCAN_ADR1
                 clc
-                adc #40
+                adc #$28
                 sta SCAN_ADR1
                 sta ADR1
                 lda SCAN_ADR1+1
-                adc #0
+                adc #$00
                 sta SCAN_ADR1+1
                 sta ADR1+1
 

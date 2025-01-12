@@ -14,11 +14,12 @@ MAX_PODS        = 39
 MovePods        .proc
                 lda #POD_SPEED
 _next1          pha
+
                 jsr MovePods1
 
                 pla
                 sec
-                sbc #1
+                sbc #$01
                 bne _next1
 
                 rts
@@ -63,7 +64,7 @@ PodsEnd         .proc
                 cpx #MAX_PODS
                 bcc _1
 
-                ldx #0
+                ldx #$00
 _1              stx POD_NUM
 
                 rts
@@ -99,7 +100,7 @@ GetPodValue     .proc
 
                 jsr GetPodAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 sta TEMP1
                 iny
@@ -121,7 +122,7 @@ PutPodValue     .proc
 
                 jsr GetPodAddr
 
-                ldy #0
+                ldy #$00
                 lda TEMP3
                 sta (ADR1),Y
                 iny
@@ -158,23 +159,23 @@ PodBegin        .proc
 ;---
 
 _next1          .frsRandomByte
-                cmp #50
+                cmp #$32
                 bcc _next1
 
-                cmp #256-50
+                cmp #$100-50
                 bcs _next1
 
                 sta POD_X,X
 
 _next2          .frsRandomByte
-                cmp #40
+                cmp #$28
                 bcs _next2
 
                 sta POD_Y,X
 
                 jsr GetPodAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 iny
                 ora (ADR1),Y
@@ -183,6 +184,7 @@ _next2          .frsRandomByte
                 lda #kON
                 sta POD_STATUS,X
                 sta POD_COM
+
                 jsr PodDraw
 
                 lda #$01
@@ -334,19 +336,20 @@ _2              lda POD_X,X
                 sta TEMP1
                 lda POD_Y,X
                 sta TEMP2
+
                 jsr ComputeMapAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 iny
                 ora (ADR1),Y
                 bne _3
 
                 lda POD_X,X
-                cmp #50
+                cmp #$32
                 bcc _3
 
-                cmp #256-50
+                cmp #$100-50
                 bcc _4
 
 _3              lda POD_DX,X

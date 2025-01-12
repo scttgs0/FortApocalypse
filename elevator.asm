@@ -18,8 +18,8 @@ DoElevator      .proc
                 lda ELEVATOR_SPD
                 sta ELEVATOR_TIM
 
-                ldx #32-1
-                lda #0
+                ldx #$20-1
+                lda #$00
 _next1          sta BLOCK_5,X
 
                 dex
@@ -28,7 +28,7 @@ _next1          sta BLOCK_5,X
                 lda ELEVATOR_NUM
                 clc
                 adc ELEVATOR_DX
-                and #3
+                and #$03
                 sta ELEVATOR_NUM
 
                 asl
@@ -38,7 +38,7 @@ _next1          sta BLOCK_5,X
                 lda _ELEVATORS+1,X
                 sta ADR1_I+1
 
-                ldy #7
+                ldy #$07
                 lda #$55
 _next2          sta (ADR1_I),Y
 

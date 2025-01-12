@@ -9,16 +9,16 @@ CheckCollision  .proc
                 phx
                 phy
 
-                ldx #1                  ; Given: SP02_Y=112
+                ldx #$01                ; Given: SP02_Y=112
 _nextBomb       lda zpBombDrop,X        ; A=112
                 beq _nextPlayer
 
-                cmp #132
+                cmp #$84
                 bcs _withinRange
                 bra _nextPlayer
 
 _withinRange    sec
-                sbc #132                ; A=8
+                sbc #$84                ; A=8
                 lsr             ; /2    ; A=4
                 lsr             ; /4    ; A=2
                 lsr             ; /8    ; A=1
@@ -39,7 +39,7 @@ _nextRow        beq _checkRock
 
                 lda zpSource
                 clc
-                adc #40
+                adc #$28
                 sta zpSource
                 bcc _1
 
@@ -52,7 +52,7 @@ _checkRock      ldy zpTemp2
                 lda (zpSource),Y
                 beq _nextPlayer
 
-                ;cmp #4
+                ;cmp #$04
                 ;bcs _nextPlayer
 
                 sta P2PF,X
@@ -768,7 +768,7 @@ v_QtyLines      = zpTemp1
                 pha
                 phy
 
-                lda #11             ; 11 lines
+                lda #$0B             ; 11 lines
                 sta v_QtyLines
 
                 lda #<CANYON
@@ -788,37 +788,37 @@ v_QtyLines      = zpTemp1
                 lda #>CS_TEXT_MEM_PTR+v_RenderLine
                 sta zpDest+3
 
-                ldy #40             ; 40 characters per line
+                ldy #$28             ; 40 characters per line
 _nextChar       dey
                 bpl _1
 
                 dec v_QtyLines
                 beq _XIT
 
-                ldy #40             ; reset index
+                ldy #$28             ; reset index
 
                 lda zpSource
                 clc
-                adc #40
+                adc #$28
                 sta zpSource
                 lda zpSource+1
-                adc #0
+                adc #$00
                 sta zpSource+1
 
                 lda zpDest
                 clc
-                adc #40
+                adc #$28
                 sta zpDest
                 lda zpDest+1
-                adc #0
+                adc #$00
                 sta zpDest+1
 
                 lda zpDest+2
                 clc
-                adc #40
+                adc #$28
                 sta zpDest+2
                 lda zpDest+3
-                adc #0
+                adc #$00
                 sta zpDest+3
 
 _1              lda (zpSource),Y

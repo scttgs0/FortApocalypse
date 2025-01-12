@@ -16,10 +16,11 @@ CheckChrI       .proc
 
                 jsr ComputeMapAddrI
 
-                ldy #0
+                ldy #$00
                 lda (ADR1_I),Y
                 and #$7F
-                ldy #0
+
+                ldy #$00
                 sty ADR2_I+1
                 asl
                 rol ADR2_I+1
@@ -35,7 +36,7 @@ CheckChrI       .proc
                 adc ADR2_I+1
                 sta ADR2_I+1
 
-                ldy #7
+                ldy #$07
 _next1          lda (ADR2_I),Y
                 bne _XIT
 
@@ -83,13 +84,14 @@ _1              cmp #kCRASH
                 bne _2
 
                 inc CHOPPER_Y
+
 _2              lda CHOPPER_COL
                 beq _3
 
-                cmp #4
+                cmp #$04
                 beq _leap               ; LASER
 
-                cmp #8
+                cmp #$08
                 bne _4                  ; HYPER
 
                 lda LEVEL
@@ -100,7 +102,7 @@ _2              lda CHOPPER_COL
                 lda #HYPERSPACE_MODE
                 sta MODE
 
-                lda #1
+                lda #$01
                 sta SND3_VAL
                 sta SND5_VAL
 
@@ -111,11 +113,13 @@ _4              lda CHOP_X
                 sta TEMP1_I
                 lda CHOP_Y
                 sta TEMP2_I
+
                 jsr ComputeMapAddrI
 
-                lda #0
+                lda #$00
                 sta TEMP3_I
                 sta TEMP4_I
+
                 jsr CheckLanding
 
                 inc ADR1_I+1
@@ -139,13 +143,14 @@ _4              lda CHOP_X
                 bra _9
 
 _5              lda TEMP3_I
-                cmp #3
+                cmp #$03
                 beq _8
 
                 dec CHOPPER_Y
+
                 ldx FUEL_STATUS
                 lda CHOP_Y
-                cmp #10+4
+                cmp #$0A+4
                 bcc _6
 
                 cpx #kEMPTY
@@ -162,9 +167,9 @@ _6              cpx #kREFUEL
 _7              ldx #kLAND
                 bra _9
 
-_8              lda #20
+_8              lda #$14
                 sta TIM3_VAL
-                lda #1
+                lda #$01
                 sta SND3_VAL
 
                 ldx #kCRASH
@@ -190,7 +195,7 @@ UpdateChopper   .proc
                 cmp #kOFF
                 bne _2
 
-                lda #0
+                lda #$00
                 sta SPR(sprite_t.X, 0)
                 sta SPR(sprite_t.X, 1)
 
@@ -202,8 +207,8 @@ _1              lda #kFLY
                 jmp _CCXY
 
 _2              ldy OCHOPPER_Y
-                ldx #17
-                lda #0
+                ldx #$11
+                lda #$00
 _next1          sta PLAYER+PL0,Y
                 sta PLAYER+PL1,Y
 
@@ -215,7 +220,7 @@ _next1          sta PLAYER+PL0,Y
                 sta SPR(sprite_t.X, 0)
 
                 clc
-                adc #8
+                adc #$08
                 sta SPR(sprite_t.X, 1)
 
                 lda CHOPPER_ANGLE
@@ -227,9 +232,9 @@ _next1          sta PLAYER+PL0,Y
                 lda CHOPPER_SHAPES+1,X
                 sta ADR1_I+1
 
-                lda #0
+                lda #$00
                 sta TEMP1_I
-                lda #18
+                lda #$12
                 sta TEMP2_I
 
                 ldx CHOPPER_Y
@@ -238,6 +243,7 @@ _next1          sta PLAYER+PL0,Y
 _next2          ldy TEMP1_I
                 lda (ADR1_I),Y
                 sta PLAYER+PL0,X
+
                 ldy TEMP2_I
                 lda (ADR1_I),Y
                 sta PLAYER+PL1,X
@@ -247,7 +253,7 @@ _next2          ldy TEMP1_I
                 inx
 
                 lda TEMP1_I
-                cmp #18
+                cmp #$12
                 bne _next2
 
                 lda CHOPPER_STATUS
@@ -255,7 +261,7 @@ _next2          ldy TEMP1_I
                 bne _5
 
                 ldx CHOPPER_Y
-                ldy #18
+                ldy #$12
 _next3          lda PLAYER+PL0,X
                 and frsRandomREG
                 sta PLAYER+PL0,X
@@ -269,8 +275,9 @@ _next3          lda PLAYER+PL0,X
 
                 ;!! inc PCOLR0
                 ;!! inc PCOLR1
+
                 .frsRandomByte
-                ora #$F
+                ora #$0F
                 sta BAK2_COLOR
 
                 lda MODE
@@ -278,7 +285,7 @@ _next3          lda PLAYER+PL0,X
                 bne _5
 
                 lda FRAME
-                and #1
+                and #$01
                 bne _3
 
                 inc CHOPPER_Y
@@ -301,11 +308,11 @@ _4              jsr PositionChopper
                 sta MODE
 
 _5              lda FRAME
-                and #3
+                and #$03
                 bne _6
 
                 lda CHOPPER_ANGLE
-                eor #1
+                eor #$01
                 sta CHOPPER_ANGLE
 
 _6              lda MODE
@@ -316,15 +323,17 @@ _6              lda MODE
 
 _CCXY           lda CHOPPER_X
                 sec
-                sbc #24
+                sbc #$18
                 lsr
                 lsr
+
                 clc
                 adc SX
                 sta CHOP_X
+
                 lda CHOPPER_Y
                 sec
-                sbc #76+12
+                sbc #$4C+12
                 lsr
                 lsr
                 lsr
@@ -333,7 +342,7 @@ _CCXY           lda CHOPPER_X
                 lda SY
                 bpl _7
 
-                lda #0
+                lda #$00
 _7              clc
                 adc TEMP1_I
                 sta CHOP_Y
@@ -367,17 +376,17 @@ v_posY          .var TEMP2_I
 ;======================================
 Hover           .proc
                 lda FRAME
-                and #7
+                and #$07
                 bne _XIT
 
                 lda CHOPPER_ANGLE
-                cmp #4
+                cmp #$04
                 bcc _1
 
-                cmp #14
+                cmp #$0E
                 bcc _XIT
 
-_1              cmp #8
+_1              cmp #$08
                 bcs _2
 
                 inc CHOPPER_ANGLE

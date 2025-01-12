@@ -45,10 +45,10 @@ _1              jsr SlaveCollision
 
 _2              ldx SLAVE_NUM
                 inx
-                cpx #8
+                cpx #$08
                 bcc _3
 
-                ldx #0
+                ldx #$00
 _3              stx SLAVE_NUM
 
                 lda PLAY_SCRN+5
@@ -90,7 +90,7 @@ SlaveCollision  .proc
 
                 jsr GetSlaveAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 beq S_COL2
 
@@ -104,6 +104,7 @@ SlaveCollision  .proc
                 beq S_COL2
 
                 dec ADR1+1
+
                 lda (ADR1),Y
                 beq S_COL2
 
@@ -148,10 +149,11 @@ PrintSlavesLeft .proc
 ;v_???          .var TEMP1
 ;---
 
-                lda #9                  ; (9,0)
+                lda #$09                ; (9,0)
                 sta TEMP1
-                lda #0
+                lda #$00
                 sta TEMP2
+
                 ldx #<txtMenRemain      ; "MEN  TO  RESCUE"
                 ldy #>txtMenRemain
                 jsr Print
@@ -163,7 +165,7 @@ PrintSlavesLeft .proc
                 cmp #$10+128
                 bne _1
 
-                lda #$A+128
+                lda #$0A+128
 _1              and #$8F
                 sta PLAY_SCRN+6
 
@@ -184,11 +186,12 @@ SlaveErase      .proc
 
                 jsr GetSlaveAddr
 
-                ldy #0
+                ldy #$00
                 lda #$48                ; '^H'
                 sta (ADR1),Y
 
                 dec ADR1+1
+
                 lda #$1F                ; '?'
                 sta (ADR1),Y
 
@@ -213,6 +216,7 @@ _next1          lda SLAVE_DX,X
                 sta SLAVE_DX,X
 
                 inc SLAVE_X,X
+
                 bra _2
 
 _1              dec SLAVE_DX,X
@@ -225,7 +229,7 @@ _1              dec SLAVE_DX,X
 
 _2              jsr GetSlaveAddr
 
-                ldy #0
+                ldy #$00
                 lda (ADR1),Y
                 cmp #$48
                 beq _XIT
@@ -249,16 +253,19 @@ SlaveDraw       .proc
 
                 jsr GetSlaveAddr
 
-                ldy #0
+                ldy #$00
                 lda SLAVE_DX,X
                 pha
+
                 and #$03
                 tax
+
                 pla
                 bpl _1
 
                 lda SLAVE_CHR_B_L,X
                 sta (ADR1),Y
+
                 dec ADR1+1
 
                 lda SLAVE_CHR_T_L,X
@@ -268,6 +275,7 @@ SlaveDraw       .proc
 
 _1              lda SLAVE_CHR_B_R,X
                 sta (ADR1),Y
+
                 dec ADR1+1
 
                 lda SLAVE_CHR_T_R,X
@@ -281,7 +289,7 @@ _1              lda SLAVE_CHR_B_R,X
 ;
 ;======================================
 SlavePickUp     .proc
-                ldx #8-0
+                ldx #$08-0
 _next1          dex
                 bpl _1
 
@@ -298,7 +306,8 @@ _1              lda SLAVE_STATUS,X
                 bpl _2
 
                 eor #-2
-_2              cmp #4
+
+_2              cmp #$04
                 bcs _next1
 
                 lda SLAVE_Y,X
@@ -307,7 +316,8 @@ _2              cmp #4
                 bpl _3
 
                 eor #-2
-_3              cmp #4
+
+_3              cmp #$04
                 bcs _next1
 
                 lda #kPICKUP
@@ -316,7 +326,7 @@ _3              cmp #4
                 lda #$A8
                 sta SID1_CTRL3
 
-                lda #32
+                lda #$20
                 sta SID1_FREQ3
 
                 sec
@@ -334,4 +344,5 @@ LAND_CHR
 SLAVE_CHR_B_L   .byte $3E,$3D
 SLAVE_CHR_B_R   .byte $3B,$3C
                 .byte $44
+
 LAND_LEN        = *-LAND_CHR-1

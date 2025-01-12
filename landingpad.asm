@@ -40,7 +40,7 @@ CheckLanding    .proc
 ;v_???          .var TEMP4_I
 ;---
 
-                ldy #0
+                ldy #$00
                 ldx #LAND_LEN
                 lda (ADR1_I),Y
 _next1          cmp LAND_CHR,X

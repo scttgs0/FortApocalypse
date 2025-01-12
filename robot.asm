@@ -28,9 +28,9 @@ RobotAI         .proc
                 rts
 
 ;--------------------------------------
-;--------------------------------------
-                lda TIM7_VAL
+                lda TIM7_VAL            ; dead code
                 beq _2
+;--------------------------------------
 
 _1              dec TIM7_VAL
                 bne _XIT
@@ -39,18 +39,18 @@ _2              lda #$88
                 ;!! sta PCOLR2
                 ;!! sta PCOLR3
 
-                lda #8
+                lda #$08
                 sta ROBOT_ANGLE
 
                 .frsRandomByte
-                and #7
-                ldx LEVEL
+                and #$07
 
+                ldx LEVEL
                 dex                     ; X=1?
                 bne _3
 
                 clc
-                adc #8
+                adc #$08
 _3              tax
 
                 lda ROB_X,X
@@ -64,7 +64,7 @@ _3              tax
                 bpl _4
 
                 eor #-2
-_4              cmp #34
+_4              cmp #$22
                 bcs _6
 
                 lda R_Y
@@ -73,13 +73,13 @@ _4              cmp #34
                 bpl _5
 
                 eor #-2
-_5              cmp #8
+_5              cmp #$08
                 bcc _XIT
 
 _6              lda #kFLY
                 sta R_STATUS
 
-                ldx #0
+                ldx #$00
                 stx R_FX
                 stx R_FY
                 stx TIM7_VAL
@@ -101,7 +101,7 @@ RobotStart      .proc
 ;---
 
                 lda ROBOT_ANGLE
-                and #1
+                and #$01
                 sta TEMP4_I
 
                 lda ROBOT_ANGLE
@@ -115,7 +115,7 @@ R_F             .block
                 dec TIM8_VAL
                 bne _XIT
 
-                lda #5
+                lda #$05
                 sta TIM8_VAL
 
                 lda ROBOT_STATUS
@@ -128,36 +128,37 @@ R_F             .block
                 lda ROBOT_ANGLE
                 and #%00011110
                 lsr
-                cmp #4
+                cmp #$04
                 bcc _2
 
-                cmp #6
+                cmp #$06
                 bcs _1
 
-                lda #3
+                lda #$03
                 bra _2
 
 _1              sec
-                sbc #2
-_2              cmp #6
+                sbc #$02
+_2              cmp #$06
                 bcc _3
 
-                lda #5
-_3              cmp #0
+                lda #$05
+_3              cmp #$00
                 bne _4
 
-                lda #1
+                lda #$01
 _4              sta ROCKET_STATUS+2
 
                 lda ROBOT_X
-                and #3
+                and #$03
                 clc
                 adc ROBOT_X
-                adc #8
+                adc #$08
                 sta ROCKET_X+2
+
                 lda ROBOT_Y
                 clc
-                adc #8
+                adc #$08
                 sta ROCKET_Y+2
 
                 lda #$3F
@@ -167,26 +168,26 @@ _XIT            .endblock
 ; - - - - - - - - - - - - - - - - - - -
 R_B             .block
                 lda R_X
-                ldx #215
-                cmp #216
+                ldx #$D7
+                cmp #$D8
                 beq _1
 
-                ldx #49
-                cmp #48
+                ldx #$31
+                cmp #$30
                 bne _5
 
 _1              lda FRAME
-                and #3
+                and #$03
                 bne _4
 
                 lda ROBOT_ANGLE
-                cmp #4
+                cmp #$04
                 bcc _2
 
-                cmp #14
+                cmp #$0E
                 bcc _4
 
-_2              cmp #8
+_2              cmp #$08
                 bcs _3
 
                 inc ROBOT_ANGLE
@@ -234,13 +235,13 @@ R_END           .block
                 lda ROBOT_ANGLE
                 bpl _1
 
-                lda #0
+                lda #$00
                 sta ROBOT_ANGLE
 
-_1              cmp #18
+_1              cmp #$12
                 bcc _2
 
-                lda #16
+                lda #$10
                 sta ROBOT_ANGLE
 
 _2              lda ROBOT_ANGLE
@@ -248,10 +249,10 @@ _2              lda ROBOT_ANGLE
                 sta ROBOT_ANGLE
 
                 lda R_FX
-                and #3
+                and #$03
                 sta R_FX
                 lda R_FY
-                and #7
+                and #$07
                 sta R_FY
 
                 rts
@@ -271,14 +272,17 @@ RobotLeft       .proc
                 sta TEMP1_I
                 lda R_Y
                 sta TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 dec TEMP1_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 dec TEMP1_I
+
                 jsr CheckChrI
                 bcs _XIT
 
@@ -290,7 +294,7 @@ RobotLeft       .proc
                 dec R_X
 
 _1              lda FRAME
-                and #3
+                and #$03
                 bne _XIT
 
                 dec ROBOT_ANGLE
@@ -312,26 +316,29 @@ RobotRight      .proc
                 sta TEMP1_I
                 lda R_Y
                 sta TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 inc TEMP1_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 inc TEMP1_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 inc R_FX
                 lda R_FX
-                cmp #4
+                cmp #$04
                 bne _1
 
                 inc R_X
 
 _1              lda FRAME
-                and #3
+                and #$03
                 bne _XIT
 
                 inc ROBOT_ANGLE
@@ -353,20 +360,23 @@ RobotDown       .proc
                 sta TEMP1_I
                 lda R_Y
                 sta TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 inc TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 inc TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 inc R_FY
                 lda R_FY
-                cmp #8
+                cmp #$08
                 bne _XIT
 
                 inc R_Y
@@ -387,22 +397,26 @@ RobotUp         .proc
                 sta TEMP1_I
 
                 lda R_Y
-                cmp #3
+                cmp #$03
                 bcc _1
 
                 sta TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 dec TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 dec TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
                 dec TEMP2_I
+
                 jsr CheckChrI
                 bcs _XIT
 
@@ -444,13 +458,13 @@ DoRobotChopper  .proc
 
                 sec
                 sbc SX
-                cmp #48
+                cmp #$30
                 bcs P1
 
                 ldy SY
                 bpl _1
 
-                ldy #0
+                ldy #$00
 _1              sty TEMP1_I
 
                 lda R_Y
@@ -459,7 +473,7 @@ _1              sty TEMP1_I
 
                 sec
                 sbc SY
-                cmp #19
+                cmp #$13
                 bcs P1
 
                 lda R_X
@@ -468,11 +482,11 @@ _1              sty TEMP1_I
                 asl
                 asl
                 clc
-                adc #22
+                adc #$16
                 sta TEMP1_I
 
                 lda SX_F
-                and #3
+                and #$03
                 clc
                 adc TEMP1_I
                 adc R_FX
@@ -482,20 +496,21 @@ _1              sty TEMP1_I
                 ldy SY
                 bpl _2
 
-                ldy #0
+                ldy #$00
 _2              sty TEMP1_I
+
                 sec
                 sbc TEMP1_I
                 asl
                 asl
                 asl
                 clc
-                adc #71+12
+                adc #$47+12
                 sta TEMP1_I
 
                 lda SY_F
                 eor #$FF
-                and #7
+                and #$07
                 clc
                 adc TEMP1_I
 
@@ -503,7 +518,7 @@ _2              sty TEMP1_I
                 bpl _3
 
                 clc
-                adc #8
+                adc #$08
 
 _3              clc
                 adc R_FY
@@ -518,10 +533,10 @@ _3              clc
                 beq _4
 
                 ldx #kCRASH
-                lda #20
+                lda #$14
                 sta TIM7_VAL
 
-                lda #1
+                lda #$01
                 sta SND3_VAL
 
 _4              lda R_STATUS
@@ -550,13 +565,13 @@ UpdateRobotChopper .proc
                 cmp #kOFF
                 bne _1
 
-                lda #0
+                lda #$00
                 sta ROBOT_X
                 sta ROBOT_Y
 
 _1              ldy OROBOT_Y
-                ldx #17
-                lda #0
+                ldx #$11
+                lda #$00
 _next1          sta PLAYER+PL2,Y
                 sta PLAYER+PL3,Y
 
@@ -573,9 +588,9 @@ _next1          sta PLAYER+PL2,Y
                 lda CHOPPER_SHAPES+1,X
                 sta ADR1_I+1
 
-                lda #0
+                lda #$00
                 sta TEMP1_I
-                lda #18
+                lda #$12
                 sta TEMP2_I
 
                 ldx ROBOT_Y
@@ -594,7 +609,7 @@ _next2          ldy TEMP1_I
                 inx
 
                 lda TEMP1_I
-                cmp #18
+                cmp #$12
                 bne _next2
 
                 lda R_STATUS
@@ -602,7 +617,7 @@ _next2          ldy TEMP1_I
                 bne _2
 
                 ldx ROBOT_Y
-                ldy #18
+                ldy #$12
 _next3          lda PLAYER+PL2,X
                 and frsRandomREG
                 sta PLAYER+PL2,X
@@ -626,15 +641,15 @@ _next3          lda PLAYER+PL2,X
 
                 jsr PositionRobot
 
-                lda #255
+                lda #$FF
                 sta TIM7_VAL
 
 _2              lda FRAME
-                and #3
+                and #$03
                 bne _XIT
 
                 lda ROBOT_ANGLE
-                eor #1
+                eor #$01
                 sta ROBOT_ANGLE
 
 _XIT            rts
@@ -663,7 +678,7 @@ POS_IT_I        ldx TEMP1_I
                 asl
                 adc TEMP2_I
 
-                ldy #0
+                ldy #$00
                 sty TEMP3_I
                 asl
                 rol TEMP3_I
@@ -686,10 +701,10 @@ POS_IT_I        ldx TEMP1_I
                 sta ADR1_I+1
 
                 txa
-                and #7
+                and #$07
                 tax
 
-                ldy #0
+                ldy #$00
                 lda (ADR1_I),Y
                 eor POS_MASK1,X
                 sta (ADR1_I),Y

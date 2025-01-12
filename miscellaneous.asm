@@ -76,7 +76,7 @@ v_roboExplodeTimer .var TIM7_VAL
                 sta R_STATUS
 
 _1              ldx #$E0
-                lda #0
+                lda #$00
 _next1          sta CHR_SET1+$200,X
 
                 inx
@@ -98,7 +98,7 @@ _next2          sta CHR_SET1+$300,X
                 stz SND6_VAL
                 stz BAK2_COLOR
 
-                lda #20
+                lda #$14
                 sta SND1_2_VAL
 
                 ldx #MAX_TANKS-1
@@ -116,9 +116,9 @@ _next3          lda CM_STATUS,X
 _2              dex
                 bpl _next3
 
-                ldx #2
+                ldx #$02
 _next4          lda ROCKET_STATUS,X
-                cmp #7                  ; EXP
+                cmp #$07                ; EXP
                 bne _3
 
                 lda ROCKET_TEMPX,X
@@ -128,11 +128,11 @@ _next4          lda ROCKET_STATUS,X
 
                 jsr ComputeMapAddr
 
-                ldy #0
+                ldy #$00
                 lda ROCKET_TEMP,X
                 sta (ADR1),Y
 
-_3              lda #0
+_3              lda #$00
                 sta ROCKET_STATUS,X
                 sta ROCKET_X,X
 
@@ -209,9 +209,10 @@ v_destIdx       .var TEMP6
 
                 stx v_sourceAddr
                 sty v_sourceAddr+1
+
                 jsr CalcCursorLoc
 
-                ldy #0
+                ldy #$00
                 sty v_sourceIdx
                 sty v_destIdx
 
@@ -227,7 +228,7 @@ _nextChar       ldy v_sourceIdx
 
                 inc v_destIdx
                 clc
-                adc #32
+                adc #$20
 
 _isSpaceChar    ldy v_destIdx           ; right-half of glyph
                 sta (v_destAddr),Y
@@ -248,18 +249,19 @@ GiveBonus       .proc
                 ldy BONUS2
                 jsr IncreaseScore
 
-                lda #0
+                lda #$00
                 sta BONUS1
                 sta BONUS2
 
                 sed
                 lda CHOP_LEFT
                 clc
-                adc #2
+                adc #$02
                 sta CHOP_LEFT
-
                 cld
-                ldx #2
+
+                ldx #$02
+
                 .endproc
 
                 ;[fall-through]
@@ -299,8 +301,8 @@ _2              ldx #$FF                ; reset stack
 ;
 ;======================================
 ClearInfo       .proc
-                ldy #40-1
-                lda #0
+                ldy #$28-1
+                lda #$00
 _next1          sta PLAY_SCRN,Y
 
                 dey
@@ -318,13 +320,14 @@ DoChecksum2    .proc
 ;v_???          .var TEMP1
 ;---
 
-                ldy #0
+                ldy #$00
                 sty TEMP1
                 sty ADR1
+
                 lda #$90
                 sta ADR1+1
-                clc
 
+                clc
 _next1          adc (ADR1),Y
                 bcc _1
 
@@ -338,12 +341,12 @@ _1              iny
                 cpx #$B0
                 bne _next1
 
-                ;cmp #0
+                ;cmp #$00
                 cmp #$C7
                 bne _2
 
                 lda TEMP1
-                ;cmp #0
+                ;cmp #$00
                 cmp #$f8
                 beq _XIT
 
@@ -375,6 +378,7 @@ PositionIt      .proc
                 lsr
                 lsr
                 lsr
+
                 clc
                 adc #<SCANNER+3
                 adc TEMP1
@@ -385,10 +389,10 @@ PositionIt      .proc
                 sta ADR2+1
 
                 txa
-                and #7
+                and #$07
                 tax
 
-                ldy #0
+                ldy #$00
                 lda (ADR2),Y
                 eor POS_MASK1,X
                 sta (ADR2),Y
@@ -411,7 +415,7 @@ MULT_BY_40      .proc
                 asl
                 adc TEMP1
 
-                ldy #0
+                ldy #$00
                 sty TEMP2
                 asl
                 rol TEMP2
@@ -429,7 +433,7 @@ MULT_BY_40      .proc
 ;
 ;======================================
 DoChecksum3     .proc
-                ldx #0
+                ldx #$00
                 txa
 
                 clc
@@ -438,7 +442,7 @@ _next1          adc $B980,X
                 inx
                 bne _next1
 
-                ;cmp #$0
+                ;cmp #$00
                 cmp #$90
                 beq _XIT
 

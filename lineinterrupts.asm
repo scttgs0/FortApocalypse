@@ -18,17 +18,17 @@ dliLINE1        .proc
                 lda #>dliLINE2
                 ;!! sta VDSLST+1
 
-                ldx #0
+                ldx #$00
 _next1          txa
                 ;!! sta WSYNC
+
                 asl
                 ora #$E0
                 ;!! sta COLBK
 
                 inx
-                cpx #8
+                cpx #$08
                 bne _next1
-
                 bra dliLINE2.LINEC
 
                 .endproc
@@ -47,16 +47,17 @@ dliLINE2        .proc
                 lda #>dliLINE3
                 ;!! sta VDSLST+1
 
-                ldx #2
+                ldx #$02
 _next1          lda ROCKET_X,X
                 .frsSpriteSetX_ix       ; missiles = sprint 5+
 
                 dex
                 bpl _next1
 
-                ldx #7
+                ldx #$07
 _next2          txa
                 ;!! sta WSYNC
+
                 asl
                 ora #$E0
                 ;!! sta COLBK
@@ -64,7 +65,7 @@ _next2          txa
                 dex
                 bpl _next2
 
-LINEC           lda #0
+LINEC           lda #$00
                 ;!! sta COLBK
 
                 pla
@@ -90,12 +91,11 @@ dliLINE3        .proc
                 lda ROBOT_X
                 sta SPR(sprite_t.X, 2)
                 clc
-                adc #8
+                adc #$08
                 sta SPR(sprite_t.X, 3)
 
                 lda #>CHR_SET2
                 ;!! sta WSYNC
-
                 ;!! sta CHBASE
 
                 lda BAK_COLOR
@@ -135,8 +135,8 @@ dliLINE4        .proc
                 lda #>dliLINE1
                 ;!! sta VDSLST+1
 
-                ldx #7
-                lda #0
+                ldx #$07
+                lda #$00
 _next1          .frsSpriteSetX_ix
 
                 dex
