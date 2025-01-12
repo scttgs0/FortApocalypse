@@ -110,6 +110,7 @@ frsSpriteSetX_ix .macro
                 asl
                 tax
                 sta $D904,X
+                stz $D905,X
 
                 plx
                 pla
@@ -126,6 +127,7 @@ frsSpriteSetY_ix .macro
                 asl
                 tax
                 sta $D906,X
+                stz $D907,X
 
                 plx
                 pla

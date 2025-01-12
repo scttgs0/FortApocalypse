@@ -122,18 +122,61 @@ Bcd2Bin         .proc
                 pha                     ; n*2
                 lsr
                 lsr                     ; n*8
-                sta zpTemp1
+                sta _tmp
 
                 pla                     ; A=n*2
                 clc
-                adc zpTemp1             ; A=n*8+n*2 := n*10
-                sta zpTemp1
+                adc _tmp                ; A=n*8+n*2 := n*10
+                sta _tmp
 
 ;   add the lower-nibble
                 pla
                 and #$0F
                 clc
-                adc zpTemp1
+                adc _tmp
+
+                rts
+
+;--------------------------------------
+
+_tmp            .byte $00
+
+                .endproc
+
+
+;======================================
+; Convert BCD to Binary
+;======================================
+Bin2Bcd         .proc
+                ldx #00
+                ldy #00
+_next1          cmp #10
+                bcc _done
+
+                sec
+                sbc #10
+
+                inx
+                bra _next1
+
+_done           tay
+                txa
+                asl
+                asl
+                asl
+                asl
+                and #$F0
+                sta _tmp
+
+                tya
+                clc
+                adc _tmp
+
+                rts
+
+;--------------------------------------
+
+_tmp            .byte $00
 
                 .endproc
 
@@ -169,7 +212,7 @@ _next1          sta SID1_BASE,X
                 sta SID2_ATDCY1
 
                 ; 0%|sidDecay6ms
-                stz SID1_SUREL1         ; Susatain/Release = 0 [square wave]
+                stz SID1_SUREL1         ; Sustain/Release = 0 [square wave]
                 stz SID1_SUREL2
                 stz SID1_SUREL3
                 stz SID2_SUREL1
@@ -354,13 +397,17 @@ InitTiles       .proc
 
                 lda #40                ; Set the size of the tile map to 256x256
                 sta TILE0_SIZE_X
+                stz TILE0_SIZE_X+1
                 lda #30
                 sta TILE0_SIZE_Y
+                stz TILE0_SIZE_Y+1
 
+                stz TILE0_SCROLL_X+1
                 stz TILE0_SCROLL_X
+                stz TILE0_SCROLL_Y+1
                 stz TILE0_SCROLL_Y
 
-;   enable the tilema, puse 8x8 pixel tiles
+;   enable the tilemap, use 8x8 pixel tiles
                 lda #tcEnable|tcSmallTiles
                 sta TILE0_CTRL
 
@@ -394,13 +441,15 @@ InitSprites     .proc
 ;   switch to system map
                 stz IOPAGE_CTRL
 
-;   set player sprites (sprite-00 & sprint-01)
-                .frsSpriteInit SPR_Balloon, scEnable|scLUT0|scDEPTH0|scSIZE_16, 0
-                .frsSpriteInit SPR_Balloon, scEnable|scLUT1|scDEPTH0|scSIZE_16, 1
+; - - - - - - - - - - - - - - - - - - -
 
-;   set bomb sprites (sprite-02 & sprint-03)
-                .frsSpriteInit SPR_Bomb, scEnable|scLUT0|scDEPTH0|scSIZE_16, 2
-                .frsSpriteInit SPR_Bomb, scEnable|scLUT0|scDEPTH0|scSIZE_16, 3
+                ;!!.frsSpriteInit SPR_Balloon, scEnable|scLUT0|scDEPTH0|scSIZE_16, 0
+                ;!!.frsSpriteInit SPR_Balloon, scEnable|scLUT1|scDEPTH0|scSIZE_16, 1
+
+                ;!!.frsSpriteInit SPR_Bomb, scEnable|scLUT0|scDEPTH0|scSIZE_16, 2
+                ;!!.frsSpriteInit SPR_Bomb, scEnable|scLUT0|scDEPTH0|scSIZE_16, 3
+
+; - - - - - - - - - - - - - - - - - - -
 
 ;   restore IOPAGE control
                 pla
@@ -452,8 +501,7 @@ InitBitmap      .proc
 ; preserve      A, X, Y
 ;======================================
 ClearScreen     .proc
-v_QtyPages      .var $04                ; 40x30 = $4B0... 4 pages + 176 bytes
-                                        ; remaining 176 bytes cleared via ClearGamePanel
+v_QtyPages      .var $05                ; 40x30 = $4B0... 4 pages + 176 bytes
 
 v_EmptyText     .var $00
 v_TextColor     .var $40
@@ -772,10 +820,10 @@ InitIRQs        .proc
                 sei                     ; disable IRQ
 
 ;   enable IRQ handler
-                ; lda #<vecIRQ_BRK
-                ; sta IRQ_PRIOR
-                ; lda #>vecIRQ_BRK
-                ; sta IRQ_PRIOR+1
+                ;lda #<vecIRQ_BRK
+                ;sta IRQ_PRIOR
+                ;lda #>vecIRQ_BRK
+                ;sta IRQ_PRIOR+1
 
                 lda #<irqMain
                 sta vecIRQ_BRK
@@ -869,7 +917,7 @@ FONT0           lda #<GameFont
                 sta zpDest+1
                 stz zpDest+2
 
-                ldx #$07                ; 7 pages
+                ldx #$08                ; 8 pages
 _nextPage       ldy #$00
 _next1          lda (zpSource),Y
                 sta (zpDest),Y
