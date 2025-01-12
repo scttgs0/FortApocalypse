@@ -79,15 +79,17 @@ NAVA_PANEL      .byte $00,$00,$00,$00,$00,$00,$00,$00       ; whitespace
 ;- - - - - - - - - - - ----------------
 
 PANEL           = RAM2_STUFF
+
 Z2              .byte $00,$00,$00,$00,$00,$00,$00           ; whitespace
 
-;--------------------- - - - - - - - - 
+;--------------------- - - - - - - - -
 
                 .byte $B3,$D3,$A3,$C3,$AF,$CF,$B2,$D2       ; 'SCORE'
                 .byte $A5,$C5
                 .byte $00,$00                               ; ** intentional overrun (+21 bytes)
 
 SCORE_DIG       = *-Z2+RAM2_STUFF
+
                 .byte $00,$00,$00,$00,$00,$00,$00,$00
                 .byte $00,$00,$00,$00,$00,$00,$00,$00
                 .byte $00,$00,$00,$00,$00
@@ -114,15 +116,17 @@ SCORE_DIG       = *-Z2+RAM2_STUFF
                 .byte $00,$00                               ; '  '
 
 FUEL_DIG        = *-Z2+RAM2_STUFF
+
                 .byte $00,$00,$00,$00,$00,$00,$00,$00       ; 'xxxxxxxx  ;'
                 .byte $00,$00,$1B
                 .byte $68,$69,$6A,$6B,$6C,$6D,$6E,$6F       ; <scanner>
                 .byte $70,$71,$72,$73
                 .byte $1E,$00,$00,$00                       ; '>   '    ** intentional overrun (+11 bytes)
 
-;--------------------- - - - - - - - - 
+;--------------------- - - - - - - - -
 
 BONUS_DIG       = *-Z2+RAM2_STUFF
+
                 .byte $00,$00,$00,$00,$00,$00,$00,$00
                 .byte $00,$00,$00
 

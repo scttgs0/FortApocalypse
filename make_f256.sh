@@ -12,12 +12,5 @@ mkdir -p obj/
         --labels=obj/fort.lbl \
         fort.asm
 
-
-64tass  --m65c02 \
-        --flat \
-        --nostart \
-        -D PGX=0 \
-        -o obj/fortB.bin \
-        --list=obj/fortB.lst \
-        --labels=obj/fortB.lbl \
-        fort.asm
+cp obj/fort.pgx /media/scott/ExternData/src/GameEngines/FoenixRetroSystems/bin/SDCARD_JR/
+cp obj/fort.lst /media/scott/ExternData/src/GameEngines/FoenixRetroSystems/bin/SDCARD_JR/

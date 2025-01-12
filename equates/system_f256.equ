@@ -216,30 +216,30 @@ TILE2_SCROLL_X          = $D220
 TILE2_SCROLL_Y          = $D222
 
 TILESET0_ADDR           = $D280         ; [long] Bits[18:0]
-TILESET0_ADDR_CFG       = $D283
+TILESET0_CTRL           = $D283
 tsVertical          = $00
 tsSquare            = $08
 
 TILESET1_ADDR           = $D284         ; [long] Bits[18:0]
-TILESET1_ADDR_CFG       = $D287
+TILESET1_CTRL           = $D287
 
 TILESET2_ADDR           = $D288         ; [long] Bits[18:0]
-TILESET2_ADDR_CFG       = $D28B
+TILESET2_CTRL           = $D28B
 
 TILESET3_ADDR           = $D28C         ; [long] Bits[18:0]
-TILESET3_ADDR_CFG       = $D28F
+TILESET3_CTRL           = $D28F
 
 TILESET4_ADDR           = $D290         ; [long] Bits[18:0]
-TILESET4_ADDR_CFG       = $D293
+TILESET4_CTRL           = $D293
 
 TILESET5_ADDR           = $D294         ; [long] Bits[18:0]
-TILESET5_ADDR_CFG       = $D297
+TILESET5_CTRL           = $D297
 
 TILESET6_ADDR           = $D298         ; [long] Bits[18:0]
-TILESET6_ADDR_CFG       = $D29B
+TILESET6_CTRL           = $D29B
 
 TILESET7_ADDR           = $D29C         ; [long] Bits[18:0]
-TILESET7_ADDR_CFG       = $D29F
+TILESET7_CTRL           = $D29F
 
 ;--------------------------------------
 
@@ -576,7 +576,7 @@ BG_CHAR_LUT_PTR         = $D840         ; 16 entries = ARGB
 
 SPRITE_BASE             = $D900
 
-; SP00_CTRL             = $D900
+; SP00_CTRL             = $D900         ; [write-only]
 scEnable            = $01
 scLUT0              = $00
 scLUT1              = $02
@@ -593,31 +593,31 @@ scSIZE_24           = $20
 scSIZE_16           = $40
 scSIZE_8            = $60
 
-; SP00_ADDR             = $D901      ; [long] Bits[18:0]
-; SP00_X                = $D904      ; [word]
-; SP00_Y                = $D906      ; [word]
+; SP00_ADDR             = $D901         ; [write-only] [long] Bits[18:0]
+; SP00_X                = $D904         ; [write-only] [word]
+; SP00_Y                = $D906         ; [write-only] [word]
 
-; SP01_CTRL             = $D908
-; SP01_ADDR             = $D909
-; SP01_X                = $D90C
-; SP01_Y                = $D90E
+; SP01_CTRL             = $D908         ; [write-only]
+; SP01_ADDR             = $D909         ; [write-only]
+; SP01_X                = $D90C         ; [write-only]
+; SP01_Y                = $D90E         ; [write-only]
 
-; SP02_CTRL             = $D910
-; SP02_ADDR             = $D911
-; SP02_X                = $D914
-; SP02_Y                = $D916
+; SP02_CTRL             = $D910         ; [write-only]
+; SP02_ADDR             = $D911         ; [write-only]
+; SP02_X                = $D914         ; [write-only]
+; SP02_Y                = $D916         ; [write-only]
 
-; SP03_CTRL             = $D918
-; SP03_ADDR             = $D919
-; SP03_X                = $D91C
-; SP03_Y                = $D91E
+; SP03_CTRL             = $D918         ; [write-only]
+; SP03_ADDR             = $D919         ; [write-only]
+; SP03_X                = $D91C         ; [write-only]
+; SP03_Y                = $D91E         ; [write-only]
 
 ;...
 
-; SP63_CTRL             = $DAF8
-; SP63_ADDR             = $DAF9
-; SP63_X                = $DAFC
-; SP63_Y                = $DAFE
+; SP63_CTRL             = $DAF8         ; [write-only]
+; SP63_ADDR             = $DAF9         ; [write-only]
+; SP63_X                = $DAFC         ; [write-only]
+; SP63_Y                = $DAFE         ; [write-only]
 
 ;--------------------------------------
 
@@ -681,6 +681,7 @@ VIA0_IO2_PORTA          = $DC0F
 
 JOYSTICK0               = $DC00         ; (R) Joystick 0
 JOYSTICK1               = $DC01
+joyNONE             = $0F
 joyUP               = $01               ;           1110            bit-0   UP
 joyDOWN             = $02               ;      1010   |   0110      bit-1   DOWN
 joyLEFT             = $04               ;          \  |  /          bit-2   LEFT

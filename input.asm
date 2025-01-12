@@ -12,9 +12,9 @@
 ; Start (F4) = switch to Start Mode
 ;--------------------------------------
 ; Any activity will cancel the Demo
-; All keypresses are delegated to the
+; All key-presses are delegated to the
 ;   Option screen while in Option mode
-; Capture (endless loop) while Pasused
+; Capture (endless loop) while Paused
 ;======================================
 ReadKeyboard    .proc
 v_demoTimer     .var TIM6_VAL
@@ -144,7 +144,7 @@ _doStick        lda CHOPPER_ANGLE
 
                 inx
                 cpx #$6C
-                blt _1
+                bcc _1
 
                 ldx #0
 _1              stx DEMO_COUNT
@@ -176,7 +176,7 @@ _chk_right      txa
 
                 lda CHOPPER_ANGLE
                 cmp #14
-                bge _4
+                bcs _4
 
                 lda FRAME
                 and #1
@@ -200,7 +200,7 @@ _chk_left       txa
 
                 lda CHOPPER_ANGLE
                 cmp #4
-                blt _6
+                bcc _6
 
                 lda FRAME
                 and #1
@@ -253,7 +253,7 @@ _8              lda CHOPPER_ANGLE
                 sta CHOPPER_ANGLE
 
 _9              cmp #18
-                blt _10
+                bcc _10
 
                 lda #16
                 sta CHOPPER_ANGLE
@@ -321,10 +321,10 @@ _5              lda CHOPPER_ANGLE
                 and #%00011110
                 lsr
                 cmp #4
-                blt _7
+                bcc _7
 
                 cmp #6
-                bge _6
+                bcs _6
 
                 lda #3
                 bne _7
@@ -332,7 +332,7 @@ _5              lda CHOPPER_ANGLE
 _6              sec
                 sbc #2
 _7              cmp #6
-                blt _8
+                bcc _8
 
                 lda #5
 _8              cmp #0

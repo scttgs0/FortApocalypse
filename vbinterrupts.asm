@@ -8,7 +8,7 @@
 ;======================================
 ;
 ;======================================
-VERTBLKD        .proc
+irqVBlankD      .proc
                 sei
                 php
                 cld
@@ -72,6 +72,8 @@ HIT_LIST        .byte $40,$5B,$5C,$5D,$5E,$5F
                 .byte $3B,$3C,$3D,$3E,$49,$4A
 
 HIT_LIST_LEN    = *-HIT_LIST-1
+
                 .byte $61,$00                   ; 'a ' atari-ascii
                 .byte EXP
+
 HIT_LIST2_LEN   = *-HIT_LIST-1

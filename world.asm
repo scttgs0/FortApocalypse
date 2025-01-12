@@ -17,14 +17,14 @@ DrawMap         .proc
 DO_X            .block
                 ldx CHOPPER_X
                 cpx #MIN_RIGHT+1
-                blt _2
+                bcc _2
 
                 ldx #MIN_RIGHT
                 stx CHOPPER_X
 
                 lda SX
                 cmp #$D8+1
-                blt _1
+                bcc _1
 
                 lda #1+1
                 sta SX
@@ -38,14 +38,14 @@ _1              dec SX_F
                 inc SX
 
 _2              cpx #MIN_LEFT
-                bge _XIT
+                bcs _XIT
 
                 ldx #MIN_LEFT
                 stx CHOPPER_X
 
                 lda SX
                 cmp #1+1+1
-                bge _3
+                bcs _3
 
                 lda #$D8+1
                 sta SX
@@ -66,7 +66,7 @@ DO_Y            .block
 
                 ldx CHOPPER_Y
                 cpx #MIN_DOWN+1
-                blt _1
+                bcc _1
 
                 ldx #MIN_DOWN
                 stx CHOPPER_Y
@@ -75,7 +75,7 @@ DO_Y            .block
 
 _1              ldx CHOPPER_Y
                 cpx #MAX_DOWN+1
-                blt _3
+                bcc _3
 
                 lda #MAX_DOWN
                 sta CHOPPER_Y
@@ -100,7 +100,7 @@ _3              lda SY
                 beq _4
 
                 cpx #MIN_UP
-                bge _4
+                bcs _4
 
                 ldx #MIN_UP
                 stx CHOPPER_Y
@@ -108,7 +108,7 @@ _3              lda SY
                 bra _5
 
 _4              cpx #MAX_UP
-                bge _6
+                bcs _6
 
                 lda #MAX_UP
                 sta CHOPPER_Y

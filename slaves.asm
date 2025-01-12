@@ -37,16 +37,16 @@ _1              jsr SlaveCollision
                 jsr SlaveMove
                 jsr SlaveDraw
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ; dec SlaveMove
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
 _2              ldx SLAVE_NUM
                 inx
                 cpx #8
-                blt _3
+                bcc _3
 
                 ldx #0
 _3              stx SLAVE_NUM
@@ -75,6 +75,7 @@ GetSlaveAddr    .proc
                 sta TEMP1
                 lda SLAVE_Y,X
                 sta TEMP2
+
                 jmp ComputeMapAddr
 
                 .endproc
@@ -298,7 +299,7 @@ _1              lda SLAVE_STATUS,X
 
                 eor #-2
 _2              cmp #4
-                bge _next1
+                bcs _next1
 
                 lda SLAVE_Y,X
                 sec
@@ -307,7 +308,7 @@ _2              cmp #4
 
                 eor #-2
 _3              cmp #4
-                bge _next1
+                bcs _next1
 
                 lda #kPICKUP
                 sta SLAVE_STATUS,X

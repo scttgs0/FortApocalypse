@@ -146,7 +146,7 @@ _5              lda TEMP3_I
                 ldx FUEL_STATUS
                 lda CHOP_Y
                 cmp #10+4
-                blt _6
+                bcc _6
 
                 cpx #kEMPTY
                 beq _8
@@ -337,6 +337,7 @@ _CCXY           lda CHOPPER_X
 _7              clc
                 adc TEMP1_I
                 sta CHOP_Y
+
                 jmp PositionChopper
 
 _XIT            rts
@@ -355,6 +356,7 @@ v_posY          .var TEMP2_I
                 sta v_posX
                 lda CHOP_Y
                 sta v_posY
+
                 jmp PositionRobot.POS_IT_I
 
                 .endproc
@@ -370,13 +372,13 @@ Hover           .proc
 
                 lda CHOPPER_ANGLE
                 cmp #4
-                blt _1
+                bcc _1
 
                 cmp #14
-                blt _XIT
+                bcc _XIT
 
 _1              cmp #8
-                bge _2
+                bcs _2
 
                 inc CHOPPER_ANGLE
                 inc CHOPPER_ANGLE

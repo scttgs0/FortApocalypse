@@ -146,7 +146,7 @@ S6              .block                  ; CRUISE MISSILE SOUND
 
                 inc SND6_VAL
                 cmp #$20
-                blt _1
+                bcc _1
 
                 ldx #0
                 stx SND6_VAL

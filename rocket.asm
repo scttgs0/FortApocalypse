@@ -137,17 +137,17 @@ MOVE_ROCKETS    .block
 
                 lda ROCKET_X,X
                 cmp #0+4
-                blt _1
+                bcc _1
 
                 cmp #255-4
-                bge _1
+                bcs _1
 
                 lda ROCKET_Y,X
                 cmp #MAX_DOWN+18
-                bge _1
+                bcs _1
 
                 cmp #MAX_UP
-                bge _3
+                bcs _3
 
 _1              lda #0                  ; OFF
                 sta ROCKET_STATUS,X

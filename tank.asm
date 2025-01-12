@@ -267,12 +267,12 @@ _1              lda TANK_STATUS,X
 
                 lda CHOP_Y
                 cmp #3
-                blt _2
+                bcc _2
 
                 sec
                 sbc #3
                 cmp TANK_START_Y,X
-                blt _2
+                bcc _2
 
                 lda TANK_START_X,X
                 sec

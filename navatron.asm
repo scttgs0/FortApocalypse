@@ -19,18 +19,18 @@ SetScanner      .proc
                 sta TEMP1
                 sta TEMP2
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ; inc DrawMap
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda SY
                 beq _2
                 bmi _2
 
                 cmp #17
-                blt _1
+                bcc _1
 
                 lda #16
 _1              jsr MULT_BY_40

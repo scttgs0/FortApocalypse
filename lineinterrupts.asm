@@ -5,17 +5,17 @@
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
-;======================================
-;
-;======================================
-LINE1           .proc
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; DLI (Head)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dliLINE1        .proc
                 pha
                 txa
                 pha
 
-                lda #<LINE2
+                lda #<dliLINE2
                 ;!! sta VDSLST
-                lda #>LINE2
+                lda #>dliLINE2
                 ;!! sta VDSLST+1
 
                 ldx #0
@@ -29,22 +29,22 @@ _next1          txa
                 cpx #8
                 bne _next1
 
-                bra LINE2.LINEC
+                bra dliLINE2.LINEC
 
                 .endproc
 
 
-;======================================
-;
-;======================================
-LINE2           .proc
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; DLI (Stage 2)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dliLINE2        .proc
                 pha
                 txa
                 pha
 
-                lda #<LINE3
+                lda #<dliLINE3
                 ;!! sta VDSLST
-                lda #>LINE3
+                lda #>dliLINE3
                 ;!! sta VDSLST+1
 
                 ldx #2
@@ -74,17 +74,17 @@ LINEC           lda #0
                 .endproc
 
 
-;======================================
-;
-;======================================
-LINE3           .proc
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; DLI (Stage 3)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dliLINE3        .proc
                 pha
                 php
                 cld
 
-                lda #<LINE4
+                lda #<dliLINE4
                 ;!! sta VDSLST
-                lda #>LINE4
+                lda #>dliLINE4
                 ;!! sta VDSLST+1
 
                 lda ROBOT_X
@@ -118,10 +118,10 @@ LINE3           .proc
                 .endproc
 
 
-;======================================
-;
-;======================================
-LINE4           .proc
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; DLI (Tail)
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dliLINE4        .proc
                 pha
                 txa
                 pha
@@ -130,9 +130,9 @@ LINE4           .proc
                 php
 
                 cld
-                lda #<LINE1
+                lda #<dliLINE1
                 ;!! sta VDSLST
-                lda #>LINE1
+                lda #>dliLINE1
                 ;!! sta VDSLST+1
 
                 ldx #7

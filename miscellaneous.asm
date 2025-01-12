@@ -138,7 +138,6 @@ _3              lda #0
 
                 dex
                 bpl _next4
-
                 jmp ClearSounds
 
                 .endproc

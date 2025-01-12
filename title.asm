@@ -243,9 +243,9 @@ T3              .proc
                 lda #$9A                ; LETTERS
                 ;!! sta COLOR3
 
-                lda #<VERTBLKD          ; enable deferred VBI
+                lda #<irqVBlankD          ; enable deferred VBI
                 ;!! sta VVBLKD
-                lda #>VERTBLKD
+                lda #>irqVBlankD
                 ;!! sta VVBLKD+1
 
                 jsr ScreenOff
@@ -257,7 +257,6 @@ _wait1          ;!! lda VCOUNT              ; wait for next horz sync
                 ;!! sta NMIEN
 
                 cli
-
                 jmp MAIN
 
                 .endproc

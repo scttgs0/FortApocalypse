@@ -24,36 +24,36 @@ _1              lda CHOPPER_STATUS
 
                 lda CHOP_Y
                 cmp #7+2
-                blt _4
+                bcc _4
 
                 cmp #11+2
-                bge _4
+                bcs _4
 
                 ldx CHOP_X
                 lda LEVEL
                 bne _2
 
                 cpx #$15+2
-                blt _4
+                bcc _4
 
                 cpx #$EC+2+6
-                bge _4
+                bcs _4
                 jmp _3
 
 _2              cpx #$82
-                blt _4
+                bcc _4
 
                 cpx #$82+6
-                bge _4
+                bcs _4
 
 _3              lda #kREFUEL
                 sta FUEL_STATUS
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ; asl ComputeMapAddr
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #1
                 sta TIM4_VAL
@@ -85,7 +85,6 @@ _4              lda #0
                 ldx #<txtLowOnFuel      ; "LOW  ON  FUEL"
                 ldy #>txtLowOnFuel
                 jsr Print
-
                 jmp _XIT
 
 _5              lda #$A4
@@ -144,7 +143,7 @@ FE              rts
 F1              ldx #1
                 lda CHOP_Y
                 cmp #11+2
-                bge _1
+                bcs _1
 
                 ldx #0
                 ;--.setbank $AF
@@ -154,7 +153,7 @@ _1              stx SND4_VAL
 
                 lda CHOP_Y
                 cmp #8+2
-                bge FE
+                bcs FE
 
                 lda #kFULL
                 sta FUEL_STATUS
@@ -163,7 +162,6 @@ _1              stx SND4_VAL
                 sta FUEL_TEMP
 
                 jsr DF1
-
                 jmp RestorePoint
 
                 .endproc

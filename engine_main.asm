@@ -102,9 +102,9 @@ _next1          lda Z2,X
                 inx                     ; X=2
                 stx CHOPS
 
-                lda #<LINE1
+                lda #<dliLINE1
                 ;!! sta VDSLST
-                lda #>LINE1
+                lda #>dliLINE1
                 ;!! sta VDSLST+1
 
                 jsr M_START
@@ -217,7 +217,6 @@ CheckLevel      .proc
 
                 cmp #1
                 bne _1
-
                 jmp DoLevel2
 
 _1              jmp DoLevel3
@@ -243,14 +242,14 @@ DoLevel1        .proc
 
                 lda CHOP_Y
                 cmp #35
-                blt _XIT
+                bcc _XIT
 
                 lda CHOP_X
                 cmp #130
-                blt _XIT
+                bcc _XIT
 
                 cmp #130+6+1
-                bge _XIT
+                bcs _XIT
 
                 lda SLAVES_LEFT
                 bne PSL
@@ -298,11 +297,11 @@ _next2          ldx #5
                 dec TEMP2
                 bne _next1
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ; dec MAIN+32
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #NEW_LEVEL_MODE
                 sta MODE
@@ -314,10 +313,7 @@ _XIT            rts
 ;======================================
 ;
 ;======================================
-PSL             .proc
-                jmp PrintSlavesLeft
-
-                .endproc
+PSL             jmp PrintSlavesLeft
 
 
 ;======================================
@@ -360,14 +356,14 @@ DoLevel2        .proc
 
                 lda CHOP_Y
                 cmp #2
-                bge _XIT
+                bcs _XIT
 
                 lda CHOP_X
                 cmp #130
-                blt _XIT
+                bcc _XIT
 
                 cmp #130+4+1
-                bge _XIT
+                bcs _XIT
 
                 lda SLAVES_LEFT
                 bne PSL
@@ -375,11 +371,11 @@ DoLevel2        .proc
                 inc LEVEL               ; =2
                 jsr GiveBonus
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ; asl M_NewPlayer
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #NEW_LEVEL_MODE
                 sta MODE
@@ -398,14 +394,14 @@ DoLevel3        .proc
 
                 lda CHOP_Y
                 cmp #13
-                bge _XIT
+                bcs _XIT
 
                 lda CHOP_X
                 cmp #$17
-                blt _XIT
+                bcc _XIT
 
                 cmp #$F4
-                bge _XIT
+                bcs _XIT
 
                 jsr GiveBonus
 
@@ -537,11 +533,11 @@ _3              cmp #NEW_PLAYER_MODE
                 bne _4
                 jmp M_NewPlayer
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
 _4              ; rol CheckModes
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 rts
                 .endproc
@@ -595,11 +591,11 @@ M_START         .proc
 
                 lda #2
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
 _1              ; sta MAIN
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 sta CHOP_LEFT
 
@@ -700,11 +696,11 @@ _1              lda #$1F                ; CHOPPER CLR
                 cmp #kEMPTY
                 bne _2
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ; dec UpdateChopper
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #kFULL
                 sta FUEL_STATUS
@@ -1070,11 +1066,11 @@ _4              lda ADR2
 _5              dex
                 bpl _next8
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ; inc MAIN
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 .endblock
 
@@ -1119,10 +1115,10 @@ _next3          lda (ADR1),Y
 
                 .frsRandomByte
                 cmp #10
-                blt _1
+                bcc _1
 
                 cmp #50
-                bge _1
+                bcs _1
 
                 tya
                 clc
@@ -1256,7 +1252,7 @@ _2              jsr IncreaseGamePoints
 
                 lda #0
 _3              cmp #16
-                blt _4
+                bcc _4
 
                 lda #15
 _4              sta GAME_POINTS
@@ -1271,7 +1267,7 @@ _4              sta GAME_POINTS
 
                 lda SCORE1
                 cmp HI1
-                blt _6
+                bcc _6
 
 _next1          lda SCORE1
                 sta HI1
@@ -1282,7 +1278,7 @@ _next1          lda SCORE1
 
                 jmp _6
 
-_5              bge _next1
+_5              bcs _next1
 
 _6              lda #2                  ; (2,0)
                 sta TEMP1
@@ -1379,11 +1375,11 @@ _8              iny
                 lda #-1
                 sta TIM6_VAL
 
-                ;-----------------------
-                ; Copy Protection
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
+;   Copy Protection
+; - - - - - - - - - - - - - - - - - - -
                 ; ror ScreenOff
-                ;-----------------------
+; - - - - - - - - - - - - - - - - - - -
 
                 lda #TITLE_MODE
                 sta MODE

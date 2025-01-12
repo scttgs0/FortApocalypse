@@ -24,7 +24,7 @@ v_posY          .var TEMP2
                 ldx OPT_NUM
                 inx
                 cpx #3
-                blt _1
+                bcc _1
 
                 ldx #0
 _1              stx OPT_NUM
@@ -38,7 +38,7 @@ _2              cmp #5                  ; SELECT
                 ldx GRAV_SKILL
                 inx
                 cpx #3
-                blt _3
+                bcc _3
 
                 ldx #0
 _3              stx GRAV_SKILL
@@ -49,7 +49,7 @@ _4              cmp #1
                 ldx PILOT_SKILL
                 inx
                 cpx #3
-                blt _5
+                bcc _5
 
                 ldx #0
 _5              stx PILOT_SKILL
@@ -60,7 +60,7 @@ _6              cmp #2
                 ldx CHOPS
                 inx
                 cpx #3
-                blt _7
+                bcc _7
 
                 ldx #0
 _7              stx CHOPS
@@ -181,6 +181,7 @@ _2              lda #28                 ; (28,7)
                 ldx OptRoboTable,Y      ; "SEVEN|NINE|ELEVEN"
                 lda OptRoboTable+1,Y
                 tay
+
                 jmp Print
 
                 .endblock

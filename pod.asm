@@ -40,7 +40,6 @@ MovePods1       .proc
 
                 cmp #kBEGIN
                 bne _1
-
                 jmp PodBegin
 
 _1              jsr PodCollision
@@ -62,7 +61,7 @@ PodsEnd         .proc
                 ldx POD_NUM
                 inx
                 cpx #MAX_PODS
-                blt _1
+                bcc _1
 
                 ldx #0
 _1              stx POD_NUM
@@ -83,6 +82,7 @@ GetPodAddr      .proc
                 sta TEMP1
                 lda POD_Y,X
                 sta TEMP2
+
                 jmp ComputeMapAddr
 
                 .endproc
@@ -144,6 +144,7 @@ PositionPod     .proc
                 sta TEMP1
                 lda POD_Y,X
                 sta TEMP2
+
                 jmp PositionIt
 
                 .endproc
@@ -158,16 +159,16 @@ PodBegin        .proc
 
 _next1          .frsRandomByte
                 cmp #50
-                blt _next1
+                bcc _next1
 
                 cmp #256-50
-                bge _next1
+                bcs _next1
 
                 sta POD_X,X
 
 _next2          .frsRandomByte
                 cmp #40
-                bge _next2
+                bcs _next2
 
                 sta POD_Y,X
 
@@ -316,6 +317,7 @@ _next1          lda POD_DX,X
                 bne _2
 
                 dec POD_X,X
+
                 jmp _2
 
 _1              lda POD_COM
@@ -342,10 +344,10 @@ _2              lda POD_X,X
 
                 lda POD_X,X
                 cmp #50
-                blt _3
+                bcc _3
 
                 cmp #256-50
-                blt _4
+                bcc _4
 
 _3              lda POD_DX,X
                 eor #-2

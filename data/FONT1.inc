@@ -233,7 +233,7 @@ FORT_EX4        .byte %00000000         ;....
                 .byte %11110000         ;##..
                 .byte %00111111         ;.###
 ; CHR $1A
-                .byte %00000010         ;...R       navitron left
+                .byte %00000010         ;...R       navatron left
                 .byte %00001000         ;..R.
                 .byte %00001000         ;..R.
                 .byte %00001000         ;..R.
@@ -260,7 +260,7 @@ FORT_EX4        .byte %00000000         ;....
                 .byte %00001000         ;..R.
                 .byte %00000010         ;...R
 ; CHR $1D
-                .byte %10000000         ;R...       navitron right
+                .byte %10000000         ;R...       navatron right
                 .byte %00100000         ;.R..
                 .byte %00100000         ;.R..
                 .byte %00100000         ;.R..

@@ -25,7 +25,6 @@ M_ST            .block
 
                 cmp #kBEGIN
                 bne _1
-
                 jmp MissileBegin
 
 _1              jsr MissileCollision
@@ -49,7 +48,7 @@ M_END           .block
                 bmi _2
 
                 cmp #14
-                bge _2
+                bcs _2
 
                 lda CM_STATUS,X
                 cmp #kOFF
@@ -63,7 +62,7 @@ M_END           .block
 
                 eor #-2
 _1              cmp #9
-                bge _2
+                bcs _2
 
                 lda #kBEGIN
                 sta CM_STATUS,X
@@ -104,6 +103,7 @@ v_posY          .var TEMP2
                 sta v_posX
                 lda CM_Y,X
                 sta v_posY
+
                 jmp ComputeMapAddr
 
                 .endproc
@@ -203,16 +203,16 @@ MissileErase    .proc
                 beq _1
 
                 cmp #$60+128
-                bge _XIT
+                bcs _XIT
 
                 cmp #$40
                 beq _XIT
 
                 cmp #$5B
-                blt _1
+                bcc _1
 
                 cmp #$5F+1
-                blt _XIT
+                bcc _XIT
 
 _1              ldy #0
                 sta (ADR1),Y
@@ -242,6 +242,7 @@ _2              lda CM_TIME,X
                 bpl _3
 
 _next1          inc CM_Y,X
+
                 jmp _6
 
 _3              lda CHOP_X
@@ -262,10 +263,10 @@ _4              lda v_distance
 
 _5              lda CM_X,X
                 cmp #$D8
-                bge _next1
+                bcs _next1
 
                 cmp #$2D
-                blt _next1
+                bcc _next1
 
                 ldy CHOP_Y
                 iny
