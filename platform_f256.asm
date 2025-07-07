@@ -1,6 +1,6 @@
 
 ; SPDX-FileName: platform_f256.asm
-; SPDX-FileCopyrightText: Copyright 2023, Scott Giese
+; SPDX-FileCopyrightText: Copyright 2023-2025, Scott Giese
 ; SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -145,16 +145,16 @@ _tmp            .byte $00
 
 
 ;======================================
-; Convert BCD to Binary
+; Convert Binary to BCD
 ;======================================
 Bin2Bcd         .proc
-                ldx #$00
-                ldy #$00
-_next1          cmp #$0A
+                ldx #00
+                ldy #00
+_next1          cmp #10
                 bcc _done
 
                 sec
-                sbc #$0A
+                sbc #10
 
                 inx
                 bra _next1
@@ -182,6 +182,40 @@ _tmp            .byte $00
 
 
 ;======================================
+; Convert Binary to Ascii
+;--------------------------------------
+; on entry:
+;   A           byte value
+; on exit:
+;   Y,A         2-byte ascii value
+;======================================
+Bin2Ascii       .proc
+                pha
+
+;   upper-nibble to ascii
+                lsr
+                lsr
+                lsr
+                lsr
+                and #$0F
+                tax
+                ldy _hex,X
+
+;   lower-nibble to ascii
+                pla
+                and #$0F
+                tax
+                lda _hex,X
+
+                rts
+
+;--------------------------------------
+
+_hex            .text '0123456789ABCDEF'
+
+                .endproc
+
+;======================================
 ; Initialize SID
 ;--------------------------------------
 ; preserve      A, X
@@ -197,7 +231,7 @@ InitSID         .proc
 ;   switch to system map
                 stz IOPAGE_CTRL
 
-                lda #$00                ; reset the SID registers
+                lda #0                  ; reset the SID registers
                 ldx #$1F
 _next1          sta SID1_BASE,X
                 sta SID2_BASE,X
@@ -253,7 +287,7 @@ InitPSG         .proc
 ;   switch to system map
                 stz IOPAGE_CTRL
 
-                lda #$00                ; reset the PSG registers
+                lda #0                  ; reset the PSG registers
                 ldx #$07
 _next1          sta PSG1_BASE,X
                 sta PSG2_BASE,X
@@ -377,6 +411,7 @@ InitTiles       .proc
 ;   switch to system map
                 stz IOPAGE_CTRL
 
+;   define the tilesets
                 lda #<tiles             ; Set the source address
                 sta TILESET0_ADDR
                 lda #>tiles
@@ -386,7 +421,7 @@ InitTiles       .proc
 
 ;   enable the tileset, use 8x256 pixel source data layout
                 lda #tsVertical
-                sta TILESET0_ADDR_CFG
+                sta TILESET0_CTRL
 
                 lda #<worldmap          ; Set the source address
                 sta TILE0_ADDR
@@ -395,10 +430,10 @@ InitTiles       .proc
                 lda #`worldmap
                 sta TILE0_ADDR+2
 
-                lda #$28                ; Set the size of the tile map to 256x256
+                lda #40                 ; Set the size of the tile map
                 sta TILE0_SIZE_X
                 stz TILE0_SIZE_X+1
-                lda #$1E
+                lda #30
                 sta TILE0_SIZE_Y
                 stz TILE0_SIZE_Y+1
 
@@ -441,15 +476,40 @@ InitSprites     .proc
 ;   switch to system map
                 stz IOPAGE_CTRL
 
-; - - - - - - - - - - - - - - - - - - -
+;   set player sprites (sprite-00 & sprint-01)
+                .frsSpriteInit SPR_PLAYER, scEnable|scLUT0|scDEPTH0|scSIZE_16, 0
+                .frsSpriteInit SPR_PLAYER, scEnable|scLUT0|scDEPTH0|scSIZE_16, 1
 
-                ;!!.frsSpriteInit SPR_Balloon, scEnable|scLUT0|scDEPTH0|scSIZE_16, 0
-                ;!!.frsSpriteInit SPR_Balloon, scEnable|scLUT1|scDEPTH0|scSIZE_16, 1
+;   set bomb sprites (sprite-02 & sprint-03)
+                .frsSpriteInit SPR_PLAYER, scEnable|scLUT0|scDEPTH0|scSIZE_16, 2
+                .frsSpriteInit SPR_PLAYER, scEnable|scLUT0|scDEPTH0|scSIZE_16, 3
 
-                ;!!.frsSpriteInit SPR_Bomb, scEnable|scLUT0|scDEPTH0|scSIZE_16, 2
-                ;!!.frsSpriteInit SPR_Bomb, scEnable|scLUT0|scDEPTH0|scSIZE_16, 3
+;   restore IOPAGE control
+                pla
+                sta IOPAGE_CTRL
 
-; - - - - - - - - - - - - - - - - - - -
+                pla
+                rts
+                .endproc
+
+
+;======================================
+; Clear all Sprites
+;======================================
+ClearSprites    .proc
+                pha
+
+;   preserve IOPAGE control
+                lda IOPAGE_CTRL
+                pha
+
+;   switch to system map
+                stz IOPAGE_CTRL
+
+                .frsSpriteClear 0
+                .frsSpriteClear 1
+                .frsSpriteClear 2
+                .frsSpriteClear 3
 
 ;   restore IOPAGE control
                 pla
@@ -473,11 +533,11 @@ InitBitmap      .proc
 ;   switch to system map
                 stz IOPAGE_CTRL
 
-                ;!!lda #<ScreenRAM         ; Set the destination address
+                lda #<ScreenRAM         ; Set the destination address
                 sta BITMAP2_ADDR
-                ;!!lda #>ScreenRAM
+                lda #>ScreenRAM
                 sta BITMAP2_ADDR+1
-                ;!!lda #`ScreenRAM
+                lda #`ScreenRAM
                 sta BITMAP2_ADDR+2
 
                 lda #bmcEnable|bmcLUT0
@@ -485,6 +545,9 @@ InitBitmap      .proc
 
                 lda #locLayer2_BM2
                 sta LAYER_ORDER_CTRL_1
+
+                stz BITMAP0_CTRL        ; disabled
+                stz BITMAP1_CTRL
 
 ;   restore IOPAGE control
                 pla
@@ -502,7 +565,6 @@ InitBitmap      .proc
 ;======================================
 ClearScreen     .proc
 v_QtyPages      .var $05                ; 40x30 = $4B0... 4 pages + 176 bytes
-
 v_EmptyText     .var $00
 v_TextColor     .var $40
 ;---

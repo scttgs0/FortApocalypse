@@ -136,7 +136,7 @@ MOVE_ROCKETS    .block
                 beq _2
 
                 lda SSIZEM
-                ;!! sta SIZEM
+                ;!! sta SIZEM           ; set missile size
 
                 lda ROCKET_X,X
                 cmp #$00+4

@@ -14,7 +14,7 @@
 ;*     September 1 1982    *
 ;*     Synapse Software    *
 ;*                         *
-;*     Febuary 8, 1983     *
+;*     February 8, 1983    *
 ;*                         *
 ;***************************
 
@@ -83,12 +83,18 @@ BOOT            cld
                 ldx #$FF                ; initialize the stack
                 txs
 
+                stz IOPAGE_CTRL
+
+                stz BACKGROUND_COLOR_R
+                stz BACKGROUND_COLOR_G
+                stz BACKGROUND_COLOR_B
+
                 jmp START
 
 
 ;--------------------------------------
 ;--------------------------------------
-                * = $2000
+                .align $100
 ;--------------------------------------
 
                 .include "data/LEVEL.inc"

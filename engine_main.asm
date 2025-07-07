@@ -73,13 +73,13 @@ _next1          lda Z2,X
                 dex
                 bne _next1
 
-                lda #%00111110
+                lda #%00111110          ; standard playfield; enable single-line P/M; enable DMA fetch
                 ;!! sta SDMCTL
 
-                lda #$14
+                lda #$14                ; 5th-player; Playfield/5th-player -> P/M 0-3 -> background
                 ;!! sta PRIOR
 
-                lda #%00000011
+                lda #%00000011          ; enable P/M
                 ;!! sta GRACTL
                 ;!! sta SKCTL
 
@@ -140,7 +140,7 @@ _next2          lda Z1,X
                 dex
                 bpl _next2
 
-                lda #$40
+                lda #$40                ; enable VBI
                 ;!! sta NMIEN
 
                 cli

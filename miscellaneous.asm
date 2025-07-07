@@ -16,18 +16,18 @@ _next1          lda $E480,X             ; PUPDIV
                 dex
                 bpl _next1
 
-                lda #$40
+                lda #$40                ; enable VBI
                 ;!! sta NMIEN
 
-                ldx #$3B
+                ldx #$3B                ; enable direction control
                 ;!! stx PACTL
                 ;!! stx PBCTL
 
-                lda #$00
+                lda #$00                ; all-input direction
                 ;!! sta PORTA
                 ;!! sta PORTB
 
-                inx
+                inx                     ; disable direction control 
                 ;!! stx PACTL
                 ;!! stx PBCTL
 
