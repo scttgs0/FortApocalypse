@@ -442,7 +442,7 @@ InitTiles       .proc
                 stz TILE0_SCROLL_Y+1
                 stz TILE0_SCROLL_Y
 
-;   enable the tilemap, use 8x8 pixel tiles
+;   enable the tilemap, use 8x8-pixel tiles
                 lda #tcEnable|tcSmallTiles
                 sta TILE0_CTRL
 

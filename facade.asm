@@ -1,4 +1,9 @@
 
+; SPDX-FileName: facade.asm
+; SPDX-FileCopyrightText: Copyright 2023-2025, Scott Giese
+; SPDX-License-Identifier: GPL-3.0-or-later
+
+
 ;======================================
 ;
 ;--------------------------------------
@@ -9,16 +14,16 @@ CheckCollision  .proc
                 phx
                 phy
 
-                ldx #$01                ; Given: SP02_Y=112
+                ldx #1                  ; Given: SP02_Y=112
 _nextBomb       lda zpBombDrop,X        ; A=112
                 beq _nextPlayer
 
-                cmp #$84
+                cmp #132
                 bcs _withinRange
                 bra _nextPlayer
 
 _withinRange    sec
-                sbc #$84                ; A=8
+                sbc #132                ; A=8
                 lsr             ; /2    ; A=4
                 lsr             ; /4    ; A=2
                 lsr             ; /8    ; A=1
@@ -39,7 +44,7 @@ _nextRow        beq _checkRock
 
                 lda zpSource
                 clc
-                adc #$28
+                adc #40
                 sta zpSource
                 bcc _1
 
@@ -52,14 +57,14 @@ _checkRock      ldy zpTemp2
                 lda (zpSource),Y
                 beq _nextPlayer
 
-                ;cmp #$04
+                ;cmp #4
                 ;bcs _nextPlayer
 
                 sta P2PF,X
 
                 stz zpTemp1
                 txa
-                asl
+                asl                     ; *2
                 rol zpTemp1
                 tay
 
@@ -81,6 +86,8 @@ _nextPlayer     dex
 
 ;======================================
 ; Clear the bottom of the screen
+;--------------------------------------
+; preserve      A, Y
 ;======================================
 ClearGamePanel  .proc
 v_EmptyText     .var $00
@@ -88,9 +95,7 @@ v_TextColor     .var $40
 v_RenderLine    .var 24*CharResX
 ;---
 
-                php
                 pha
-                phx
                 phy
 
 ;   switch to color map
@@ -134,21 +139,20 @@ _next2          sta (zpDest),Y
                 stz IOPAGE_CTRL
 
                 ply
-                plx
                 pla
-                plp
                 rts
                 .endproc
 
 
 ;======================================
 ; Render High Score
+;--------------------------------------
+; preserve      A, X, Y
 ;======================================
 RenderHiScore   .proc
 v_RenderLine    .var 2*CharResX
 ;---
 
-                php
                 pha
                 phx
                 phy
@@ -229,19 +233,19 @@ _XIT
                 ply
                 plx
                 pla
-                plp
                 rts
                 .endproc
 
 
 ;======================================
 ; Render High Score
+;--------------------------------------
+; preserve      A, X, Y
 ;======================================
 RenderHiScore2  .proc
 v_RenderLine    .var 24*CharResX
 ;---
 
-                php
                 pha
                 phx
                 phy
@@ -322,19 +326,19 @@ _XIT
                 ply
                 plx
                 pla
-                plp
                 rts
                 .endproc
 
 
 ;======================================
 ; Render Title
+;--------------------------------------
+; preserve      A, X, Y
 ;======================================
 RenderTitle     .proc
 v_RenderLine    .var 24*CharResX
 ;---
 
-                php
                 pha
                 phx
                 phy
@@ -381,19 +385,22 @@ _XIT
                 ply
                 plx
                 pla
-                plp
                 rts
                 .endproc
 
 
 ;======================================
 ; Render Author
+;--------------------------------------
+; preserve      A, X, Y
 ;======================================
 RenderAuthor    .proc
 v_RenderLine    .var 26*CharResX
 ;---
 
-                php
+                pha
+                phx
+                phy
 
 ;   switch to color map
                 lda #iopPage3
@@ -452,19 +459,22 @@ _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL
 
-                plp
+                ply
+                plx
+                pla
                 rts
                 .endproc
 
 
 ;======================================
 ; Render SELECT (Qty of Players)
+;--------------------------------------
+; preserve      A, X, Y
 ;======================================
 RenderSelect    .proc
 v_RenderLine    .var 27*CharResX
 ;---
 
-                php
                 pha
                 phx
                 phy
@@ -545,19 +555,19 @@ _XIT
                 ply
                 plx
                 pla
-                plp
                 rts
                 .endproc
 
 
 ;======================================
 ; Render Title
+;--------------------------------------
+; preserve      A, X, Y
 ;======================================
 RenderPlayers   .proc
 v_RenderLine    .var 26*CharResX
 ;---
 
-                php
                 pha
                 phx
                 phy
@@ -638,7 +648,6 @@ _XIT
                 ply
                 plx
                 pla
-                plp
                 rts
                 .endproc
 
@@ -646,14 +655,12 @@ _XIT
 ;======================================
 ; Render Player Scores & Bombs
 ;--------------------------------------
-; preserves:
-;   X Y
+; preserve      A, X, Y
 ;======================================
 RenderScore     .proc
 v_RenderLine    .var 27*CharResX
 ;---
 
-                php
                 pha
                 phx
                 phy
@@ -748,7 +755,6 @@ _XIT
                 ply
                 plx
                 pla
-                plp
                 rts
                 .endproc
 
@@ -764,7 +770,6 @@ v_RenderLine    .var 13*CharResX    ; skip 13 lines
 v_QtyLines      = zpTemp1
 ;---
 
-                php
                 pha
                 phy
 
@@ -894,6 +899,5 @@ _XIT
 
                 ply
                 pla
-                plp
                 rts
                 .endproc
