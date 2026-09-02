@@ -159,6 +159,7 @@ _6              lda #FLY
 
                 jmp PositionRobot
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
                 .endproc
 
@@ -286,6 +287,7 @@ _4              lda ROBOT_STATUS
 
                 jmp _7
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda CHOP_X
                 sec
                 sbc R_X
@@ -295,6 +297,7 @@ _5              lda CHOP_X
                 jsr RobotLeft
                 jmp _7
 
+; - - - - - - - - - - - - - - - - - - -
 _6              jsr RobotRight
 
 _7              lda CHOP_Y
@@ -306,6 +309,7 @@ _7              lda CHOP_Y
                 jsr RobotUp
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 _8              jsr RobotDown
 _9              jsr PositionRobot
                 .endblock
@@ -552,6 +556,7 @@ _next1          lda (ADR2_I),Y
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            sec
                 rts
                 .endproc
@@ -574,8 +579,10 @@ DoChopper       .proc
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _leap           jmp _8
 
+; - - - - - - - - - - - - - - - - - - -
 _1              cmp #CRASH
                 beq _XIT
 
@@ -648,6 +655,7 @@ _4              lda CHOP_X
                 ldx #PICKUP
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda TEMP3_I
                 cmp #$03
                 beq _8
@@ -736,6 +744,7 @@ _next1          cmp LAND_CHR,X
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              inc TEMP4_I
 
                 rts
@@ -885,11 +894,13 @@ UpdateChopper   .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda #FLY
                 sta CHOPPER_STATUS
 
                 jmp _CCXY
 
+; - - - - - - - - - - - - - - - - - - -
 _2              ldy OCHOPPER_Y
                 ldx #$11
                 lda #$00
@@ -1033,6 +1044,7 @@ _7              clc
 
                 jmp PositionChopper
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
                 .endproc
 
@@ -1159,6 +1171,7 @@ NXT_RCK         .block
 
 _next1          jmp _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _1              cmp #$07
                 beq _next1
 

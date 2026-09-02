@@ -40,6 +40,7 @@
 POD_STATUS      .fill MAX_PODS
 POD_DX          .fill MAX_PODS
 
+
 ;--------------------------------------
 ;--------------------------------------
                 * = POD_2
@@ -49,6 +50,7 @@ POD_X           .fill MAX_PODS
 POD_Y           .fill MAX_PODS
 POD_TEMP1       .fill MAX_PODS
 POD_TEMP2       .fill MAX_PODS
+
 
 ;--------------------------------------
 ;--------------------------------------
@@ -67,6 +69,7 @@ SLAVE_DX        .fill 8
 ;--------------------------------------
 
                 .include "FORT7.inc"
+
 
 ;--------------------------------------
 ; REST OF PROGRAM IS
@@ -108,7 +111,11 @@ SLAVE_DX        .fill 8
 
 END_CART        .fill $BFFA-*
 
-                .addr CartridgeStart
+
+;--------------------------------------
+;--------------------------------------
+
+                .addr CART_START
                 .byte $00
                 .byte %10000100
-                .addr CartridgeStart
+                .addr CART_START

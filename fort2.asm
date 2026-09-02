@@ -44,6 +44,7 @@ v_demoTimer     .var TIM6_VAL
 
                 jmp _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _chk_mode       ldx MODE                ; Options Screen has its own handler
                 cpx #OPTION_MODE        ; continue if not on the Options screen
                 bne _determine_key
@@ -51,6 +52,7 @@ _chk_mode       ldx MODE                ; Options Screen has its own handler
                 jsr CheckOptions        ; transfer to the Option handler
                 jmp _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _determine_key  cmp #$03                ; OPTION pressed?
                 beq _doOption
 
@@ -68,6 +70,7 @@ _doOption       lda #OPTION_MODE        ; switch to Options screen
                 jsr CheckOptions        ; transfer to the Option handler
                 jmp _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _doSelect       lda SKSTAT              ; is the key still pressed?
                 and #%00000100
                 bne _XIT                ; still pressed then exit
@@ -391,6 +394,7 @@ MovePods1       .proc
                 bne _1
                 jmp PodBegin
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr PodCollision
                 bcs PodsEnd
 
@@ -576,6 +580,7 @@ PodCollision    .proc
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr PodErase
 
                 lda #OFF
@@ -670,6 +675,7 @@ _next1          lda POD_DX,X
 
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda POD_COM
                 clc
                 adc #$10
@@ -706,6 +712,7 @@ _3              lda POD_DX,X
 
                 jmp _next1
 
+; - - - - - - - - - - - - - - - - - - -
 _4              lda POD_COM
                 sta POD_STATUS,X
 
@@ -744,6 +751,7 @@ M_ST            .block
                 bne _1
                 jmp MissileBegin
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr MissileCollision
                 bcs M_END
 
@@ -882,6 +890,7 @@ v_preserveX     .var TEMP1
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 M_COL2          jsr MissileErase
 
                 lda #$01
@@ -953,6 +962,7 @@ v_distance      .var TEMP1
 
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              dec CM_X,X
 
 _2              lda CM_TIME,X
@@ -962,6 +972,7 @@ _next1          inc CM_Y,X
 
                 jmp _6
 
+; - - - - - - - - - - - - - - - - - - -
 _3              lda CHOP_X
                 sec
                 sbc CM_X,X
@@ -998,6 +1009,7 @@ _5              lda CM_X,X
 
                 jmp _6
 
+; - - - - - - - - - - - - - - - - - - -
 _next2          inc CM_Y,X
 
 _6              jsr GetMissileAddr
@@ -1047,6 +1059,7 @@ _1              ldy #$00
                 bcc _XIT
                 jmp MissileCollision.M_COL2
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
                 .endproc
 
@@ -1147,6 +1160,7 @@ _next1          lda (ADR2),Y
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            sec
                 rts
                 .endproc
@@ -1190,6 +1204,7 @@ MT1             .block
                 beq _1
                 jmp MT2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda TANK_SPEED
                 sta TANK_SPD
 
@@ -1202,6 +1217,7 @@ _next1          lda TANK_Y,X
                 bne _2
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 _2              cmp #BEGIN
                 bne _4
 
@@ -1223,10 +1239,12 @@ _3              sta TANK_DX,X
                 jsr PositionTank
                 jmp _next4
 
+; - - - - - - - - - - - - - - - - - - -
 _4              cmp #CRASH
                 bne _5
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 ;   RESTORE OLD POS
 _5              lda TANK_X,X
                 sta TEMP1
@@ -1266,6 +1284,7 @@ _next3          sta (ADR1),Y
 
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 _7              lda TANK_TEMP,X
                 sta (ADR1),Y
 
@@ -1461,6 +1480,7 @@ _next1          lda (ADR1),Y
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx TEMP1
                 lda TANK_DX,X
                 eor #-2
@@ -1740,6 +1760,7 @@ _1              cmp FRAME
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _2              ldx #$FF                ; reset stack
                 txs
 

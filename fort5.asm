@@ -83,6 +83,7 @@ MoveSlaves      .proc
 
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr SlaveCollision
                 bcs _2
 
@@ -272,6 +273,7 @@ _next1          lda SLAVE_DX,X
 
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              dec SLAVE_DX,X
                 lda SLAVE_DX,X
                 and #$01
@@ -293,6 +295,7 @@ _2              jsr GetSlaveAddr
 
                 jmp _next1
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
                 .endproc
 
@@ -326,6 +329,7 @@ SlaveDraw       .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda SLAVE_CHR_B_R,X
                 sta (ADR1),Y
 
@@ -349,6 +353,7 @@ _next1          dex
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda SLAVE_STATUS,X
                 cmp #OFF
                 beq _next1
@@ -423,6 +428,7 @@ v_posY          .var TEMP2
                 bne _1
                 jmp Refuel
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda CHOPPER_STATUS
                 cmp #LAND
                 bne _4
@@ -445,6 +451,7 @@ _1              lda CHOPPER_STATUS
                 bcs _4
                 jmp _3
 
+; - - - - - - - - - - - - - - - - - - -
 _2              cpx #$82
                 bcc _4
 
@@ -492,6 +499,7 @@ _4              lda #$00
                 jsr Print
                 jmp _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda #$A4
 _6              sta AUDC2
                 lda #$88
@@ -556,6 +564,7 @@ _2              sta TEMP1
 
 FE              rts
 
+; - - - - - - - - - - - - - - - - - - -
 F1              ldx #$01
                 lda CHOP_Y
                 cmp #$0B+2
@@ -708,6 +717,7 @@ _2              lda SX
 
                 jmp DO_LINE
 
+; - - - - - - - - - - - - - - - - - - -
                 rts
                 .endproc
 

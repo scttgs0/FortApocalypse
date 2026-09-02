@@ -284,9 +284,9 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 ldx #OPTION_MODE        ; switch to Option screen when SELECT or OPTION is pressed
                 cmp #$07
                 bne _3
-
                 jmp VVBLKD_RET          ; exit VBI
 
+; - - - - - - - - - - - - - - - - - - -
 _3              stx MODE
 
                 ldx #$00
@@ -297,6 +297,7 @@ _4              stx DEMO_STATUS
 
                 jmp T3
 
+; - - - - - - - - - - - - - - - - - - -
 _5              ldx #-1                 ; START DEMO
                 bne _4                  ; [unc]
 
@@ -432,6 +433,7 @@ _5              lda FRAME
                 bne _4
                 jmp TITLE
 
+; - - - - - - - - - - - - - - - - - - -
 _4              JMP MAIN
 
 
@@ -446,8 +448,10 @@ CheckLevel      .proc
                 bne _1
                 jmp DoLevel2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jmp DoLevel3
 
+; - - - - - - - - - - - - - - - - - - -
                 rts                     ; unreachable code
                 .endproc
 
@@ -762,14 +766,17 @@ CheckModes      .proc
                 bne _1
                 jmp M_START
 
+; - - - - - - - - - - - - - - - - - - -
 _1              cmp #GAME_OVER_MODE
                 bne _2
                 jmp M_GameOver
 
+; - - - - - - - - - - - - - - - - - - -
 _2              cmp #NEW_LEVEL_MODE
                 bne _3
                 jmp M_NewLevel
 
+; - - - - - - - - - - - - - - - - - - -
 _3              cmp #NEW_PLAYER_MODE
                 bne _4
                 jmp M_NewPlayer
@@ -928,6 +935,7 @@ M_NewPlayer     .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda #$1F                ; CHOPPER CLR
                 sta PCOLR0
                 sta PCOLR1
@@ -1066,6 +1074,7 @@ M_NewLevel      .proc
                 jsr Print
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx #<txtEnterL2        ; "CRYSTALLINE  CAVES"
                 ldy #>txtEnterL2
                 jsr Print
@@ -1553,6 +1562,7 @@ _next1          lda SCORE1
 
                 jmp _6
 
+; - - - - - - - - - - - - - - - - - - -
 _5              bcs _next1
 
 _6              lda #$02                ; (2,0)

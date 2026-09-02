@@ -67,7 +67,7 @@ DSP_LST3        .byte AEMPTY8           ; 48 blank lines
 ;======================================
 ;
 ;======================================
-CartridgeStart  .proc
+CART_START      .proc
 ;v_???          .var ADR1
 ;---
 
@@ -79,7 +79,7 @@ CartridgeStart  .proc
                 txa
 _next1          sta $0000,X             ; zero-page
                 sta HPOSP0,X
-                sta DMACLT,X
+                sta DMACTL,X
                 sta AUDF1,X
                 sta PORTA,X
 
@@ -409,7 +409,7 @@ BOOT_STUFF      .byte $84,$C4,$76,$9E,$E6,$7C,$08,$88,$79,$06               ; #.
 
 
 ;======================================
-;
+; relocated to $01CA
 ;======================================
 INIT_OS         ;.proc                  ; never called
                 ldx #$25
@@ -436,6 +436,7 @@ _next1          lda $E480,X             ; PUPDIV
 
                 rts
                 ;.endproc
+
 
 ;--------------------------------------
 ;--------------------------------------

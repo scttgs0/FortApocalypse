@@ -112,6 +112,7 @@ v_angleBit0     .var TEMP1_I
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _doStick        lda CHOPPER_ANGLE
                 and #$01
                 sta v_angleBit0
@@ -272,6 +273,7 @@ ReadTrigger     .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx TRIG0
                 beq _2
 
@@ -279,6 +281,7 @@ _1              ldx TRIG0
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda TRIG_FLAG
                 beq _XIT
 
@@ -308,6 +311,7 @@ _next1          lda ROCKET_STATUS,X
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda CHOPPER_ANGLE
                 and #%00011110
                 lsr
@@ -374,6 +378,7 @@ _1              cmp #$08
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _2              dec CHOPPER_ANGLE
                 dec CHOPPER_ANGLE
 
@@ -630,6 +635,7 @@ _next2          lda LASER_SHAPES+24,X
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx #$20-1
                 lda #$00
 _next3          sta LASERS_1,X
@@ -683,6 +689,7 @@ _next2          lda LASER_SHAPES+16,X
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx #$20-1
                 lda #$00
 _next3          sta LASERS_2,X
@@ -943,6 +950,7 @@ _1              lda #<BONUS_DIG
 
                 jmp _3
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda #EMPTY
                 sta FUEL_STATUS
 
