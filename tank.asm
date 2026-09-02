@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: tank.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -49,6 +49,7 @@ MT1             .block
                 beq _1
                 jmp MT2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda TANK_SPEED
                 sta TANK_SPD
 
@@ -61,6 +62,7 @@ _next1          lda TANK_Y,X
                 bne _2
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 _2              cmp #kBEGIN
                 bne _4
 
@@ -73,9 +75,7 @@ _2              cmp #kBEGIN
                 sta TANK_Y,X
 
                 lda #-1
-                ;--.setbank $AF
                 .frsRandomByteY
-                ;--.setbank $03
                 bpl _3
 
                 lda #$01
@@ -84,10 +84,12 @@ _3              sta TANK_DX,X
                 jsr PositionTank
                 bra _next4
 
+; - - - - - - - - - - - - - - - - - - -
 _4              cmp #kCRASH
                 bne _5
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 ;   RESTORE OLD POS
 _5              lda TANK_X,X
                 sta TEMP1
@@ -127,6 +129,7 @@ _next3          sta (ADR1),Y
 
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 _7              lda TANK_TEMP,X
                 sta (ADR1),Y
 
@@ -325,6 +328,7 @@ _next1          lda (ADR1),Y
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx TEMP1
                 lda TANK_DX,X
                 eor #-2

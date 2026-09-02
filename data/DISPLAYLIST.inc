@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: DISPLAYLIST.inc
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -14,7 +14,7 @@ Z1              ;!! .byte AEMPTY8
                 .byte $04;!! +ALMS          ; Score Panel
                     .addr PANEL
 
-                .byte $04,$04,$04,$04   ; 32 lines of 40 pixels (Navatron display)
+                .byte $04,$04,$04,$04       ; 32 lines of 40 pixels (Navatron display)
 
                 .byte $04;!! +ALMS          ; Navatron Panel
                     .addr NAVA_PANEL
@@ -60,10 +60,10 @@ MAP_LINES       = 17
                     .word $0000
                 .byte $04;!! +ALMS+AHSCR+AVSCR
                     .word $0000
-                .byte $04;!! +ALMS+ADLI+AHSCR           ; no vertical scroll on bottom row
+                .byte $04;!! +ALMS+ADLI+AHSCR       ; no vertical scroll on bottom row
                     .word $0000
 
-                ;!! .byte AVB+AJMP          ; vblank jump
+                ;!! .byte AVB+AJMP
                     .addr DSP_LST1
 
 Z1_LEN          = *-Z1-1
@@ -198,4 +198,3 @@ DSP_LST3        ;!! .byte AEMPTY8           ; 48 blank lines
 
                 ;!! .byte AVB+AJMP          ; vblank jump
                     .addr DSP_LST3
-

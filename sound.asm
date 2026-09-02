@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: sound.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -48,9 +48,7 @@ S2              .block                  ; MISSILE SOUND
                 bne _1
 
                 ldx #$00
-_1              ;--.setbank $AF
-                stx SID1_CTRL2
-                ;--.setbank $03
+_1              stx SID1_CTRL2
 
                 dec SND2_VAL
 
@@ -80,9 +78,7 @@ _1              ldx #$48
                 bne _2
 
                 tax                     ; X=0
-_2              ;--.setbank $AF
-                stx SID1_CTRL3
-                ;--.setbank $03
+_2              stx SID1_CTRL3
 
 _XIT            .endblock
 
@@ -115,10 +111,8 @@ _1              ldy #$00
                 sta FUEL2
 
                 cld
-_2              ;--.setbank $AF
-                stx SID1_FREQ2
+_2              stx SID1_FREQ2
                 sty SID1_CTRL2
-                ;--.setbank $03
 
 _XIT            .endblock
 

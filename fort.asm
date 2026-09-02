@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: fort.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023-2024
+; SPDX-FileContributor: Modified by Scott Giese 2023-2024,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -64,18 +64,6 @@
 ;--------------------------------------
 ;--------------------------------------
                 * = $2000
-;--------------------------------------
-
-.if PGZ=0
-                .byte $F2,$56           ; signature
-                .byte $01               ; slot count
-                .byte $01               ; start slot
-                .addr BOOT              ; execute address
-                .word $0001             ; version
-                .word $0000             ; kernel
-                .null 'Fort Apocalypse' ; binary name
-.endif
-
 ;--------------------------------------
 
 BOOT            cld

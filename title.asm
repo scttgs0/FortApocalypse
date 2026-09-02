@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: title.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -169,13 +169,11 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
                 lda #$FF                ; audio freq increases as v_audiofreq is incremented
                 sec
                 sbc v_audiofreq
-                sta SID1_FREQ1           ; this is a divide-by-N circuit - larger numbers are lower freq
+                sta SID1_FREQ1          ; this is a divide-by-N circuit - larger numbers are lower freq
 
                 tax
                 dex
-                ;--.setbank $AF
-                stx SID1_FREQ2           ; audio channel 2 leads channel 1
-                ;--.setbank $03
+                stx SID1_FREQ2          ; audio channel 2 leads channel 1
 
                 lda v_audiofreq         ; launch demo near the end of the audio scale (avoid the highest notes)
                 cmp #$F3
@@ -195,6 +193,7 @@ _2              lda #$AF                ; set audio channels to full-volume, pur
 
                 ;!! jmp VVBLKD_RET          ; exit VBI
 
+; - - - - - - - - - - - - - - - - - - -
 _3              stx MODE
 
                 ldx #$00
@@ -205,6 +204,7 @@ _4              stx DEMO_STATUS
 
                 jmp T3
 
+; - - - - - - - - - - - - - - - - - - -
 _5              ldx #-1                 ; START DEMO
                 bra _4
 

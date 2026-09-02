@@ -1,6 +1,6 @@
 
 ; SPDX-FileName: platform_f256.asm
-; SPDX-FileCopyrightText: Copyright 2023-2025, Scott Giese
+; SPDX-FileCopyrightText: Copyright 2023-2026, Scott Giese
 ; SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -157,8 +157,10 @@ _next1          cmp #10
                 sbc #10
 
                 inx
+
                 bra _next1
 
+; - - - - - - - - - - - - - - - - - - -
 _done           tay
                 txa
                 asl
@@ -670,6 +672,7 @@ _nextColor      inx
                 sta CS_COLOR_MEM_PTR+v_RenderLine,X
                 bra _nextColor
 
+; - - - - - - - - - - - - - - - - - - -
 ;   process the text
 _processText
 
@@ -696,12 +699,14 @@ _nextChar       inx
                 bcc _number
                 bra _letter
 
+; - - - - - - - - - - - - - - - - - - -
 _space          sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 ;   (ascii-30)*2+$A0
 _number         sec
                 sbc #$30
@@ -716,6 +721,7 @@ _number         sec
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 clc
@@ -724,6 +730,7 @@ _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _bomb           sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 inc A
@@ -731,6 +738,7 @@ _bomb           sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   restore IOPAGE control
                 pla

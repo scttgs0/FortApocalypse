@@ -7,8 +7,7 @@ mkdir -p obj/
         --c256-pgz \
         --output-exec=BOOT \
         --long-address \
-        -D PGZ=1 \
-        -o obj/fort.pgx \
+        -o obj/fort.pgz \
         --list=obj/fort.lst \
         --labels=obj/fort.lbl \
         fort.asm

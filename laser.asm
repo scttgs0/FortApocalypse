@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: laser.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -41,6 +41,7 @@ _next2          lda LASER_VERT,X
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx #$20-1
                 lda #$00
 _next3          sta LASER_1,X
@@ -94,6 +95,7 @@ _next2          lda LASER_HORZ,X
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx #$20-1
                 lda #$00
 _next3          sta LASER_2,X

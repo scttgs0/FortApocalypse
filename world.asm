@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: world.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -73,6 +73,7 @@ DO_Y            .block
 
                 bra _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx CHOPPER_Y
                 cpx #MAX_DOWN+1
                 bcc _3
@@ -106,6 +107,7 @@ _3              lda SY
 
                 bra _5
 
+; - - - - - - - - - - - - - - - - - - -
 _4              cpx #MAX_UP
                 bcs _6
 

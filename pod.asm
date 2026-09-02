@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: pod.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -43,6 +43,7 @@ MovePods1       .proc
                 bne _1
                 jmp PodBegin
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr PodCollision
                 bcs PodsEnd
 
@@ -228,6 +229,7 @@ PodCollision    .proc
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr PodErase
 
                 lda #kOFF
@@ -322,6 +324,7 @@ _next1          lda POD_DX,X
 
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda POD_COM
                 clc
                 adc #$10
@@ -358,6 +361,7 @@ _3              lda POD_DX,X
 
                 bra _next1
 
+; - - - - - - - - - - - - - - - - - - -
 _4              lda POD_COM
                 sta POD_STATUS,X
 

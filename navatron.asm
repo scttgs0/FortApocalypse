@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: navatron.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -79,6 +79,7 @@ _2              lda SX
 
                 jmp DO_LINE
 
+; - - - - - - - - - - - - - - - - - - -
                 rts
                 .endproc
 

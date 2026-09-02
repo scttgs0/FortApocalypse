@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: options.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -156,8 +156,10 @@ _1              ldy TEMP6
 
                 inc TEMP6
                 inc TEMP5
+
                 bra _next1
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda #$1C                ; (28,7)
                 sta v_posX
                 lda #$07

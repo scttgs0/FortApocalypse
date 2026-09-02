@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: fuel.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -18,6 +18,7 @@ v_posY          .var TEMP2
                 bne _1
                 jmp Refuel
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda CHOPPER_STATUS
                 cmp #kLAND
                 bne _4
@@ -40,6 +41,7 @@ _1              lda CHOPPER_STATUS
                 bcs _4
                 jmp _3
 
+; - - - - - - - - - - - - - - - - - - -
 _2              cpx #$82
                 bcc _4
 
@@ -87,6 +89,7 @@ _4              lda #$00
                 jsr Print
                 jmp _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda #$A4
 _6              sta SID1_CTRL2
                 lda #$88
@@ -133,6 +136,7 @@ DF1             lda #$09+2
                 lda #$EC+2
                 bra _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda #$82
 _2              sta TEMP1
 
@@ -142,15 +146,14 @@ _2              sta TEMP1
 
 FE              rts
 
+; - - - - - - - - - - - - - - - - - - -
 F1              ldx #$01
                 lda CHOP_Y
                 cmp #$0B+2
                 bcs _1
 
                 ldx #$00
-                ;--.setbank $AF
                 stx SID1_CTRL2
-                ;--.setbank $03
 _1              stx SND4_VAL
 
                 lda CHOP_Y

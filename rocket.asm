@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: rocket.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -23,6 +23,7 @@ NXT_RCK         .block
 
 _next1          jmp _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _1              cmp #$07
                 beq _next1
 
@@ -88,6 +89,7 @@ _3              clc
 
                 bra _7
 
+; - - - - - - - - - - - - - - - - - - -
 _4              cmp #EXP_WALL
                 bne _5
 
@@ -106,6 +108,7 @@ _4              cmp #EXP_WALL
 
                 bra _6
 
+; - - - - - - - - - - - - - - - - - - -
 _5              ldy #HIT_LIST_LEN
 _next2          cmp HIT_LIST,Y
                 beq _7
@@ -116,6 +119,7 @@ _next2          cmp HIT_LIST,Y
 _6              lda #$07
                 bra _8
 
+; - - - - - - - - - - - - - - - - - - -
 _7              lda #$00
 _8              sta ROCKET_STATUS,X
 

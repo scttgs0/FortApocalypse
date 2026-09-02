@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: cruisemissile.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -27,6 +27,7 @@ M_ST            .block
                 bne _1
                 jmp MissileBegin
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr MissileCollision
                 bcs M_END
 
@@ -165,6 +166,7 @@ v_preserveX     .var TEMP1
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 M_COL2          jsr MissileErase
 
                 lda #$01
@@ -236,6 +238,7 @@ v_distance      .var TEMP1
 
                 bra _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              dec CM_X,X
 
 _2              lda CM_TIME,X
@@ -245,6 +248,7 @@ _next1          inc CM_Y,X
 
                 jmp _6
 
+; - - - - - - - - - - - - - - - - - - -
 _3              lda CHOP_X
                 sec
                 sbc CM_X,X
@@ -258,6 +262,7 @@ _3              lda CHOP_X
                 bpl _next1
                 bra _5
 
+; - - - - - - - - - - - - - - - - - - -
 _4              lda v_distance
                 bmi _next1
 
@@ -281,6 +286,7 @@ _5              lda CM_X,X
 
                 bra _6
 
+; - - - - - - - - - - - - - - - - - - -
 _next2          inc CM_Y,X
 
 _6              jsr GetMissileAddr
@@ -330,6 +336,7 @@ _1              ldy #$00
                 bcc _XIT
                 jmp MissileCollision.M_COL2
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
                 .endproc
 
@@ -368,6 +375,7 @@ _next1          lda (ADR2),Y
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            sec
                 rts
                 .endproc

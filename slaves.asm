@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: slaves.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -20,9 +20,7 @@ MoveSlaves      .proc
                 jsr S_COL2
 
                 ldx #$00
-                ;--.setbank $AF
                 stz SID1_CTRL3
-                ;--.setbank $03
                 ldy #$08
                 jsr IncreaseScore
 
@@ -30,6 +28,7 @@ MoveSlaves      .proc
 
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr SlaveCollision
                 bcs _2
 
@@ -219,6 +218,7 @@ _next1          lda SLAVE_DX,X
 
                 bra _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              dec SLAVE_DX,X
                 lda SLAVE_DX,X
                 and #$01
@@ -240,6 +240,7 @@ _2              jsr GetSlaveAddr
 
                 jmp _next1
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
                 .endproc
 
@@ -273,6 +274,7 @@ SlaveDraw       .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda SLAVE_CHR_B_R,X
                 sta (ADR1),Y
 
@@ -296,6 +298,7 @@ _next1          dex
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda SLAVE_STATUS,X
                 cmp #kOFF
                 beq _next1

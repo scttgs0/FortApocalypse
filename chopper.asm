@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: chopper.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -46,6 +46,7 @@ _next1          lda (ADR2_I),Y
                 clc
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            sec
                 rts
                 .endproc
@@ -68,8 +69,10 @@ DoChopper       .proc
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _leap           jmp _8
 
+; - - - - - - - - - - - - - - - - - - -
 _1              cmp #kCRASH
                 beq _XIT
 
@@ -109,6 +112,7 @@ _2              lda CHOPPER_COL
 _3              ldx #kFLY
                 bra _9
 
+; - - - - - - - - - - - - - - - - - - -
 _4              lda CHOP_X
                 sta TEMP1_I
                 lda CHOP_Y
@@ -142,6 +146,7 @@ _4              lda CHOP_X
                 ldx #kPICKUP
                 bra _9
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda TEMP3_I
                 cmp #$03
                 beq _8
@@ -167,6 +172,7 @@ _6              cpx #kREFUEL
 _7              ldx #kLAND
                 bra _9
 
+; - - - - - - - - - - - - - - - - - - -
 _8              lda #$14
                 sta TIM3_VAL
                 lda #$01
@@ -201,11 +207,13 @@ UpdateChopper   .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda #kFLY
                 sta CHOPPER_STATUS
 
                 jmp _CCXY
 
+; - - - - - - - - - - - - - - - - - - -
 _2              ldy OCHOPPER_Y
                 ldx #$11
                 lda #$00
@@ -349,6 +357,7 @@ _7              clc
 
                 jmp PositionChopper
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
                 .endproc
 
@@ -394,6 +403,7 @@ _1              cmp #$08
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _2              dec CHOPPER_ANGLE
                 dec CHOPPER_ANGLE
 

@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: robot.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -95,6 +95,7 @@ _6              lda #kFLY
 
                 jmp PositionRobot
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
                 .endproc
 
@@ -143,6 +144,7 @@ R_F             .block
                 lda #$03
                 bra _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              sec
                 sbc #$02
 _2              cmp #$06
@@ -201,6 +203,7 @@ _2              cmp #$08
 
                 bra _4
 
+; - - - - - - - - - - - - - - - - - - -
 _3              dec ROBOT_ANGLE
                 dec ROBOT_ANGLE
 
@@ -212,6 +215,7 @@ _4              lda ROBOT_STATUS
 
                 jmp _7
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda CHOP_X
                 sec
                 sbc R_X
@@ -221,6 +225,7 @@ _5              lda CHOP_X
                 jsr RobotLeft
                 jmp _7
 
+; - - - - - - - - - - - - - - - - - - -
 _6              jsr RobotRight
 
 _7              lda CHOP_Y
@@ -232,6 +237,7 @@ _7              lda CHOP_Y
                 jsr RobotUp
                 jmp _9
 
+; - - - - - - - - - - - - - - - - - - -
 _8              jsr RobotDown
 _9              jsr PositionRobot
                 .endblock

@@ -1,6 +1,6 @@
 
 ; SPDX-FileName: facade.asm
-; SPDX-FileCopyrightText: Copyright 2023-2025, Scott Giese
+; SPDX-FileCopyrightText: Copyright 2023-2026, Scott Giese
 ; SPDX-License-Identifier: GPL-3.0-or-later
 
 
@@ -22,6 +22,7 @@ _nextBomb       lda zpBombDrop,X        ; A=112
                 bcs _withinRange
                 bra _nextPlayer
 
+; - - - - - - - - - - - - - - - - - - -
 _withinRange    sec
                 sbc #132                ; A=8
                 lsr             ; /2    ; A=4
@@ -53,6 +54,7 @@ _nextRow        beq _checkRock
 _1              dey
                 bra _nextRow
 
+; - - - - - - - - - - - - - - - - - - -
 _checkRock      ldy zpTemp2
                 lda (zpSource),Y
                 beq _nextPlayer
@@ -175,6 +177,7 @@ _nextColor      inx
                 sta CS_COLOR_MEM_PTR+v_RenderLine,X
                 bra _nextColor
 
+; - - - - - - - - - - - - - - - - - - -
 ;   process the text
 _processText
 
@@ -198,12 +201,14 @@ _nextChar       inx
                 bcc _number
                 bra _letter
 
+; - - - - - - - - - - - - - - - - - - -
 _space          sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 ;   (ascii-30)*2+$A0
 _number         sec
                 sbc #$30
@@ -218,6 +223,7 @@ _number         sec
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 clc
@@ -226,6 +232,7 @@ _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL
@@ -268,6 +275,7 @@ _nextColor      inx
                 sta CS_COLOR_MEM_PTR+v_RenderLine,X
                 bra _nextColor
 
+; - - - - - - - - - - - - - - - - - - -
 ;   process the text
 _processText
 
@@ -291,12 +299,14 @@ _nextChar       inx
                 bcc _number
                 bra _letter
 
+; - - - - - - - - - - - - - - - - - - -
 _space          sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 ;   (ascii-30)*2+$A0
 _number         sec
                 sbc #$30
@@ -311,6 +321,7 @@ _number         sec
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 clc
@@ -319,6 +330,7 @@ _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL
@@ -360,6 +372,7 @@ _nextColor      inx
 
                 bra _nextColor
 
+; - - - - - - - - - - - - - - - - - - -
 ;   process the text
 _processText
 ;   switch to text map
@@ -378,6 +391,7 @@ _nextChar       inx
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL
@@ -420,6 +434,7 @@ _nextColor      inx
                 sta CS_COLOR_MEM_PTR+v_RenderLine,X
                 bra _nextColor
 
+; - - - - - - - - - - - - - - - - - - -
 ;   process the text
 _processText
 
@@ -441,12 +456,14 @@ _nextChar       inx
 
                 bra _letter
 
+; - - - - - - - - - - - - - - - - - - -
 _space          sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 clc
@@ -455,6 +472,7 @@ _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL
@@ -497,6 +515,7 @@ _nextColor      inx
                 sta CS_COLOR_MEM_PTR+v_RenderLine,X
                 bra _nextColor
 
+; - - - - - - - - - - - - - - - - - - -
 ;   process the text
 _processText
 
@@ -520,12 +539,14 @@ _nextChar       inx
                 bcc _number
                 bra _letter
 
+; - - - - - - - - - - - - - - - - - - -
 _space          sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 ;   (ascii-30)*2+$A0
 _number         sec
                 sbc #$30
@@ -540,6 +561,7 @@ _number         sec
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 clc
@@ -548,6 +570,7 @@ _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL
@@ -590,6 +613,7 @@ _nextColor      inx
                 sta CS_COLOR_MEM_PTR+v_RenderLine,X
                 bra _nextColor
 
+; - - - - - - - - - - - - - - - - - - -
 ;   process the text
 _processText
 
@@ -613,12 +637,14 @@ _nextChar       inx
                 bcc _number
                 bra _letter
 
+; - - - - - - - - - - - - - - - - - - -
 _space          sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 ;   (ascii-30)*2+$A0
 _number         sec
                 sbc #$30
@@ -633,6 +659,7 @@ _number         sec
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 clc
@@ -641,6 +668,7 @@ _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL
@@ -687,6 +715,7 @@ _nextColor      inx
                 sta CS_COLOR_MEM_PTR+v_RenderLine,X
                 bra _nextColor
 
+; - - - - - - - - - - - - - - - - - - -
 ;   process the text
 _processText
 
@@ -713,12 +742,14 @@ _nextChar       inx
                 bcc _number
                 bra _letter
 
+; - - - - - - - - - - - - - - - - - - -
 _space          sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 ;   (ascii-30)*2+$A0
 _number         sec
                 sbc #$30
@@ -733,6 +764,7 @@ _number         sec
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 clc
@@ -741,6 +773,7 @@ _letter         sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _bomb           sta CS_TEXT_MEM_PTR+v_RenderLine,X
                 inx
                 inc A
@@ -748,6 +781,7 @@ _bomb           sta CS_TEXT_MEM_PTR+v_RenderLine,X
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL
@@ -853,6 +887,7 @@ _earth          eor #$80            ; clear the high-bit (to convert the data in
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _space          pha
 
 ;   switch to color map
@@ -871,6 +906,7 @@ _space          pha
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _boulder        pha
 
 ;   switch to color map
@@ -893,6 +929,7 @@ _boulder        pha
 
                 bra _nextChar
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT
 ;   switch to system map
                 stz IOPAGE_CTRL

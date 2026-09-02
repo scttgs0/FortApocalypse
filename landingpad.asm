@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: landingpad.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -56,6 +56,7 @@ _next1          cmp LAND_CHR,X
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              inc TEMP4_I
 
                 rts

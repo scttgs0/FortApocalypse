@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: engine_main.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -13,22 +13,22 @@ CartridgeStart  .proc
 ;---
 
                 sei
-                lda #$B3
+                lda #<$34B3
                 pha
 
+;   clear zero-page and hardware registers
                 ldx #$00
                 txa
 _next1          sta $0000,X             ; zero-page
-
-                .frsSpriteSetX_ix
-                ;!! sta DMACLT,X
-                sta SID1_FREQ1,X
-                sta SID1_FREQ1+1,X
-                ;!! sta PORTA,X
+                ;!! sta $D000,X         ; GTIA
+                ;!! sta $D400,X         ; ANTIC
+                ;!! sta $D200,X         ; POKEY
+                ;!! sta $D300,X         ; PIA
 
                 inx
                 bne _next1
 
+;   clear RAM [$0100:BF00]
                 ldy #$01
                 sty ADR1+1
 
@@ -39,14 +39,15 @@ _next2          sta (ADR1),Y
                 iny
                 bne _next2
 
-                inc ADR1+1
+                inc ADR1+1              ; do the next page of RAM
                 ldx ADR1+1
                 cpx #$C0
                 bne _next2
 
-                lda #$34
+                lda #>$34B3
                 pha
 
+;   copy [$95D3:9652] -> [$01C0:023F]
                 ldx #$00
 _next3          lda BOOT_STUFF,X
                 sta $01C0,X             ; L01C0
@@ -203,6 +204,7 @@ _4              lda FRAME
                 bne _5
                 jmp Title
 
+; - - - - - - - - - - - - - - - - - - -
 _5              jmp MAIN
 
                 .endproc
@@ -219,8 +221,10 @@ CheckLevel      .proc
                 bne _1
                 jmp DoLevel2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jmp DoLevel3
 
+; - - - - - - - - - - - - - - - - - - -
                 rts                     ; unreachable code
                 .endproc
 
@@ -445,6 +449,7 @@ _next2          cmp CHR1,Y
 _next3          ldx #$01
                 bra _next5
 
+; - - - - - - - - - - - - - - - - - - -
 _next4          cmp CHR2,Y
                 beq _1
 
@@ -453,6 +458,7 @@ _next4          cmp CHR2,Y
                 bne _next4
                 bra _next3
 
+; - - - - - - - - - - - - - - - - - - -
 _1              sta TEMP1
 
                 jsr GetByte
@@ -535,14 +541,17 @@ CheckModes      .proc
                 bne _1
                 jmp M_START
 
+; - - - - - - - - - - - - - - - - - - -
 _1              cmp #GAME_OVER_MODE
                 bne _2
                 jmp M_GameOver
 
+; - - - - - - - - - - - - - - - - - - -
 _2              cmp #NEW_LEVEL_MODE
                 bne _3
                 jmp M_NewLevel
 
+; - - - - - - - - - - - - - - - - - - -
 _3              cmp #NEW_PLAYER_MODE
                 bne _4
                 jmp M_NewPlayer
@@ -642,9 +651,7 @@ _next1          sta WINDOW_1,X
 
                 ldx #$07
                 lda #$55
-                ;--.setbank $AF
                 .frsRandomByteY
-                ;--.setbank $03
                 bmi _next3
 
 _next2          sta WINDOW_1,X
@@ -653,6 +660,7 @@ _next2          sta WINDOW_1,X
                 bpl _next2
                 bra _2
 
+; - - - - - - - - - - - - - - - - - - -
 _next3          sta WINDOW_2,X
 
                 dex
@@ -703,6 +711,7 @@ M_NewPlayer     .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda #$1F                ; CHOPPER CLR
                 ;!! sta PCOLR0
                 ;!! sta PCOLR1
@@ -829,6 +838,7 @@ M_NewLevel      .proc
                 jsr Print
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ldx #<txtEnterL2        ; "CRYSTALLINE  CAVES"
                 ldy #>txtEnterL2
                 jsr Print
@@ -883,6 +893,7 @@ _next1          ldy LEVEL
                 lda TANK_START_Y_L1,X
                 bra _5
 
+; - - - - - - - - - - - - - - - - - - -
 _4              lda TANK_START_X_L2,X
                 sta TANK_START_X,X
                 lda TANK_START_Y_L2,X
@@ -960,6 +971,7 @@ _next2          .frsRandomByte
                 adc #$62-1
                 bra _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              cmp #$74                ; 't'
                 bne _2
 
@@ -1305,6 +1317,7 @@ _next1          lda SCORE1
 
                 jmp _6
 
+; - - - - - - - - - - - - - - - - - - -
 _5              bcs _next1
 
 _6              lda #$02                ; (2,0)
@@ -1562,6 +1575,7 @@ _1              lda #<BONUS_DIG
 
                 jmp _3
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda #kEMPTY
                 sta FUEL_STATUS
 
@@ -1637,6 +1651,7 @@ DRAW            .block
                 lda #$00
                 bra _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda #<$F0+128           ; BLANK
 _2              clc
                 adc #$10+128            ; '0'

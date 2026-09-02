@@ -1,7 +1,7 @@
 
 ; SPDX-FileName: input.asm
 ; SPDX-FileCopyrightText: Fort Apocalypse © 1995, 2007, 2015 Steve Hales.
-; SPDX-FileContributor: Modified by Scott Giese 2023
+; SPDX-FileContributor: Modified by Scott Giese 2023,2026
 ; SPDX-License-Identifier: CC-BY-NC-ND-2.5
 
 
@@ -38,6 +38,7 @@ v_demoTimer     .var TIM6_VAL
 
                 bra _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _chk_mode       ldx MODE                ; Options Screen has its own handler
                 cpx #OPTION_MODE        ; continue if not on the Options screen
                 bne _determine_key
@@ -45,6 +46,7 @@ _chk_mode       ldx MODE                ; Options Screen has its own handler
                 jsr CheckOptions        ; transfer to the Option handler
                 bra _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _determine_key  cmp #$03                ; OPTION pressed?
                 beq _doOption
 
@@ -61,6 +63,7 @@ _doOption       lda #OPTION_MODE        ; switch to Options screen
                 jsr CheckOptions        ; transfer to the Option handler
                 bra _XIT
 
+; - - - - - - - - - - - - - - - - - - -
 _doSelect       ;!! lda SKSTAT              ; is the key still pressed?
                 and #%00000100
                 bne _XIT                ; still pressed then exit
@@ -123,6 +126,7 @@ v_angleBit0     .var TEMP1_I
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _doStick        lda CHOPPER_ANGLE
                 and #$01
                 sta v_angleBit0
@@ -285,6 +289,7 @@ ReadTrigger     .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ;!! ldx TRIG0
                 beq _2
 
@@ -292,6 +297,7 @@ _1              ;!! ldx TRIG0
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda TRIG_FLAG
                 beq _XIT
 
@@ -321,6 +327,7 @@ _next1          lda ROCKET_STATUS,X
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda CHOPPER_ANGLE
                 and #%00011110
                 lsr
